@@ -1,0 +1,16 @@
+#Give me your Mario
+#No way you've got your own
+#Well I want yours too
+
+[SETTINGS]
+default	11
+
+[SCENES]
+0	assets\data\menu.txt
+1	assets\data\game_over.txt
+
+#World 1
+10	assets\data\overworld_1\map.txt
+11	assets\data\overworld_1\stage_one.txt
+12	assets\data\overworld_1\stage_two.txt
+13	assets\data\overworld_1\stage_three.txt
