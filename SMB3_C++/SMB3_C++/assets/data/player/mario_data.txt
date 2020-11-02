@@ -1,0 +1,145 @@
+#string_id	left	top	right	bottom	frames	speed	tex_id
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#==SMALL==
+#Idle
+Idle	1	16	16	31	1	0	0
+#Run
+Run	1	16	16	31	2	100	0
+Run	19	16	34	31
+#Turnaround
+Turn	109	16	124	31	2	100	0
+#Jump
+Jump	37	16	52	31	1	0	0
+#Front
+Front	127	16	142	31	1	0	0
+#Hold
+Hold	145	16	160	31	2	100	0
+Hold	163	16	178	31
+#Kick
+Kick	181	16	196	31	1	0	0
+#Slide
+Slide	199	16	214	31	1	0	0
+#Swim
+Swim	217	16	232	31	4	100	0
+Swim	235	16	250	31
+Swim	253	16	268	31
+Swim	271	16	286	31
+#Climb
+Climb	289	16	304	31	1	0	0
+#Die
+Die	307	16	322	31	1	0	0
+
+#==BIG==
+#Idle
+BigIdle	1	88	16	119	1	0	0
+#Run
+BigRun	19	88	34	119	2	100	0
+BigRun	37	88	52	119
+#Crouch
+BigCrouch	55	96	70	119	1	0	0
+#Jump
+BigJump	73	88	88	119	1	0	0
+#Turnaround
+BigTurn	195	88	210	119	1	0	0
+#Front
+BigFront	213	88	228	119	1	0	0
+#Back
+BigBack	231	88	246	119	1	0	0
+#Hold
+BigHold	249	88	264	119	3	100	0
+BigHold	267	88	282	119
+BigHold	285	88	300	119
+#Kick
+BigKick	303	88	326	119	1	0	0
+#Slide
+BigSlide	329	88	344	119	1	0	0
+#Swim
+BigSwim	347	88	370	119	4	100	0
+BigSwim	373	88	396	119
+BigSwim	399	88	422	119
+BigSwim	425	88	448	119
+#Climb
+BigClimb	451	88	466	119	1	0	0
+
+#==FIRE==
+#Idle
+FireIdle	1	260	16	291	1	0	0
+#Run
+FireRun	19	260	34	291	2	100	0
+FireRun	37	260	52	291
+#Crouch
+FireCrouch	55	268	522	1150	1	0	0
+#Jump
+FireJump	73	260	88	291	1	0	0
+#Turnaround
+FireTurn	195	260	210	291	1	0	0
+#Front
+FireFront	213	260	228	291	1	0	0
+#Back
+FireBack	231	260	246	291	1	0	0
+#Hold
+FireHold	249	260	264	291	3	100	0
+FireHold	267	260	282	291
+FireHold	285	260	300	291
+#Kick
+FireKick	303	260	326	291	1	0	0
+#Slide
+FireSlide	329	260	344	291	1	0	0
+#Swim
+FireSwim	347	260	370	291	4	100	0
+FireSwim	373	260	396	291
+FireSwim	399	260	422	291
+FireSwim	425	260	448	291
+#Climb
+FireClimb	451	260	466	291	1	0	0
+#Shoot
+FireShoot	209	294	224	325	2	100	0
+FireShoot	227	294	242	325
+
+#==RACOON==
+#Idle
+RacIdle	1	346	24	377	1	0	0
+#Run
+RacRun	27	346	50	377	2	100	0
+RacRun	53	346	76	377
+#Crouch
+RacCrouch	79	354	102	377	1	0	0
+#Jump
+RacJump	105	346	128	377	3	100	0
+RacJump	131	346	154	377
+RacJump	157	346	180	377
+#Turnaround
+RacTurn	339	346	354	377	1	0	0
+#Front
+RacFront	357	346	373	377	1	0	0
+#Back
+RacBack	401	346	416	377	1	0	0
+#Hold
+RacHold	1	380	24	411	3	100	0
+RacHold	27	380	50	411
+RacHold	53	380	76	411
+#Kick
+RacKick	79	380	102	411	1	0	0
+#Slide
+RacSlide	105	380	120	411	1	0	0
+#Swim
+RacSwim	123	380	146	411	4	100	0
+RacSwim	149	380	172	411
+RacSwim	175	380	198	411
+RacSwim	201	380	224	411
+#Climb
+RacClimb	227	380	242	411	1	0	0
+#Spin
+RacSpin	357	346	373	377	3	100	0
+RacSpin	375	346	398	377
+RacSpin	401	346	416	377
+#Fall
+RacFall	261	346	284	377	3	100	0
+RacFall	287	346	310	377
+RacFall	313	346	336	377
+
+#left	top	right	bottom
+[HITBOXES]
+0	0	16	16
+0	0	16	32

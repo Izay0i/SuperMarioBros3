@@ -1,0 +1,48 @@
+#Use Notepad++ and set language to CMake for better readability
+
+#r	g	b
+[BGCOLOR]
+156	252	240
+
+#tex_id	file_path	r	g	b
+[TEXTURES]
+0	assets\textures\mario.png	68	145	190
+1	assets\textures\enemies.png	255	255	255
+2	assets\textures\stage_tileset.png	255	255	255
+3	assets\textures\items_and_misc_blocks.png	255	255	255
+4	assets\textures\gui_and_font.png	255	255	255
+
+#entity_id	data_path
+#0-99: moving entities
+#100: portal
+#101-999: tileset or static entities
+
+#0: Mario, 1: Goomba, 2: Paragoomba, etc...
+[ENTITY_DATA]
+#Projectiles
+#Fireball
+-1	assets\data\projectiles\fireball_data.txt
+
+#Mario
+0	assets\data\player\mario_data.txt
+
+#NPCs
+#Goomba
+1	assets\data\npc\goomba_data.txt
+
+#Tilemap
+#QuestionBlock
+
+#Coins
+
+
+#entity_id	x	y
+[WORLD_COORDS]
+#Mario
+0	0	0
+
+#NPCs
+#Goomba
+1	32	0
+
+#Tilemap
