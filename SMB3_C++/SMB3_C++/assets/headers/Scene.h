@@ -10,6 +10,7 @@
 //Welcome to a world of pain
 //Something's wrong, I can feel it
 
+#include "Background.h"
 #include "Entity.h"
 #include "Camera.h"
 
@@ -48,20 +49,31 @@
 //#include "tile/BlackPipe"
 
 class Game;
+class Background;
 class Mario;
 class Camera;
 class Entity;
 
 class Scene {
 private:
+	enum class ObjectType {
+		OBJECT_TYPE_MARIO = 0,
+		OBJECT_TYPE_GOOMBA = 1,
+		OBJECT_TYPE_FIREBALL = 80
+	};
+
 	enum class SceneSection {
 		SCENE_FILE_SECTION_UNKNOWN,
 		SCENE_FILE_SECTION_BGCOLOR,
 		SCENE_FILE_SECTION_TEXTURES,
+		SCENE_FILE_SECTION_BACKGROUND,
 		SCENE_FILE_SECTION_ENTITYDATA,
+		SCENE_FILE_SECTION_TILESETDATA,
 		SCENE_FILE_SECTION_WORLDCOORDS
 	};
 
+	Background* bgInstance;
+	
 	Mario* marioInstance;
 	Camera* cameraInstance;
 
@@ -80,7 +92,9 @@ private:
 
 	void ParseBGColor(std::string);
 	void ParseTextures(std::string);
+	void ParseBackground(std::string);
 	void ParseEntityData(std::string);
+	void ParseTilesetData(std::string);
 	void ParseWorldCoords(std::string);
 
 public:

@@ -3,6 +3,8 @@
 Scene::Scene(int id, std::string path) {
 	sceneID = id;
 	filePath = path;
+
+	bgInstance = new Background();
 }
 
 Scene::~Scene() {}
@@ -49,6 +51,28 @@ void Scene::ParseTextures(std::string line) {
 	textureFiles[texID] = std::pair<std::string, D3DCOLOR>(tokens.at(1), D3DCOLOR_XRGB(r, g, b));
 }
 
+void Scene::ParseBackground(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 7) {
+		return;
+	}
+
+	RECT bound;
+	bound.left = atoi(tokens.at(0).c_str());
+	bound.top = atoi(tokens.at(1).c_str());
+	bound.right = atoi(tokens.at(2).c_str()) + 1;
+	bound.bottom = atoi(tokens.at(3).c_str()) + 1;
+
+	int posX = atoi(tokens.at(4).c_str());
+	int posY = atoi(tokens.at(5).c_str());
+	D3DXVECTOR3 pos = D3DXVECTOR3(posX, posY, 0);
+
+	int texID = atoi(tokens.at(6).c_str());
+	bgInstance->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
+	bgInstance->AddImage(bound, pos);
+}
+
 void Scene::ParseEntityData(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
@@ -56,13 +80,20 @@ void Scene::ParseEntityData(std::string line) {
 		return;
 	}
 
-	int entityID = atoi(tokens.at(0).c_str());
-	switch (entityID) {
-		case 0:
+	ObjectType objectID = static_cast<ObjectType>(atoi(tokens.at(0).c_str()));
+	switch (objectID) {
+		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();
 			marioInstance->ParseData(tokens.at(1));
 			break;
+		case ObjectType::OBJECT_TYPE_GOOMBA:
+
+			break;
 	}
+}
+
+void Scene::ParseTilesetData(std::string line) {
+
 }
 
 void Scene::ParseWorldCoords(std::string line) {
@@ -115,8 +146,18 @@ void Scene::Load() {
 			continue;
 		}
 
+		if (line == "[BACKGROUND]") {
+			section = SceneSection::SCENE_FILE_SECTION_BACKGROUND;
+			continue;
+		}
+
 		if (line == "[ENTITY_DATA]") {
 			section = SceneSection::SCENE_FILE_SECTION_ENTITYDATA;
+			continue;
+		}
+
+		if (line == "[TILESET_DATA") {
+			section = SceneSection::SCENE_FILE_SECTION_TILESETDATA;
 			continue;
 		}
 
@@ -132,8 +173,14 @@ void Scene::Load() {
 			case SceneSection::SCENE_FILE_SECTION_TEXTURES:
 				ParseTextures(line);
 				break;
+			case SceneSection::SCENE_FILE_SECTION_BACKGROUND:
+				ParseBackground(line);
+				break;
 			case SceneSection::SCENE_FILE_SECTION_ENTITYDATA:
 				ParseEntityData(line);
+				break;
+			case SceneSection::SCENE_FILE_SECTION_TILESETDATA:
+				ParseTilesetData(line);
 				break;
 			case SceneSection::SCENE_FILE_SECTION_WORLDCOORDS:
 				ParseWorldCoords(line);
@@ -145,6 +192,10 @@ void Scene::Load() {
 }
 
 void Scene::Unload() {
+	if (bgInstance) {
+		bgInstance->Release();
+	}
+
 	for (Entity* entity : entities) {
 		if (entity) {
 			entity->Release();
@@ -172,6 +223,8 @@ void Scene::Update(DWORD delta) {
 }
 
 void Scene::Render() {
+	bgInstance->DrawBackground();
+
 	marioInstance = Mario::GetInstance();
 	marioInstance->Render();
 

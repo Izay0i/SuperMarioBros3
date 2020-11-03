@@ -11,6 +11,9 @@ private:
 public:
 	RECT GetHitBox(int);
 
+	unsigned int GetWidth(int);
+	unsigned int GetHeight(int);
+
 	void AddHitBox(RECT);
 
 	void EnableCollistion();

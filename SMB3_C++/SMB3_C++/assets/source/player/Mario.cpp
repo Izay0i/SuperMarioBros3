@@ -119,7 +119,7 @@ void Mario::Update(DWORD delta) {
 }
 
 void Mario::Render() {
-	sprite->PlayAnimation("Die");
+	sprite->PlayAnimation("BigRun");
 }
 
 void Mario::Release() {
