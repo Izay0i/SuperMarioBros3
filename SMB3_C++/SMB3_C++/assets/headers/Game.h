@@ -25,7 +25,7 @@ private:
 	const WCHAR* GAME_TITLE = L"Super Mario Bros 3";
 	
 	const static int MAX_FILE_LINE = 1024;
-	const int FRAME_RATE = 60;
+	const int FRAME_RATE = 30;
 
 	static Game* gameInstance;
 	
@@ -56,6 +56,9 @@ private:
 
 public:
 	static Game* GetInstance();
+
+	int GetScreenWidth();
+	int GetScreenHeight();
 
 	LPDIRECT3DDEVICE9 GetDevice();
 	LPD3DXSPRITE GetSpriteHandler();

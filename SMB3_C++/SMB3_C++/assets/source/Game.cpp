@@ -136,6 +136,14 @@ Game* Game::GetInstance() {
 	return gameInstance;
 }
 
+int Game::GetScreenWidth() {
+	return screenWidth;
+}
+
+int Game::GetScreenHeight() {
+	return screenHeight;
+}
+
 LPDIRECT3DDEVICE9 Game::GetDevice() {
 	return directDevice;
 }

@@ -66,13 +66,11 @@ void Sprite::Draw() {
 		}
 	}
 
-	position = D3DXVECTOR3(40, 0, 0);
-	scale = D3DXVECTOR2(3, 3);
-	D3DXMatrixTransformation2D(&matrix, &scale, 0, &scale, &rotation, 0, &translation);
+	/*D3DXMatrixTranslation(&matrix, 0.0005f, 0.0f, 0.0f);
+	D3DXMATRIX matScale;
+	D3DXMatrixScaling(&matScale, -1.0f, 1.0f, 0.0f);
 
-	D3DXMATRIX oldMatrix;
-	Game::GetInstance()->GetSpriteHandler()->GetTransform(&oldMatrix);
-	Game::GetInstance()->GetSpriteHandler()->SetTransform(&matrix);
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&(matScale * matrix));*/
 
 	//Why is it pixelated, i dunt undastand
 	Game::GetInstance()->GetSpriteHandler()->Draw(
@@ -82,8 +80,6 @@ void Sprite::Draw() {
 		&position,
 		D3DCOLOR_ARGB(255, 255, 255, 255)
 	);
-
-	Game::GetInstance()->GetSpriteHandler()->SetTransform(&oldMatrix);
 }
 
 void Sprite::Release() {

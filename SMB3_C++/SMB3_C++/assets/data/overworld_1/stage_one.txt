@@ -8,20 +8,21 @@
 [TEXTURES]
 0	assets\textures\mario.png	68	145	190
 1	assets\textures\enemies.png	255	255	255
-2	assets\textures\stage_tileset.png	255	255	255
+2	assets\textures\stage_tileset.png	224	163	216
 3	assets\textures\items_and_misc_blocks.png	255	255	255
 4	assets\textures\gui_and_font.png	255	255	255
 
-#entity_id	data_path
-#0-99: moving entities
-#100: portal
-#101-999: tileset or static entities
+#obj_id	data_path
+#0-99:	moving entities
+#100:	portal
+#101-200:	animated tileset, eg: question block
+#201-300:	tileset, eg: ground
 
 #0: Mario, 1: Goomba, 2: Paragoomba, etc...
 [ENTITY_DATA]
 #Projectiles
 #Fireball
--1	assets\data\projectiles\fireball_data.txt
+80	assets\data\projectiles\fireball_data.txt
 
 #Mario
 0	assets\data\player\mario_data.txt
@@ -30,19 +31,96 @@
 #Goomba
 1	assets\data\npc\goomba_data.txt
 
-#Tilemap
+[TILESET_DATA]
 #QuestionBlock
 
 #Coins
 
+#Whoever says they like game dev has never been into game dev
+#construct background image
+#left	top	right	bottom	x	y	tex_id
+[BACKGROUND]
+#white_flower
+800	86	815	101	112	32	2
+800	86	815	101	304	80	2
+800	86	815	101	336	32	2
+800	86	815	101	368	64	2
+800	86	815	101	592	48	2
+800	86	815	101	752	16	2
+800	86	815	101	752	48	2
+800	86	815	101	1104	112	2
+800	86	815	101	1264	48	2
+800	86	815	101	1360	32	2
+800	86	815	101	1392	144	2
+800	86	815	101	1456	96	2
+800	86	815	101	1488	80	2
+800	86	815	101	1616	32	2
+800	86	815	101	1680	64	2
+800	86	815	101	2224	80	2
+800	86	815	101	2384	0	2
+800	86	815	101	2448	0	2
+800	86	815	101	2416	144	2
 
-#entity_id	x	y
+#white_mushroom
+834	86	849	101	256	32	2
+834	86	849	101	256	64	2
+834	86	849	101	832	32	2
+834	86	849	101	960	64	2
+834	86	849	101	1216	128	2
+834	86	849	101	1728	64	2
+834	86	849	101	1856	80	2
+834	86	849	101	1920	16	2
+834	86	849	101	1920	144	2
+834	86	849	101	2112	112	2
+
+#white_star
+817	86	832	101	224	64	2
+817	86	832	101	288	80	2
+817	86	832	101	608	48	2
+817	86	832	101	672	16	2
+817	86	832	101	800	16	2
+817	86	832	101	1184	128	2
+817	86	832	101	1504	64	2
+817	86	832	101	1504	96	2
+817	86	832	101	1952	16	2
+
+#bush
+375	324	390	339	160	400	2
+375	324	390	339	176	400	2
+375	324	390	339	192	400	2
+375	324	390	339	672	384	2
+375	324	390	339	688	384	2
+375	324	390	339	704	384	2
+375	324	390	339	720	384	2
+375	324	390	339	736	384	2
+375	324	390	339	752	384	2
+375	324	390	339	1040	384	2
+375	324	390	339	1056	384	2
+375	324	390	339	1184	400	2
+375	324	390	339	1200	400	2
+375	324	390	339	1216	400	2
+375	324	390	339	1728	400	2
+375	324	390	339	1744	400	2
+375	324	390	339	1760	400	2
+
+#tall_bush
+
+#cloud
+
+#zigzag
+
+#black_bush
+
+#bonus_square
+
+
+#obj_id	x	y
 [WORLD_COORDS]
 #Mario
 0	0	0
 
 #NPCs
 #Goomba
-1	32	0
+17	32	0
 
 #Tilemap
