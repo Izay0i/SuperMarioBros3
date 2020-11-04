@@ -16,11 +16,11 @@ private:
 	std::vector<RECT> bounds;
 
 	DWORD lastFrameTime;
-	LPCWSTR filePath;
+	static LPCWSTR filePath;
 
-	LPDIRECT3DTEXTURE9 texture;
+	static LPDIRECT3DTEXTURE9 texture;
 	
-	D3DCOLOR colorKey;
+	static D3DCOLOR colorKey;
 
 	D3DXVECTOR3 position;
 	D3DXVECTOR2 rotation;

@@ -31,6 +31,8 @@ private:
 	static Entity* marioInstance;
 
 	const static int MAX_FILE_LINE = 1024;
+	
+	D3DXMATRIX matTranslate;
 
 	void CheckCollision(Entity*, Entity*) override;
 
@@ -45,6 +47,10 @@ public:
 	bool IsOnGround() {}
 
 	void ParseData(std::string);
+
+	D3DXMATRIX GetMatTrans() {
+		return matTranslate;
+	}
 
 	void SetPosition(D3DXVECTOR3) override;
 	D3DXVECTOR3 GetPosition() override;	

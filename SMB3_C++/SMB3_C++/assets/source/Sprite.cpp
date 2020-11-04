@@ -1,34 +1,40 @@
 #include "../headers/Sprite.h"
 
+LPCWSTR Sprite::filePath = nullptr;
+LPDIRECT3DTEXTURE9 Sprite::texture = nullptr;
+D3DCOLOR Sprite::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+
 void Sprite::LoadTexture() {
-	HRESULT hResult;
-	D3DXIMAGE_INFO imageInfo;
+	if (!texture) {
+		HRESULT hResult;
+		D3DXIMAGE_INFO imageInfo;
 
-	hResult = D3DXGetImageInfoFromFile(filePath, &imageInfo);
-	if (hResult != D3D_OK) {
-		OutputDebugStringA("Failed to get image info\n");
-		return;
-	}
+		hResult = D3DXGetImageInfoFromFile(filePath, &imageInfo);
+		if (hResult != D3D_OK) {
+			OutputDebugStringA("Failed to get image info\n");
+			return;
+		}
 
-	hResult = D3DXCreateTextureFromFileEx(
-		Game::GetInstance()->GetDevice(),
-		filePath,
-		imageInfo.Width,
-		imageInfo.Height,
-		1,
-		D3DUSAGE_DYNAMIC,
-		D3DFMT_UNKNOWN,
-		D3DPOOL_DEFAULT,
-		D3DX_DEFAULT,
-		D3DX_DEFAULT,
-		colorKey,
-		&imageInfo,
-		nullptr,
-		&texture
-	);
-	if (hResult != D3D_OK) {
-		OutputDebugStringA("Failed to create texture from file\n");
-		return;
+		hResult = D3DXCreateTextureFromFileEx(
+			Game::GetInstance()->GetDevice(),
+			filePath,
+			imageInfo.Width,
+			imageInfo.Height,
+			1,
+			D3DUSAGE_DYNAMIC,
+			D3DFMT_UNKNOWN,
+			D3DPOOL_DEFAULT,
+			D3DX_DEFAULT,
+			D3DX_DEFAULT,
+			colorKey,
+			&imageInfo,
+			nullptr,
+			&texture
+			);
+		if (hResult != D3D_OK) {
+			OutputDebugStringA("Failed to create texture from file\n");
+			return;
+		}
 	}
 }
 
@@ -65,12 +71,6 @@ void Sprite::Draw() {
 			}
 		}
 	}
-
-	/*D3DXMatrixTranslation(&matrix, 0.0005f, 0.0f, 0.0f);
-	D3DXMATRIX matScale;
-	D3DXMatrixScaling(&matScale, -1.0f, 1.0f, 0.0f);
-
-	Game::GetInstance()->GetSpriteHandler()->SetTransform(&(matScale * matrix));*/
 
 	//Why is it pixelated, i dunt undastand
 	Game::GetInstance()->GetSpriteHandler()->Draw(
