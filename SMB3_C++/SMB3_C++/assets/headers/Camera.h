@@ -34,8 +34,21 @@ class Camera : GameObject {
 private:
 	static GameObject* cameraInstance;
 
+	int camWidth, camHeight;
+
 public:
 	static Camera* GetInstance();
+
+	void SetPosition(D3DXVECTOR3);
+	D3DXVECTOR3 GetPosition() const;
+
+	void SetWidth(int);
+	int GetWidth() const;
+
+	void SetHeight(int);
+	int GetHeight() const;
+
+	RECTF GetBound() const;
 
 	void Release() override;
 };

@@ -48,6 +48,12 @@
 //#include "tile/Pipe"
 //#include "tile/BlackPipe"
 
+#define VK_A 0x41
+#define VK_D 0x44
+#define VK_F 0x46
+#define VK_S 0x53
+#define VK_W 0x57
+
 class Game;
 class Background;
 class Mario;
@@ -59,17 +65,23 @@ private:
 	enum class ObjectType {
 		OBJECT_TYPE_MARIO = 0,
 		OBJECT_TYPE_GOOMBA = 1,
-		OBJECT_TYPE_FIREBALL = 80
+		OBJECT_TYPE_REDPARAGOOMBA = 2,
+		OBJECT_TYPE_TROOPA = 3,
+		OBJECT_TYPE_PARATROOPA = 4,
+		OBJECT_TYPE_PIPLANT = 5,
+		OBJECT_TYPE_VENUSTRAP = 6
 	};
 
 	enum class SceneSection {
 		SCENE_FILE_SECTION_UNKNOWN,
+		SCENE_FILE_SECTION_MAPSIZE,
 		SCENE_FILE_SECTION_BGCOLOR,
 		SCENE_FILE_SECTION_TEXTURES,
-		SCENE_FILE_SECTION_BACKGROUND,
 		SCENE_FILE_SECTION_ENTITYDATA,
-		SCENE_FILE_SECTION_TILESETDATA,
-		SCENE_FILE_SECTION_WORLDCOORDS
+		SCENE_FILE_SECTION_WORLDCOORDS,
+		SCENE_FILE_SECTION_TILESDATA,
+		SCENE_FILE_SECTION_TILESPRITES,
+		SCENE_FILE_SECTION_BACKGROUND
 	};
 
 	Background* bgInstance;
@@ -80,6 +92,7 @@ private:
 	const static int MAX_FILE_LINE = 1024;
 
 	int sceneID;
+	int sceneWidth, sceneHeight;
 
 	std::string filePath;
 	std::vector<Entity*> entities;
@@ -90,20 +103,25 @@ private:
 
 	~Scene();
 
+	void ParseMapSize(std::string);
 	void ParseBGColor(std::string);
 	void ParseTextures(std::string);
-	void ParseBackground(std::string);
 	void ParseEntityData(std::string);
-	void ParseTilesetData(std::string);
 	void ParseWorldCoords(std::string);
+	void ParseTilesData(std::string);
+	void ParseTileSprites(std::string);
+	void ParseBackground(std::string);
 
 public:
 	Scene(int, std::string);
 
-	D3DCOLOR GetBGColor();
-	D3DCOLOR GetTextureColorKey(int);
+	D3DCOLOR GetBGColor() const;
+	D3DCOLOR GetTextureColorKey(int) const;
 
-	std::string GetTexturePath(int);
+	std::string GetTexturePath(int) const;
+
+	int GetSceneWidth() const;
+	int GetSceneHeight() const;
 
 	void Load();
 	void Unload();
@@ -111,6 +129,6 @@ public:
 	void Update(DWORD);
 	void Render();
 
-	static void OnKeyDown(int);
-	static void OnKeyUp(int);
+	void OnKeyDown(int);
+	void OnKeyUp(int);
 };

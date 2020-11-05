@@ -4,17 +4,19 @@
 
 #include <Windows.h>
 
+#include "GameObject.h"
+
 class HitBox {
 private:
-	std::vector<RECT> hitboxes;
+	std::vector<RECTF> hitboxes;
 
 public:
-	RECT GetHitBox(int);
+	RECTF GetHitBox(int) const;
 
-	unsigned int GetWidth(int);
-	unsigned int GetHeight(int);
+	unsigned int GetWidth(int) const;
+	unsigned int GetHeight(int) const;
 
-	void AddHitBox(RECT);
+	void AddHitBox(RECTF);
 
 	void EnableCollistion();
 	void DisableCollision();

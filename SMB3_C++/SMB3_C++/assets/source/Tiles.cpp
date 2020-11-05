@@ -1,10 +1,10 @@
-#include "../headers/Background.h"
+#include "../headers/Tiles.h"
 
-LPCWSTR Background::texturePath = nullptr;
-LPDIRECT3DTEXTURE9 Background::texture = nullptr;
-D3DCOLOR Background::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+LPCWSTR Tiles::texturePath = nullptr;
+LPDIRECT3DTEXTURE9 Tiles::texture = nullptr;
+D3DCOLOR Tiles::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
-void Background::LoadTexture(std::string path, D3DCOLOR color) {
+void Tiles::LoadTexture(std::string path, D3DCOLOR color) {
 	if (!texture) {
 		texturePath = Util::ToLPCWSTR(path);
 		colorKey = color;
@@ -33,7 +33,7 @@ void Background::LoadTexture(std::string path, D3DCOLOR color) {
 			&imageInfo,
 			nullptr,
 			&texture
-			);
+		);
 		if (hResult != D3D_OK) {
 			OutputDebugStringA("Failed to create texture from file\n");
 			return;
@@ -41,16 +41,20 @@ void Background::LoadTexture(std::string path, D3DCOLOR color) {
 	}
 }
 
-void Background::AddImage(RECT bound, D3DXVECTOR3 pos) {	
+void Tiles::AddHitBox(RECTF bound) {
+	hitbox.AddHitBox(bound);
+}
+
+void Tiles::AddImage(RECT bound, D3DXVECTOR3 pos) {
 	images.push_back(std::make_pair(bound, pos));
 }
 
-void Background::DrawBackground() {			
-	for (const auto &image : images) {
+void Tiles::Render() {
+	for (const auto& image : images) {
 		float x = image.second.x - Camera::GetInstance()->GetPosition().x;
 		float y = image.second.y - Camera::GetInstance()->GetPosition().y;
 		D3DXVECTOR3 position = D3DXVECTOR3(x, y, 0);
-		
+
 		/*char debugStr[100];
 		sprintf_s(debugStr, "Sprite position: %f %f\n", position.x, position.y);
 		OutputDebugStringA(debugStr);*/
@@ -65,15 +69,15 @@ void Background::DrawBackground() {
 	}
 }
 
-void Background::Release() {
+void Tiles::Release() {
 	if (texture) {
 		texture->Release();
 	}
-	
+
 	if (texturePath) {
 		delete texturePath;
 		texturePath = nullptr;
 	}
 
-	images.clear();	
+	images.clear();
 }

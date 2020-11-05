@@ -52,7 +52,7 @@ void Sprite::AddBound(RECT bound) {
 	bounds.push_back(bound);
 }
 
-void Sprite::Draw() {
+void Sprite::Draw(D3DXVECTOR3 position) {
 	DWORD now = static_cast<DWORD>(GetTickCount64());
 
 	if (currentFrame == -1) {
@@ -71,20 +71,28 @@ void Sprite::Draw() {
 			}
 		}
 	}
+	
+	float x = position.x - Camera::GetInstance()->GetPosition().x;
+	float y = position.y - Camera::GetInstance()->GetPosition().y;
+	D3DXVECTOR3 spritePosition = D3DXVECTOR3(x, y, 0);
 
-	//Why is it pixelated, i dunt undastand
 	Game::GetInstance()->GetSpriteHandler()->Draw(
 		texture,
 		&bounds.at(currentFrame),
 		nullptr,
-		&position,
+		&spritePosition,
 		D3DCOLOR_ARGB(255, 255, 255, 255)
 	);
 }
 
 void Sprite::Release() {
-	if (!texture) {
+	if (texture) {
 		texture->Release();
+	}
+
+	if (filePath) {
+		delete filePath;
+		filePath = nullptr;
 	}
 
 	bounds.clear();

@@ -156,6 +156,7 @@
     <ClCompile Include="assets\source\Scene.cpp" />
     <ClCompile Include="assets\source\SceneManager.cpp" />
     <ClCompile Include="assets\source\Sprite.cpp" />
+    <ClCompile Include="assets\source\Tiles.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +174,7 @@
     <ClInclude Include="assets\headers\SceneManager.h" />
     <ClInclude Include="assets\headers\Sprite.h" />
     <ClInclude Include="assets\headers\StateMachine.h" />
+    <ClInclude Include="assets\headers\Tiles.h" />
     <ClInclude Include="assets\headers\Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

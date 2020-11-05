@@ -99,10 +99,10 @@ void Device::ProcessKeyboard() {
 		int keyState = keyEvents[i].dwData;
 
 		if ((keyState & 0x80) > 0) {
-			Scene::OnKeyDown(keyCode);
+			//Scene::OnKeyDown(keyCode);
 		}
 		else {
-			Scene::OnKeyUp(keyCode);
+			//Scene::OnKeyUp(keyCode);
 		}
 	}
 }

@@ -38,7 +38,7 @@ BigRun	1	88	16	119	3	50	0
 BigRun	19	88	34	119
 BigRun	37	88	52	119
 #Crouch
-BigCrouch	55	96	70	119	1	0	0
+BigCrouch	55	88	70	119	1	0	0
 #Jump
 BigJump	73	88	88	119	1	0	0
 #Turnaround
@@ -71,7 +71,7 @@ FireRun	1	260	16	291	3	50	0
 FireRun	19	260	34	291
 FireRun	37	260	52	291
 #Crouch
-FireCrouch	55	268	522	1150	1	0	0
+FireCrouch	55	260	522	1150	1	0	0
 #Jump
 FireJump	73	260	88	291	1	0	0
 #Turnaround
@@ -107,7 +107,7 @@ RacRun	1	346	24	377	3	50	0
 RacRun	27	346	50	377
 RacRun	53	346	76	377
 #Crouch
-RacCrouch	79	354	102	377	1	0	0
+RacCrouch	79	346	102	377	1	0	0
 #Jump
 RacJump	105	346	128	377	3	50	0
 RacJump	131	346	154	377
@@ -134,8 +134,7 @@ RacSwim	201	380	224	411
 #Climb
 RacClimb	227	380	242	411	1	0	0
 #Spin
-RacSpin	357	346	372	377	3	50	0
-RacSpin	375	346	398	377
+RacSpin	375	346	398	377	2	50	0
 RacSpin	401	346	416	377
 #Fall
 RacFall	261	346	284	377	3	50	0

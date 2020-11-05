@@ -14,15 +14,15 @@ LRESULT CALLBACK Game::WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lP
 					OutputDebugStringA("Enter key pressed\n");
 					break;
 			}
+		case WM_KEYDOWN:
+			SceneManager::GetInstance()->GetCurrentScene()->OnKeyDown(wParam);
+			break;
 	}
 
 	return DefWindowProc(hWND, message, wParam, lParam);
 }
 
-HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int height) {
-	screenWidth = width;
-	screenHeight = height;
-	
+HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int height) {	
 	WNDCLASSEX wndClass;
 	wndClass.cbSize = sizeof(WNDCLASSEX);
 	wndClass.style = CS_HREDRAW | CS_VREDRAW;
@@ -165,7 +165,7 @@ bool Game::InitGame(HWND hWND) {
 
 	directParams.Windowed = true;
 	directParams.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	directParams.BackBufferFormat = D3DFMT_UNKNOWN;
+	directParams.BackBufferFormat = D3DFMT_X8R8G8B8;
 	directParams.BackBufferCount = 1;
 
 	RECT window;
@@ -173,6 +173,9 @@ bool Game::InitGame(HWND hWND) {
 
 	directParams.BackBufferWidth = window.right + 1;
 	directParams.BackBufferHeight = window.bottom + 1;
+
+	screenWidth = window.right + 1;
+	screenHeight = window.bottom + 1;
 
 	direct3D->CreateDevice(
 		D3DADAPTER_DEFAULT,

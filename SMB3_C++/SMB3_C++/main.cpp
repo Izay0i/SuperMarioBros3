@@ -5,8 +5,9 @@
 
 #include "assets/headers/Game.h"
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+//320	240
+const int SCREEN_WIDTH = 320;
+const int SCREEN_HEIGHT = 240;
 
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	Game* gameInstance = Game::GetInstance();
@@ -25,9 +26,15 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	gameInstance->Load("assets/data/settings.txt");
 
-	SetWindowPos(hWND, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWND, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	gameInstance->GameRun();
+
+	/*char debugStr[100];
+	for (int i = 1; i < 27; ++i) {
+		sprintf_s(debugStr, "201	1	460	154	475	169	%d	416	2\n", (640 + (16 * i)));
+		OutputDebugStringW(Util::ToLPCWSTR(debugStr));
+	}*/
 
 	return 0;
 }

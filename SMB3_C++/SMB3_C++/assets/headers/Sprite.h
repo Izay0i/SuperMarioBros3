@@ -22,13 +22,6 @@ private:
 	
 	static D3DCOLOR colorKey;
 
-	D3DXVECTOR3 position;
-	D3DXVECTOR2 rotation;
-	D3DXVECTOR2 translation;
-	D3DXVECTOR2 scale;
-
-	D3DXMATRIX matrix;
-
 	void LoadTexture();
 
 public:
@@ -36,7 +29,7 @@ public:
 
 	void AddBound(RECT);
 
-	void Draw();
+	void Draw(D3DXVECTOR3);
 
 	void Release();
 };
