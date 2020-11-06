@@ -265,8 +265,8 @@ void Scene::Update(DWORD delta) {
 
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
 	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2;
-	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;
-	//camPosition.y = 0;
+	//camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;
+	camPosition.y = Game::GetInstance()->GetScreenWidth() / 2;
 
 	Camera::GetInstance()->SetPosition(camPosition);
 }

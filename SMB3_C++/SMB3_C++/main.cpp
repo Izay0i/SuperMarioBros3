@@ -30,11 +30,11 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	gameInstance->GameRun();
 
-	/*char debugStr[100];
-	for (int i = 1; i < 27; ++i) {
-		sprintf_s(debugStr, "201	1	460	154	475	169	%d	416	2\n", (640 + (16 * i)));
+	char debugStr[100];
+	for (int i = 1; i <= 11; ++i) {
+		sprintf_s(debugStr, "203	13	698	1	713	16	%d	176	2\n", (1504 + (16 * i)));
 		OutputDebugStringW(Util::ToLPCWSTR(debugStr));
-	}*/
+	}
 
 	return 0;
 }
