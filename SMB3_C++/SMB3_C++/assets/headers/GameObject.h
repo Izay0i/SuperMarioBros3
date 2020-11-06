@@ -4,6 +4,8 @@
 
 class GameObject {
 protected:
+	int objectID;
+	
 	D3DXVECTOR3 velocity;
 	D3DXVECTOR3 distance;
 
@@ -16,6 +18,12 @@ protected:
 	
 public:
 	virtual ~GameObject() {}
+
+	void SetObjectID(int id) { objectID = id; }
+	int GetObjectID() { return objectID; }
+
+	virtual void Update(DWORD) = 0;
+	virtual void Render() = 0;
 
 	virtual void Release() = 0;
 };

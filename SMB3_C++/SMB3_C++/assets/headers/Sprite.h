@@ -29,7 +29,7 @@ public:
 
 	void AddBound(RECT);
 
-	void Draw(D3DXVECTOR3);
+	void Draw(D3DXVECTOR3, D3DXVECTOR2 = D3DXVECTOR2(1.0f, 1.0f));
 
 	void Release();
 };

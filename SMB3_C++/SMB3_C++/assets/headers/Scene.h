@@ -7,69 +7,46 @@
 
 #include <dinput.h>
 
-//Welcome to a world of pain
-//Something's wrong, I can feel it
+//Dependency hell, what do?
 
+#include "GameObject.h"
 #include "Background.h"
+#include "Tiles.h"
 #include "Entity.h"
 #include "Camera.h"
 
 #include "player/Mario.h"
 
 #include "npc/Goomba.h"
-//#include "npc/Paragoomba"
-//#include "npc/Microgoomba"
-//#include "npc/RedParagoomba"?
-//#include "npc/Troopa"
-//#include "npc/Paratroopa"
-//#include "npc/HammerBro"
-//#include "npc/PiranaPlant"
-//#include "npc/VenusTrap"
 
-//#include "npc/Coin"
-//#include "npc/SuperLeaf"
-//#include "npc/SuperMushroom"
-
-//tile or npc?
-//#include "tile/SwitchBlock"
-//#include "tile/QuestionBlock"
-//#include "tile/ShinyBrick" //Destructable
-
-//#include "tile/ColoredBlock"
-//#include "tile/Sky"
-//#include "tile/BlackSky"
-//#include "tile/Cloud"
-//#include "tile/Ground"
-//#include "tile/Bush"
-//#include "tile/TallBush"
-//#include "tile/BlackBush"
-//#include "tile/Brick"
-//#include "tile/BlueBrick"
-//#include "tile/Pipe"
-//#include "tile/BlackPipe"
+//#include "tiles/BonusItem.h"
 
 #define VK_A 0x41
 #define VK_D 0x44
-#define VK_F 0x46
+#define VK_K 0x4B
 #define VK_S 0x53
 #define VK_W 0x57
 
-class Game;
 class Background;
 class Mario;
 class Camera;
-class Entity;
 
 class Scene {
 private:
 	enum class ObjectType {
+		//entities
 		OBJECT_TYPE_MARIO = 0,
 		OBJECT_TYPE_GOOMBA = 1,
 		OBJECT_TYPE_REDPARAGOOMBA = 2,
 		OBJECT_TYPE_TROOPA = 3,
 		OBJECT_TYPE_PARATROOPA = 4,
 		OBJECT_TYPE_PIPLANT = 5,
-		OBJECT_TYPE_VENUSTRAP = 6
+		OBJECT_TYPE_VENUSTRAP = 6,
+		//animated tiles
+		OBJECT_TYPE_COIN = 101,
+		OBJECT_TYPE_QUESTIONBLOCK = 102,
+		OBJECT_TYPE_SHINYBRICK = 103,
+		OBJECT_TYPE_BONUSITEM = 104,
 	};
 
 	enum class SceneSection {
@@ -89,13 +66,13 @@ private:
 	Mario* marioInstance;
 	Camera* cameraInstance;
 
-	const static int MAX_FILE_LINE = 1024;
+	const static int MAX_FILE_LINE = 2048;
 
 	int sceneID;
 	int sceneWidth, sceneHeight;
 
 	std::string filePath;
-	std::vector<Entity*> entities;
+	std::vector<GameObject*> objects;
 
 	std::unordered_map<unsigned int, std::pair<std::string, D3DCOLOR>> textureFiles;
 

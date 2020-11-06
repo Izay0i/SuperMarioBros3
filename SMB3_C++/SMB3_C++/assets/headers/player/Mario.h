@@ -2,12 +2,11 @@
 
 #include <fstream>
 
-#include "../StateMachine.h"
 #include "../Entity.h"
 
 class Entity;
 
-class Mario : Entity {
+class Mario : public Entity {
 private:
 	enum class MarioForm {
 		SMALL,
@@ -55,8 +54,7 @@ private:
 
 	const static int MAX_FILE_LINE = 1024;
 	
-	int acceleration;
-	float runSpeed = 0.15f;
+	float runSpeed = 0.10f;
 	float jumpSpeed = 0.2f;
 	float gravity = 0.002f;
 
@@ -64,6 +62,8 @@ private:
 	MarioState currentState;
 
 	void CheckCollision(Entity*, Entity*) override;
+	
+	void HandleStates();
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);

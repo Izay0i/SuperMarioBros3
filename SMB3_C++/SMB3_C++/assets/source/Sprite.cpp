@@ -52,7 +52,7 @@ void Sprite::AddBound(RECT bound) {
 	bounds.push_back(bound);
 }
 
-void Sprite::Draw(D3DXVECTOR3 position) {
+void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale) {
 	DWORD now = static_cast<DWORD>(GetTickCount64());
 
 	if (currentFrame == -1) {
@@ -71,16 +71,23 @@ void Sprite::Draw(D3DXVECTOR3 position) {
 			}
 		}
 	}
-	
-	float x = position.x - Camera::GetInstance()->GetPosition().x;
-	float y = position.y - Camera::GetInstance()->GetPosition().y;
-	D3DXVECTOR3 spritePosition = D3DXVECTOR3(x, y, 0);
+
+	//WHY DOES TRANSLATING EVERYTHING BY FLOAT MAKE THE SPRITES PIXELATED???
+	int x = static_cast<int>(position.x - Camera::GetInstance()->GetPosition().x);
+	int y = static_cast<int>(position.y - Camera::GetInstance()->GetPosition().y);
+	D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);
+
+	D3DXMATRIX mat;
+	D3DXVECTOR2 center(8, 8);
+
+	D3DXMatrixTransformation2D(&mat, &center, 0.0f, &scale, nullptr, 0.0f, &spritePosition);
+	Game::GetInstance()->GetSpriteHandler()->SetTransform(&mat);
 
 	Game::GetInstance()->GetSpriteHandler()->Draw(
 		texture,
 		&bounds.at(currentFrame),
 		nullptr,
-		&spritePosition,
+		nullptr,
 		D3DCOLOR_ARGB(255, 255, 255, 255)
 	);
 }

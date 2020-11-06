@@ -25,7 +25,7 @@ private:
 	const WCHAR* GAME_TITLE = L"Super Mario Bros 3";
 	
 	const static int MAX_FILE_LINE = 1024;
-	const int FRAME_RATE = 30;
+	const int FRAME_RATE = 60;
 
 	static Game* gameInstance;
 	

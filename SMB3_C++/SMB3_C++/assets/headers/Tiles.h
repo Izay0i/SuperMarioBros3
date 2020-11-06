@@ -10,23 +10,33 @@
 #include "Game.h"
 #include "Util.h"
 
-class Tiles {
+class HitBox;
+
+class Tiles : public GameObject {
 private:
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	int spritesArrID;
 	std::vector<std::pair<RECT, D3DXVECTOR3>> images;
 
-	HitBox hitbox;
+	HitBox* hitbox;
 
 public:
+	Tiles();
+	~Tiles();
+
 	void LoadTexture(std::string, D3DCOLOR);
 
 	void AddHitBox(RECTF);
 	void AddImage(RECT, D3DXVECTOR3);
+	
+	void SetSpritesArrID(int id) { spritesArrID = id; }
+	int GetSpritesArrID() { return spritesArrID; }
 
-	void Render();
+	void Update(DWORD) override {}
+	void Render() override;
 
-	void Release();
+	void Release() override;
 };

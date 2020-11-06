@@ -23,5 +23,5 @@ private:
 public:	
 	void ParseSprites(std::string);
 	
-	void PlayAnimation(std::string, D3DXVECTOR3);
+	void PlayAnimation(std::string, D3DXVECTOR3, D3DXVECTOR2 = D3DXVECTOR2(1.0f, 1.0f));
 };

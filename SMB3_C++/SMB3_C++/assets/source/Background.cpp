@@ -47,19 +47,21 @@ void Background::AddImage(RECT bound, D3DXVECTOR3 pos) {
 
 void Background::DrawBackground() {			
 	for (const auto &image : images) {
-		float x = image.second.x - Camera::GetInstance()->GetPosition().x;
-		float y = image.second.y - Camera::GetInstance()->GetPosition().y;
-		D3DXVECTOR3 position = D3DXVECTOR3(x, y, 0);
-		
-		/*char debugStr[100];
-		sprintf_s(debugStr, "Sprite position: %f %f\n", position.x, position.y);
-		OutputDebugStringA(debugStr);*/
+		int x = static_cast<int>(image.second.x - Camera::GetInstance()->GetPosition().x);
+		int y = static_cast<int>(image.second.y - Camera::GetInstance()->GetPosition().y);
+		D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);
+
+		D3DXMATRIX mat;
+
+		D3DXVECTOR2 scale(1.0f, 1.0f);
+		D3DXMatrixTransformation2D(&mat, nullptr, 0.0f, &scale, nullptr, 0.0f, &spritePosition);
+		Game::GetInstance()->GetSpriteHandler()->SetTransform(&mat);
 
 		Game::GetInstance()->GetSpriteHandler()->Draw(
 			texture,
 			&image.first,
 			nullptr,
-			&position,
+			nullptr,
 			D3DCOLOR_XRGB(255, 255, 255)
 		);
 	}

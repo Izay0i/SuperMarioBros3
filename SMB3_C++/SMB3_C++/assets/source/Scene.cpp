@@ -93,29 +93,108 @@ void Scene::ParseBackground(std::string line) {
 }
 
 void Scene::ParseTilesData(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
 
+	if (tokens.size() < 6) {
+		return;
+	}
+
+	GameObject* object = new Tiles;
+	dynamic_cast<Tiles*>(object)->SetSpritesArrID(atoi(tokens.at(5).c_str()));
+	object->SetObjectID(atoi(tokens.at(0).c_str()));
+
+	RECTF hitbox;
+	hitbox.left = atoi(tokens.at(1).c_str());
+	hitbox.top = atoi(tokens.at(2).c_str());
+	hitbox.right = atoi(tokens.at(3).c_str());
+	hitbox.bottom = atoi(tokens.at(4).c_str());
+
+	dynamic_cast<Tiles*>(object)->AddHitBox(hitbox);
+
+	if (object) {
+		objects.push_back(object);
+	}
 }
 
 void Scene::ParseTileSprites(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
 
+	if (tokens.size() < 9) {
+		return;
+	}
+
+	for (GameObject* object : objects) {
+		//check if an object is a tile
+		if (dynamic_cast<Tiles*>(object)) {
+			Tiles* tile = static_cast<Tiles*>(object);
+
+			int objectID = atoi(tokens.at(0).c_str());
+			int spritesArrID = atoi(tokens.at(1).c_str());
+
+			RECT bound;
+			D3DXVECTOR3 pos;
+
+			if (tile->GetObjectID() == objectID) {
+				if (tile->GetSpritesArrID() == spritesArrID) {
+					int texID = atoi(tokens.at(8).c_str());
+					tile->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
+
+					bound.left = atoi(tokens.at(2).c_str());
+					bound.top = atoi(tokens.at(3).c_str());
+					bound.right = atoi(tokens.at(4).c_str()) + 1;
+					bound.bottom = atoi(tokens.at(5).c_str()) + 1;
+
+					int posX = atoi(tokens.at(6).c_str());
+					int posY = atoi(tokens.at(7).c_str());
+					pos = D3DXVECTOR3(posX, posY, 0);
+
+					tile->AddImage(bound, pos);
+
+					return;
+				}
+			}
+		}
+	}
 }
 
 void Scene::ParseEntityData(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
-	if (tokens.size() < 2) {
+	if (tokens.size() < 3) {
 		return;
 	}
+
+	GameObject* object = nullptr;
 
 	ObjectType objectID = static_cast<ObjectType>(atoi(tokens.at(0).c_str()));
 	switch (objectID) {
 		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();
+			marioInstance->SetObjectID(static_cast<int>(objectID));
 			marioInstance->ParseData(tokens.at(1));
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
+			
+			break;
+		case ObjectType::OBJECT_TYPE_REDPARAGOOMBA:
 
 			break;
+		case ObjectType::OBJECT_TYPE_TROOPA:
+
+			break;
+		case ObjectType::OBJECT_TYPE_PARATROOPA:
+
+			break;
+		case ObjectType::OBJECT_TYPE_PIPLANT:
+
+			break;
+		case ObjectType::OBJECT_TYPE_VENUSTRAP:
+
+			break;
+	}
+
+	if (object) {
+		objects.push_back(object);
 	}
 }
 
@@ -184,7 +263,7 @@ void Scene::Load() {
 			continue;
 		}
 
-		if (line == "[TILES_DATA") {
+		if (line == "[TILES_DATA]") {
 			section = SceneSection::SCENE_FILE_SECTION_TILESDATA;
 			continue;
 		}		
@@ -228,9 +307,6 @@ void Scene::Load() {
 	}
 
 	readFile.close();
-
-	/*cameraInstance = Camera::GetInstance();
-	cameraInstance->SetPosition(D3DXVECTOR3(Game::GetInstance()->GetScreenWidth() / 2, Game::GetInstance()->GetScreenHeight() / 2, 0));*/
 }
 
 void Scene::Unload() {
@@ -238,9 +314,9 @@ void Scene::Unload() {
 		bgInstance->Release();
 	}
 
-	for (Entity* entity : entities) {
-		if (entity) {
-			entity->Release();
+	for (GameObject* object : objects) {
+		if (object) {
+			object->Release();
 		}
 	}
 	
@@ -256,17 +332,23 @@ void Scene::Unload() {
 }
 
 void Scene::Update(DWORD delta) {	
-	for (Entity* entity : entities) {
-		entity->Update(delta);
+	for (GameObject* object : objects) {
+		object->Update(delta);
 	}
 
 	marioInstance = Mario::GetInstance();
 	marioInstance->Update(delta);
 
-	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
+	D3DXVECTOR3 camPosition = marioInstance->GetPosition();	
 	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2;
+	if (camPosition.x < 0) {
+		camPosition.x = 0;
+	}
+	else if ((camPosition.x + Game::GetInstance()->GetScreenWidth()) > sceneWidth) {
+		camPosition.x = sceneWidth - Game::GetInstance()->GetScreenWidth();
+	}
 	//camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;
-	camPosition.y = Game::GetInstance()->GetScreenWidth() / 2;
+	camPosition.y = 230;
 
 	Camera::GetInstance()->SetPosition(camPosition);
 }
@@ -274,8 +356,8 @@ void Scene::Update(DWORD delta) {
 void Scene::Render() {
 	bgInstance->DrawBackground();
 	
-	for (Entity* entity : entities) {
-		entity->Render();
+	for (GameObject* object : objects) {
+		object->Render();
 	}
 
 	marioInstance = Mario::GetInstance();
@@ -287,5 +369,5 @@ void Scene::OnKeyDown(int keyCode) {
 }
 
 void Scene::OnKeyUp(int keyCode) {
-
+	Mario::GetInstance()->OnKeyUp(keyCode);
 }

@@ -4,6 +4,12 @@ LPCWSTR Tiles::texturePath = nullptr;
 LPDIRECT3DTEXTURE9 Tiles::texture = nullptr;
 D3DCOLOR Tiles::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
+Tiles::Tiles() {
+	hitbox = new HitBox;
+}
+
+Tiles::~Tiles() {}
+
 void Tiles::LoadTexture(std::string path, D3DCOLOR color) {
 	if (!texture) {
 		texturePath = Util::ToLPCWSTR(path);
@@ -42,7 +48,7 @@ void Tiles::LoadTexture(std::string path, D3DCOLOR color) {
 }
 
 void Tiles::AddHitBox(RECTF bound) {
-	hitbox.AddHitBox(bound);
+	hitbox->AddHitBox(bound);
 }
 
 void Tiles::AddImage(RECT bound, D3DXVECTOR3 pos) {
@@ -51,19 +57,21 @@ void Tiles::AddImage(RECT bound, D3DXVECTOR3 pos) {
 
 void Tiles::Render() {
 	for (const auto& image : images) {
-		float x = image.second.x - Camera::GetInstance()->GetPosition().x;
-		float y = image.second.y - Camera::GetInstance()->GetPosition().y;
-		D3DXVECTOR3 position = D3DXVECTOR3(x, y, 0);
+		int x = static_cast<int>(image.second.x - Camera::GetInstance()->GetPosition().x);
+		int y = static_cast<int>(image.second.y - Camera::GetInstance()->GetPosition().y);
+		D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);
 
-		/*char debugStr[100];
-		sprintf_s(debugStr, "Sprite position: %f %f\n", position.x, position.y);
-		OutputDebugStringA(debugStr);*/
+		D3DXMATRIX mat;
+
+		D3DXVECTOR2 scale(1.0f, 1.0f);
+		D3DXMatrixTransformation2D(&mat, nullptr, 0.0f, &scale, nullptr, 0.0f, &spritePosition);
+		Game::GetInstance()->GetSpriteHandler()->SetTransform(&mat);
 
 		Game::GetInstance()->GetSpriteHandler()->Draw(
 			texture,
 			&image.first,
 			nullptr,
-			&position,
+			nullptr,
 			D3DCOLOR_XRGB(255, 255, 255)
 		);
 	}
@@ -77,6 +85,11 @@ void Tiles::Release() {
 	if (texturePath) {
 		delete texturePath;
 		texturePath = nullptr;
+	}
+
+	if (hitbox) {
+		delete hitbox;
+		hitbox = nullptr;
 	}
 
 	images.clear();

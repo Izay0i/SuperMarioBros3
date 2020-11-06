@@ -35,7 +35,7 @@ protected:
 	virtual	D3DXVECTOR2 GetScale() = 0;
 
 public:
-	virtual ~Entity() {}
+	virtual ~Entity() {}	
 
 	virtual void Update(DWORD) = 0;
 	virtual void Render() = 0;

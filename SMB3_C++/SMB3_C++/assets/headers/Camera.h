@@ -50,5 +50,8 @@ public:
 
 	RECTF GetBound() const;
 
+	void Update(DWORD) override {}
+	void Render() override {}
+
 	void Release() override;
 };

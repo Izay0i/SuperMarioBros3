@@ -157,6 +157,10 @@
     <ClCompile Include="assets\source\SceneManager.cpp" />
     <ClCompile Include="assets\source\Sprite.cpp" />
     <ClCompile Include="assets\source\Tiles.cpp" />
+    <ClCompile Include="assets\source\tiles\BonusItem.cpp" />
+    <ClCompile Include="assets\source\tiles\Coin.cpp" />
+    <ClCompile Include="assets\source\tiles\QuestionBlock.cpp" />
+    <ClCompile Include="assets\source\tiles\ShinyBrick.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +179,10 @@
     <ClInclude Include="assets\headers\Sprite.h" />
     <ClInclude Include="assets\headers\StateMachine.h" />
     <ClInclude Include="assets\headers\Tiles.h" />
+    <ClInclude Include="assets\headers\tiles\BonusItem.h" />
+    <ClInclude Include="assets\headers\tiles\Coin.h" />
+    <ClInclude Include="assets\headers\tiles\QuestionBlock.h" />
+    <ClInclude Include="assets\headers\tiles\ShinyBrick.h" />
     <ClInclude Include="assets\headers\Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

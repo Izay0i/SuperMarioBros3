@@ -4,8 +4,11 @@ Entity* Mario::marioInstance = nullptr;
 
 Mario::Mario() {
 	sprite = new AnimatedSprite;
-	currentForm = MarioForm::RACOON;
+
+	currentForm = MarioForm::BIG;
 	currentState = MarioState::IDLE;
+
+	scale = D3DXVECTOR2(1.0f, 1.0f);
 }
 
 Mario* Mario::GetInstance() {
@@ -135,42 +138,82 @@ void Mario::CheckCollision(Entity* movingEntity, Entity* staticEntity) {
 
 }
 
+void Mario::HandleStates() {
+	switch (currentState) {
+		case MarioState::IDLE:
+			if (velocity.x != 0.0f) {
+				SetState(MarioState::RUN);
+			}
+			else if (velocity.y < 0.0f) {
+				SetState(MarioState::JUMP);
+			}
+			else if (velocity.y > 0.0f) {
+				SetState(MarioState::FALL);
+			}
+			break;
+		case MarioState::RUN:
+			if (velocity.x == 0.0f) {
+				SetState(MarioState::IDLE);
+			}
+			break;
+		case MarioState::TURN:
+
+			break;
+		case MarioState::JUMP:
+			if (velocity.y > 0.0f) {
+				//SetStates(MarioState::FALL);
+			}
+			break;
+		case MarioState::FALL:
+
+			break;
+		case MarioState::HOLD:
+
+			break;
+		case MarioState::KICK:
+
+			break;
+		case MarioState::DIE:
+
+			break;
+		case MarioState::CROUCH:
+			if (velocity.x != 0.0f) {
+				SetState(MarioState::RUN);
+			}
+			else if (velocity.y < 0.0f) {
+				SetState(MarioState::JUMP);
+			}
+			break;
+	}
+}
+
 void Mario::OnKeyDown(int keyCode) {
 	switch (keyCode) {
 		case VK_A:
-			SetState(MarioState::RUN);
-			acceleration = -1;
-			//OutputDebugStringA("A key pressed\n");
+			velocity.x = -runSpeed;
+			//to flip the sprite
+			scale = D3DXVECTOR2(1.0f, 1.0f);
 			break;
 		case VK_D:
-			SetState(MarioState::RUN);
-			acceleration = 1;
-			//OutputDebugStringA("D key pressed\n");
+			velocity.x = runSpeed;
+			scale = D3DXVECTOR2(-1.0f, 1.0f);
 			break;
 		case VK_S:
 			SetState(MarioState::CROUCH);
-			//OutputDebugStringA("S key pressed\n");
+			velocity.y = jumpSpeed;
+			//scale = D3DXVECTOR2(1.0f, 1.0f);
 			break;
 		case VK_W:
-			//OutputDebugStringA("W key pressed\n");
+			scale = D3DXVECTOR2(1.0f, 1.0f);
 			break;
 		case VK_SPACE:
-			SetState(MarioState::JUMP);
-			//OutputDebugStringA("Space key pressed\n");
+			velocity.y = -jumpSpeed;
+			//scale = D3DXVECTOR2(1.0f, 1.0f);
 			break;
-		case VK_F: //fire or spin
-			acceleration = 0;
+		case VK_K: //fire or spin
 			velocity.x = 0;
 			velocity.y = 0;
-			switch (GetMarioForm()) {
-				case MarioForm::FIRE:
-					SetState(MarioState::SHOOT);
-					break;
-				case MarioForm::RACOON:
-					SetState(MarioState::SPIN);
-					break;
-			}
-			//OutputDebugStringA("F key pressed\n");
+			scale = D3DXVECTOR2(-1.0f, 1.0f);
 			break;
 	}
 }
@@ -180,24 +223,10 @@ void Mario::OnKeyUp(int keyCode) {
 }
 
 void Mario::Update(DWORD delta) {
-	switch (GetState()) {
-		case MarioState::RUN:
-			velocity.x = runSpeed * acceleration;
-			break;
-		case MarioState::JUMP:
-			velocity.y = -jumpSpeed;
-			break;
-		case MarioState::CROUCH:
-			velocity.y = jumpSpeed;
-			break;
-	}
+	HandleStates();
 
 	distance = velocity * delta;
 	position += distance;
-
-	/*char debugStr[100];
-	sprintf_s(debugStr, "Velocity: %f %f\tPosition: %f %f\n", velocity.x, velocity.y, position.x, position.y);
-	OutputDebugStringA(debugStr);*/
 }
 
 void Mario::Render() {
@@ -205,75 +234,75 @@ void Mario::Render() {
 		case MarioState::IDLE:
 			switch (GetMarioForm()) {
 				case MarioForm::SMALL:
-					sprite->PlayAnimation("Idle", position);
+					sprite->PlayAnimation("Idle", position, scale);
 					break;
 				case MarioForm::BIG:
-					sprite->PlayAnimation("BigIdle", position);
+					sprite->PlayAnimation("BigIdle", position, scale);
 					break;
 				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireIdle", position);
+					sprite->PlayAnimation("FireIdle", position, scale);
 					break;
 				case MarioForm::RACOON:
-					sprite->PlayAnimation("RacIdle", position);
+					sprite->PlayAnimation("RacIdle", position, scale);
 					break;
 			}
 			break;
 		case MarioState::RUN:
 			switch (GetMarioForm()) {
 				case MarioForm::SMALL:
-					sprite->PlayAnimation("Run", position);
+					sprite->PlayAnimation("Run", position, scale);
 					break;
 				case MarioForm::BIG:
-					sprite->PlayAnimation("BigRun", position);
+					sprite->PlayAnimation("BigRun", position, scale);
 					break;
 				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireRun", position);
+					sprite->PlayAnimation("FireRun", position, scale);
 					break;
 				case MarioForm::RACOON:
-					sprite->PlayAnimation("RacRun", position);
+					sprite->PlayAnimation("RacRun", position, scale);
 					break;
 			}
 			break;
 		case MarioState::JUMP:
 			switch (GetMarioForm()) {
 				case MarioForm::SMALL:
-					sprite->PlayAnimation("Jump", position);
+					sprite->PlayAnimation("Jump", position, scale);
 					break;
 				case MarioForm::BIG:
-					sprite->PlayAnimation("BigJump", position);
+					sprite->PlayAnimation("BigJump", position, scale);
 					break;
 				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireJump", position);
+					sprite->PlayAnimation("FireJump", position, scale);
 					break;
 				case MarioForm::RACOON:
-					sprite->PlayAnimation("RacJump", position);
+					sprite->PlayAnimation("RacJump", position, scale);
 					break;
 			}
 			break;
 		case MarioState::CROUCH:
 			switch (GetMarioForm()) {
 				case MarioForm::BIG:
-					sprite->PlayAnimation("BigCrouch", position);
+					sprite->PlayAnimation("BigCrouch", position, scale);
 					break;
 				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireCrouch", position);
+					sprite->PlayAnimation("FireCrouch", position, scale);
 					break;
 				case MarioForm::RACOON:
-					sprite->PlayAnimation("RacCrouch", position);
+					sprite->PlayAnimation("RacCrouch", position, scale);
 					break;
 				}
 			break;
 		case MarioState::SHOOT:
 			switch (GetMarioForm()) {
 				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireShoot", position);
+					sprite->PlayAnimation("FireShoot", position, scale);
 					break;
 			}
 			break;
 		case MarioState::SPIN:
 			switch (GetMarioForm()) {
 			case MarioForm::RACOON:
-				sprite->PlayAnimation("RacSpin", position);
+				sprite->PlayAnimation("RacSpin", position, scale);
 				break;
 			}
 			break;
@@ -286,5 +315,10 @@ void Mario::Release() {
 	if (marioInstance) {
 		delete marioInstance;
 		marioInstance = nullptr;
+	}
+	
+	if (sprite) {
+		delete sprite;
+		sprite = nullptr;
 	}
 }
