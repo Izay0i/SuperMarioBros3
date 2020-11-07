@@ -3,8 +3,6 @@
 #include <dinput.h>
 #include <d3d9.h>
 
-#include "Scene.h"
-
 class Device {
 private:
 	const static int KEYBOARD_BUFFER_SIZE = 1024;

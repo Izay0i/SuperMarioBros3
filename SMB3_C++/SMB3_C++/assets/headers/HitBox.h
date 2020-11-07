@@ -4,7 +4,7 @@
 
 #include <Windows.h>
 
-#include "GameObject.h"
+#include "Util.h"
 
 class HitBox {
 private:

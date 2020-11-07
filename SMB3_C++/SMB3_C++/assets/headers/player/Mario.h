@@ -4,6 +4,12 @@
 
 #include "../Entity.h"
 
+#define VK_A 0x41
+#define VK_D 0x44
+#define VK_K 0x4B
+#define VK_S 0x53
+#define VK_W 0x57
+
 class Entity;
 
 class Mario : public Entity {
@@ -54,12 +60,18 @@ private:
 
 	const static int MAX_FILE_LINE = 1024;
 	
+	std::string texturePath;
+	D3DCOLOR colorKey;
+
 	float runSpeed = 0.10f;
 	float jumpSpeed = 0.2f;
 	float gravity = 0.002f;
 
 	MarioForm currentForm;
 	MarioState currentState;
+
+	LPDIRECT3DDEVICE9 directDevice;
+	LPD3DXSPRITE spriteHandler;
 
 	void CheckCollision(Entity*, Entity*) override;
 	
@@ -75,7 +87,7 @@ public:
 
 	bool IsOnGround() {}
 
-	void ParseData(std::string);
+	void ParseData(std::string, std::string, D3DCOLOR);
 
 	void SetPosition(D3DXVECTOR3) override;
 	D3DXVECTOR3 GetPosition() override;	
@@ -94,6 +106,19 @@ public:
 
 	void SetState(MarioState);
 	MarioState GetState();
+
+	void SetDevice(LPDIRECT3DDEVICE9& dev) { 
+		if (!dev) {
+			OutputDebugStringA("[MARIO] Device is nulllptr\n");
+		}
+		directDevice = dev;
+
+		sprite->SetDevice(directDevice);
+	}
+	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
+
+	void SetSpriteHandler(LPD3DXSPRITE& handler) { spriteHandler = handler; sprite->SetSpriteHandler(spriteHandler); }
+	LPD3DXSPRITE GetSpriteHandler() { return spriteHandler; }
 
 	void OnKeyDown(int);
 	void OnKeyUp(int);

@@ -1,7 +1,7 @@
 //#include "../../headers/tiles/BonusItem.h"
 //
 //BonusItem::BonusItem() {
-//	sprite = new AnimatedSprite;
+//	sprite = new AnimatedSprite(directDevice, spriteHandler);
 //}
 //
 //void BonusItem::ParseSprites(std::string line) {

@@ -1,5 +1,8 @@
 #include "../headers/Game.h"
 
+LPDIRECT3DDEVICE9 Game::directDevice = nullptr;
+LPD3DXSPRITE Game::spriteHandler = nullptr;
+
 LRESULT CALLBACK Game::WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		case WM_DESTROY:
@@ -193,10 +196,13 @@ bool Game::InitGame(HWND hWND) {
 	directDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
 
 	HRESULT hResult = D3DXCreateSprite(directDevice, &spriteHandler);
-	if (hResult != DI_OK) {
+	if (hResult != D3D_OK) {
 		OutputDebugStringA("Failed to create sprite handler\n");
 		return false;
 	}
+
+	sceneManager->SetDevice(directDevice);
+	sceneManager->SetSpriteHandler(spriteHandler);
 
 	return true;
 }
@@ -251,7 +257,7 @@ void Game::Load(std::string filePath) {
 	readFile.close();
 	
 	sceneManager->ChangeScene(currentSceneID);
-	sceneManager->GetCurrentScene()->Load();
+	sceneManager->GetCurrentScene()->Load(directDevice, spriteHandler);
 }
 
 void Game::GameRun() {

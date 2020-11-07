@@ -27,7 +27,7 @@ spriteHandler->Draw(
 );
 */
 
-
+#include "Util.h"
 #include "GameObject.h"
 
 class Camera : GameObject {

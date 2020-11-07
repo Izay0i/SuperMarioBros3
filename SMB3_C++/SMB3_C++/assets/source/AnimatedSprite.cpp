@@ -8,7 +8,7 @@ bool AnimatedSprite::HasAnimation(std::string animName) {
 	return sprites.find(animName) != sprites.end();
 }
 
-void AnimatedSprite::ParseSprites(std::string line) {
+void AnimatedSprite::ParseSprites(std::string line, std::string texturePath, D3DCOLOR colorKey) {
 	std::vector<std::string> tokens = Util::split(line);
 
 	if (tokens.size() < 5) {
@@ -22,14 +22,10 @@ void AnimatedSprite::ParseSprites(std::string line) {
 	bound.bottom = atoi(tokens.at(4).c_str()) + 1;
 
 	if (!HasAnimation(tokens.at(0))) {
-
-		int index = atoi(tokens.at(7).c_str());
-		std::string texturePath = SceneManager::GetInstance()->GetCurrentScene()->GetTexturePath(index);
-		D3DCOLOR colorKey = SceneManager::GetInstance()->GetCurrentScene()->GetTextureColorKey(index);
-
 		int totalFrames = atoi(tokens.at(5).c_str());
 		float animSpeed = atof(tokens.at(6).c_str());
-		sprites[tokens.at(0)] = new Sprite(texturePath, bound, totalFrames, animSpeed, colorKey);
+		//sprites[tokens.at(0)] = new Sprite(texturePath, bound, totalFrames, animSpeed, colorKey, directDevice, spriteHandler);
+		sprites.insert(std::make_pair(tokens.at(0), new Sprite(texturePath, bound, totalFrames, animSpeed, colorKey, directDevice, spriteHandler)));
 
 		char debugStr[100];
 		sprintf_s(debugStr, "Added animation: %s\n", tokens.at(0).c_str());

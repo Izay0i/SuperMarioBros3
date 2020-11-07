@@ -19,13 +19,7 @@
 
 #include "npc/Goomba.h"
 
-//#include "tiles/BonusItem.h"
-
-#define VK_A 0x41
-#define VK_D 0x44
-#define VK_K 0x4B
-#define VK_S 0x53
-#define VK_W 0x57
+#include "tiles/BonusItem.h"
 
 class Background;
 class Mario;
@@ -78,6 +72,9 @@ private:
 
 	D3DCOLOR backgroundColor;
 
+	LPDIRECT3DDEVICE9 directDevice;
+	LPD3DXSPRITE spriteHandler;
+
 	~Scene();
 
 	void ParseMapSize(std::string);
@@ -100,7 +97,18 @@ public:
 	int GetSceneWidth() const;
 	int GetSceneHeight() const;
 
-	void Load();
+	void SetDevice(LPDIRECT3DDEVICE9& dev) { 
+		if (!dev) {
+			OutputDebugStringA("[SCENE] Device is nulllptr\n");
+		}
+		directDevice = dev; 
+	}
+	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
+
+	void SetSpriteHandler(LPD3DXSPRITE& handler) { spriteHandler = handler; }
+	LPD3DXSPRITE GetSpriteHandler() { return spriteHandler; }
+
+	void Load(LPDIRECT3DDEVICE9&, LPD3DXSPRITE&);
 	void Unload();
 
 	void Update(DWORD);

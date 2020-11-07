@@ -4,7 +4,7 @@ Scene::Scene(int id, std::string path) {
 	sceneID = id;
 	filePath = path;
 
-	bgInstance = new Background();
+	bgInstance = new Background;
 }
 
 Scene::~Scene() {}
@@ -164,14 +164,19 @@ void Scene::ParseEntityData(std::string line) {
 		return;
 	}
 
+	int texID = atoi(tokens.at(2).c_str());
 	GameObject* object = nullptr;
 
 	ObjectType objectID = static_cast<ObjectType>(atoi(tokens.at(0).c_str()));
 	switch (objectID) {
 		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();
+			
 			marioInstance->SetObjectID(static_cast<int>(objectID));
-			marioInstance->ParseData(tokens.at(1));
+			marioInstance->SetDevice(directDevice);
+			marioInstance->SetSpriteHandler(spriteHandler);
+
+			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
 			
@@ -189,6 +194,9 @@ void Scene::ParseEntityData(std::string line) {
 
 			break;
 		case ObjectType::OBJECT_TYPE_VENUSTRAP:
+
+			break;
+		case ObjectType::OBJECT_TYPE_BONUSITEM:
 
 			break;
 	}
@@ -219,7 +227,10 @@ void Scene::ParseWorldCoords(std::string line) {
 	}
 }
 
-void Scene::Load() {
+void Scene::Load(LPDIRECT3DDEVICE9& device, LPD3DXSPRITE& handler) {
+	directDevice = device;
+	spriteHandler = handler;
+
 	std::ifstream readFile;
 	readFile.open(filePath, std::ios::in);
 
@@ -301,6 +312,8 @@ void Scene::Load() {
 				ParseTileSprites(line);
 				break;
 			case SceneSection::SCENE_FILE_SECTION_BACKGROUND:
+				bgInstance->SetDevice(directDevice);
+				bgInstance->SetSpriteHandler(spriteHandler);
 				ParseBackground(line);
 				break;
 		}
@@ -365,9 +378,13 @@ void Scene::Render() {
 }
 
 void Scene::OnKeyDown(int keyCode) {
-	Mario::GetInstance()->OnKeyDown(keyCode);
+	if (marioInstance) {
+		marioInstance->OnKeyDown(keyCode);
+	}
 }
 
 void Scene::OnKeyUp(int keyCode) {
-	Mario::GetInstance()->OnKeyUp(keyCode);
+	if (marioInstance) {
+		marioInstance->OnKeyUp(keyCode);
+	}
 }

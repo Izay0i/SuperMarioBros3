@@ -5,7 +5,7 @@ Entity* Mario::marioInstance = nullptr;
 Mario::Mario() {
 	sprite = new AnimatedSprite;
 
-	currentForm = MarioForm::BIG;
+	currentForm = MarioForm::SMALL;
 	currentState = MarioState::IDLE;
 
 	scale = D3DXVECTOR2(1.0f, 1.0f);
@@ -20,7 +20,7 @@ Mario* Mario::GetInstance() {
 }
 
 void Mario::ParseSprites(std::string line) {
-	sprite->ParseSprites(line);
+	sprite->ParseSprites(line, texturePath, colorKey);
 }
 
 void Mario::ParseHitboxes(std::string line) {
@@ -44,7 +44,7 @@ void Mario::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Mario::ParseData(std::string dataPath) {
+void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -52,6 +52,9 @@ void Mario::ParseData(std::string dataPath) {
 		OutputDebugStringA("Failed to read data\n");
 		return;
 	}
+
+	this->texturePath = texturePath;
+	this->colorKey = colorKey;
 
 	DataSection section = DataSection::DATA_SECTION_UNKNOWN;
 
@@ -281,6 +284,9 @@ void Mario::Render() {
 			break;
 		case MarioState::CROUCH:
 			switch (GetMarioForm()) {
+				case MarioForm::SMALL:
+					sprite->PlayAnimation("Idle", position, scale);
+					break;
 				case MarioForm::BIG:
 					sprite->PlayAnimation("BigCrouch", position, scale);
 					break;

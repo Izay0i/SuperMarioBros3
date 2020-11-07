@@ -1,6 +1,6 @@
-#Give me your Mario
-#No way you've got your own
-#Well I want yours too
+#Luigi: Give that to me
+#Mario: No way, you got your own
+#Luigi: Well I want yours too
 
 [SETTINGS]
 default	11

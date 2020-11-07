@@ -40,7 +40,7 @@ void SceneManager::ChangeScene(unsigned int id) {
 	scenes[currentSceneID]->Unload();
 
 	currentSceneID = id;
-	scenes[currentSceneID]->Load();
+	scenes[currentSceneID]->Load(directDevice, spriteHandler);
 }
 
 void SceneManager::Release() {

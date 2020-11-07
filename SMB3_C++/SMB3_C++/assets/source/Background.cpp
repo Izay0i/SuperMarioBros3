@@ -19,7 +19,7 @@ void Background::LoadTexture(std::string path, D3DCOLOR color) {
 		}
 
 		hResult = D3DXCreateTextureFromFileEx(
-			Game::GetInstance()->GetDevice(),
+			directDevice,
 			texturePath,
 			imageInfo.Width,
 			imageInfo.Height,
@@ -34,8 +34,9 @@ void Background::LoadTexture(std::string path, D3DCOLOR color) {
 			nullptr,
 			&texture
 			);
+
 		if (hResult != D3D_OK) {
-			OutputDebugStringA("Failed to create texture from file\n");
+			OutputDebugStringA("Failed to create background sprite from file\n");
 			return;
 		}
 	}
@@ -55,9 +56,9 @@ void Background::DrawBackground() {
 
 		D3DXVECTOR2 scale(1.0f, 1.0f);
 		D3DXMatrixTransformation2D(&mat, nullptr, 0.0f, &scale, nullptr, 0.0f, &spritePosition);
-		Game::GetInstance()->GetSpriteHandler()->SetTransform(&mat);
+		spriteHandler->SetTransform(&mat);
 
-		Game::GetInstance()->GetSpriteHandler()->Draw(
+		spriteHandler->Draw(
 			texture,
 			&image.first,
 			nullptr,

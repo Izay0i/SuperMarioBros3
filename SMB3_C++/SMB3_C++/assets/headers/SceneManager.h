@@ -18,6 +18,9 @@ private:
 
 	Device* deviceInput;
 
+	LPDIRECT3DDEVICE9 directDevice;
+	LPD3DXSPRITE spriteHandler;
+
 	SceneManager();
 	~SceneManager();
 
@@ -25,6 +28,17 @@ public:
 	static SceneManager* GetInstance();
 
 	Scene* GetCurrentScene();
+
+	void SetDevice(LPDIRECT3DDEVICE9& dev) { 
+		if (!dev) {
+			OutputDebugStringA("[SCENE MANAGER] Device is nulllptr\n");
+		}
+		directDevice = dev; 
+	}
+	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
+
+	void SetSpriteHandler(LPD3DXSPRITE& handler) { spriteHandler = handler; }
+	LPD3DXSPRITE GetSpriteHandler() { return spriteHandler; }
 
 	void ParseScenes(std::string);
 

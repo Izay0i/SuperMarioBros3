@@ -38,11 +38,11 @@ private:
 	HWND hWND;
 
 	LPDIRECT3D9 direct3D;
-	LPDIRECT3DDEVICE9 directDevice;
+	static LPDIRECT3DDEVICE9 directDevice;
 	
 	LPDIRECT3DSURFACE9 backBuffer;
 
-	LPD3DXSPRITE spriteHandler;
+	static LPD3DXSPRITE spriteHandler;
 	
 	static LRESULT CALLBACK WinProc(HWND, UINT, WPARAM, LPARAM);
 

@@ -3,6 +3,8 @@
 LPCWSTR Sprite::filePath = nullptr;
 LPDIRECT3DTEXTURE9 Sprite::texture = nullptr;
 D3DCOLOR Sprite::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+LPDIRECT3DDEVICE9 Sprite::directDevice = nullptr;
+LPD3DXSPRITE Sprite::spriteHandler = nullptr;
 
 void Sprite::LoadTexture() {
 	if (!texture) {
@@ -16,7 +18,7 @@ void Sprite::LoadTexture() {
 		}
 
 		hResult = D3DXCreateTextureFromFileEx(
-			Game::GetInstance()->GetDevice(),
+			directDevice,
 			filePath,
 			imageInfo.Width,
 			imageInfo.Height,
@@ -31,19 +33,32 @@ void Sprite::LoadTexture() {
 			nullptr,
 			&texture
 			);
+
 		if (hResult != D3D_OK) {
-			OutputDebugStringA("Failed to create texture from file\n");
+			OutputDebugStringA("Failed to create entity sprite from file\n");
 			return;
 		}
 	}
 }
 
-Sprite::Sprite(std::string path, RECT bound, int frames, float animSpeed, D3DCOLOR color) {
+Sprite::Sprite(std::string path, RECT bound, int frames, float animSpeed, D3DCOLOR color, LPDIRECT3DDEVICE9& device, LPD3DXSPRITE& handler) {
 	filePath = Util::ToLPCWSTR(path);
 	bounds.push_back(bound);
 	totalFrames = frames;
 	animationSpeed = animSpeed;
 	colorKey = color;
+
+	if (!device) {
+		OutputDebugStringA("[SPRITE] Device is nulllptr\n");
+	}
+
+	if (!directDevice) {
+		directDevice = device;
+	}
+
+	if (!spriteHandler) {
+		spriteHandler = handler;
+	}
 
 	LoadTexture();
 }
@@ -81,9 +96,9 @@ void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale) {
 	D3DXVECTOR2 center(8, 8);
 
 	D3DXMatrixTransformation2D(&mat, &center, 0.0f, &scale, nullptr, 0.0f, &spritePosition);
-	Game::GetInstance()->GetSpriteHandler()->SetTransform(&mat);
+	spriteHandler->SetTransform(&mat);
 
-	Game::GetInstance()->GetSpriteHandler()->Draw(
+	spriteHandler->Draw(
 		texture,
 		&bounds.at(currentFrame),
 		nullptr,

@@ -33,3 +33,13 @@ namespace Util {
 		return wStr->c_str();
 	}
 }
+
+typedef struct RectFloat {
+	float left;
+	float top;
+	float right;
+	float bottom;
+
+	RectFloat() : left(0), top(0), right(0), bottom(0) {}
+	RectFloat(float l, float t, float r, float b) : left(l), top(t), right(r), bottom(b) {}
+} RECTF;

@@ -5,8 +5,8 @@
 
 #include <d3dx9.h>
 
+#include "Camera.h"
 #include "Util.h"
-#include "Game.h"
 
 class Sprite {
 private:
@@ -22,10 +22,13 @@ private:
 	
 	static D3DCOLOR colorKey;
 
+	static LPDIRECT3DDEVICE9 directDevice;
+	static LPD3DXSPRITE spriteHandler;
+
 	void LoadTexture();
 
 public:
-	Sprite(std::string, RECT, int, float, D3DCOLOR);
+	Sprite(std::string, RECT, int, float, D3DCOLOR, LPDIRECT3DDEVICE9&, LPD3DXSPRITE&);
 
 	void AddBound(RECT);
 
