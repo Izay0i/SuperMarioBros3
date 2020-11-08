@@ -15,22 +15,21 @@ private:
 
 	Sprite* GetAnimation(std::string);
 
-	LPDIRECT3DDEVICE9 directDevice;
-	LPD3DXSPRITE spriteHandler;
+	static LPDIRECT3DDEVICE9 directDevice;
+	static LPD3DXSPRITE spriteHandler;
 
 	bool HasAnimation(std::string);
 
 	void AddBound(RECT, std::string);
 
 public:
+	static void SetDevice(LPDIRECT3DDEVICE9&);
+	static LPDIRECT3DDEVICE9 GetDevice();
 
-	void SetDevice(LPDIRECT3DDEVICE9& dev) { directDevice = dev; }
-	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
+	static void SetSpriteHandler(LPD3DXSPRITE&);
+	static LPD3DXSPRITE GetSpriteHandler();
 
-	void SetSpriteHandler(LPD3DXSPRITE& handler) { spriteHandler = handler; }
-	LPD3DXSPRITE GetSpriteHandler() { return spriteHandler; }
-
-	void ParseSprites(std::string, std::string, D3DCOLOR);
+	void ParseSprites(std::string, LPDIRECT3DTEXTURE9, D3DCOLOR);
 	
 	void PlayAnimation(std::string, D3DXVECTOR3, D3DXVECTOR2 = D3DXVECTOR2(1.0f, 1.0f));
 };

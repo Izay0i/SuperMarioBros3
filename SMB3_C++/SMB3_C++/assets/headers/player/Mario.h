@@ -59,9 +59,10 @@ private:
 	static Entity* marioInstance;
 
 	const static int MAX_FILE_LINE = 1024;
-	
-	std::string texturePath;
-	D3DCOLOR colorKey;
+
+	static LPCWSTR texturePath;
+	static LPDIRECT3DTEXTURE9 texture;
+	static D3DCOLOR colorKey;
 
 	float runSpeed = 0.10f;
 	float jumpSpeed = 0.2f;
@@ -70,8 +71,7 @@ private:
 	MarioForm currentForm;
 	MarioState currentState;
 
-	LPDIRECT3DDEVICE9 directDevice;
-	LPD3DXSPRITE spriteHandler;
+	void LoadTexture();
 
 	void CheckCollision(Entity*, Entity*) override;
 	
@@ -87,38 +87,13 @@ public:
 
 	bool IsOnGround() {}
 
-	void ParseData(std::string, std::string, D3DCOLOR);
+	void ParseData(std::string, std::string, D3DCOLOR) override;
 
-	void SetPosition(D3DXVECTOR3) override;
-	D3DXVECTOR3 GetPosition() override;	
+	void SetMarioForm(MarioForm form) { currentForm = form; }
+	MarioForm GetMarioForm() { return currentForm; }
 
-	void SetRotation(D3DXVECTOR2) override;
-	D3DXVECTOR2 GetRotation() override;
-
-	void SetTranslation(D3DXVECTOR2) override;
-	D3DXVECTOR2 GetTranslation() override;
-
-	void SetScale(D3DXVECTOR2) override;
-	D3DXVECTOR2 GetScale() override;
-
-	void SetMarioForm(MarioForm);
-	MarioForm GetMarioForm();
-
-	void SetState(MarioState);
-	MarioState GetState();
-
-	void SetDevice(LPDIRECT3DDEVICE9& dev) { 
-		if (!dev) {
-			OutputDebugStringA("[MARIO] Device is nulllptr\n");
-		}
-		directDevice = dev;
-
-		sprite->SetDevice(directDevice);
-	}
-	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
-
-	void SetSpriteHandler(LPD3DXSPRITE& handler) { spriteHandler = handler; sprite->SetSpriteHandler(spriteHandler); }
-	LPD3DXSPRITE GetSpriteHandler() { return spriteHandler; }
+	void SetState(MarioState state) { currentState = state; }
+	MarioState GetState() { return currentState; }
 
 	void OnKeyDown(int);
 	void OnKeyUp(int);

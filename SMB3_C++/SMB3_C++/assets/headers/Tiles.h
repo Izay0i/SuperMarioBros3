@@ -7,7 +7,9 @@
 
 #include <Windows.h>
 
-#include "Game.h"
+#include "GameObject.h"
+#include "HitBox.h"
+#include "Camera.h"
 #include "Util.h"
 
 class HitBox;

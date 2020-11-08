@@ -1,6 +1,9 @@
 #include "../../headers/player/Mario.h"
 
 Entity* Mario::marioInstance = nullptr;
+LPCWSTR Mario::texturePath = nullptr;
+LPDIRECT3DTEXTURE9 Mario::texture = nullptr;
+D3DCOLOR Mario::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Mario::Mario() {
 	sprite = new AnimatedSprite;
@@ -19,8 +22,43 @@ Mario* Mario::GetInstance() {
 	return static_cast<Mario*>(marioInstance);
 }
 
+void Mario::LoadTexture() {
+	if (!texture) {
+		HRESULT hResult;
+		D3DXIMAGE_INFO imageInfo;
+
+		hResult = D3DXGetImageInfoFromFile(texturePath, &imageInfo);
+		if (hResult != D3D_OK) {
+			OutputDebugStringA("[MARIO] Failed to get image info\n");
+			return;
+		}
+
+		hResult = D3DXCreateTextureFromFileEx(
+			directDevice,
+			texturePath,
+			imageInfo.Width,
+			imageInfo.Height,
+			1,
+			D3DUSAGE_DYNAMIC,
+			D3DFMT_UNKNOWN,
+			D3DPOOL_DEFAULT,
+			D3DX_DEFAULT,
+			D3DX_DEFAULT,
+			colorKey,
+			&imageInfo,
+			nullptr,
+			&texture
+		);
+
+		if (hResult != D3D_OK) {
+			OutputDebugStringA("Failed to create entity sprite from file\n");
+			return;
+		}
+	}
+}
+
 void Mario::ParseSprites(std::string line) {
-	sprite->ParseSprites(line, texturePath, colorKey);
+	sprite->ParseSprites(line, texture, colorKey);
 }
 
 void Mario::ParseHitboxes(std::string line) {
@@ -53,8 +91,10 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 		return;
 	}
 
-	this->texturePath = texturePath;
+	this->texturePath = Util::ToLPCWSTR(texturePath);
 	this->colorKey = colorKey;
+
+	LoadTexture();
 
 	DataSection section = DataSection::DATA_SECTION_UNKNOWN;
 
@@ -89,57 +129,7 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 	readFile.close();
 }
 
-void Mario::SetPosition(D3DXVECTOR3 pos) {
-	position = pos;
-}
-
-D3DXVECTOR3 Mario::GetPosition() {
-	return position;
-}
-
-void Mario::SetRotation(D3DXVECTOR2 rot) {
-	rotation = rot;
-}
-
-D3DXVECTOR2 Mario::GetRotation() {
-	return rotation;
-}
-
-void Mario::SetTranslation(D3DXVECTOR2 trans) {
-	translation = trans;
-}
-
-D3DXVECTOR2 Mario::GetTranslation() {
-	return translation;
-}
-
-void Mario::SetScale(D3DXVECTOR2 scale) {
-	this->scale = scale;
-}
-
-D3DXVECTOR2 Mario::GetScale() {
-	return scale;
-}
-
-void Mario::SetMarioForm(MarioForm form) {
-	currentForm = form;
-}
-
-Mario::MarioForm Mario::GetMarioForm() {
-	return currentForm;
-}
-
-void Mario::SetState(MarioState state) {
-	currentState = state;
-}
-
-Mario::MarioState Mario::GetState() {
-	return currentState;
-}
-
-void Mario::CheckCollision(Entity* movingEntity, Entity* staticEntity) {
-
-}
+void Mario::CheckCollision(Entity* movingEntity, Entity* staticEntity) {}
 
 void Mario::HandleStates() {
 	switch (currentState) {
@@ -216,7 +206,6 @@ void Mario::OnKeyDown(int keyCode) {
 		case VK_K: //fire or spin
 			velocity.x = 0;
 			velocity.y = 0;
-			scale = D3DXVECTOR2(-1.0f, 1.0f);
 			break;
 	}
 }

@@ -16,19 +16,21 @@ private:
 	std::vector<RECT> bounds;
 
 	DWORD lastFrameTime;
-	static LPCWSTR filePath;
 
-	static LPDIRECT3DTEXTURE9 texture;
-	
-	static D3DCOLOR colorKey;
+	LPDIRECT3DTEXTURE9 texture;
+	D3DCOLOR colorKey;
 
 	static LPDIRECT3DDEVICE9 directDevice;
 	static LPD3DXSPRITE spriteHandler;
 
-	void LoadTexture();
-
 public:
-	Sprite(std::string, RECT, int, float, D3DCOLOR, LPDIRECT3DDEVICE9&, LPD3DXSPRITE&);
+	Sprite(LPDIRECT3DTEXTURE9, RECT, int, float, D3DCOLOR);
+
+	static void SetDevice(LPDIRECT3DDEVICE9& dev) { if (!directDevice) { directDevice = dev; } }
+	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
+
+	static void SetSpriteHandler(LPD3DXSPRITE& handler) { if (!spriteHandler) { spriteHandler = handler; } }
+	LPD3DXSPRITE GetSpriteHandler() { return spriteHandler; }
 
 	void AddBound(RECT);
 

@@ -1,30 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="AnimatedSprite" Collapsed="true">
-    <Position X="5" Y="6" Width="1.5" />
+    <Position X="5.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABAAAAAAAAAAAgAABAAgAAAAAgAAAQIAAAAECAAAA=</HashCode>
+      <HashCode>AAABAAAAAAAAAACgAABAAgAAAACgAAgQAAAIAECAAAA=</HashCode>
       <FileName>assets\headers\AnimatedSprite.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Background" Collapsed="true">
-    <Position X="9.25" Y="2.75" Width="1.5" />
+    <Position X="3.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAkAACAAAAAAAAgAABAAAAAEAAAAgAAAAAkABACAAA=</HashCode>
+      <HashCode>AAQkAACAAAAAAAAAAAAAAAAAEAAAAgAAABAAABACAAA=</HashCode>
       <FileName>assets\headers\Background.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BonusItem" Collapsed="true">
-    <Position X="1.25" Y="6" Width="1.5" />
-    <NestedTypes>
-      <Enum Name="BonusItem::ItemState" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>assets\headers\tiles\BonusItem.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
+    <Position X="1.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABQBAAABACCAAAEgAABAAAAAAAAAAgiAIBIAIhAABAA=</HashCode>
+      <HashCode>ABQBAAABACCAAAEAAAAAAAAAAAAAAgiAIBIAIhAABAA=</HashCode>
       <FileName>assets\headers\tiles\BonusItem.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -36,7 +29,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Device" Collapsed="true">
-    <Position X="9.25" Y="2" Width="1.5" />
+    <Position X="9.5" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BIAAAAAIAQADAgAAAABBAAAABCAAAAAAAAAAABAAAAA=</HashCode>
       <FileName>assets\headers\Device.h</FileName>
@@ -45,7 +38,7 @@
   <Class Name="Entity" Collapsed="true">
     <Position X="5.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAQAAAAAECCAAAAAAAAAAAAAADAAAgiAIBIAIhAAAAA=</HashCode>
+      <HashCode>BAQgAACAECCAAAEAAAAAAAAAADAAAgiAIBIAIhAAAAA=</HashCode>
       <FileName>assets\headers\Entity.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -59,33 +52,21 @@
   <Class Name="GameObject" Collapsed="true">
     <Position X="7.5" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QFQAAAAAAAIAAAAAAACAJCACAEAAAAAAABQAABAAAAA=</HashCode>
+      <HashCode>QFQAAAAAAAIAAACgAADAJCACAECAAAgAABQIABAAAAA=</HashCode>
       <FileName>assets\headers\GameObject.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="HitBox" Collapsed="true">
-    <Position X="6.75" Y="6" Width="1.5" />
+    <Position X="7.5" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAQAAAAAQAAAEABAAAAAAAAAAAAAAEKAAAA=</HashCode>
       <FileName>assets\headers\HitBox.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Mario" Collapsed="true">
-    <Position X="3.25" Y="6" Width="1.5" />
-    <NestedTypes>
-      <Enum Name="Mario::MarioForm" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>assets\headers\player\Mario.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-      <Enum Name="Mario::MarioState" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>assets\headers\player\Mario.h</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
+    <Position X="3.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gBQhBEgBACCAAQGgIAhAAQAABAKACgigIBKIIhAAAAA=</HashCode>
+      <HashCode>gBQhBEgBACCAAQEAIAgAAQAABAIACgigIBKAIhAAAAA=</HashCode>
       <FileName>assets\headers\player\Mario.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -104,9 +85,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Sprite" Collapsed="true">
-    <Position X="5" Y="6.75" Width="1.5" />
+    <Position X="5.5" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAACIoAAAAgAgAAhAAAAAAAAAAkAQAAACAFAAAAA=</HashCode>
+      <HashCode>AAAEAACIoAAAAgCgAAhAAAAAAACAAkgQAAAKAFAAAAA=</HashCode>
       <FileName>assets\headers\Sprite.h</FileName>
     </TypeIdentifier>
   </Class>

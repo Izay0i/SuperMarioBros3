@@ -15,8 +15,11 @@ private:
 
 	const static int MAX_FILE_LINE = 1024;
 
-	LPDIRECT3DDEVICE9 directDevice;
-	LPD3DXSPRITE spriteHandler;
+	static LPCWSTR texturePath;
+	static LPDIRECT3DTEXTURE9 texture;
+	static D3DCOLOR colorKey;
+
+	void LoadTexture();
 
 	void CheckCollision(Entity*, Entity*) override {}
 
@@ -26,19 +29,7 @@ private:
 public:
 	BonusItem();
 
-	void ParseData(std::string);
-
-	void SetPosition(D3DXVECTOR3) override {}
-	D3DXVECTOR3 GetPosition() override { return position; }
-
-	void SetRotation(D3DXVECTOR2) override {}
-	D3DXVECTOR2 GetRotation() override { return rotation; }
-
-	void SetTranslation(D3DXVECTOR2) override {}
-	D3DXVECTOR2 GetTranslation() override { return translation; }
-
-	void SetScale(D3DXVECTOR2) override {}
-	D3DXVECTOR2 GetScale() override { return scale; }
+	void ParseData(std::string, std::string, D3DCOLOR) override;
 
 	void Update(DWORD) override;
 	void Render() override;

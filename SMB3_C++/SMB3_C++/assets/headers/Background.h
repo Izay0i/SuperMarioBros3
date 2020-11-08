@@ -7,32 +7,25 @@
 
 #include <Windows.h>
 
+#include "GameObject.h"
 #include "Camera.h"
 #include "Util.h"
 
-class Background {
+class Background : public GameObject {
 private:
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
-	LPDIRECT3DDEVICE9 directDevice;
-	LPD3DXSPRITE spriteHandler;
-
 	std::vector<std::pair<RECT, D3DXVECTOR3>> images;
 
 public:
-	void SetDevice(LPDIRECT3DDEVICE9& dev) { directDevice = dev; }
-	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
-
-	void SetSpriteHandler(LPD3DXSPRITE& handler) { spriteHandler = handler; }
-	LPD3DXSPRITE GetSpriteHandler() { return spriteHandler; }
-
 	void LoadTexture(std::string, D3DCOLOR);
 
 	void AddImage(RECT, D3DXVECTOR3);
 
-	void DrawBackground();
+	void Update(DWORD) override {}
+	void Render() override;
 
 	void Release();
 };

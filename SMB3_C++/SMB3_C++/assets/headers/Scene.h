@@ -9,6 +9,7 @@
 
 //Dependency hell, what do?
 
+#include "Game.h"
 #include "GameObject.h"
 #include "Background.h"
 #include "Tiles.h"
@@ -19,6 +20,9 @@
 
 #include "npc/Goomba.h"
 
+#include "tiles/Coin.h"
+#include "tiles/QuestionBlock.h"
+#include "tiles/ShinyBrick.h"
 #include "tiles/BonusItem.h"
 
 class Background;

@@ -17,6 +17,7 @@
 2	assets\textures\stage_tileset.png	224	163	216
 3	assets\textures\items_and_misc_blocks.png	255	255	255
 4	assets\textures\gui_and_font.png	255	255	255
+5	assets\textures\goal_roulette.png	156	252	240
 
 #obj_id	data_path	tex_id
 #0-99:	moving entities
@@ -118,7 +119,7 @@
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
 #Bonus item
-104	assets\data\tiles\bonusitem_data.txt	2
+104	assets\data\tiles\bonusitem_data.txt	5
 
 #obj_id	x	y
 [WORLD_COORDS]
@@ -198,7 +199,7 @@
 103	2096	400
 103	2112	400
 #Bonus item
-104	2689	338
+104	2688	337
 
 #obj_id	world_x	world_y	width	height	sprites_arr_id
 [TILES_DATA]

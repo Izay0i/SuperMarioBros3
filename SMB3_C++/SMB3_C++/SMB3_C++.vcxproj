@@ -150,6 +150,7 @@
     <ClCompile Include="assets\source\Camera.cpp" />
     <ClCompile Include="assets\source\Device.cpp" />
     <ClCompile Include="assets\source\Game.cpp" />
+    <ClCompile Include="assets\source\GameObject.cpp" />
     <ClCompile Include="assets\source\HitBox.cpp" />
     <ClCompile Include="assets\source\npc\Goomba.cpp" />
     <ClCompile Include="assets\source\player\Mario.cpp" />

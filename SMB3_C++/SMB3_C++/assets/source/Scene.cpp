@@ -100,15 +100,19 @@ void Scene::ParseTilesData(std::string line) {
 	}
 
 	GameObject* object = new Tiles;
-	dynamic_cast<Tiles*>(object)->SetSpritesArrID(atoi(tokens.at(5).c_str()));
 	object->SetObjectID(atoi(tokens.at(0).c_str()));
+	dynamic_cast<Tiles*>(object)->SetSpritesArrID(atoi(tokens.at(5).c_str()));
+
+	int posX, posY;
 
 	RECTF hitbox;
-	hitbox.left = atoi(tokens.at(1).c_str());
-	hitbox.top = atoi(tokens.at(2).c_str());
+	hitbox.left = posX = atoi(tokens.at(1).c_str());
+	hitbox.top = posY = atoi(tokens.at(2).c_str());
 	hitbox.right = atoi(tokens.at(3).c_str());
 	hitbox.bottom = atoi(tokens.at(4).c_str());
-
+	
+	D3DXVECTOR3 position(posX, posY, 0);
+	
 	dynamic_cast<Tiles*>(object)->AddHitBox(hitbox);
 
 	if (object) {
@@ -170,12 +174,8 @@ void Scene::ParseEntityData(std::string line) {
 	ObjectType objectID = static_cast<ObjectType>(atoi(tokens.at(0).c_str()));
 	switch (objectID) {
 		case ObjectType::OBJECT_TYPE_MARIO:
-			marioInstance = Mario::GetInstance();
-			
+			marioInstance = Mario::GetInstance();			
 			marioInstance->SetObjectID(static_cast<int>(objectID));
-			marioInstance->SetDevice(directDevice);
-			marioInstance->SetSpriteHandler(spriteHandler);
-
 			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
@@ -196,9 +196,26 @@ void Scene::ParseEntityData(std::string line) {
 		case ObjectType::OBJECT_TYPE_VENUSTRAP:
 
 			break;
-		case ObjectType::OBJECT_TYPE_BONUSITEM:
-
+		case ObjectType::OBJECT_TYPE_COIN:
+			object = new Coin;
+			object->SetObjectID(static_cast<int>(objectID));
+			dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
 			break;
+		case ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
+			object = new QuestionBlock;
+			object->SetObjectID(static_cast<int>(objectID));
+			dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
+			break;
+		case ObjectType::OBJECT_TYPE_SHINYBRICK:
+			object = new ShinyBrick;
+			object->SetObjectID(static_cast<int>(objectID));
+			dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
+			break;
+		case ObjectType::OBJECT_TYPE_BONUSITEM:
+			object = new BonusItem;
+			object->SetObjectID(static_cast<int>(objectID));
+			dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
+			break;	
 	}
 
 	if (object) {
@@ -213,16 +230,79 @@ void Scene::ParseWorldCoords(std::string line) {
 		return;
 	}
 
+	int posX = atoi(tokens.at(1).c_str());
+	int posY = atoi(tokens.at(2).c_str());
+	D3DXVECTOR3 position(posX, posY, 0);
+
 	ObjectType objectID = static_cast<ObjectType>(atoi(tokens.at(0).c_str()));
 	switch (objectID) {
 		case ObjectType::OBJECT_TYPE_MARIO:
-			int posX = atoi(tokens.at(1).c_str());
-			int posY = atoi(tokens.at(2).c_str());
-
-			D3DXVECTOR3 position(posX, posY, 0);
-
 			marioInstance = Mario::GetInstance();
 			marioInstance->SetPosition(position);
+			break;
+		case ObjectType::OBJECT_TYPE_GOOMBA:
+
+			break;
+		case ObjectType::OBJECT_TYPE_REDPARAGOOMBA:
+
+			break;
+		case ObjectType::OBJECT_TYPE_TROOPA:
+
+			break;
+		case ObjectType::OBJECT_TYPE_PARATROOPA:
+
+			break;
+		case ObjectType::OBJECT_TYPE_PIPLANT:
+
+			break;
+		case ObjectType::OBJECT_TYPE_VENUSTRAP:
+
+			break;
+		case ObjectType::OBJECT_TYPE_COIN:
+			for (GameObject* object : objects) {
+				//dumbass way to check if position is not set
+				//but its almost 2am and im too tired to think of another way
+				if (dynamic_cast<Coin*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = atoi(tokens.at(0).c_str());
+					if (object->GetObjectID() == objectID) {					
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<QuestionBlock*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = atoi(tokens.at(0).c_str());
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case ObjectType::OBJECT_TYPE_SHINYBRICK:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<ShinyBrick*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = atoi(tokens.at(0).c_str());
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case ObjectType::OBJECT_TYPE_BONUSITEM:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<BonusItem*>(object)) {
+					int objectID = atoi(tokens.at(0).c_str());
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
 			break;
 	}
 }
@@ -238,6 +318,12 @@ void Scene::Load(LPDIRECT3DDEVICE9& device, LPD3DXSPRITE& handler) {
 		OutputDebugStringA("Failed to read file\n");
 		return;
 	}
+
+	GameObject::SetDevice(directDevice);
+	GameObject::SetSpriteHandler(spriteHandler);
+
+	AnimatedSprite::SetDevice(directDevice);
+	AnimatedSprite::SetSpriteHandler(spriteHandler);
 
 	SceneSection section = SceneSection::SCENE_FILE_SECTION_UNKNOWN;
 
@@ -312,14 +398,12 @@ void Scene::Load(LPDIRECT3DDEVICE9& device, LPD3DXSPRITE& handler) {
 				ParseTileSprites(line);
 				break;
 			case SceneSection::SCENE_FILE_SECTION_BACKGROUND:
-				bgInstance->SetDevice(directDevice);
-				bgInstance->SetSpriteHandler(spriteHandler);
 				ParseBackground(line);
 				break;
 		}
 	}
 
-	readFile.close();
+	readFile.close();	
 }
 
 void Scene::Unload() {
@@ -367,7 +451,7 @@ void Scene::Update(DWORD delta) {
 }
 
 void Scene::Render() {
-	bgInstance->DrawBackground();
+	bgInstance->Render();
 	
 	for (GameObject* object : objects) {
 		object->Render();

@@ -46,7 +46,7 @@ void Background::AddImage(RECT bound, D3DXVECTOR3 pos) {
 	images.push_back(std::make_pair(bound, pos));
 }
 
-void Background::DrawBackground() {			
+void Background::Render() {			
 	for (const auto &image : images) {
 		int x = static_cast<int>(image.second.x - Camera::GetInstance()->GetPosition().x);
 		int y = static_cast<int>(image.second.y - Camera::GetInstance()->GetPosition().y);
