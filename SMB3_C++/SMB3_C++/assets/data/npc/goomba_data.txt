@@ -1,8 +1,8 @@
-#string_id	left	top	right	bottom	frames	speed	tex_id
+#string_id	left	top	right	bottom	frames	speed
 #any consecutive string_id that matches prev string_id will add bounds to it
 [SPRITES]
 #Walk
-Walk	0	0	15	15	2	100	1
+Walk	0	0	15	15	2	100
 Walk	16	0	31	15
 #Die
 Die	32	0	47	15

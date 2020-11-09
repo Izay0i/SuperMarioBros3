@@ -1,5 +1,8 @@
 #include "../headers/Scene.h"
 
+LPDIRECT3DDEVICE9 Scene::directDevice = nullptr;
+LPD3DXSPRITE Scene::spriteHandler = nullptr;
+
 Scene::Scene(int id, std::string path) {
 	sceneID = id;
 	filePath = path;
@@ -113,6 +116,7 @@ void Scene::ParseTilesData(std::string line) {
 	
 	D3DXVECTOR3 position(posX, posY, 0);
 	
+	object->SetPosition(position);
 	dynamic_cast<Tiles*>(object)->AddHitBox(hitbox);
 
 	if (object) {
@@ -308,8 +312,13 @@ void Scene::ParseWorldCoords(std::string line) {
 }
 
 void Scene::Load(LPDIRECT3DDEVICE9& device, LPD3DXSPRITE& handler) {
-	directDevice = device;
-	spriteHandler = handler;
+	if (!directDevice) {
+		directDevice = device;
+	}
+	
+	if (!spriteHandler) {
+		spriteHandler = handler;
+	}
 
 	std::ifstream readFile;
 	readFile.open(filePath, std::ios::in);

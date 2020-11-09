@@ -35,7 +35,6 @@ void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale) {
 		}
 	}
 
-	//WHY DOES TRANSLATING EVERYTHING BY FLOAT MAKE THE SPRITES PIXELATED???
 	//this isn't changing the object's position so it's still LEGAL
 	//HAHAHAHA I FOUND A LOOP HOLE WOOOOOOOO
 	int x = static_cast<int>(position.x - Camera::GetInstance()->GetPosition().x);

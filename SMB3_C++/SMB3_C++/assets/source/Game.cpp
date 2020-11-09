@@ -115,12 +115,16 @@ void Game::Update(DWORD delta) {
 
 void Game::Render() {
 	//directDevice->Clear(0, nullptr, D3DCLEAR_TARGET, sceneManager->GetCurrentScene()->GetBGColor(), 0.0f, 0);
-	//directDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
 
 	if (directDevice->BeginScene()) {
 		directDevice->ColorFill(backBuffer, nullptr, sceneManager->GetCurrentScene()->GetBGColor());
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
+		
+		//texture still bleeds even when set to point sampling
+		/*directDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+		directDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
+		directDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);*/
 
 		sceneManager->GetCurrentScene()->Render();
 

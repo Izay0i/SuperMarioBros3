@@ -76,8 +76,8 @@ private:
 
 	D3DCOLOR backgroundColor;
 
-	LPDIRECT3DDEVICE9 directDevice;
-	LPD3DXSPRITE spriteHandler;
+	static LPDIRECT3DDEVICE9 directDevice;
+	static LPD3DXSPRITE spriteHandler;
 
 	~Scene();
 
@@ -100,17 +100,6 @@ public:
 
 	int GetSceneWidth() const;
 	int GetSceneHeight() const;
-
-	void SetDevice(LPDIRECT3DDEVICE9& dev) { 
-		if (!dev) {
-			OutputDebugStringA("[SCENE] Device is nulllptr\n");
-		}
-		directDevice = dev; 
-	}
-	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
-
-	void SetSpriteHandler(LPD3DXSPRITE& handler) { spriteHandler = handler; }
-	LPD3DXSPRITE GetSpriteHandler() { return spriteHandler; }
 
 	void Load(LPDIRECT3DDEVICE9&, LPD3DXSPRITE&);
 	void Unload();

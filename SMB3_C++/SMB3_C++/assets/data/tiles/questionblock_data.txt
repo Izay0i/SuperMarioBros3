@@ -1,13 +1,13 @@
-#string_id	left	top	right	bottom	frames	speed	tex_id
+#string_id	left	top	right	bottom	frames	speed
 #any consecutive string_id that matches prev string_id will add bounds to it
 [SPRITES]
 #Rotate
-Rotate	1140	1	1155	16	4	200	2
+Rotate	1140	1	1155	16	4	200
 Rotate	1157	1	1172	16
 Rotate	1174	1	1189	16
 Rotate	1191	1	1206	16
 #None
-None	1208	1	1223	16	1	0	2
+None	1208	1	1223	16	1	0
 
 #left	top	right	bottom
 [HITBOXES]
