@@ -15,7 +15,7 @@ protected:
 		DATA_SECTION_HITBOXES
 	};
 
-	AnimatedSprite* sprite;
+	AnimatedSprite sprite;
 	HitBox hitBox;
 
 	virtual void CheckCollision(Entity*, Entity*) = 0;

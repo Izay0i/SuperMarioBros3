@@ -154,6 +154,7 @@
     <ClCompile Include="assets\source\HitBox.cpp" />
     <ClCompile Include="assets\source\npc\Goomba.cpp" />
     <ClCompile Include="assets\source\player\Mario.cpp" />
+    <ClCompile Include="assets\source\player\MarioStateMachine.cpp" />
     <ClCompile Include="assets\source\Scene.cpp" />
     <ClCompile Include="assets\source\SceneManager.cpp" />
     <ClCompile Include="assets\source\Sprite.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="assets\headers\HitBox.h" />
     <ClInclude Include="assets\headers\npc\Goomba.h" />
     <ClInclude Include="assets\headers\player\Mario.h" />
+    <ClInclude Include="assets\headers\player\MarioStateMachine.h" />
     <ClInclude Include="assets\headers\Scene.h" />
     <ClInclude Include="assets\headers\SceneManager.h" />
     <ClInclude Include="assets\headers\Sprite.h" />

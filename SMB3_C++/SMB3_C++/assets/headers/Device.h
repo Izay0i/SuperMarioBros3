@@ -3,6 +3,8 @@
 #include <dinput.h>
 #include <d3d9.h>
 
+#include "SceneManager.h"
+
 class Device {
 private:
 	const static int KEYBOARD_BUFFER_SIZE = 1024;
@@ -12,7 +14,7 @@ private:
 	LPDIRECTINPUT8 directInput;
 	LPDIRECTINPUTDEVICE8 keyboard;
 
-	BYTE keyStates[256];
+	static BYTE keyStates[256];
 	DIDEVICEOBJECTDATA keyEvents[KEYBOARD_BUFFER_SIZE];
 
 	Device();
@@ -22,6 +24,8 @@ public:
 	static Device* GetInstance();
 
 	bool InitKeyboard(HWND);
+
+	static bool IsKeyDown(int keyCode);
 
 	void ProcessKeyboard();
 

@@ -22,10 +22,11 @@ private:
 	};
 
 	const WCHAR* CLASS_NAME = L"SMB3_Class";
-	const WCHAR* GAME_TITLE = L"Super Mario Bros 3";
+	const WCHAR* GAME_TITLE = L"Super Mario Bros 3 [C++]";
 	
 	const static int MAX_FILE_LINE = 1024;
-	const int FRAME_RATE = 60;
+	//EVEN FURTHER BEYOND AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	const unsigned int FRAME_RATE = 240;
 
 	static Game* gameInstance;
 	

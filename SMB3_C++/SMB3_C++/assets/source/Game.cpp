@@ -17,9 +17,9 @@ LRESULT CALLBACK Game::WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lP
 					OutputDebugStringA("Enter key pressed\n");
 					break;
 			}
-		case WM_KEYDOWN:
+		/*case WM_KEYDOWN:
 			SceneManager::GetInstance()->GetCurrentScene()->OnKeyDown(wParam);
-			break;
+			break;*/
 	}
 
 	return DefWindowProc(hWND, message, wParam, lParam);

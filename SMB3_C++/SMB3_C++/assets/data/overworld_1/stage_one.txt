@@ -17,7 +17,7 @@
 2	assets\textures\stage_tileset.png	224	163	216
 3	assets\textures\items_and_misc_blocks.png	255	255	255
 4	assets\textures\gui_and_font.png	255	255	255
-5	assets\textures\goal_roulette.png	156	252	240
+5	assets\textures\goal_roulette.png	0	183	239
 
 #obj_id	data_path	tex_id
 #0-99:	moving entities
@@ -481,10 +481,6 @@
 201	5	460	154	475	169	2784	416	2
 201	5	477	154	492	169	2800	416	2
 
-#top_left	69	35	84	50
-#top_right	86	35	101	50
-#bottom_left	69	52	84	67
-#bottom_right	86	52	101	67
 #Pipe 1
 202	6	69	35	84	50	352	368	2
 202	6	86	35	101	50	368	368	2

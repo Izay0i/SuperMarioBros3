@@ -1,6 +1,5 @@
 //Let's see if I can make it in 5 days
 //Guess not...
-
 #include <Windows.h>
 
 #include "assets/headers/Game.h"

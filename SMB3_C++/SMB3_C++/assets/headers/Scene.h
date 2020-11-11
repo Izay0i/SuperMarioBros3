@@ -7,8 +7,6 @@
 
 #include <dinput.h>
 
-//Dependency hell, what do?
-
 #include "Game.h"
 #include "GameObject.h"
 #include "Background.h"
@@ -101,12 +99,13 @@ public:
 	int GetSceneWidth() const;
 	int GetSceneHeight() const;
 
-	void Load(LPDIRECT3DDEVICE9&, LPD3DXSPRITE&);
+	void Load(const LPDIRECT3DDEVICE9&, const LPD3DXSPRITE&);
 	void Unload();
 
 	void Update(DWORD);
 	void Render();
 
+	void HandleStates(BYTE* states);
 	void OnKeyDown(int);
 	void OnKeyUp(int);
 };

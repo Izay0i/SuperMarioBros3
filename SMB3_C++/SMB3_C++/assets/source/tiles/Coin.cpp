@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 Coin::texture = nullptr;
 D3DCOLOR Coin::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Coin::Coin() {
-	sprite = new AnimatedSprite;
+	//sprite = new AnimatedSprite;
 }
 
 void Coin::LoadTexture() {
@@ -44,7 +44,7 @@ void Coin::LoadTexture() {
 }
 
 void Coin::ParseSprites(std::string line) {
-	sprite->ParseSprites(line, texture, colorKey);
+	sprite.ParseSprites(line, texture, colorKey);
 }
 
 void Coin::ParseHitboxes(std::string line) {
@@ -120,12 +120,12 @@ void Coin::Update(DWORD delta) {
 }
 
 void Coin::Render() {
-	sprite->PlayAnimation("Rotate", position);
+	sprite.PlayAnimation("Rotate", position);
 }
 
 void Coin::Release() {
-	if (sprite) {
+	/*if (sprite) {
 		delete sprite;
 		sprite = nullptr;
-	}
+	}*/
 }

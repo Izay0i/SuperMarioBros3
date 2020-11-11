@@ -311,7 +311,7 @@ void Scene::ParseWorldCoords(std::string line) {
 	}
 }
 
-void Scene::Load(LPDIRECT3DDEVICE9& device, LPD3DXSPRITE& handler) {
+void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 	if (!directDevice) {
 		directDevice = device;
 	}
@@ -468,6 +468,12 @@ void Scene::Render() {
 
 	marioInstance = Mario::GetInstance();
 	marioInstance->Render();
+}
+
+void Scene::HandleStates(BYTE* states) {
+	if (marioInstance) {
+		marioInstance->HandleStates(states);
+	}
 }
 
 void Scene::OnKeyDown(int keyCode) {

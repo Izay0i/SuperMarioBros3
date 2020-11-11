@@ -2,9 +2,9 @@
 #any consecutive string_id that matches prev string_id will add bounds to it
 [SPRITES]
 #Rotate
-Rotate	260	394	275	409	3	100
-Rotate	278	394	293	409
-Rotate	296	394	311	409
+Rotate	258	350	273	365	3	100
+Rotate	277	350	293	365
+Rotate	298	350	313	365
 
 #left	top	right	bottom
 [HITBOXES]

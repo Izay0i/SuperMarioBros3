@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 BonusItem::texture = nullptr;
 D3DCOLOR BonusItem::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 BonusItem::BonusItem() {
-	sprite = new AnimatedSprite;
+	//sprite = new AnimatedSprite;
 }
 
 void BonusItem::LoadTexture() {
@@ -44,7 +44,7 @@ void BonusItem::LoadTexture() {
 }
 
 void BonusItem::ParseSprites(std::string line) {
-	sprite->ParseSprites(line, texture, colorKey);
+	sprite.ParseSprites(line, texture, colorKey);
 }
 
 void BonusItem::ParseHitboxes(std::string line) {
@@ -120,12 +120,12 @@ void BonusItem::Update(DWORD delta) {
 }
 
 void BonusItem::Render() {
-	sprite->PlayAnimation("Rotate", position);
+	sprite.PlayAnimation("Rotate", position);
 }
 
 void BonusItem::Release() {
-	if (sprite) {
+	/*if (sprite) {
 		delete sprite;
 		sprite = nullptr;
-	}
+	}*/
 }

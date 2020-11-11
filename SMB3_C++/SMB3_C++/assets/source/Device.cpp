@@ -1,6 +1,7 @@
 #include "../headers/Device.h"
 
 Device* Device::deviceInstance = nullptr;
+BYTE Device::keyStates[256] = { ' ' };
 
 Device::Device() {}
 
@@ -68,6 +69,10 @@ void Device::Release() {
 	}
 }
 
+bool Device::IsKeyDown(int keyCode) {
+	return (keyStates[keyCode] & 0x80) > 0;
+}
+
 void Device::ProcessKeyboard() {
 	HRESULT hResult;
 
@@ -86,6 +91,8 @@ void Device::ProcessKeyboard() {
 		}
 	}
 
+	SceneManager::GetInstance()->GetCurrentScene()->HandleStates(reinterpret_cast<BYTE*>(&keyStates));
+
 	DWORD elements = KEYBOARD_BUFFER_SIZE;
 
 	hResult = keyboard->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), keyEvents, &elements, 0);
@@ -100,9 +107,11 @@ void Device::ProcessKeyboard() {
 
 		if ((keyState & 0x80) > 0) {
 			//Scene::OnKeyDown(keyCode);
+			SceneManager::GetInstance()->GetCurrentScene()->OnKeyDown(keyCode);
 		}
 		else {
 			//Scene::OnKeyUp(keyCode);
+			SceneManager::GetInstance()->GetCurrentScene()->OnKeyUp(keyCode);
 		}
 	}
 }

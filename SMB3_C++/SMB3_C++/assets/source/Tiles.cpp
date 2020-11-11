@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 Tiles::texture = nullptr;
 D3DCOLOR Tiles::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Tiles::Tiles() {
-	hitbox = new HitBox;
+	
 }
 
 Tiles::~Tiles() {}
@@ -48,7 +48,7 @@ void Tiles::LoadTexture(std::string path, D3DCOLOR color) {
 }
 
 void Tiles::AddHitBox(RECTF bound) {
-	hitbox->AddHitBox(bound);
+	hitbox.AddHitBox(bound);
 }
 
 void Tiles::AddImage(RECT bound, D3DXVECTOR3 pos) {
@@ -85,11 +85,6 @@ void Tiles::Release() {
 	if (texturePath) {
 		delete texturePath;
 		texturePath = nullptr;
-	}
-
-	if (hitbox) {
-		delete hitbox;
-		hitbox = nullptr;
 	}
 
 	images.clear();

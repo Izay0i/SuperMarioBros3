@@ -6,11 +6,6 @@ LPDIRECT3DTEXTURE9 Mario::texture = nullptr;
 D3DCOLOR Mario::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Mario::Mario() {
-	sprite = new AnimatedSprite;
-
-	currentForm = MarioForm::SMALL;
-	currentState = MarioState::IDLE;
-
 	scale = D3DXVECTOR2(1.0f, 1.0f);
 }
 
@@ -58,7 +53,7 @@ void Mario::LoadTexture() {
 }
 
 void Mario::ParseSprites(std::string line) {
-	sprite->ParseSprites(line, texture, colorKey);
+	sprite.ParseSprites(line, texture, colorKey);
 }
 
 void Mario::ParseHitboxes(std::string line) {
@@ -127,193 +122,49 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 	}
 
 	readFile.close();
+
+	marioFSM = new MarioStateMachine(static_cast<Mario*>(marioInstance));
 }
 
 void Mario::CheckCollision(Entity* movingEntity, Entity* staticEntity) {}
 
-void Mario::HandleStates() {
-	switch (currentState) {
-		case MarioState::IDLE:
-			if (velocity.x != 0.0f) {
-				SetState(MarioState::RUN);
-			}
-			else if (velocity.y < 0.0f) {
-				SetState(MarioState::JUMP);
-			}
-			else if (velocity.y > 0.0f) {
-				SetState(MarioState::FALL);
-			}
-			break;
-		case MarioState::RUN:
-			if (velocity.x == 0.0f) {
-				SetState(MarioState::IDLE);
-			}
-			break;
-		case MarioState::TURN:
-
-			break;
-		case MarioState::JUMP:
-			if (velocity.y > 0.0f) {
-				//SetStates(MarioState::FALL);
-			}
-			break;
-		case MarioState::FALL:
-
-			break;
-		case MarioState::HOLD:
-
-			break;
-		case MarioState::KICK:
-
-			break;
-		case MarioState::DIE:
-
-			break;
-		case MarioState::CROUCH:
-			if (velocity.x != 0.0f) {
-				SetState(MarioState::RUN);
-			}
-			else if (velocity.y < 0.0f) {
-				SetState(MarioState::JUMP);
-			}
-			break;
+void Mario::HandleStates(BYTE* states) {
+	if (Device::IsKeyDown(DIK_A)) {
+		//to flip sprite
+		scale = D3DXVECTOR2(1.0f, 1.0f);
+		velocity.x = -runSpeed;
 	}
+	else if (Device::IsKeyDown(DIK_D)) {
+		scale = D3DXVECTOR2(-1.0f, 1.0f);
+		velocity.x = runSpeed;
+	}
+	else {
+		velocity.x = 0.0f;
+	}
+
+	marioFSM->HandleStates(states);
 }
 
 void Mario::OnKeyDown(int keyCode) {
 	switch (keyCode) {
-		case VK_A:
-			velocity.x = -runSpeed;
-			//to flip the sprite
-			scale = D3DXVECTOR2(1.0f, 1.0f);
-			break;
-		case VK_D:
-			velocity.x = runSpeed;
-			scale = D3DXVECTOR2(-1.0f, 1.0f);
-			break;
-		case VK_S:
-			SetState(MarioState::CROUCH);
-			velocity.y = jumpSpeed;
-			//scale = D3DXVECTOR2(1.0f, 1.0f);
-			break;
-		case VK_W:
-			scale = D3DXVECTOR2(1.0f, 1.0f);
-			break;
-		case VK_SPACE:
+		case DIK_SPACE:
 			velocity.y = -jumpSpeed;
-			//scale = D3DXVECTOR2(1.0f, 1.0f);
-			break;
-		case VK_K: //fire or spin
-			velocity.x = 0;
-			velocity.y = 0;
 			break;
 	}
 }
 
-void Mario::OnKeyUp(int keyCode) {	
-	
-}
-
 void Mario::Update(DWORD delta) {
-	HandleStates();
-
 	distance = velocity * delta;
 	position += distance;
 }
 
 void Mario::Render() {
-	switch (GetState()) {
-		case MarioState::IDLE:
-			switch (GetMarioForm()) {
-				case MarioForm::SMALL:
-					sprite->PlayAnimation("Idle", position, scale);
-					break;
-				case MarioForm::BIG:
-					sprite->PlayAnimation("BigIdle", position, scale);
-					break;
-				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireIdle", position, scale);
-					break;
-				case MarioForm::RACOON:
-					sprite->PlayAnimation("RacIdle", position, scale);
-					break;
-			}
-			break;
-		case MarioState::RUN:
-			switch (GetMarioForm()) {
-				case MarioForm::SMALL:
-					sprite->PlayAnimation("Run", position, scale);
-					break;
-				case MarioForm::BIG:
-					sprite->PlayAnimation("BigRun", position, scale);
-					break;
-				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireRun", position, scale);
-					break;
-				case MarioForm::RACOON:
-					sprite->PlayAnimation("RacRun", position, scale);
-					break;
-			}
-			break;
-		case MarioState::JUMP:
-			switch (GetMarioForm()) {
-				case MarioForm::SMALL:
-					sprite->PlayAnimation("Jump", position, scale);
-					break;
-				case MarioForm::BIG:
-					sprite->PlayAnimation("BigJump", position, scale);
-					break;
-				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireJump", position, scale);
-					break;
-				case MarioForm::RACOON:
-					sprite->PlayAnimation("RacJump", position, scale);
-					break;
-			}
-			break;
-		case MarioState::CROUCH:
-			switch (GetMarioForm()) {
-				case MarioForm::SMALL:
-					sprite->PlayAnimation("Idle", position, scale);
-					break;
-				case MarioForm::BIG:
-					sprite->PlayAnimation("BigCrouch", position, scale);
-					break;
-				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireCrouch", position, scale);
-					break;
-				case MarioForm::RACOON:
-					sprite->PlayAnimation("RacCrouch", position, scale);
-					break;
-				}
-			break;
-		case MarioState::SHOOT:
-			switch (GetMarioForm()) {
-				case MarioForm::FIRE:
-					sprite->PlayAnimation("FireShoot", position, scale);
-					break;
-			}
-			break;
-		case MarioState::SPIN:
-			switch (GetMarioForm()) {
-			case MarioForm::RACOON:
-				sprite->PlayAnimation("RacSpin", position, scale);
-				break;
-			}
-			break;
-		default:
-			SetState(MarioState::IDLE);
-	}
+	marioFSM->Render();
 }
 
 void Mario::Release() {
 	if (marioInstance) {
 		delete marioInstance;
 		marioInstance = nullptr;
-	}
-	
-	if (sprite) {
-		delete sprite;
-		sprite = nullptr;
 	}
 }

@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 QuestionBlock::texture = nullptr;
 D3DCOLOR QuestionBlock::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 QuestionBlock::QuestionBlock() {
-	sprite = new AnimatedSprite;
+	//sprite = new AnimatedSprite;
 }
 
 void QuestionBlock::LoadTexture() {
@@ -44,7 +44,7 @@ void QuestionBlock::LoadTexture() {
 }
 
 void QuestionBlock::ParseSprites(std::string line) {
-	sprite->ParseSprites(line, texture, colorKey);
+	sprite.ParseSprites(line, texture, colorKey);
 }
 
 void QuestionBlock::ParseHitboxes(std::string line) {
@@ -120,12 +120,12 @@ void QuestionBlock::Update(DWORD delta) {
 }
 
 void QuestionBlock::Render() {
-	sprite->PlayAnimation("Rotate", position);
+	sprite.PlayAnimation("Rotate", position);
 }
 
 void QuestionBlock::Release() {
-	if (sprite) {
+	/*if (sprite) {
 		delete sprite;
 		sprite = nullptr;
-	}
+	}*/
 }

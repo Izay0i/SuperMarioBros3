@@ -34,9 +34,7 @@ void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale) {
 			}
 		}
 	}
-
-	//this isn't changing the object's position so it's still LEGAL
-	//HAHAHAHA I FOUND A LOOP HOLE WOOOOOOOO
+	
 	int x = static_cast<int>(position.x - Camera::GetInstance()->GetPosition().x);
 	int y = static_cast<int>(position.y - Camera::GetInstance()->GetPosition().y);
 	D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);

@@ -23,7 +23,7 @@ private:
 	int spritesArrID;
 	std::vector<std::pair<RECT, D3DXVECTOR3>> images;
 
-	HitBox* hitbox;
+	HitBox hitbox;
 
 public:
 	Tiles();

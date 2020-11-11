@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 ShinyBrick::texture = nullptr;
 D3DCOLOR ShinyBrick::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 ShinyBrick::ShinyBrick() {
-	sprite = new AnimatedSprite;
+	//sprite = new AnimatedSprite;
 }
 
 void ShinyBrick::LoadTexture() {
@@ -44,7 +44,7 @@ void ShinyBrick::LoadTexture() {
 }
 
 void ShinyBrick::ParseSprites(std::string line) {
-	sprite->ParseSprites(line, texture, colorKey);
+	sprite.ParseSprites(line, texture, colorKey);
 }
 
 void ShinyBrick::ParseHitboxes(std::string line) {
@@ -120,12 +120,12 @@ void ShinyBrick::Update(DWORD delta) {
 }
 
 void ShinyBrick::Render() {
-	sprite->PlayAnimation("Rotate", position);
+	sprite.PlayAnimation("Rotate", position);
 }
 
 void ShinyBrick::Release() {
-	if (sprite) {
+	/*if (sprite) {
 		delete sprite;
 		sprite = nullptr;
-	}
+	}*/
 }
