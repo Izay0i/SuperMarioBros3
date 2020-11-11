@@ -24,7 +24,9 @@ public:
 
 	void AddImage(RECT, D3DXVECTOR3);
 
-	void Update(DWORD) override {}
+	RECTF GetBoundingBox(int = 0) const override { RECTF b; return b; }
+
+	void Update(DWORD, std::vector<GameObject*>* = nullptr) override {}
 	void Render() override;
 
 	void Release();

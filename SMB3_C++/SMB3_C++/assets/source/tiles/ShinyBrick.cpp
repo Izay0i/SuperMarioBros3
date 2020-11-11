@@ -115,7 +115,7 @@ void ShinyBrick::ParseData(std::string dataPath, std::string texturePath, D3DCOL
 	readFile.close();
 }
 
-void ShinyBrick::Update(DWORD delta) {
+void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	
 }
 

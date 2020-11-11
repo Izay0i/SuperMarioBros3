@@ -31,7 +31,17 @@ public:
 
 	void ParseData(std::string, std::string, D3DCOLOR) override;
 
-	void Update(DWORD) override;
+	RECTF GetBoundingBox(int id = 0) const override {
+		RECTF bound;
+		bound.left = position.x;
+		bound.top = position.y;
+		bound.right = position.x + hitBox.GetWidth(0);
+		bound.bottom = position.y + hitBox.GetHeight(0);
+
+		return bound;
+	}
+
+	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;
 
 	void Release() override;

@@ -115,7 +115,7 @@ void Coin::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR col
 	readFile.close();
 }
 
-void Coin::Update(DWORD delta) {
+void Coin::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	
 }
 

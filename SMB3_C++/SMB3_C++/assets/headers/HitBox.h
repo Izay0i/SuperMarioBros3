@@ -11,13 +11,10 @@ private:
 	std::vector<RECTF> hitboxes;
 
 public:
-	RECTF GetHitBox(int) const;
+	RECTF GetBoundingBox(int = 0) const;
 
 	unsigned int GetWidth(int) const;
 	unsigned int GetHeight(int) const;
 
 	void AddHitBox(RECTF);
-
-	void EnableCollistion();
-	void DisableCollision();
 };

@@ -1,7 +1,9 @@
 #include "../headers/HitBox.h"
 
-RECTF HitBox::GetHitBox(int id = 0) const {	
-	return hitboxes.at(id);
+RECTF HitBox::GetBoundingBox(int id) const {	
+	if (hitboxes.size() > 0) {
+		return hitboxes.at(id);
+	}
 }
 
 unsigned int HitBox::GetWidth(int id = 0) const {

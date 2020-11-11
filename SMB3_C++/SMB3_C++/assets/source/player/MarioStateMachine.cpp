@@ -34,6 +34,14 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 				currentState = MarioState::FALL;
 			}
 			break;
+		case MarioState::TURN:
+			if (mario->GetVelocity().x == 0.0f) {
+				currentState = MarioState::IDLE;
+			}
+			else if (mario->GetVelocity().x != 0.0f) {
+				currentState = MarioState::RUN;
+			}
+			break;
 		case MarioState::JUMP:
 			if (mario->GetVelocity().y > 0.0f) {
 				currentState = MarioState::FALL;
@@ -72,6 +80,9 @@ void MarioStateMachine::Render() {
 			break;
 		case MarioState::RUN:
 			mario->GetSprite().PlayAnimation("Run", mario->GetPosition(), mario->GetScale());
+			break;
+		case MarioState::TURN:
+			mario->GetSprite().PlayAnimation("Turn", mario->GetPosition(), mario->GetScale());
 			break;
 		case MarioState::JUMP:
 			mario->GetSprite().PlayAnimation("Jump", mario->GetPosition(), mario->GetScale());

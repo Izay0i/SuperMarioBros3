@@ -1,11 +1,15 @@
 #pragma once
 #define NOMINMAX
 
+#include <algorithm>
+
 #include <d3dx9.h>
 
 #include "Util.h"
+#include "HitBox.h"
 
 class GameObject;
+class HitBox;
 
 struct CollisionEvent {
 	GameObject* object;
@@ -21,8 +25,8 @@ struct CollisionEvent {
 		object = obj;
 	}
 
-	static bool CompareCollisionEvent(const CollisionEvent& a, CollisionEvent& b) {
-		return a.time < b.time;
+	static bool CompareCollisionEvent(const CollisionEvent*& a, CollisionEvent*& b) {
+		return a->time < b->time;
 	}
 };
 
@@ -30,6 +34,10 @@ class GameObject {
 protected:
 	int objectID;
 	
+	HitBox hitBox;
+
+	DWORD delta;
+
 	D3DXVECTOR3 velocity;
 	D3DXVECTOR3 distance;
 
@@ -49,6 +57,9 @@ public:
 	static void SweptAABB(RECTF, RECTF, D3DXVECTOR3, D3DXVECTOR3&, float&);
 	CollisionEvent* SweptAABBEx(GameObject*);
 
+	void CalcPotentialCollision(std::vector<GameObject*>*, std::vector<CollisionEvent*>&);
+	void FilterCollision(std::vector<CollisionEvent*>&, std::vector<CollisionEvent*>&, D3DXVECTOR2&, D3DXVECTOR3&, D3DXVECTOR3&);
+
 	static void SetDevice(LPDIRECT3DDEVICE9&);
 	static LPDIRECT3DDEVICE9 GetDevice();
 
@@ -57,6 +68,8 @@ public:
 
 	void SetObjectID(int id) { objectID = id; }
 	int GetObjectID() { return objectID; }
+
+	virtual RECTF GetBoundingBox(int id = 0) const = 0;
 
 	virtual void SetVelocity(D3DXVECTOR3 vel) { velocity = vel; }
 	virtual D3DXVECTOR3 GetVelocity() const { return velocity; }
@@ -76,7 +89,7 @@ public:
 	virtual	void SetScale(D3DXVECTOR2 sc) { scale = sc; }
 	virtual	D3DXVECTOR2 GetScale() const { return scale; }
 
-	virtual void Update(DWORD) = 0;
+	virtual void Update(DWORD, std::vector<GameObject*>* = nullptr);
 	virtual void Render() = 0;
 
 	virtual void Release() = 0;

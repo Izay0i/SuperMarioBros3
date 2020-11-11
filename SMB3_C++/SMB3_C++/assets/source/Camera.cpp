@@ -33,16 +33,6 @@ int Camera::GetHeight() const {
 	return camHeight;
 }
 
-RECTF Camera::GetBound() const {
-	RECTF bound;
-	bound.left = position.x - camWidth / 2;
-	bound.top = position.y - camHeight / 2;
-	bound.right = bound.left + camWidth;
-	bound.bottom = bound.top + camHeight;
-
-	return bound;
-}
-
 void Camera::Release() {
 	if (cameraInstance) {
 		delete cameraInstance;

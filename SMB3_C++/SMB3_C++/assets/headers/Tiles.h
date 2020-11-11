@@ -37,7 +37,9 @@ public:
 	void SetSpritesArrID(int id) { spritesArrID = id; }
 	int GetSpritesArrID() { return spritesArrID; }
 
-	void Update(DWORD) override {}
+	RECTF GetBoundingBox(int = 0) const override { return hitBox.GetBoundingBox(0); }
+
+	void Update(DWORD, std::vector<GameObject*>* = nullptr) override {}
 	void Render() override;
 
 	void Release() override;

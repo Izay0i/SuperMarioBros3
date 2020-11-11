@@ -115,7 +115,7 @@ void BonusItem::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 	readFile.close();
 }
 
-void BonusItem::Update(DWORD delta) {
+void BonusItem::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	
 }
 

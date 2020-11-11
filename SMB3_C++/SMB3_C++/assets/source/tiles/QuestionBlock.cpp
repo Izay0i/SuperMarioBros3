@@ -115,7 +115,7 @@ void QuestionBlock::ParseData(std::string dataPath, std::string texturePath, D3D
 	readFile.close();
 }
 
-void QuestionBlock::Update(DWORD delta) {
+void QuestionBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	
 }
 

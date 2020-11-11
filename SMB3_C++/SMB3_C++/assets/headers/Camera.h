@@ -48,9 +48,9 @@ public:
 	void SetHeight(int);
 	int GetHeight() const;
 
-	RECTF GetBound() const;
+	RECTF GetBoundingBox(int = 0) const override { return hitBox.GetBoundingBox(0); }
 
-	void Update(DWORD) override {}
+	void Update(DWORD, std::vector<GameObject*>*) override {}
 	void Render() override {}
 
 	void Release() override;

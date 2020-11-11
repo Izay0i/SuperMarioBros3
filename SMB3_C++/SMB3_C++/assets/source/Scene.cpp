@@ -438,12 +438,21 @@ void Scene::Unload() {
 }
 
 void Scene::Update(DWORD delta) {	
+	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
-		object->Update(delta);
+		collidableObjects.push_back(object);
 	}
 
-	marioInstance = Mario::GetInstance();
-	marioInstance->Update(delta);
+	for (GameObject* object : objects) {
+		object->Update(delta, &collidableObjects);
+	}
+
+	if (!marioInstance) {
+		return;
+	}
+
+	/*marioInstance = Mario::GetInstance();
+	marioInstance->Update(delta, &collidableObjects);*/
 
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();	
 	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2;

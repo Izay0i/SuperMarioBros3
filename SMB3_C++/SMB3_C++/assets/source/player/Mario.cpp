@@ -52,6 +52,16 @@ void Mario::LoadTexture() {
 	}
 }
 
+RECTF Mario::GetBoundingBox(int id) const {
+	RECTF bound;
+	bound.left = position.x;
+	bound.top = position.y;
+	bound.right = position.x + hitBox.GetWidth(0);
+	bound.bottom = position.y + hitBox.GetHeight(0);
+
+	return bound;
+}
+
 void Mario::ParseSprites(std::string line) {
 	sprite.ParseSprites(line, texture, colorKey);
 }
@@ -153,9 +163,41 @@ void Mario::OnKeyDown(int keyCode) {
 	}
 }
 
-void Mario::Update(DWORD delta) {
-	distance = velocity * delta;
-	position += distance;
+void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	GameObject::Update(delta);
+	
+	velocity.y += gravity * delta;
+
+	std::vector<CollisionEvent*> collisionEvents, eventResults;
+	collisionEvents.clear();
+
+	CalcPotentialCollision(objects, collisionEvents);
+
+	if (collisionEvents.size() == 0) {
+		position += distance;
+	}
+	else {
+		D3DXVECTOR2 minTime;
+		D3DXVECTOR3 normal;
+		D3DXVECTOR3 relativeDistance;
+
+		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
+
+		if (normal.x != 0.0f) {
+			velocity.x = 0.0f;
+		}
+
+		if (normal.y != 0.0f) {
+			velocity.y = 0.0f;
+		}
+	}
+
+	for (CollisionEvent* event : collisionEvents) {
+		delete event;
+	}
 }
 
 void Mario::Render() {

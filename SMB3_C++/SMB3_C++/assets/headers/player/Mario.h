@@ -46,6 +46,7 @@ public:
 
 	bool IsOnGround() {}
 
+	RECTF GetBoundingBox(int = 0) const override;
 	AnimatedSprite GetSprite() { return sprite; }
 
 	void ParseData(std::string, std::string, D3DCOLOR) override;
@@ -54,7 +55,7 @@ public:
 	void OnKeyDown(int);
 	void OnKeyUp(int) {}
 
-	void Update(DWORD) override;
+	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;
 
 	void Release() override;
