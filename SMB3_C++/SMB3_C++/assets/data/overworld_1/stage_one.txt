@@ -20,10 +20,10 @@
 5	assets\textures\goal_roulette.png	0	183	239
 
 #obj_id	data_path	tex_id
-#0-99:	moving entities
-#100:	portal
-#101-200:	animated tileset, eg: question block
-#201-300:	tileset, eg: ground
+#0-99:		moving entities
+#100:		portal
+#101-200:	animated tiles, eg: question block
+#201-300:	tiles, eg: ground
 
 [ENTITY_DATA]
 #Mario
@@ -53,18 +53,6 @@
 
 #Animated Tiles
 #Coin
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
 101	assets\data\tiles\coin_data.txt	2
 101	assets\data\tiles\coin_data.txt	2
 101	assets\data\tiles\coin_data.txt	2
@@ -196,6 +184,7 @@
 103	2000	400
 103	2016	400
 103	2032	400
+103	2048	400
 103	2096	400
 103	2112	400
 #Bonus item

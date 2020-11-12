@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 BonusItem::texture = nullptr;
 D3DCOLOR BonusItem::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 BonusItem::BonusItem() {
-	//sprite = new AnimatedSprite;
+	
 }
 
 void BonusItem::LoadTexture() {
@@ -124,8 +124,5 @@ void BonusItem::Render() {
 }
 
 void BonusItem::Release() {
-	/*if (sprite) {
-		delete sprite;
-		sprite = nullptr;
-	}*/
+
 }

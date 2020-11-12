@@ -8,7 +8,13 @@ void GameObject::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	distance = velocity * delta;
 }
 
-void GameObject::SweptAABB(RECTF movingObject, RECTF staticObject, D3DXVECTOR3 distance, D3DXVECTOR3& normal, float& t) {
+void GameObject::SweptAABB(
+	RECTF movingObject, 
+	RECTF staticObject, 
+	D3DXVECTOR3 distance, 
+	D3DXVECTOR3& normal, 
+	float& t) 
+{
 	D3DXVECTOR3 dEntry;
 	D3DXVECTOR3 dExit;
 
@@ -36,7 +42,7 @@ void GameObject::SweptAABB(RECTF movingObject, RECTF staticObject, D3DXVECTOR3 d
 		return;
 	}
 
-	if (distance == D3DXVECTOR3(0, 0, 0)) {
+	if (distance.x == 0.0f && distance.y == 0.0f) {
 		return;
 	}
 
@@ -119,13 +125,15 @@ CollisionEvent* GameObject::SweptAABBEx(GameObject* object) {
 	SweptAABB(movingObject, staticObject, relativeDistance, normal, t);
 
 	CollisionEvent* event = new CollisionEvent(t, normal, relativeDistance, object);
-
 	return event;
 }
 
-void GameObject::CalcPotentialCollision(std::vector<GameObject*>* collidableObjects, std::vector<CollisionEvent*>& collisionEvents) {
+void GameObject::CalcPotentialCollision(
+	std::vector<GameObject*>* collidableObjects, 
+	std::vector<LPCOLLISIONEVENT>& collisionEvents) 
+{
 	for (int i = 0; i < collidableObjects->size(); ++i) {
-		CollisionEvent* event = SweptAABBEx(collidableObjects->at(i));
+		LPCOLLISIONEVENT event = SweptAABBEx(collidableObjects->at(i));
 		if (event->time > 0.0f && event->time <= 1.0f) {
 			collisionEvents.push_back(event);
 		}
@@ -134,42 +142,48 @@ void GameObject::CalcPotentialCollision(std::vector<GameObject*>* collidableObje
 		}
 	}
 
-	//std::sort(collisionEvents.begin(), collisionEvents.end(), CollisionEvent::CompareCollisionEvent);
+	std::sort(collisionEvents.begin(), collisionEvents.end(), CollisionEvent::CompareCollisionEvent);
 }
 
 //What the hell is this
-void GameObject::FilterCollision(std::vector<CollisionEvent*>& collisionEvents, std::vector<CollisionEvent*>& eventResults, D3DXVECTOR2& minTime, D3DXVECTOR3& normal, D3DXVECTOR3& relativeDistance) {
+void GameObject::FilterCollision(
+	std::vector<LPCOLLISIONEVENT>& collisionEvents, 
+	std::vector<LPCOLLISIONEVENT>& eventResults, 
+	D3DXVECTOR2& minTime, 
+	D3DXVECTOR3& normal, 
+	D3DXVECTOR3& relativeDistance) 
+{
 	minTime = D3DXVECTOR2(1.0f, 1.0f);
 	normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	D3DXVECTOR2 minInverse;
+	D3DXVECTOR2 minInd(-1, -1);
 
 	collisionEvents.clear();
 
 	for (int i = 0; i < collisionEvents.size(); ++i) {
-		CollisionEvent* coEvent = collisionEvents.at(i);
+		LPCOLLISIONEVENT coEvent = collisionEvents.at(i);
 
 		if (coEvent->time < minTime.x && coEvent->normal.x != 0) {
 			minTime.x = coEvent->time;
 			normal.x = coEvent->normal.x;
 			relativeDistance.x = coEvent->distance.x;
-			minInverse.x = i;
+			minInd.x = i;
 		}
 
 		if (coEvent->time < minTime.y && coEvent->normal.y != 0) {
 			minTime.y = coEvent->time;
 			normal.y = coEvent->normal.y;
 			relativeDistance.y = coEvent->distance.y;
-			minInverse.y = i;
+			minInd.y = i;
 		}
 	}
 
-	if (minInverse.x >= 0) {
-		eventResults.push_back(collisionEvents.at(minInverse.x));
+	if (minInd.x >= 0) {
+		eventResults.push_back(collisionEvents.at(minInd.x));
 	}
 
-	if (minInverse.y >= 0) {
-		eventResults.push_back(collisionEvents.at(minInverse.y));
+	if (minInd.y >= 0) {
+		eventResults.push_back(collisionEvents.at(minInd.y));
 	}
 }
 

@@ -31,5 +31,6 @@ public:
 
 	void ParseSprites(std::string, LPDIRECT3DTEXTURE9, D3DCOLOR);
 	
-	void PlayAnimation(std::string, D3DXVECTOR3, D3DXVECTOR2 = D3DXVECTOR2(1.0f, 1.0f));
+	//animation name, position, scale, center to scale from
+	void PlayAnimation(std::string, D3DXVECTOR3, D3DXVECTOR2 = D3DXVECTOR2(1.0f, 1.0f), D3DXVECTOR2 = D3DXVECTOR2(8, 8));
 };

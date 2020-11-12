@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 QuestionBlock::texture = nullptr;
 D3DCOLOR QuestionBlock::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 QuestionBlock::QuestionBlock() {
-	//sprite = new AnimatedSprite;
+	
 }
 
 void QuestionBlock::LoadTexture() {
@@ -116,7 +116,7 @@ void QuestionBlock::ParseData(std::string dataPath, std::string texturePath, D3D
 }
 
 void QuestionBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	
+
 }
 
 void QuestionBlock::Render() {
@@ -124,8 +124,5 @@ void QuestionBlock::Render() {
 }
 
 void QuestionBlock::Release() {
-	/*if (sprite) {
-		delete sprite;
-		sprite = nullptr;
-	}*/
+	
 }

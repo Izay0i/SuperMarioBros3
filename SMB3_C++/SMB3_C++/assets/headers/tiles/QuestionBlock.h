@@ -35,8 +35,8 @@ public:
 		RECTF bound;
 		bound.left = position.x;
 		bound.top = position.y;
-		bound.right = position.x + hitBox.GetWidth(0);
-		bound.bottom = position.y + hitBox.GetHeight(0);
+		bound.right = position.x + hitBox.GetWidth(id);
+		bound.bottom = position.y + hitBox.GetHeight(id);
 
 		return bound;
 	}

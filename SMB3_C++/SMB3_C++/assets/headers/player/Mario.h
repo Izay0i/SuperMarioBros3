@@ -31,6 +31,7 @@ private:
 	float runSpeed = 0.15f;
 	float jumpSpeed = 0.5f;
 	float gravity = 0.002f;
+	float acceleration;
 
 	void LoadTexture();
 

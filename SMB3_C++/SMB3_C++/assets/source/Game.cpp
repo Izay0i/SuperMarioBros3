@@ -17,9 +17,6 @@ LRESULT CALLBACK Game::WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lP
 					OutputDebugStringA("Enter key pressed\n");
 					break;
 			}
-		/*case WM_KEYDOWN:
-			SceneManager::GetInstance()->GetCurrentScene()->OnKeyDown(wParam);
-			break;*/
 	}
 
 	return DefWindowProc(hWND, message, wParam, lParam);
@@ -261,7 +258,6 @@ void Game::Load(std::string filePath) {
 	readFile.close();
 	
 	sceneManager->ChangeScene(currentSceneID);
-	sceneManager->GetCurrentScene()->Load(directDevice, spriteHandler);
 }
 
 void Game::GameRun() {

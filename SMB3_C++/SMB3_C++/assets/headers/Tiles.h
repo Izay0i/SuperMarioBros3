@@ -23,8 +23,6 @@ private:
 	int spritesArrID;
 	std::vector<std::pair<RECT, D3DXVECTOR3>> images;
 
-	HitBox hitbox;
-
 public:
 	Tiles();
 	~Tiles();
@@ -37,7 +35,15 @@ public:
 	void SetSpritesArrID(int id) { spritesArrID = id; }
 	int GetSpritesArrID() { return spritesArrID; }
 
-	RECTF GetBoundingBox(int = 0) const override { return hitBox.GetBoundingBox(0); }
+	RECTF GetBoundingBox(int id = 0) const override {
+		RECTF bound;
+		bound.left = position.x;
+		bound.top = position.y;
+		bound.right = position.x + hitBox.GetWidth(id);
+		bound.bottom = position.y + hitBox.GetHeight(id);
+
+		return bound;
+	}
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override {}
 	void Render() override;

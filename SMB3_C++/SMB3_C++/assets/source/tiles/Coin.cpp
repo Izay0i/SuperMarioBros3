@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 Coin::texture = nullptr;
 D3DCOLOR Coin::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Coin::Coin() {
-	//sprite = new AnimatedSprite;
+	
 }
 
 void Coin::LoadTexture() {
@@ -124,8 +124,5 @@ void Coin::Render() {
 }
 
 void Coin::Release() {
-	/*if (sprite) {
-		delete sprite;
-		sprite = nullptr;
-	}*/
+	
 }

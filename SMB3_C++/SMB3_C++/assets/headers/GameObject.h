@@ -11,6 +11,8 @@
 class GameObject;
 class HitBox;
 
+struct CollisionEvent;
+typedef CollisionEvent* LPCOLLISIONEVENT;
 struct CollisionEvent {
 	GameObject* object;
 	D3DXVECTOR3 normal;
@@ -25,7 +27,7 @@ struct CollisionEvent {
 		object = obj;
 	}
 
-	static bool CompareCollisionEvent(const CollisionEvent*& a, CollisionEvent*& b) {
+	static bool CompareCollisionEvent(const LPCOLLISIONEVENT& a, LPCOLLISIONEVENT& b) {
 		return a->time < b->time;
 	}
 };
@@ -57,8 +59,8 @@ public:
 	static void SweptAABB(RECTF, RECTF, D3DXVECTOR3, D3DXVECTOR3&, float&);
 	CollisionEvent* SweptAABBEx(GameObject*);
 
-	void CalcPotentialCollision(std::vector<GameObject*>*, std::vector<CollisionEvent*>&);
-	void FilterCollision(std::vector<CollisionEvent*>&, std::vector<CollisionEvent*>&, D3DXVECTOR2&, D3DXVECTOR3&, D3DXVECTOR3&);
+	void CalcPotentialCollision(std::vector<GameObject*>*, std::vector<LPCOLLISIONEVENT>&);
+	void FilterCollision(std::vector<LPCOLLISIONEVENT>&, std::vector<LPCOLLISIONEVENT>&, D3DXVECTOR2&, D3DXVECTOR3&, D3DXVECTOR3&);
 
 	static void SetDevice(LPDIRECT3DDEVICE9&);
 	static LPDIRECT3DDEVICE9 GetDevice();

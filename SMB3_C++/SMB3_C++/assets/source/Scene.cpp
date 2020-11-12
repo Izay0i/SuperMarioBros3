@@ -73,98 +73,6 @@ void Scene::ParseTextures(std::string line) {
 	textureFiles[texID] = std::pair<std::string, D3DCOLOR>(tokens.at(1), D3DCOLOR_XRGB(r, g, b));
 }
 
-void Scene::ParseBackground(std::string line) {
-	std::vector<std::string> tokens = Util::split(line);
-
-	if (tokens.size() < 7) {
-		return;
-	}
-
-	RECT bound;
-	bound.left = atoi(tokens.at(0).c_str());
-	bound.top = atoi(tokens.at(1).c_str());
-	bound.right = atoi(tokens.at(2).c_str()) + 1;
-	bound.bottom = atoi(tokens.at(3).c_str()) + 1;
-
-	int posX = atoi(tokens.at(4).c_str());
-	int posY = atoi(tokens.at(5).c_str());
-	D3DXVECTOR3 pos = D3DXVECTOR3(posX, posY, 0);
-
-	int texID = atoi(tokens.at(6).c_str());
-	bgInstance->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
-	bgInstance->AddImage(bound, pos);
-}
-
-void Scene::ParseTilesData(std::string line) {
-	std::vector<std::string> tokens = Util::split(line);
-
-	if (tokens.size() < 6) {
-		return;
-	}
-
-	GameObject* object = new Tiles;
-	object->SetObjectID(atoi(tokens.at(0).c_str()));
-	dynamic_cast<Tiles*>(object)->SetSpritesArrID(atoi(tokens.at(5).c_str()));
-
-	int posX, posY;
-
-	RECTF hitbox;
-	hitbox.left = posX = atoi(tokens.at(1).c_str());
-	hitbox.top = posY = atoi(tokens.at(2).c_str());
-	hitbox.right = atoi(tokens.at(3).c_str());
-	hitbox.bottom = atoi(tokens.at(4).c_str());
-	
-	D3DXVECTOR3 position(posX, posY, 0);
-	
-	object->SetPosition(position);
-	dynamic_cast<Tiles*>(object)->AddHitBox(hitbox);
-
-	if (object) {
-		objects.push_back(object);
-	}
-}
-
-void Scene::ParseTileSprites(std::string line) {
-	std::vector<std::string> tokens = Util::split(line);
-
-	if (tokens.size() < 9) {
-		return;
-	}
-
-	for (GameObject* object : objects) {
-		//check if an object is a tile
-		if (dynamic_cast<Tiles*>(object)) {
-			Tiles* tile = static_cast<Tiles*>(object);
-
-			int objectID = atoi(tokens.at(0).c_str());
-			int spritesArrID = atoi(tokens.at(1).c_str());
-
-			RECT bound;
-			D3DXVECTOR3 pos;
-
-			if (tile->GetObjectID() == objectID) {
-				if (tile->GetSpritesArrID() == spritesArrID) {
-					int texID = atoi(tokens.at(8).c_str());
-					tile->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
-
-					bound.left = atoi(tokens.at(2).c_str());
-					bound.top = atoi(tokens.at(3).c_str());
-					bound.right = atoi(tokens.at(4).c_str()) + 1;
-					bound.bottom = atoi(tokens.at(5).c_str()) + 1;
-
-					int posX = atoi(tokens.at(6).c_str());
-					int posY = atoi(tokens.at(7).c_str());
-					pos = D3DXVECTOR3(posX, posY, 0);
-
-					tile->AddImage(bound, pos);
-
-					return;
-				}
-			}
-		}
-	}
-}
-
 void Scene::ParseEntityData(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
@@ -241,7 +149,6 @@ void Scene::ParseWorldCoords(std::string line) {
 	ObjectType objectID = static_cast<ObjectType>(atoi(tokens.at(0).c_str()));
 	switch (objectID) {
 		case ObjectType::OBJECT_TYPE_MARIO:
-			marioInstance = Mario::GetInstance();
 			marioInstance->SetPosition(position);
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
@@ -311,7 +218,106 @@ void Scene::ParseWorldCoords(std::string line) {
 	}
 }
 
+void Scene::ParseTilesData(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 6) {
+		return;
+	}
+
+	GameObject* object = new Tiles;
+	object->SetObjectID(atoi(tokens.at(0).c_str()));
+	dynamic_cast<Tiles*>(object)->SetSpritesArrID(atoi(tokens.at(5).c_str()));
+
+	int posX, posY;
+
+	RECTF hitbox;
+	hitbox.left = posX = atoi(tokens.at(1).c_str());
+	hitbox.top = posY = atoi(tokens.at(2).c_str());
+	hitbox.right = atoi(tokens.at(3).c_str());
+	hitbox.bottom = atoi(tokens.at(4).c_str());
+
+	D3DXVECTOR3 position(posX, posY, 0);
+
+	object->SetPosition(position);
+	dynamic_cast<Tiles*>(object)->AddHitBox(hitbox);
+
+	if (object) {
+		objects.push_back(object);
+	}
+}
+
+void Scene::ParseTileSprites(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 9) {
+		return;
+	}
+
+	for (GameObject* object : objects) {
+		//check if an object is a tile
+		if (dynamic_cast<Tiles*>(object)) {
+			Tiles* tile = static_cast<Tiles*>(object);
+
+			int objectID = atoi(tokens.at(0).c_str());
+			int spritesArrID = atoi(tokens.at(1).c_str());
+
+			RECT bound;
+			D3DXVECTOR3 pos;
+
+			if (tile->GetObjectID() == objectID) {
+				if (tile->GetSpritesArrID() == spritesArrID) {
+					int texID = atoi(tokens.at(8).c_str());
+					tile->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
+
+					bound.left = atoi(tokens.at(2).c_str());
+					bound.top = atoi(tokens.at(3).c_str());
+					bound.right = atoi(tokens.at(4).c_str()) + 1;
+					bound.bottom = atoi(tokens.at(5).c_str()) + 1;
+
+					int posX = atoi(tokens.at(6).c_str());
+					int posY = atoi(tokens.at(7).c_str());
+					pos = D3DXVECTOR3(posX, posY, 0);
+
+					tile->AddImage(bound, pos);
+
+					return;
+				}
+			}
+		}
+	}
+}
+
+void Scene::ParseBackground(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 7) {
+		return;
+	}
+
+	RECT bound;
+	bound.left = atoi(tokens.at(0).c_str());
+	bound.top = atoi(tokens.at(1).c_str());
+	bound.right = atoi(tokens.at(2).c_str()) + 1;
+	bound.bottom = atoi(tokens.at(3).c_str()) + 1;
+
+	int posX = atoi(tokens.at(4).c_str());
+	int posY = atoi(tokens.at(5).c_str());
+	D3DXVECTOR3 pos = D3DXVECTOR3(posX, posY, 0);
+
+	int texID = atoi(tokens.at(6).c_str());
+	bgInstance->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
+	bgInstance->AddImage(bound, pos);
+}
+
 void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
+	static int read = 0;
+	++read;
+
+	char debugStr[100];
+	sprintf_s(debugStr, "[DEBUG] Read: %d times\n", read);
+	OutputDebugStringA(debugStr);
+	
 	if (!directDevice) {
 		directDevice = device;
 	}
@@ -437,11 +443,20 @@ void Scene::Unload() {
 	textureFiles.clear();
 }
 
-void Scene::Update(DWORD delta) {	
+void Scene::Update(DWORD delta) {
+	if (marioInstance->GetPosition().x < 0.0f) {
+		marioInstance->SetPosition(D3DXVECTOR3(0.0f, marioInstance->GetPosition().y, 0));
+	}
+	else if ((marioInstance->GetPosition().x + 16) > sceneWidth) {
+		marioInstance->SetPosition(D3DXVECTOR3(sceneWidth - 16, marioInstance->GetPosition().y, 0));
+	}
+
 	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
 		collidableObjects.push_back(object);
 	}
+
+	marioInstance->Update(delta, &collidableObjects);
 
 	for (GameObject* object : objects) {
 		object->Update(delta, &collidableObjects);
@@ -450,9 +465,6 @@ void Scene::Update(DWORD delta) {
 	if (!marioInstance) {
 		return;
 	}
-
-	/*marioInstance = Mario::GetInstance();
-	marioInstance->Update(delta, &collidableObjects);*/
 
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();	
 	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2;
@@ -474,25 +486,18 @@ void Scene::Render() {
 	for (GameObject* object : objects) {
 		object->Render();
 	}
-
-	marioInstance = Mario::GetInstance();
+	
 	marioInstance->Render();
 }
 
 void Scene::HandleStates(BYTE* states) {
-	if (marioInstance) {
-		marioInstance->HandleStates(states);
-	}
+	marioInstance->HandleStates(states);
 }
 
 void Scene::OnKeyDown(int keyCode) {
-	if (marioInstance) {
-		marioInstance->OnKeyDown(keyCode);
-	}
+	marioInstance->OnKeyDown(keyCode);
 }
 
 void Scene::OnKeyUp(int keyCode) {
-	if (marioInstance) {
-		marioInstance->OnKeyUp(keyCode);
-	}
+	marioInstance->OnKeyUp(keyCode);
 }

@@ -34,7 +34,8 @@ public:
 
 	void AddBound(RECT);
 
-	void Draw(D3DXVECTOR3, D3DXVECTOR2 = D3DXVECTOR2(1.0f, 1.0f));
+	//position, scale, center pos to scale from
+	void Draw(D3DXVECTOR3, D3DXVECTOR2 = D3DXVECTOR2(1.0f, 1.0f), D3DXVECTOR2 = D3DXVECTOR2(8, 8));
 
 	void Release();
 };

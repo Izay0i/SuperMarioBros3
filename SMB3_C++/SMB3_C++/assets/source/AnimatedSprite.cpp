@@ -65,7 +65,7 @@ void AnimatedSprite::AddBound(RECT bound, std::string animName) {
 	sprites[animName]->AddBound(bound);
 }
 
-void AnimatedSprite::PlayAnimation(std::string animName, D3DXVECTOR3 position, D3DXVECTOR2 scale) {
+void AnimatedSprite::PlayAnimation(std::string animName, D3DXVECTOR3 position, D3DXVECTOR2 scale, D3DXVECTOR2 center) {
 	if (!HasAnimation(animName)) {
 		char debugStr[100];
 		sprintf_s(debugStr, "[ANIMATED SPRITE] Animation %s does not exist\n", animName.c_str());
@@ -73,5 +73,5 @@ void AnimatedSprite::PlayAnimation(std::string animName, D3DXVECTOR3 position, D
 		return;
 	}
 
-	sprites[animName]->Draw(position, scale);
+	sprites[animName]->Draw(position, scale, center);
 }

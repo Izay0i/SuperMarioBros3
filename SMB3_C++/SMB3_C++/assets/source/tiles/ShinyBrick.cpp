@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 ShinyBrick::texture = nullptr;
 D3DCOLOR ShinyBrick::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 ShinyBrick::ShinyBrick() {
-	//sprite = new AnimatedSprite;
+	
 }
 
 void ShinyBrick::LoadTexture() {
@@ -124,8 +124,5 @@ void ShinyBrick::Render() {
 }
 
 void ShinyBrick::Release() {
-	/*if (sprite) {
-		delete sprite;
-		sprite = nullptr;
-	}*/
+	
 }

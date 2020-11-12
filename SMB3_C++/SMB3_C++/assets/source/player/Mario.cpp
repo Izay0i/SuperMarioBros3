@@ -6,7 +6,7 @@ LPDIRECT3DTEXTURE9 Mario::texture = nullptr;
 D3DCOLOR Mario::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Mario::Mario() {
-	scale = D3DXVECTOR2(1.0f, 1.0f);
+	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
 
 Mario* Mario::GetInstance() {
@@ -56,8 +56,8 @@ RECTF Mario::GetBoundingBox(int id) const {
 	RECTF bound;
 	bound.left = position.x;
 	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(0);
-	bound.bottom = position.y + hitBox.GetHeight(0);
+	bound.right = position.x + hitBox.GetWidth(id);
+	bound.bottom = position.y + hitBox.GetHeight(id);
 
 	return bound;
 }
@@ -139,17 +139,25 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 void Mario::CheckCollision(Entity* movingEntity, Entity* staticEntity) {}
 
 void Mario::HandleStates(BYTE* states) {
+	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
+		//GOTTA GO FAAAST
+		if (acceleration < 1.99f) {
+			acceleration += 0.01f;
+		}
+	}
+	
 	if (Device::IsKeyDown(DIK_A)) {
 		//to flip sprite
 		scale = D3DXVECTOR2(1.0f, 1.0f);
-		velocity.x = -runSpeed;
+		velocity.x = -runSpeed * acceleration;
 	}
 	else if (Device::IsKeyDown(DIK_D)) {
 		scale = D3DXVECTOR2(-1.0f, 1.0f);
-		velocity.x = runSpeed;
+		velocity.x = runSpeed * acceleration;
 	}
 	else {
 		velocity.x = 0.0f;
+		acceleration = 1.0f;
 	}
 
 	marioFSM->HandleStates(states);
@@ -160,15 +168,21 @@ void Mario::OnKeyDown(int keyCode) {
 		case DIK_SPACE:
 			velocity.y = -jumpSpeed;
 			break;
+		case DIK_K:
+			velocity.y = 0.0f;
+			break;
 	}
 }
 
 void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 	
-	velocity.y += gravity * delta;
+	char debugStr[100];
+	sprintf_s(debugStr, "Accel: %f\n", acceleration);
+	OutputDebugStringA(debugStr);
+	//velocity.y += gravity * delta;
 
-	std::vector<CollisionEvent*> collisionEvents, eventResults;
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
 
 	CalcPotentialCollision(objects, collisionEvents);
@@ -195,7 +209,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 	}
 
-	for (CollisionEvent* event : collisionEvents) {
+	for (LPCOLLISIONEVENT event : collisionEvents) {
 		delete event;
 	}
 }

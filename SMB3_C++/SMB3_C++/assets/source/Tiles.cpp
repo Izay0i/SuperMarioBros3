@@ -48,7 +48,7 @@ void Tiles::LoadTexture(std::string path, D3DCOLOR color) {
 }
 
 void Tiles::AddHitBox(RECTF bound) {
-	hitbox.AddHitBox(bound);
+	hitBox.AddHitBox(bound);
 }
 
 void Tiles::AddImage(RECT bound, D3DXVECTOR3 pos) {
@@ -60,7 +60,7 @@ void Tiles::Render() {
 		int x = static_cast<int>(image.second.x - Camera::GetInstance()->GetPosition().x);
 		int y = static_cast<int>(image.second.y - Camera::GetInstance()->GetPosition().y);
 		D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);
-
+		
 		D3DXMATRIX mat;
 
 		D3DXVECTOR2 scale(1.0f, 1.0f);

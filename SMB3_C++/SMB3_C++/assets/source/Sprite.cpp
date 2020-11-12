@@ -15,7 +15,7 @@ void Sprite::AddBound(RECT bound) {
 	bounds.push_back(bound);
 }
 
-void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale) {
+void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale, D3DXVECTOR2 center) {
 	DWORD now = static_cast<DWORD>(GetTickCount64());
 
 	if (currentFrame == -1) {
@@ -40,7 +40,6 @@ void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale) {
 	D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);
 
 	D3DXMATRIX mat;
-	D3DXVECTOR2 center(8, 8);
 
 	D3DXMatrixTransformation2D(&mat, &center, 0.0f, &scale, nullptr, 0.0f, &spritePosition);
 	spriteHandler->SetTransform(&mat);
