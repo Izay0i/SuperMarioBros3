@@ -447,8 +447,8 @@ void Scene::Update(DWORD delta) {
 	if (marioInstance->GetPosition().x < 0.0f) {
 		marioInstance->SetPosition(D3DXVECTOR3(0.0f, marioInstance->GetPosition().y, 0));
 	}
-	else if ((marioInstance->GetPosition().x + 16) > sceneWidth) {
-		marioInstance->SetPosition(D3DXVECTOR3(sceneWidth - 16, marioInstance->GetPosition().y, 0));
+	else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
+		marioInstance->SetPosition(D3DXVECTOR3(sceneWidth - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
 	}
 
 	std::vector<GameObject*> collidableObjects;

@@ -54,6 +54,7 @@ protected:
 	static LPD3DXSPRITE spriteHandler;
 	
 public:
+	GameObject() {}
 	virtual ~GameObject() {}
 
 	static void SweptAABB(RECTF, RECTF, D3DXVECTOR3, D3DXVECTOR3&, float&);
@@ -71,7 +72,9 @@ public:
 	void SetObjectID(int id) { objectID = id; }
 	int GetObjectID() { return objectID; }
 
-	virtual RECTF GetBoundingBox(int id = 0) const = 0;
+	virtual RECTF GetBoundingBox(int = 0) const = 0;
+	unsigned int GetBoxWidth(int id = 0) { return hitBox.GetWidth(id); }
+	unsigned int GetBoxHeight(int id = 0) { return hitBox.GetHeight(id); }
 
 	virtual void SetVelocity(D3DXVECTOR3 vel) { velocity = vel; }
 	virtual D3DXVECTOR3 GetVelocity() const { return velocity; }

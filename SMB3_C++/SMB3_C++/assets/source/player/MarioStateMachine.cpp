@@ -3,7 +3,7 @@
 MarioStateMachine::MarioStateMachine(Mario* mario) : StateMachine(mario) { 
 	this->mario = mario;
 
-	currentForm = MarioForm::SMALL;
+	currentForm = MarioForm::BIG;
 	currentState = MarioState::IDLE;
 }
 
@@ -19,8 +19,11 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			else if (mario->GetVelocity().y < 0.0f) {
 				currentState = MarioState::JUMP;
 			}
-			else if (mario->GetVelocity().y > 0.0f) {
+			else if (mario->GetVelocity().y > 0.0f && !mario->IsOnGround()) {
 				currentState = MarioState::FALL;
+			}
+			else if (Device::IsKeyDown(DIK_S)) {
+				currentState = MarioState::CROUCH;
 			}
 			break;
 		case MarioState::RUN:
@@ -30,7 +33,7 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			else if (mario->GetVelocity().y < 0.0f) {
 				currentState = MarioState::JUMP;
 			}
-			else if (mario->GetVelocity().y > 0.0f) {
+			else if (mario->GetVelocity().y > 0.0f && !mario->IsOnGround()) {
 				currentState = MarioState::FALL;
 			}
 			break;
@@ -46,12 +49,19 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			if (mario->GetVelocity().y > 0.0f) {
 				currentState = MarioState::FALL;
 			}
+			else if (mario->IsOnGround()) {
+				currentState = MarioState::IDLE;
+			}
 			break;
 		case MarioState::FALL:
-
+			if (mario->IsOnGround()) {
+				currentState = MarioState::IDLE;
+			}
 			break;
 		case MarioState::CROUCH:
-
+			if (!Device::IsKeyDown(DIK_S)) {
+				currentState = MarioState::IDLE;
+			}
 			break;
 		case MarioState::HOLD:
 
@@ -76,22 +86,22 @@ void MarioStateMachine::Render() {
 			mario->GetSprite().PlayAnimation("Die", mario->GetPosition(), mario->GetScale());
 			return;
 		case MarioState::IDLE:
-			mario->GetSprite().PlayAnimation("Idle", mario->GetPosition(), mario->GetScale());
+			mario->GetSprite().PlayAnimation("BigIdle", mario->GetPosition(), mario->GetScale());
 			break;
 		case MarioState::RUN:
-			mario->GetSprite().PlayAnimation("Run", mario->GetPosition(), mario->GetScale());
+			mario->GetSprite().PlayAnimation("BigRun", mario->GetPosition(), mario->GetScale());
 			break;
 		case MarioState::TURN:
-			mario->GetSprite().PlayAnimation("Turn", mario->GetPosition(), mario->GetScale());
+			mario->GetSprite().PlayAnimation("BigTurn", mario->GetPosition(), mario->GetScale());
 			break;
 		case MarioState::JUMP:
-			mario->GetSprite().PlayAnimation("Jump", mario->GetPosition(), mario->GetScale());
+			mario->GetSprite().PlayAnimation("BigJump", mario->GetPosition(), mario->GetScale());
 			break;
 		case MarioState::FALL:
-			mario->GetSprite().PlayAnimation("Jump", mario->GetPosition(), mario->GetScale());
+			mario->GetSprite().PlayAnimation("BigJump", mario->GetPosition(), mario->GetScale());
 			break;
 		case MarioState::CROUCH:
-
+			mario->GetSprite().PlayAnimation("BigCrouch", mario->GetPosition(), mario->GetScale());
 			break;
 		case MarioState::HOLD:
 

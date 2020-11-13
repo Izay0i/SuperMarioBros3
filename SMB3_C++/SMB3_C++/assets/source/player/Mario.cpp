@@ -54,10 +54,10 @@ void Mario::LoadTexture() {
 
 RECTF Mario::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x;
-	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
-	bound.bottom = position.y + hitBox.GetHeight(id);
+	bound.left = position.x + 1;
+	bound.top = position.y + 1;
+	bound.right = position.x + hitBox.GetWidth(1);
+	bound.bottom = position.y + hitBox.GetHeight(1);
 
 	return bound;
 }
@@ -141,7 +141,7 @@ void Mario::CheckCollision(Entity* movingEntity, Entity* staticEntity) {}
 void Mario::HandleStates(BYTE* states) {
 	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
 		//GOTTA GO FAAAST
-		if (acceleration < 1.99f) {
+		if (acceleration < 1.49f) {
 			acceleration += 0.01f;
 		}
 	}
@@ -166,7 +166,10 @@ void Mario::HandleStates(BYTE* states) {
 void Mario::OnKeyDown(int keyCode) {
 	switch (keyCode) {
 		case DIK_SPACE:
-			velocity.y = -jumpSpeed;
+			if (IsOnGround()) {
+				velocity.y = -jumpSpeed * acceleration;
+				isOnGround = false;
+			}
 			break;
 		case DIK_K:
 			velocity.y = 0.0f;
@@ -177,10 +180,7 @@ void Mario::OnKeyDown(int keyCode) {
 void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 	
-	char debugStr[100];
-	sprintf_s(debugStr, "Accel: %f\n", acceleration);
-	OutputDebugStringA(debugStr);
-	//velocity.y += gravity * delta;
+	velocity.y += gravity * delta;
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
@@ -197,8 +197,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
+		position.x += minTime.x * distance.x + normal.x * 0.1f;
+		position.y += minTime.y * distance.y + normal.y * 0.1f;
 
 		if (normal.x != 0.0f) {
 			velocity.x = 0.0f;
@@ -206,6 +206,19 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		if (normal.y != 0.0f) {
 			velocity.y = 0.0f;
+		}
+
+		for (LPCOLLISIONEVENT result : eventResults) {
+			LPCOLLISIONEVENT event = result;
+			
+			/*if (dynamic_cast<QuestionBlock*>(event->object)) {
+				char debugStr[100];
+				sprintf_s(debugStr, "Normal: %f %f\n", event->normal.x, event->normal.y);
+				OutputDebugStringA(debugStr);
+			}*/
+			if (event->normal.y == -1.0f) {
+				isOnGround = true;
+			}
 		}
 	}
 

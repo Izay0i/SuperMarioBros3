@@ -28,7 +28,9 @@ private:
 
 	MarioStateMachine* marioFSM;
 
-	float runSpeed = 0.15f;
+	bool isOnGround = true;
+
+	float runSpeed = 0.10f;
 	float jumpSpeed = 0.5f;
 	float gravity = 0.002f;
 	float acceleration;
@@ -45,7 +47,9 @@ private:
 public:
 	static Mario* GetInstance();
 
-	bool IsOnGround() {}
+	float GetAcceleration() { return acceleration; }
+
+	bool IsOnGround() { return isOnGround; }
 
 	RECTF GetBoundingBox(int = 0) const override;
 	AnimatedSprite GetSprite() { return sprite; }

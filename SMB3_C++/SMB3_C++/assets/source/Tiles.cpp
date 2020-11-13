@@ -57,8 +57,10 @@ void Tiles::AddImage(RECT bound, D3DXVECTOR3 pos) {
 
 void Tiles::Render() {
 	for (const auto& image : images) {
-		int x = static_cast<int>(image.second.x - Camera::GetInstance()->GetPosition().x);
-		int y = static_cast<int>(image.second.y - Camera::GetInstance()->GetPosition().y);
+		//int x = static_cast<int>(image.second.x - Camera::GetInstance()->GetPosition().x);
+		//int y = static_cast<int>(image.second.y - Camera::GetInstance()->GetPosition().y);
+		float x = image.second.x - Camera::GetInstance()->GetPosition().x;
+		float y = image.second.y - Camera::GetInstance()->GetPosition().y;
 		D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);
 		
 		D3DXMATRIX mat;
@@ -72,7 +74,7 @@ void Tiles::Render() {
 			&image.first,
 			nullptr,
 			nullptr,
-			D3DCOLOR_XRGB(255, 255, 255)
+			D3DCOLOR_ARGB(255, 255, 255, 255)
 		);
 	}
 }

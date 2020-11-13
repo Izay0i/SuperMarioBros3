@@ -11,7 +11,7 @@ void GameObject::Update(DWORD delta, std::vector<GameObject*>* objects) {
 void GameObject::SweptAABB(
 	RECTF movingObject, 
 	RECTF staticObject, 
-	D3DXVECTOR3 distance, 
+	D3DXVECTOR3 distance, //movingObject's
 	D3DXVECTOR3& normal, 
 	float& t) 
 {
@@ -120,7 +120,7 @@ CollisionEvent* GameObject::SweptAABBEx(GameObject* object) {
 
 	D3DXVECTOR3 relativeDistance = this->distance - staticDistance;
 
-	movingObject = this->GetBoundingBox();
+	movingObject = this->GetBoundingBox();	
 
 	SweptAABB(movingObject, staticObject, relativeDistance, normal, t);
 
@@ -158,7 +158,7 @@ void GameObject::FilterCollision(
 
 	D3DXVECTOR2 minInd(-1, -1);
 
-	collisionEvents.clear();
+	eventResults.clear();
 
 	for (int i = 0; i < collisionEvents.size(); ++i) {
 		LPCOLLISIONEVENT coEvent = collisionEvents.at(i);
