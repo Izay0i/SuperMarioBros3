@@ -13,7 +13,8 @@ void GameObject::SweptAABB(
 	RECTF staticObject, 
 	D3DXVECTOR3 distance, //movingObject's
 	D3DXVECTOR3& normal, 
-	float& t) 
+	float& t,
+	GameObject* object) 
 {
 	D3DXVECTOR3 dEntry;
 	D3DXVECTOR3 dExit;
@@ -101,6 +102,11 @@ void GameObject::SweptAABB(
 	if (tEntry.x > tEntry.y) {
 		normal.y = 0.0f;
 		distance.x > 0 ? normal.x = -1.0f : normal.x = 1.0f;
+
+		//it just works
+		if (object->GetObjectID() == 205) {
+			distance.x > 0 ? normal.x = 1.0f : normal.x = -1.0f;
+		}
 	}
 	else {
 		normal.x = 0.0f;
@@ -122,7 +128,7 @@ CollisionEvent* GameObject::SweptAABBEx(GameObject* object) {
 
 	movingObject = this->GetBoundingBox();	
 
-	SweptAABB(movingObject, staticObject, relativeDistance, normal, t);
+	SweptAABB(movingObject, staticObject, relativeDistance, normal, t, object);
 
 	CollisionEvent* event = new CollisionEvent(t, normal, relativeDistance, object);
 	return event;

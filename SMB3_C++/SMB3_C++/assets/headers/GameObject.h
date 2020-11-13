@@ -57,7 +57,7 @@ public:
 	GameObject() {}
 	virtual ~GameObject() {}
 
-	static void SweptAABB(RECTF, RECTF, D3DXVECTOR3, D3DXVECTOR3&, float&);
+	static void SweptAABB(RECTF, RECTF, D3DXVECTOR3, D3DXVECTOR3&, float&, GameObject*);
 	CollisionEvent* SweptAABBEx(GameObject*);
 
 	void CalcPotentialCollision(std::vector<GameObject*>*, std::vector<LPCOLLISIONEVENT>&);
