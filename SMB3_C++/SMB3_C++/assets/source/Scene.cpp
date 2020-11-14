@@ -472,8 +472,14 @@ void Scene::Update(DWORD delta) {
 
 	marioInstance->Update(delta, &collidableObjects);
 
-	for (GameObject* object : objects) {
-		object->Update(delta, &collidableObjects);
+	for (int i = 0; i < objects.size(); ++i) {
+		objects.at(i)->Update(delta, &collidableObjects);
+
+		if (dynamic_cast<Entity*>(objects.at(i))) {
+			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
+				objects.erase(objects.begin() + i);
+			}
+		}
 	}
 
 	if (!marioInstance) {

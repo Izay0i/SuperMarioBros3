@@ -13,7 +13,7 @@ protected:
 		DATA_SECTION_HITBOXES
 	};
 
-	int hitPoints;
+	int hitPoints = 1;
 
 	AnimatedSprite sprite;
 
