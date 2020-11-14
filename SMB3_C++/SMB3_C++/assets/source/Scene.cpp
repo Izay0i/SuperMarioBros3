@@ -32,6 +32,10 @@ int Scene::GetSceneHeight() const {
 	return sceneHeight;
 }
 
+void Scene::AddObjectToScene(GameObject* object) {
+	objects.push_back(object);
+}
+
 void Scene::ParseMapSize(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
@@ -88,16 +92,16 @@ void Scene::ParseEntityData(std::string line) {
 		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();			
 			marioInstance->SetObjectID(static_cast<int>(objectID));
-			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
+			marioInstance->ParseData(tokens.at(1), tokens.at(2), GetTexturePath(texID), GetTextureColorKey(texID));
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
-			
+			object = new Goomba;
 			break;
 		case ObjectType::OBJECT_TYPE_REDPARAGOOMBA:
-
+			
 			break;
 		case ObjectType::OBJECT_TYPE_TROOPA:
-
+			object = new KoopaTroopa;
 			break;
 		case ObjectType::OBJECT_TYPE_PARATROOPA:
 
@@ -110,27 +114,21 @@ void Scene::ParseEntityData(std::string line) {
 			break;
 		case ObjectType::OBJECT_TYPE_COIN:
 			object = new Coin;
-			object->SetObjectID(static_cast<int>(objectID));
-			dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
 			break;
 		case ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
 			object = new QuestionBlock;
-			object->SetObjectID(static_cast<int>(objectID));
-			dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
 			break;
 		case ObjectType::OBJECT_TYPE_SHINYBRICK:
 			object = new ShinyBrick;
-			object->SetObjectID(static_cast<int>(objectID));
-			dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
 			break;
 		case ObjectType::OBJECT_TYPE_BONUSITEM:
-			object = new BonusItem;
-			object->SetObjectID(static_cast<int>(objectID));
-			dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
+			object = new BonusItem;			
 			break;	
 	}
 
 	if (object) {
+		object->SetObjectID(static_cast<int>(objectID));
+		dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
 		objects.push_back(object);
 	}
 }
@@ -152,13 +150,29 @@ void Scene::ParseWorldCoords(std::string line) {
 			marioInstance->SetPosition(position);
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
-
+			for (GameObject* object : objects) {
+				if (dynamic_cast<Goomba*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = atoi(tokens.at(0).c_str());
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
 			break;
 		case ObjectType::OBJECT_TYPE_REDPARAGOOMBA:
 
 			break;
 		case ObjectType::OBJECT_TYPE_TROOPA:
-
+			for (GameObject* object : objects) {
+				if (dynamic_cast<KoopaTroopa*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = atoi(tokens.at(0).c_str());
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
 			break;
 		case ObjectType::OBJECT_TYPE_PARATROOPA:
 
@@ -484,7 +498,15 @@ void Scene::Render() {
 	bgInstance->Render();
 	
 	for (GameObject* object : objects) {
-		object->Render();
+		if (!dynamic_cast<Entity*>(object)) {
+			object->Render();
+		}
+	}
+
+	for (GameObject* object : objects) {
+		if (dynamic_cast<Entity*>(object)) {
+			object->Render();
+		}
 	}
 	
 	marioInstance->Render();

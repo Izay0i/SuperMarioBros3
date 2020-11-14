@@ -42,6 +42,7 @@ protected:
 
 	D3DXVECTOR3 velocity;
 	D3DXVECTOR3 distance;
+	D3DXVECTOR3 normal;
 
 	D3DXVECTOR3 position;
 	D3DXVECTOR2 rotation;
@@ -54,7 +55,7 @@ protected:
 	static LPD3DXSPRITE spriteHandler;
 	
 public:
-	GameObject() {}
+	GameObject() { normal.x = 1; }
 	virtual ~GameObject() {}
 
 	static void SweptAABB(RECTF, RECTF, D3DXVECTOR3, D3DXVECTOR3&, float&, GameObject*);
@@ -81,6 +82,9 @@ public:
 
 	virtual void SetDistance(D3DXVECTOR3 dis) { distance = dis; }
 	virtual D3DXVECTOR3 GetDistance() const { return distance; }
+
+	virtual void SetNormal(D3DXVECTOR3 norm) { normal = norm; }
+	virtual D3DXVECTOR3 GetNormal() const { return normal; }
 
 	virtual	void SetPosition(D3DXVECTOR3 pos) { position = pos; }
 	virtual	D3DXVECTOR3 GetPosition() const { return position; }

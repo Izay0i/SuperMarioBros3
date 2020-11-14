@@ -13,14 +13,18 @@ protected:
 		DATA_SECTION_HITBOXES
 	};
 
-	AnimatedSprite sprite;
+	int hitPoints;
 
-	virtual void CheckCollision(Entity*, Entity*) = 0;
+	AnimatedSprite sprite;
 
 public:
 	virtual ~Entity() {}	
 
-	virtual void ParseData(std::string, std::string, D3DCOLOR) = 0;
+	int GetCurrentHitPoints() const { return hitPoints; }
+
+	virtual void TakeDamage() {}
+
+	virtual void ParseData(std::string, std::string, D3DCOLOR) {}
 
 	virtual void Update(DWORD, std::vector<GameObject*>* = nullptr) = 0;
 	virtual void Render() = 0;

@@ -10,18 +10,13 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Background.h"
-#include "Tiles.h"
 #include "Entity.h"
 #include "Camera.h"
 
 #include "player/Mario.h"
 
-#include "npc/Goomba.h"
-
-#include "tiles/Coin.h"
-#include "tiles/QuestionBlock.h"
-#include "tiles/ShinyBrick.h"
-#include "tiles/BonusItem.h"
+#include "NPCList.h"
+#include "TileList.h"
 
 class Background;
 class Mario;
@@ -99,13 +94,15 @@ public:
 	int GetSceneWidth() const;
 	int GetSceneHeight() const;
 
+	void AddObjectToScene(GameObject*);
+
 	void Load(const LPDIRECT3DDEVICE9&, const LPD3DXSPRITE&);
 	void Unload();
 
 	void Update(DWORD);
 	void Render();
 
-	void HandleStates(BYTE* states);
+	void HandleStates(BYTE*);
 	void OnKeyDown(int);
 	void OnKeyUp(int);
 };

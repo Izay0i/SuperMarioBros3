@@ -27,7 +27,7 @@
 
 [ENTITY_DATA]
 #Mario
-0	assets\data\player\mario_data.txt	0
+0	assets\data\player\mario_data.txt	assets\data\projectiles\fireball_data.txt	0
 
 #NPCs
 #Goomba
@@ -124,9 +124,9 @@
 #Red Paragoomba
 2	946	384
 #Koopa troopa
-3	576	359
-3	1472	391
-3	2096	359
+3	576	352
+3	1472	384
+3	2096	352
 #Para troopa
 4	1328	294
 4	1376	294
@@ -245,7 +245,7 @@
 #Pink block
 205	240	368	48	48	22
 #White block
-205	512	304	64	80	23
+205	512	304	64	800	23
 #Pink block
 205	464	336	64	80	24
 #Green block

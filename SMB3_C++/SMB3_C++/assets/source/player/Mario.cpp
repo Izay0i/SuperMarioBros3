@@ -6,6 +6,13 @@ LPDIRECT3DTEXTURE9 Mario::texture = nullptr;
 D3DCOLOR Mario::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Mario::Mario() {
+	//0 - dead
+	//1 - small
+	//2 - big
+	//3 - fire
+	//4 - racoon
+	hitPoints = 3;
+
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
 
@@ -56,8 +63,14 @@ RECTF Mario::GetBoundingBox(int id) const {
 	RECTF bound;
 	bound.left = position.x + 1;
 	bound.top = position.y + 1;
-	bound.right = position.x + hitBox.GetWidth(1);
-	bound.bottom = position.y + hitBox.GetHeight(1);
+	bound.right = position.x + hitBox.GetWidth(id);
+
+	if (hitPoints == 1) {		
+		bound.bottom = position.y + hitBox.GetHeight(id);
+	}
+	else {
+		bound.bottom = position.y + hitBox.GetHeight(1);
+	}
 
 	return bound;
 }
@@ -87,7 +100,7 @@ void Mario::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void Mario::ParseData(std::string dataPath, std::string projPath, std::string texturePath, D3DCOLOR colorKey) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -95,6 +108,9 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 		OutputDebugStringA("Failed to read data\n");
 		return;
 	}
+
+	fireballPath = projPath;
+	texPath = texturePath;
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);
 	this->colorKey = colorKey;
@@ -136,8 +152,6 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 	marioFSM = new MarioStateMachine(static_cast<Mario*>(marioInstance));
 }
 
-void Mario::CheckCollision(Entity* movingEntity, Entity* staticEntity) {}
-
 void Mario::HandleStates(BYTE* states) {
 	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
 		//GOTTA GO FAAAST
@@ -145,15 +159,21 @@ void Mario::HandleStates(BYTE* states) {
 			acceleration += 0.01f;
 		}
 	}
-	
+
+	if (!Device::IsKeyDown(DIK_SPACE)) {
+		gravity = 0.003f;
+	}
+
 	if (Device::IsKeyDown(DIK_A)) {
 		//to flip sprite
 		scale = D3DXVECTOR2(1.0f, 1.0f);
 		velocity.x = -runSpeed * acceleration;
+		normal.x = -1;
 	}
 	else if (Device::IsKeyDown(DIK_D)) {
 		scale = D3DXVECTOR2(-1.0f, 1.0f);
 		velocity.x = runSpeed * acceleration;
+		normal.x = 1;
 	}
 	else {
 		velocity.x = 0.0f;
@@ -167,13 +187,37 @@ void Mario::OnKeyDown(int keyCode) {
 	switch (keyCode) {
 		case DIK_SPACE:
 			if (IsOnGround()) {
-				velocity.y = -jumpSpeed * acceleration;
+				gravity = 0.0012f;
+				velocity.y = -jumpSpeed;
 				isOnGround = false;
 			}
 			break;
-		case DIK_K:
-			velocity.y = 0.0f;
+		case DIK_J: //hold?
+			OutputDebugStringA("Holding\n");
 			break;
+		case DIK_K: //spin or shoot
+			if (hitPoints == 3) {
+				SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnFireball());
+			}
+			break;
+	}
+}
+
+Fireball* Mario::SpawnFireball() {
+	Fireball* fireball = new Fireball;
+	fireball->SetObjectID(99);
+	fireball->ParseData(fireballPath, texPath, colorKey);
+	fireball->SetNormal(D3DXVECTOR3(normal.x, 0, 0));
+	fireball->SetPosition(D3DXVECTOR3(position.x + normal.x * 8, position.y, 0));
+	return fireball;
+}
+
+void Mario::TakeDamage() {
+	if (hitPoints == 1) {
+		--hitPoints;
+	}
+	else {
+		hitPoints = 1;
 	}
 }
 
@@ -185,7 +229,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
 
-	CalcPotentialCollision(objects, collisionEvents);
+	if (hitPoints != 0) {
+		CalcPotentialCollision(objects, collisionEvents);
+	}
 
 	if (collisionEvents.size() == 0) {
 		position += distance;
@@ -211,11 +257,46 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 			
-			/*if (dynamic_cast<QuestionBlock*>(event->object)) {
-				char debugStr[100];
-				sprintf_s(debugStr, "Normal: %f %f\n", event->normal.x, event->normal.y);
-				OutputDebugStringA(debugStr);
-			}*/
+			if (dynamic_cast<Goomba*>(event->object)) {
+				Goomba* goomba = static_cast<Goomba*>(event->object);
+				if (event->normal.y < 0.0f) {
+					goomba->TakeDamage();
+					velocity.y = -deflectSpeed;
+				}
+				else if (event->normal.x != 0.0f) {
+					if (goomba->GetCurrentHitPoints() != 0) {
+						if (Device::IsKeyDown(DIK_K) && hitPoints == 4) {
+							goomba->TakeDamage();
+						}
+						else {
+							TakeDamage();
+							velocity.y = -dieflectSpeed;
+						}
+					}
+				}
+			}
+
+			if (dynamic_cast<KoopaTroopa*>(event->object)) {
+				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
+				if (event->normal.y < 0.0f) {
+					koopa->TakeDamage();
+					koopa->StartRetract();
+					velocity.y = -deflectSpeed;
+				}
+				else if (event->normal.x != 0.0f) {
+					if (koopa->GetCurrentHitPoints() == 2) {
+						if (Device::IsKeyDown(DIK_K) && hitPoints == 4) {
+							koopa->TakeDamage();
+							koopa->StartRetract();
+						}
+						else {
+							TakeDamage();
+							velocity.y = -dieflectSpeed;
+						}
+					}
+				}
+			}
+
 			if (event->normal.y == -1.0f) {
 				isOnGround = true;
 			}

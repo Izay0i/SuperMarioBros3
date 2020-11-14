@@ -1,15 +1,18 @@
-#include "../../headers/npc/Goomba.h"
+#include "../../headers/npc/KoopaTroopa.h"
 
-LPCWSTR Goomba::texturePath = nullptr;
-LPDIRECT3DTEXTURE9 Goomba::texture = nullptr;
-D3DCOLOR Goomba::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+LPCWSTR KoopaTroopa::texturePath = nullptr;
+LPDIRECT3DTEXTURE9 KoopaTroopa::texture = nullptr;
+D3DCOLOR KoopaTroopa::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
-Goomba::Goomba() {
-	hitPoints = 1;
-	currentState = GoombaState::WALK;
+KoopaTroopa::KoopaTroopa() {
+	//0 - dead
+	//1 - shell
+	//2 - normal
+	hitPoints = 2;
+	currentState = KoopaState::WALK;
 }
 
-void Goomba::LoadTexture() {
+void KoopaTroopa::LoadTexture() {
 	if (!texture) {
 		HRESULT hResult;
 		D3DXIMAGE_INFO imageInfo;
@@ -44,13 +47,13 @@ void Goomba::LoadTexture() {
 	}
 }
 
-RECTF Goomba::GetBoundingBox(int id) const {
+RECTF KoopaTroopa::GetBoundingBox(int id) const {
 	RECTF bound;
 	bound.left = position.x + 1;
 	bound.top = position.y + 1;
 	bound.right = position.x + hitBox.GetWidth(id);
 
-	if (hitPoints != 0) {
+	if (hitPoints == 2) {
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
 	else {
@@ -60,11 +63,11 @@ RECTF Goomba::GetBoundingBox(int id) const {
 	return bound;
 }
 
-void Goomba::ParseSprites(std::string line) {
+void KoopaTroopa::ParseSprites(std::string line) {
 	sprite.ParseSprites(line, texture, colorKey);
 }
 
-void Goomba::ParseHitboxes(std::string line) {
+void KoopaTroopa::ParseHitboxes(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
 	if (tokens.size() < 4) {
@@ -85,7 +88,7 @@ void Goomba::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Goomba::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -132,30 +135,44 @@ void Goomba::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR c
 	readFile.close();
 }
 
-void Goomba::HandleStates() {
+void KoopaTroopa::HandleStates() {
+	if (GetTickCount64() - retractStart > retractTime) {
+		retractStart = 0;
+		hitPoints = 2;
+	}
+	
 	if (hitPoints == 0) {
-		currentState = GoombaState::DIE;
+		currentState = KoopaState::DIE;
+	}
+	else if (hitPoints == 1) {
+		currentState = KoopaState::RETRACT;
+	}
+	else {
+		currentState = KoopaState::WALK;
 	}
 
 	switch (currentState) {
-		case GoombaState::WALK:
+		case KoopaState::WALK:
 			velocity.x = -runSpeed * normal.x;
 			break;
-		case GoombaState::DIE:
+		case KoopaState::RETRACT:
+			velocity = D3DXVECTOR3(0, 0, 0);
+			break;
+		case KoopaState::DIE:
 			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
 	}
 }
 
-void Goomba::TakeDamage() {
-	if (hitPoints > 0) {
+void KoopaTroopa::TakeDamage() {
+	if (hitPoints >= 2) {
 		--hitPoints;
 	}
 }
 
-void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
-	
+
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
@@ -191,12 +208,14 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
-			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
+			if (dynamic_cast<QuestionBlock*>(event->object)) {
+
+			}
+			else if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
 					this->normal.x = -event->normal.x;
 				}
 			}
-			
 		}
 	}
 
@@ -205,17 +224,23 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 }
 
-void Goomba::Render() {
+void KoopaTroopa::Render() {
 	switch (currentState) {
-		case GoombaState::WALK:
-			sprite.PlayAnimation("Walk", position);
+		case KoopaState::WALK:
+			sprite.PlayAnimation("Walk", position, D3DXVECTOR2(normal.x, 1.0f));
 			break;
-		case GoombaState::DIE:
-			sprite.PlayAnimation("Die", position);
+		case KoopaState::RETRACT:
+			if (GetTickCount64() - retractStart > retractTime / 2) {
+				sprite.PlayAnimation("Out", D3DXVECTOR3(position.x, position.y + 10, 0));
+			}
+			sprite.PlayAnimation("Retract", D3DXVECTOR3(position.x, position.y + 10, 0));
+			break;
+		case KoopaState::DIE:
+			sprite.PlayAnimation("Retract", position);
 			break;
 	}
 }
 
-void Goomba::Release() {
+void KoopaTroopa::Release() {
 
 }

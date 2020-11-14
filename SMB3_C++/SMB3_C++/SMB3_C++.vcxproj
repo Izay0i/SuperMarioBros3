@@ -152,7 +152,9 @@
     <ClCompile Include="assets\source\Game.cpp" />
     <ClCompile Include="assets\source\GameObject.cpp" />
     <ClCompile Include="assets\source\HitBox.cpp" />
+    <ClCompile Include="assets\source\npc\Fireball.cpp" />
     <ClCompile Include="assets\source\npc\Goomba.cpp" />
+    <ClCompile Include="assets\source\npc\KoopaTroopa.cpp" />
     <ClCompile Include="assets\source\player\Mario.cpp" />
     <ClCompile Include="assets\source\player\MarioStateMachine.cpp" />
     <ClCompile Include="assets\source\Scene.cpp" />
@@ -174,13 +176,17 @@
     <ClInclude Include="assets\headers\Game.h" />
     <ClInclude Include="assets\headers\GameObject.h" />
     <ClInclude Include="assets\headers\HitBox.h" />
+    <ClInclude Include="assets\headers\NPCList.h" />
+    <ClInclude Include="assets\headers\npc\Fireball.h" />
     <ClInclude Include="assets\headers\npc\Goomba.h" />
+    <ClInclude Include="assets\headers\npc\KoopaTroopa.h" />
     <ClInclude Include="assets\headers\player\Mario.h" />
     <ClInclude Include="assets\headers\player\MarioStateMachine.h" />
     <ClInclude Include="assets\headers\Scene.h" />
     <ClInclude Include="assets\headers\SceneManager.h" />
     <ClInclude Include="assets\headers\Sprite.h" />
     <ClInclude Include="assets\headers\StateMachine.h" />
+    <ClInclude Include="assets\headers\TileList.h" />
     <ClInclude Include="assets\headers\Tiles.h" />
     <ClInclude Include="assets\headers\tiles\BonusItem.h" />
     <ClInclude Include="assets\headers\tiles\Coin.h" />

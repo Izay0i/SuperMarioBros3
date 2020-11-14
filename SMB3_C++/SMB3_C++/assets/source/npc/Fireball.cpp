@@ -1,15 +1,15 @@
-#include "../../headers/npc/Goomba.h"
+#include "../../headers/npc/Fireball.h"
 
-LPCWSTR Goomba::texturePath = nullptr;
-LPDIRECT3DTEXTURE9 Goomba::texture = nullptr;
-D3DCOLOR Goomba::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+LPCWSTR Fireball::texturePath = nullptr;
+LPDIRECT3DTEXTURE9 Fireball::texture = nullptr;
+D3DCOLOR Fireball::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
-Goomba::Goomba() {
+Fireball::Fireball() {
 	hitPoints = 1;
-	currentState = GoombaState::WALK;
+	currentState = BallState::BOUNCE;
 }
 
-void Goomba::LoadTexture() {
+void Fireball::LoadTexture() {
 	if (!texture) {
 		HRESULT hResult;
 		D3DXIMAGE_INFO imageInfo;
@@ -44,27 +44,20 @@ void Goomba::LoadTexture() {
 	}
 }
 
-RECTF Goomba::GetBoundingBox(int id) const {
+RECTF Fireball::GetBoundingBox(int id) const {
 	RECTF bound;
 	bound.left = position.x + 1;
 	bound.top = position.y + 1;
 	bound.right = position.x + hitBox.GetWidth(id);
-
-	if (hitPoints != 0) {
-		bound.bottom = position.y + hitBox.GetHeight(id);
-	}
-	else {
-		bound.bottom = position.y + hitBox.GetHeight(1);
-	}
-
+	bound.bottom = position.y + hitBox.GetHeight(id);
 	return bound;
 }
 
-void Goomba::ParseSprites(std::string line) {
+void Fireball::ParseSprites(std::string line) {
 	sprite.ParseSprites(line, texture, colorKey);
 }
 
-void Goomba::ParseHitboxes(std::string line) {
+void Fireball::ParseHitboxes(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
 	if (tokens.size() < 4) {
@@ -85,7 +78,7 @@ void Goomba::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Goomba::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void Fireball::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -132,30 +125,33 @@ void Goomba::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR c
 	readFile.close();
 }
 
-void Goomba::HandleStates() {
+void Fireball::HandleStates() {
 	if (hitPoints == 0) {
-		currentState = GoombaState::DIE;
+		currentState = BallState::DIE;
+	}
+	else if (hitPoints == 1) {
+		currentState = BallState::BOUNCE;
 	}
 
 	switch (currentState) {
-		case GoombaState::WALK:
-			velocity.x = -runSpeed * normal.x;
+		case BallState::BOUNCE:
+			velocity.x = jumpSpeed * normal.x;
 			break;
-		case GoombaState::DIE:
-			velocity = D3DXVECTOR3(0, 0, 0);
+		case BallState::DIE:
+			velocity = D3DXVECTOR3(0, 1000, 0);
 			break;
 	}
 }
 
-void Goomba::TakeDamage() {
-	if (hitPoints > 0) {
+void Fireball::TakeDamage() {
+	if (hitPoints >= 1) {
 		--hitPoints;
 	}
 }
 
-void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
-	
+
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
@@ -191,12 +187,17 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
-			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
+			if (dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
-					this->normal.x = -event->normal.x;
+					TakeDamage();
 				}
 			}
-			
+			else if ((dynamic_cast<Entity*>(event->object))) {
+				if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
+					dynamic_cast<Entity*>(event->object)->TakeDamage();					
+					TakeDamage();
+				}
+			}
 		}
 	}
 
@@ -205,17 +206,14 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 }
 
-void Goomba::Render() {
+void Fireball::Render() {
 	switch (currentState) {
-		case GoombaState::WALK:
-			sprite.PlayAnimation("Walk", position);
-			break;
-		case GoombaState::DIE:
-			sprite.PlayAnimation("Die", position);
+		case BallState::BOUNCE:
+			sprite.PlayAnimation("Bounce", position, D3DXVECTOR2(normal.x, 1.0f));
 			break;
 	}
 }
 
-void Goomba::Release() {
+void Fireball::Release() {
 
 }

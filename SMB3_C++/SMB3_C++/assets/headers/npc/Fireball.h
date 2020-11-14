@@ -1,17 +1,15 @@
 #pragma once
 
-#include <fstream>
-
 #include "../Entity.h"
+#include "../TileList.h"
 
 class Entity;
 
-class ShinyBrick : public Entity {
+class Fireball : public Entity {
 private:
-	enum class ItemState {
-		ROTATE,
-		PUSHED,
-		SWITCHED
+	enum class BallState {
+		BOUNCE,
+		DIE
 	};
 
 	const static int MAX_FILE_LINE = 1024;
@@ -20,25 +18,26 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	BallState currentState;
+	
+	float jumpSpeed = 0.5f;
+	float gravity = 0.002f;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
 
+	void HandleStates();
+
 public:
-	ShinyBrick();
+	Fireball();
+
+	RECTF GetBoundingBox(int = 0) const override;
 
 	void ParseData(std::string, std::string, D3DCOLOR) override;
 
-	RECTF GetBoundingBox(int id = 0) const override {
-		RECTF bound;
-		bound.left = position.x + 1;
-		bound.top = position.y + 1;
-		bound.right = position.x + hitBox.GetWidth(id);
-		bound.bottom = position.y + hitBox.GetHeight(id);
-
-		return bound;
-	}
+	void TakeDamage() override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;

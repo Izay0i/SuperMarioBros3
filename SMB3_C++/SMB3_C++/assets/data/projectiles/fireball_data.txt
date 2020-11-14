@@ -1,11 +1,11 @@
 #string_id	left	top	right	bottom	frames	speed
 #any consecutive string_id that matches prev string_id will add bounds to it
 [SPRITES]
-Fireball	245	302	252	317	4	100
-Fireball	255	302	262	317
-Fireball	265	302	272	317
-Fireball	275	302	282	317
+Bounce	245	306	252	313	4	100
+Bounce	255	305	262	313
+Bounce	265	306	272	313
+Bounce	275	306	282	314
 
 #left	top	right	bottom
 [HITBOXES]
-0	0	10	10
+0	0	8	8

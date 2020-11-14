@@ -21,8 +21,6 @@ private:
 
 	void LoadTexture();
 
-	void CheckCollision(Entity*, Entity*) override {}
-
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
 

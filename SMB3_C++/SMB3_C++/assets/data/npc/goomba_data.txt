@@ -5,7 +5,7 @@
 Walk	0	0	15	15	2	100
 Walk	16	0	31	15
 #Die
-Die	32	0	47	15
+Die	32	0	47	15	1	0
 
 [HITBOXES]
 0	0	16	16

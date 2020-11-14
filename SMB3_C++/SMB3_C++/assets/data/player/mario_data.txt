@@ -71,7 +71,7 @@ FireRun	1	260	16	291	3	50
 FireRun	19	260	34	291
 FireRun	37	260	52	291
 #Crouch
-FireCrouch	55	260	522	1150	1	0
+FireCrouch	55	260	70	291	1	0
 #Jump
 FireJump	73	260	88	291	1	0
 #Turnaround
@@ -109,9 +109,7 @@ RacRun	53	346	76	377
 #Crouch
 RacCrouch	79	346	102	377	1	0
 #Jump
-RacJump	105	346	128	377	3	50
-RacJump	131	346	154	377
-RacJump	157	346	180	377
+RacJump	105	346	128	377	1	0
 #Turnaround
 RacTurn	339	346	354	377	1	0
 #Front
@@ -134,12 +132,13 @@ RacSwim	201	380	224	411
 #Climb
 RacClimb	227	380	242	411	1	0
 #Spin
-RacSpin	375	346	398	377	2	50
+RacSpin	375	346	398	377	2	75
 RacSpin	401	346	416	377
 #Fall
-RacFall	261	346	284	377	3	50
-RacFall	287	346	310	377
-RacFall	313	346	336	377
+RacFall	131	346	154	377	1	0
+#Slow Fall
+RacSlowFall	131	346	154	377	2	50
+RacSlowFall	157	346	180	377
 
 #left	top	right	bottom
 [HITBOXES]
