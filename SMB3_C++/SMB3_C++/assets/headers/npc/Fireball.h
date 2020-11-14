@@ -20,7 +20,8 @@ private:
 
 	BallState currentState;
 	
-	float jumpSpeed = 0.5f;
+	float runSpeed = 0.2f;
+	float jumpSpeed = 0.2f;
 	float gravity = 0.002f;
 
 	void LoadTexture();

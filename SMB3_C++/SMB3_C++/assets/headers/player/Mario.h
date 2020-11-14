@@ -28,7 +28,7 @@ private:
 
 	bool isOnGround = true;
 
-	float runSpeed = 0.10f;
+	float runSpeed = 0.09f;
 	float jumpSpeed = 0.4f;
 	float deflectSpeed = 0.3f;
 	float dieflectSpeed = 0.7f;

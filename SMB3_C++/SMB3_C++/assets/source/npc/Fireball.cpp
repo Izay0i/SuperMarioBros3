@@ -135,7 +135,7 @@ void Fireball::HandleStates() {
 
 	switch (currentState) {
 		case BallState::BOUNCE:
-			velocity.x = jumpSpeed * normal.x;
+			velocity.x = runSpeed * normal.x;
 			break;
 		case BallState::DIE:
 			velocity = D3DXVECTOR3(0, 1000, 0);
@@ -187,14 +187,23 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
+			if (event->normal.y != 0.0f) {
+				velocity.y -= jumpSpeed;
+			}
+
+			if (event->object->GetObjectID() == 205) {
+				continue;
+			}
+
 			if (dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
 					TakeDamage();
-				}
+				}				
 			}
-			else if ((dynamic_cast<Entity*>(event->object))) {
+			
+			if ((dynamic_cast<Entity*>(event->object))) {
 				if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
-					dynamic_cast<Entity*>(event->object)->TakeDamage();					
+					dynamic_cast<Entity*>(event->object)->TakeDamage();
 					TakeDamage();
 				}
 			}

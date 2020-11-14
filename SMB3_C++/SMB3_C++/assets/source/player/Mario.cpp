@@ -155,7 +155,7 @@ void Mario::ParseData(std::string dataPath, std::string projPath, std::string te
 void Mario::HandleStates(BYTE* states) {
 	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
 		//GOTTA GO FAAAST
-		if (acceleration < 1.49f) {
+		if (acceleration < 1.79f) {
 			acceleration += 0.01f;
 		}
 	}
@@ -196,7 +196,7 @@ void Mario::OnKeyDown(int keyCode) {
 			OutputDebugStringA("Holding\n");
 			break;
 		case DIK_K: //spin or shoot
-			if (hitPoints == 3) {
+			if (hitPoints == 3 && !Device::IsKeyDown(DIK_S)) {
 				SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnFireball());
 			}
 			break;
@@ -208,7 +208,7 @@ Fireball* Mario::SpawnFireball() {
 	fireball->SetObjectID(99);
 	fireball->ParseData(fireballPath, texPath, colorKey);
 	fireball->SetNormal(D3DXVECTOR3(normal.x, 0, 0));
-	fireball->SetPosition(D3DXVECTOR3(position.x + normal.x * 8, position.y, 0));
+	fireball->SetPosition(D3DXVECTOR3(position.x + normal.x * 16, position.y + 10, 0));
 	return fireball;
 }
 
@@ -260,8 +260,10 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<Goomba*>(event->object)) {
 				Goomba* goomba = static_cast<Goomba*>(event->object);
 				if (event->normal.y < 0.0f) {
+					if (goomba->GetCurrentHitPoints() > 0) {
+						velocity.y = -deflectSpeed;
+					}
 					goomba->TakeDamage();
-					velocity.y = -deflectSpeed;
 				}
 				else if (event->normal.x != 0.0f) {
 					if (goomba->GetCurrentHitPoints() != 0) {
@@ -279,15 +281,32 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<KoopaTroopa*>(event->object)) {
 				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
 				if (event->normal.y < 0.0f) {
+					if (koopa->GetCurrentHitPoints() > 1) {
+						velocity.y = -deflectSpeed;
+					}
 					koopa->TakeDamage();
 					koopa->StartRetract();
-					velocity.y = -deflectSpeed;
+					//follow the player
+					koopa->SetNormal(
+						D3DXVECTOR3(
+							this->normal.x == event->normal.x ? -this->normal.x : this->normal.x,
+							0,
+							0
+						)
+					);
 				}
 				else if (event->normal.x != 0.0f) {
 					if (koopa->GetCurrentHitPoints() == 2) {
 						if (Device::IsKeyDown(DIK_K) && hitPoints == 4) {
 							koopa->TakeDamage();
 							koopa->StartRetract();
+							koopa->SetNormal(
+								D3DXVECTOR3(
+									this->normal.x == event->normal.x ? -this->normal.x : this->normal.x,
+									0,
+									0
+								)
+							);
 						}
 						else {
 							TakeDamage();

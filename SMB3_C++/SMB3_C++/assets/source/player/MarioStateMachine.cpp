@@ -82,7 +82,7 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			}
 			break;
 		case MarioState::CROUCH:
-			if (!Device::IsKeyDown(DIK_S)) {
+			if (!Device::IsKeyDown(DIK_S) || mario->GetVelocity().x != 0.0f) {
 				currentState = MarioState::IDLE;
 			}
 			break;
