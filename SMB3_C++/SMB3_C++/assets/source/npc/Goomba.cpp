@@ -5,8 +5,9 @@ LPDIRECT3DTEXTURE9 Goomba::texture = nullptr;
 D3DCOLOR Goomba::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Goomba::Goomba() {
+	//0 - dead
+	//1 - walk
 	hitPoints = 1;
-	currentState = GoombaState::WALK;
 }
 
 void Goomba::LoadTexture() {
@@ -46,8 +47,8 @@ void Goomba::LoadTexture() {
 
 RECTF Goomba::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x + 1;
-	bound.top = position.y + 1;
+	bound.left = position.x;
+	bound.top = position.y;
 	bound.right = position.x + hitBox.GetWidth(id);
 
 	if (hitPoints != 0) {
@@ -133,8 +134,13 @@ void Goomba::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR c
 }
 
 void Goomba::HandleStates() {
-	if (hitPoints == 0) {
-		currentState = GoombaState::DIE;
+	switch (hitPoints) {
+		case 0:
+			currentState = GoombaState::DIE;
+			break;
+		case 1:
+			currentState = GoombaState::WALK;
+			break;
 	}
 
 	switch (currentState) {
@@ -177,8 +183,8 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		position.x += minTime.x * distance.x + normal.x * 0.1f;
-		position.y += minTime.y * distance.y + normal.y * 0.1f;
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
 
 		if (normal.x != 0.0f) {
 			velocity.x = 0.0f;
@@ -197,6 +203,12 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 			
+			//koopa troopa
+			if (event->object->GetObjectID() == 3) {
+				if (dynamic_cast<Entity*>(event->object)->GetCurrentHitPoints() == 1) {
+					TakeDamage();
+				}
+			}
 		}
 	}
 

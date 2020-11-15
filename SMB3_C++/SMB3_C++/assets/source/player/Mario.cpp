@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 3;
+	hitPoints = 4;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -61,8 +61,8 @@ void Mario::LoadTexture() {
 
 RECTF Mario::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x + 1;
-	bound.top = position.y + 1;
+	bound.left = position.x;
+	bound.top = position.y;
 	bound.right = position.x + hitBox.GetWidth(id);
 
 	if (hitPoints == 1) {		
@@ -152,14 +152,15 @@ void Mario::ParseData(std::string dataPath, std::string projPath, std::string te
 	marioFSM = new MarioStateMachine(static_cast<Mario*>(marioInstance));
 }
 
-void Mario::HandleStates(BYTE* states) {
+void Mario::HandleStates(BYTE* states) {	
 	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
 		//GOTTA GO FAAAST
-		if (acceleration < 1.79f) {
+		if (acceleration < maxAccel) {
 			acceleration += 0.01f;
 		}
 	}
 
+	//apply stronger gravity when space is released
 	if (!Device::IsKeyDown(DIK_SPACE)) {
 		gravity = 0.003f;
 	}
@@ -243,8 +244,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		position.x += minTime.x * distance.x + normal.x * 0.1f;
-		position.y += minTime.y * distance.y + normal.y * 0.1f;
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
 
 		if (normal.x != 0.0f) {
 			velocity.x = 0.0f;
@@ -256,8 +257,13 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
-			
-			if (dynamic_cast<Goomba*>(event->object)) {
+
+			if (event->normal.y == -1.0f) {
+				isOnGround = true;
+			}
+
+			//goomba
+			if (dynamic_cast<Goomba*>(event->object)) {	
 				Goomba* goomba = static_cast<Goomba*>(event->object);
 				if (event->normal.y < 0.0f) {
 					if (goomba->GetCurrentHitPoints() > 0) {
@@ -277,15 +283,14 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					}
 				}
 			}
-
+			//koopa troopa
 			if (dynamic_cast<KoopaTroopa*>(event->object)) {
 				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
 				if (event->normal.y < 0.0f) {
-					if (koopa->GetCurrentHitPoints() > 1) {
+					if (koopa->GetCurrentHitPoints() > 0) {
 						velocity.y = -deflectSpeed;
 					}
 					koopa->TakeDamage();
-					koopa->StartRetract();
 					//follow the player
 					koopa->SetNormal(
 						D3DXVECTOR3(
@@ -296,10 +301,10 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					);
 				}
 				else if (event->normal.x != 0.0f) {
-					if (koopa->GetCurrentHitPoints() == 2) {
+					if (koopa->GetCurrentHitPoints() > 0) {
+						//mario hits koopa with a tail
 						if (Device::IsKeyDown(DIK_K) && hitPoints == 4) {
 							koopa->TakeDamage();
-							koopa->StartRetract();
 							koopa->SetNormal(
 								D3DXVECTOR3(
 									this->normal.x == event->normal.x ? -this->normal.x : this->normal.x,
@@ -310,14 +315,15 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						}
 						else {
 							TakeDamage();
-							velocity.y = -dieflectSpeed;
+							if (hitPoints == 0) {
+								velocity.y = -dieflectSpeed;
+							}
+							else {
+								velocity.y -= deflectSpeed;
+							}
 						}
 					}
 				}
-			}
-
-			if (event->normal.y == -1.0f) {
-				isOnGround = true;
 			}
 		}
 	}

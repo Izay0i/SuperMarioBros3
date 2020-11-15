@@ -28,6 +28,8 @@ private:
 
 	bool isOnGround = true;
 
+	const float maxAccel = 1.79f;
+
 	float runSpeed = 0.09f;
 	float jumpSpeed = 0.4f;
 	float deflectSpeed = 0.3f;

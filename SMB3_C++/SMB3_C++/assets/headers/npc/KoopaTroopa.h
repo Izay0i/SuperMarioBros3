@@ -12,6 +12,7 @@ private:
 	enum class KoopaState {
 		WALK,
 		RETRACT,
+		SPIN,
 		DIE
 	};
 

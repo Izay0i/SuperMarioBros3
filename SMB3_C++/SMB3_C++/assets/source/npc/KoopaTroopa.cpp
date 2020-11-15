@@ -6,10 +6,10 @@ D3DCOLOR KoopaTroopa::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 KoopaTroopa::KoopaTroopa() {
 	//0 - dead
-	//1 - shell
-	//2 - normal
-	hitPoints = 2;
-	currentState = KoopaState::WALK;
+	//1 - spin
+	//2 - shell
+	//3 - normal
+	hitPoints = 3;
 }
 
 void KoopaTroopa::LoadTexture() {
@@ -49,11 +49,11 @@ void KoopaTroopa::LoadTexture() {
 
 RECTF KoopaTroopa::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x + 1;
-	bound.top = position.y + 1;
+	bound.left = position.x;
+	bound.top = position.y;
 	bound.right = position.x + hitBox.GetWidth(id);
 
-	if (hitPoints == 2) {
+	if (hitPoints == 3) {
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
 	else {
@@ -138,26 +138,32 @@ void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCO
 void KoopaTroopa::HandleStates() {
 	if (GetTickCount64() - retractStart > retractTime) {
 		retractStart = 0;
-		hitPoints = 2;
-	}
-	
-	if (hitPoints == 0) {
-		currentState = KoopaState::DIE;
-	}
-	else if (hitPoints == 1) {
-		currentState = KoopaState::RETRACT;
-	}
-	else {
-		currentState = KoopaState::WALK;
+		hitPoints = 3;
+	}	
+
+	switch (hitPoints) {
+		case 0:
+			currentState = KoopaState::DIE;
+			break;
+		case 1:
+			currentState = KoopaState::SPIN;
+			break;
+		case 2:
+			currentState = KoopaState::RETRACT;
+			break;
+		case 3:
+			currentState = KoopaState::WALK;
+			break;
 	}
 
 	switch (currentState) {
+		case KoopaState::SPIN:
+			velocity.x = -runSpeed * normal.x * 8;
+			break;
 		case KoopaState::WALK:
 			velocity.x = -runSpeed * normal.x;
 			break;
 		case KoopaState::RETRACT:
-			velocity = D3DXVECTOR3(0, 0, 0);
-			break;
 		case KoopaState::DIE:
 			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
@@ -167,6 +173,7 @@ void KoopaTroopa::HandleStates() {
 void KoopaTroopa::TakeDamage() {
 	if (hitPoints >= 2) {
 		--hitPoints;
+		StartRetract();
 	}
 }
 
@@ -176,6 +183,11 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
+
+	//shell spinning
+	if (hitPoints == 1) {
+		StartRetract();
+	}
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
@@ -194,8 +206,8 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		position.x += minTime.x * distance.x + normal.x * 0.1f;
-		position.y += minTime.y * distance.y + normal.y * 0.1f;
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
 
 		if (normal.x != 0.0f) {
 			velocity.x = 0.0f;
@@ -211,7 +223,8 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<QuestionBlock*>(event->object)) {
 
 			}
-			else if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
+			
+			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
 					this->normal.x = -event->normal.x;
 				}
@@ -228,12 +241,16 @@ void KoopaTroopa::Render() {
 	switch (currentState) {
 		case KoopaState::WALK:
 			sprite.PlayAnimation("Walk", position, D3DXVECTOR2(normal.x, 1.0f));
-			break;
-		case KoopaState::RETRACT:
-			if (GetTickCount64() - retractStart > retractTime / 2) {
-				sprite.PlayAnimation("Out", D3DXVECTOR3(position.x, position.y + 10, 0));
+			break;		
+		case KoopaState::RETRACT:			
+			sprite.PlayAnimation("Retract", position);
+			
+			if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
+				sprite.PlayAnimation("Out", position);
 			}
-			sprite.PlayAnimation("Retract", D3DXVECTOR3(position.x, position.y + 10, 0));
+			break;
+		case KoopaState::SPIN:
+			sprite.PlayAnimation("Spin", position);
 			break;
 		case KoopaState::DIE:
 			sprite.PlayAnimation("Retract", position);

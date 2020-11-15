@@ -83,6 +83,8 @@ private:
 	void ParseTileSprites(std::string);
 	void ParseBackground(std::string);
 
+	void UpdateCameraPosition();
+
 public:
 	Scene(int, std::string);
 
@@ -93,7 +95,7 @@ public:
 
 	int GetSceneWidth() const;
 	int GetSceneHeight() const;
-
+	
 	void AddObjectToScene(GameObject*);
 
 	void Load(const LPDIRECT3DDEVICE9&, const LPD3DXSPRITE&);

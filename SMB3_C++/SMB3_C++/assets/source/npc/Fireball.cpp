@@ -46,8 +46,8 @@ void Fireball::LoadTexture() {
 
 RECTF Fireball::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x + 1;
-	bound.top = position.y + 1;
+	bound.left = position.x;
+	bound.top = position.y;
 	bound.right = position.x + hitBox.GetWidth(id);
 	bound.bottom = position.y + hitBox.GetHeight(id);
 	return bound;
@@ -126,19 +126,21 @@ void Fireball::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR
 }
 
 void Fireball::HandleStates() {
-	if (hitPoints == 0) {
-		currentState = BallState::DIE;
-	}
-	else if (hitPoints == 1) {
-		currentState = BallState::BOUNCE;
+	switch (hitPoints) {
+		case 0:
+			currentState = BallState::EXPLODE;
+			break;
+		case 1:
+			currentState = BallState::BOUNCE;
+			break;
 	}
 
 	switch (currentState) {
 		case BallState::BOUNCE:
 			velocity.x = runSpeed * normal.x;
 			break;
-		case BallState::DIE:
-			velocity = D3DXVECTOR3(0, 1000, 0);
+		case BallState::EXPLODE:
+			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
 	}
 }
@@ -173,29 +175,26 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		position.x += minTime.x * distance.x + normal.x * 0.1f;
-		position.y += minTime.y * distance.y + normal.y * 0.1f;
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
 
 		if (normal.x != 0.0f) {
 			velocity.x = 0.0f;
 		}
 
 		if (normal.y != 0.0f) {
-			velocity.y = 0.0f;
+			velocity.y = -jumpSpeed;
 		}
 
 		for (LPCOLLISIONEVENT result : eventResults) {
-			LPCOLLISIONEVENT event = result;
+			LPCOLLISIONEVENT event = result;			
 
-			if (event->normal.y != 0.0f) {
-				velocity.y -= jumpSpeed;
-			}
-
+			//ignore one-way platforms
 			if (event->object->GetObjectID() == 205) {
 				continue;
 			}
 
-			if (dynamic_cast<Tiles*>(event->object)) {
+			if (dynamic_cast<Tiles*>(event->object)) {				
 				if (event->normal.x != 0.0f) {
 					TakeDamage();
 				}				
@@ -219,6 +218,9 @@ void Fireball::Render() {
 	switch (currentState) {
 		case BallState::BOUNCE:
 			sprite.PlayAnimation("Bounce", position, D3DXVECTOR2(normal.x, 1.0f));
+			break;
+		case BallState::EXPLODE:
+			sprite.PlayAnimation("Explode", position);
 			break;
 	}
 }

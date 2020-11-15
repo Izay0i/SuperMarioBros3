@@ -457,6 +457,21 @@ void Scene::Unload() {
 	textureFiles.clear();
 }
 
+void Scene::UpdateCameraPosition() {
+	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
+	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2;
+	if (camPosition.x < 0) {
+		camPosition.x = 0;
+	}
+	else if ((camPosition.x + Game::GetInstance()->GetScreenWidth()) > sceneWidth) {
+		camPosition.x = sceneWidth - Game::GetInstance()->GetScreenWidth();
+	}
+	//camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;
+	camPosition.y = 230;
+
+	Camera::GetInstance()->SetPosition(camPosition);
+}
+
 void Scene::Update(DWORD delta) {
 	if (marioInstance->GetPosition().x < 0.0f) {
 		marioInstance->SetPosition(D3DXVECTOR3(0.0f, marioInstance->GetPosition().y, 0));
@@ -477,7 +492,9 @@ void Scene::Update(DWORD delta) {
 
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
-				objects.erase(objects.begin() + i);
+				//erase-remove idiom
+
+				//objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
 			}
 		}
 	}
@@ -486,18 +503,7 @@ void Scene::Update(DWORD delta) {
 		return;
 	}
 
-	D3DXVECTOR3 camPosition = marioInstance->GetPosition();	
-	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2;
-	if (camPosition.x < 0) {
-		camPosition.x = 0;
-	}
-	else if ((camPosition.x + Game::GetInstance()->GetScreenWidth()) > sceneWidth) {
-		camPosition.x = sceneWidth - Game::GetInstance()->GetScreenWidth();
-	}
-	//camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;
-	camPosition.y = 230;
-
-	Camera::GetInstance()->SetPosition(camPosition);
+	UpdateCameraPosition();
 }
 
 void Scene::Render() {

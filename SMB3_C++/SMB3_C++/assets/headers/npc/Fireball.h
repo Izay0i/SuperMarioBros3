@@ -9,7 +9,7 @@ class Fireball : public Entity {
 private:
 	enum class BallState {
 		BOUNCE,
-		DIE
+		EXPLODE
 	};
 
 	const static int MAX_FILE_LINE = 1024;
