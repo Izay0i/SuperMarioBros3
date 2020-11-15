@@ -54,10 +54,10 @@ void BonusItem::ParseHitboxes(std::string line) {
 		return;
 	}
 
-	unsigned int left = atoi(tokens.at(0).c_str());
-	unsigned int top = atoi(tokens.at(1).c_str());
-	unsigned int right = atoi(tokens.at(2).c_str());
-	unsigned int bottom = atoi(tokens.at(3).c_str());
+	unsigned int left = std::stoul(tokens.at(0));
+	unsigned int top = std::stoul(tokens.at(1));
+	unsigned int right = std::stoul(tokens.at(2));
+	unsigned int bottom = std::stoul(tokens.at(3));
 
 	RECTF hitbox;
 	hitbox.left = left;
@@ -88,7 +88,7 @@ void BonusItem::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 	while (readFile.getline(str, MAX_FILE_LINE)) {
 		std::string line(str);
 
-		if (line[0] == '#' || line.empty()) {
+		if (line.empty() || line.front() == '#') {
 			continue;
 		}
 
@@ -103,12 +103,12 @@ void BonusItem::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 		}
 
 		switch (section) {
-		case DataSection::DATA_SECTION_SPRITES:
-			ParseSprites(line);
-			break;
-		case DataSection::DATA_SECTION_HITBOXES:
-			ParseHitboxes(line);
-			break;
+			case DataSection::DATA_SECTION_SPRITES:
+				ParseSprites(line);
+				break;
+			case DataSection::DATA_SECTION_HITBOXES:
+				ParseHitboxes(line);
+				break;
 		}
 	}
 

@@ -99,7 +99,7 @@ void Game::ParseSettings(std::string line) {
 	}
 
 	if (tokens.at(0) == "default") {
-		currentSceneID = atoi(tokens.at(1).c_str());
+		currentSceneID = std::stoi(tokens.at(1));
 	}
 	else {
 		OutputDebugStringA("Unknown game settings\n");
@@ -231,7 +231,7 @@ void Game::Load(std::string filePath) {
 	while (readFile.getline(str, MAX_FILE_LINE)) {
 		std::string line(str);
 
-		if (line[0] == '#' || line.empty()) {
+		if (line.empty() || line.front() == '#') {
 			continue;
 		}
 

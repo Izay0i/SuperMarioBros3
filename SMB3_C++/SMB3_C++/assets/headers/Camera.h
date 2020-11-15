@@ -32,7 +32,7 @@ spriteHandler->Draw(
 
 class Camera : GameObject {
 private:
-	static GameObject* cameraInstance;
+	static Camera* cameraInstance;
 
 	int camWidth, camHeight;
 

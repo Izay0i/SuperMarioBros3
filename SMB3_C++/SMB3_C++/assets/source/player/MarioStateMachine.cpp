@@ -1,9 +1,7 @@
 #include "../../headers/player/MarioStateMachine.h"
 
-MarioStateMachine::MarioStateMachine(Mario* mario) : StateMachine(mario) { 
+MarioStateMachine::MarioStateMachine(Mario* mario) { 
 	this->mario = mario;
-
-	currentState = MarioState::IDLE;
 }
 
 void MarioStateMachine::HandleStates(BYTE* states) {
@@ -23,14 +21,11 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 	}
 	
 	switch (currentState) {
-		case MarioState::DIE:
-
-			break;
 		case MarioState::IDLE:
 			if (mario->GetCurrentHitPoints() == 0) {
 				currentState = MarioState::DIE;
 			}
-			else if (mario->GetVelocity().x != 0.0f) {
+			else if (mario->GetVelocity().x != 0.0f && mario->IsOnGround()) {
 				currentState = MarioState::RUN;
 			}
 			else if (mario->GetVelocity().y < 0.0f) {
@@ -61,12 +56,7 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			}
 			break;
 		case MarioState::TURN:
-			if (mario->GetVelocity().x == 0.0f) {
-				currentState = MarioState::IDLE;
-			}
-			else if (mario->GetVelocity().x != 0.0f) {
-				currentState = MarioState::RUN;
-			}
+			
 			break;
 		case MarioState::JUMP:
 			if (mario->GetVelocity().y > 0.0f) {
@@ -140,12 +130,17 @@ void MarioStateMachine::Render() {
 					mario->GetSprite().PlayAnimation("FireRun", mario->GetPosition(), mario->GetScale());
 					break;
 				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacRun", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
+						mario->GetSprite().PlayAnimation("RacTakeOff", mario->GetPosition(), mario->GetScale());
+					}
+					else {
+						mario->GetSprite().PlayAnimation("RacRun", mario->GetPosition(), mario->GetScale());
+					}
 					break;
 			}
 			break;
 		case MarioState::TURN:
-			switch (currentForm) {
+			/*switch (currentForm) {
 				case MarioForm::SMALL:
 					mario->GetSprite().PlayAnimation("Turn", mario->GetPosition(), mario->GetScale());
 					break;
@@ -158,7 +153,7 @@ void MarioStateMachine::Render() {
 				case MarioForm::RACOON:
 					mario->GetSprite().PlayAnimation("RacTurn", mario->GetPosition(), mario->GetScale());
 					break;
-			}
+			}*/
 			break;
 		case MarioState::JUMP:
 			switch (currentForm) {
@@ -172,7 +167,18 @@ void MarioStateMachine::Render() {
 					mario->GetSprite().PlayAnimation("FireJump", mario->GetPosition(), mario->GetScale());
 					break;
 				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacJump", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
+						mario->GetSprite().PlayAnimation("RacTakeOffJump", mario->GetPosition(), mario->GetScale());
+					}
+					else if (Device::IsKeyDown(DIK_SPACE) && mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
+					}
+					else if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale());
+					}					
+					else {
+						mario->GetSprite().PlayAnimation("RacJump", mario->GetPosition(), mario->GetScale());
+					}
 					break;
 			}
 			break;
@@ -187,8 +193,19 @@ void MarioStateMachine::Render() {
 				case MarioForm::FIRE:
 					mario->GetSprite().PlayAnimation("FireJump", mario->GetPosition(), mario->GetScale());
 					break;
-				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacFall", mario->GetPosition(), mario->GetScale());
+				case MarioForm::RACOON:					
+					if (Device::IsKeyDown(DIK_SPACE) && mario->GetAcceleration() < mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacSlowFall", mario->GetPosition(), mario->GetScale());
+					}
+					else if (Device::IsKeyDown(DIK_SPACE) && mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
+					}
+					else if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale());
+					}
+					else {
+						mario->GetSprite().PlayAnimation("RacFall", mario->GetPosition(), mario->GetScale());
+					}
 					break;
 			}
 			break;
@@ -230,7 +247,7 @@ void MarioStateMachine::Render() {
 					mario->GetSprite().PlayAnimation(
 						"RacSpin",
 						mario->GetPosition(),
-						mario->GetNormal().x == 1 ? D3DXVECTOR2(1.0f, 1.0f) : D3DXVECTOR2(-1.0f, 1.0f)
+						D3DXVECTOR2(mario->GetNormal().x, 1.0f)
 					);
 					break;
 			}

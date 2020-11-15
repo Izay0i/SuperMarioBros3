@@ -1,6 +1,6 @@
 #include "../../headers/player/Mario.h"
 
-Entity* Mario::marioInstance = nullptr;
+Mario* Mario::marioInstance = nullptr;
 LPCWSTR Mario::texturePath = nullptr;
 LPDIRECT3DTEXTURE9 Mario::texture = nullptr;
 D3DCOLOR Mario::colorKey = D3DCOLOR_XRGB(0, 0, 0);
@@ -21,7 +21,7 @@ Mario* Mario::GetInstance() {
 		marioInstance = new Mario;
 	}
 
-	return static_cast<Mario*>(marioInstance);
+	return marioInstance;
 }
 
 void Mario::LoadTexture() {
@@ -86,10 +86,10 @@ void Mario::ParseHitboxes(std::string line) {
 		return;
 	}
 
-	unsigned int left = atoi(tokens.at(0).c_str());
-	unsigned int top = atoi(tokens.at(1).c_str());
-	unsigned int right = atoi(tokens.at(2).c_str());
-	unsigned int bottom = atoi(tokens.at(3).c_str());
+	unsigned int left = std::stoul(tokens.at(0));
+	unsigned int top = std::stoul(tokens.at(1));
+	unsigned int right = std::stoul(tokens.at(2));
+	unsigned int bottom = std::stoul(tokens.at(3));
 
 	RECTF hitbox;
 	hitbox.left = left;
@@ -123,7 +123,7 @@ void Mario::ParseData(std::string dataPath, std::string projPath, std::string te
 	while (readFile.getline(str, MAX_FILE_LINE)) {
 		std::string line(str);
 
-		if (line[0] == '#' || line.empty()) {
+		if (line.empty() || line.front() == '#') {
 			continue;
 		}
 
@@ -149,22 +149,10 @@ void Mario::ParseData(std::string dataPath, std::string projPath, std::string te
 
 	readFile.close();
 
-	marioFSM = new MarioStateMachine(static_cast<Mario*>(marioInstance));
+	marioFSM = new MarioStateMachine(marioInstance);
 }
 
-void Mario::HandleStates(BYTE* states) {	
-	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
-		//GOTTA GO FAAAST
-		if (acceleration < maxAccel) {
-			acceleration += 0.01f;
-		}
-	}
-
-	//apply stronger gravity when space is released
-	if (!Device::IsKeyDown(DIK_SPACE)) {
-		gravity = 0.003f;
-	}
-
+void Mario::HandleStates(BYTE* states) {
 	if (Device::IsKeyDown(DIK_A)) {
 		//to flip sprite
 		scale = D3DXVECTOR2(1.0f, 1.0f);
@@ -187,11 +175,22 @@ void Mario::HandleStates(BYTE* states) {
 void Mario::OnKeyDown(int keyCode) {
 	switch (keyCode) {
 		case DIK_SPACE:
+			//slow falling
+			if (!IsOnGround() && hitPoints == 4) {
+				gravity = 0.0002f;
+			}
+			
+			if (acceleration >= ACCEL_THRESHOLD && hitPoints == 4) {
+				velocity.y = -jumpSpeed;
+				isOnGround = false;
+			}
+			
+			//walking speed
 			if (IsOnGround()) {
 				gravity = 0.0012f;
 				velocity.y = -jumpSpeed;
 				isOnGround = false;
-			}
+			}			
 			break;
 		case DIK_J: //hold?
 			OutputDebugStringA("Holding\n");
@@ -215,17 +214,33 @@ Fireball* Mario::SpawnFireball() {
 
 void Mario::TakeDamage() {
 	if (hitPoints == 1) {
-		--hitPoints;
+		hitPoints = 0;
 	}
 	else {
 		hitPoints = 1;
 	}
 }
 
-void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {	
 	GameObject::Update(delta);
 	
 	velocity.y += gravity * delta;
+
+	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
+		//GOTTA GO FAAAST
+		if (acceleration < MAX_ACCEL) {
+			acceleration += 0.01f;
+		}
+	}
+
+	//time to mix gravity and change jump heights
+	if (acceleration >= ACCEL_THRESHOLD) {
+		gravity = 0.0008f;
+	}
+
+	if (!Device::IsKeyDown(DIK_SPACE)) {
+		gravity = 0.0045f;
+	}
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
@@ -257,13 +272,21 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
-
-			if (event->normal.y == -1.0f) {
-				isOnGround = true;
+			
+			if (dynamic_cast<Tiles*>(event->object) || 
+				dynamic_cast<BonusItem*>(event->object) || 
+				dynamic_cast<Coin*>(event->object) || 
+				dynamic_cast<QuestionBlock*>(event->object) || 
+				dynamic_cast<ShinyBrick*>(event->object)) 
+			{
+				if (event->normal.y == -1.0f) {
+					isOnGround = true;
+				}
+				
 			}
 
 			//goomba
-			if (dynamic_cast<Goomba*>(event->object)) {	
+			if (dynamic_cast<Goomba*>(event->object)) {					
 				Goomba* goomba = static_cast<Goomba*>(event->object);
 				if (event->normal.y < 0.0f) {
 					if (goomba->GetCurrentHitPoints() > 0) {
@@ -274,11 +297,28 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				else if (event->normal.x != 0.0f) {
 					if (goomba->GetCurrentHitPoints() != 0) {
 						if (Device::IsKeyDown(DIK_K) && hitPoints == 4) {
-							goomba->TakeDamage();
+							//check if the tail is facing the enemy
+							if (normal != event->normal) {
+								goomba->TakeDamage();
+							}
+							else {
+								TakeDamage();
+								if (hitPoints > 0) {
+									velocity.y = -deflectSpeed;
+								}
+								else {
+									velocity.y -= dieflectSpeed;
+								}
+							}
 						}
 						else {
 							TakeDamage();
-							velocity.y = -dieflectSpeed;
+							if (hitPoints > 0) {
+								velocity.y = -deflectSpeed;
+							}
+							else {
+								velocity.y -= dieflectSpeed;
+							}
 						}
 					}
 				}
@@ -286,42 +326,45 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			//koopa troopa
 			if (dynamic_cast<KoopaTroopa*>(event->object)) {
 				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
+				//on koopa
 				if (event->normal.y < 0.0f) {
 					if (koopa->GetCurrentHitPoints() > 0) {
 						velocity.y = -deflectSpeed;
 					}
 					koopa->TakeDamage();
-					//follow the player
-					koopa->SetNormal(
-						D3DXVECTOR3(
-							this->normal.x == event->normal.x ? -this->normal.x : this->normal.x,
-							0,
-							0
-						)
-					);
 				}
 				else if (event->normal.x != 0.0f) {
-					if (koopa->GetCurrentHitPoints() > 0) {
-						//mario hits koopa with a tail
-						if (Device::IsKeyDown(DIK_K) && hitPoints == 4) {
-							koopa->TakeDamage();
-							koopa->SetNormal(
-								D3DXVECTOR3(
-									this->normal.x == event->normal.x ? -this->normal.x : this->normal.x,
-									0,
-									0
-								)
-							);
+					//is spinning or walking
+					if (koopa->GetCurrentHitPoints() == 1 || koopa->GetCurrentHitPoints() == 3) {
+						//mario is in racoon form and spins his tail
+						if (hitPoints == 4 && Device::IsKeyDown(DIK_K)) {
+							//check if the tail is facing the enemy
+							if (normal != event->normal) {
+								koopa->TakeDamage();
+							}
+							else {
+								TakeDamage();
+								if (hitPoints > 0) {
+									velocity.y = -deflectSpeed;
+								}
+								else {
+									velocity.y -= dieflectSpeed;
+								}
+							}
 						}
 						else {
 							TakeDamage();
-							if (hitPoints == 0) {
-								velocity.y = -dieflectSpeed;
+							if (hitPoints > 0) {
+								velocity.y = -deflectSpeed;
 							}
 							else {
-								velocity.y -= deflectSpeed;
+								velocity.y -= dieflectSpeed;
 							}
 						}
+					}
+					//kick it, i dare you
+					else if (koopa->GetCurrentHitPoints() == 2) {
+						koopa->TakeDamage();
 					}
 				}
 			}

@@ -30,7 +30,7 @@ void SceneManager::ParseScenes(std::string line) {
 		return;
 	}
 
-	int sceneID = atoi(tokens.at(0).c_str());
+	int sceneID = std::stoi(tokens.at(0));
 	std::string scenePath = tokens.at(1);
 	
 	scenes[sceneID] = new Scene(sceneID, scenePath);

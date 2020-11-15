@@ -47,7 +47,6 @@ private:
 		SHOOT,
 		//RACOON
 		SPIN,
-		FLY
 	};
 
 	Mario* mario;
@@ -57,7 +56,6 @@ private:
 
 public:
 	MarioStateMachine(Mario*);
-	~MarioStateMachine() { if (mario) { delete mario; } }
 
 	void HandleStates(BYTE*) override;
 	void Render() override;

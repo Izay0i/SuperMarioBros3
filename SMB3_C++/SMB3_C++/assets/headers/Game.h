@@ -26,7 +26,7 @@ private:
 	
 	const static int MAX_FILE_LINE = 1024;
 	//EVEN FURTHER BEYOND AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-	const unsigned int FRAME_RATE = 240;
+	const unsigned int FRAME_RATE = 60;
 
 	static Game* gameInstance;
 	

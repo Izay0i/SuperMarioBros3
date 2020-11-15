@@ -42,14 +42,14 @@ void AnimatedSprite::ParseSprites(std::string line, LPDIRECT3DTEXTURE9 texture, 
 	Sprite::SetSpriteHandler(spriteHandler);
 
 	RECT bound;
-	bound.left = atoi(tokens.at(1).c_str());
-	bound.top = atoi(tokens.at(2).c_str());
-	bound.right = atoi(tokens.at(3).c_str()) + 1;
-	bound.bottom = atoi(tokens.at(4).c_str()) + 1;
+	bound.left = std::stoi(tokens.at(1));
+	bound.top = std::stoi(tokens.at(2));
+	bound.right = std::stoi(tokens.at(3)) + 1;
+	bound.bottom = std::stoi(tokens.at(4)) + 1;
 
 	if (!HasAnimation(tokens.at(0))) {
-		int totalFrames = atoi(tokens.at(5).c_str());
-		float animSpeed = atof(tokens.at(6).c_str());
+		int totalFrames = std::stoi(tokens.at(5));
+		float animSpeed = std::stof(tokens.at(6));
 		sprites.insert(std::make_pair(tokens.at(0), new Sprite(texture, bound, totalFrames, animSpeed, colorKey)));
 
 		char debugStr[100];

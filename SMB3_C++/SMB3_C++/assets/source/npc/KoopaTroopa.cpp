@@ -49,7 +49,7 @@ void KoopaTroopa::LoadTexture() {
 
 RECTF KoopaTroopa::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x;
+	bound.left = position.x + 1;
 	bound.top = position.y;
 	bound.right = position.x + hitBox.GetWidth(id);
 
@@ -74,10 +74,10 @@ void KoopaTroopa::ParseHitboxes(std::string line) {
 		return;
 	}
 
-	unsigned int left = atoi(tokens.at(0).c_str());
-	unsigned int top = atoi(tokens.at(1).c_str());
-	unsigned int right = atoi(tokens.at(2).c_str());
-	unsigned int bottom = atoi(tokens.at(3).c_str());
+	unsigned int left = std::stoul(tokens.at(0));
+	unsigned int top = std::stoul(tokens.at(1));
+	unsigned int right = std::stoul(tokens.at(2));
+	unsigned int bottom = std::stoul(tokens.at(3));
 
 	RECTF hitbox;
 	hitbox.left = left;
@@ -108,7 +108,7 @@ void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCO
 	while (readFile.getline(str, MAX_FILE_LINE)) {
 		std::string line(str);
 
-		if (line[0] == '#' || line.empty()) {
+		if (line.empty() || line.front() == '#') {
 			continue;
 		}
 
@@ -123,12 +123,12 @@ void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCO
 		}
 
 		switch (section) {
-		case DataSection::DATA_SECTION_SPRITES:
-			ParseSprites(line);
-			break;
-		case DataSection::DATA_SECTION_HITBOXES:
-			ParseHitboxes(line);
-			break;
+			case DataSection::DATA_SECTION_SPRITES:
+				ParseSprites(line);
+				break;
+			case DataSection::DATA_SECTION_HITBOXES:
+				ParseHitboxes(line);
+				break;
 		}
 	}
 
@@ -136,11 +136,6 @@ void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCO
 }
 
 void KoopaTroopa::HandleStates() {
-	if (GetTickCount64() - retractStart > retractTime) {
-		retractStart = 0;
-		hitPoints = 3;
-	}	
-
 	switch (hitPoints) {
 		case 0:
 			currentState = KoopaState::DIE;
@@ -158,7 +153,7 @@ void KoopaTroopa::HandleStates() {
 
 	switch (currentState) {
 		case KoopaState::SPIN:
-			velocity.x = -runSpeed * normal.x * 8;
+			velocity.x = -runSpeed * normal.x * 6;
 			break;
 		case KoopaState::WALK:
 			velocity.x = -runSpeed * normal.x;
@@ -170,7 +165,7 @@ void KoopaTroopa::HandleStates() {
 	}
 }
 
-void KoopaTroopa::TakeDamage() {
+void KoopaTroopa::TakeDamage() {	
 	if (hitPoints >= 2) {
 		--hitPoints;
 		StartRetract();
@@ -183,6 +178,11 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
+
+	if (GetTickCount64() - retractStart > retractTime) {
+		retractStart = 0;
+		hitPoints = 3;
+	}
 
 	//shell spinning
 	if (hitPoints == 1) {
@@ -220,10 +220,15 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
+			//mario's fireball
+			if (event->object->GetObjectID() == 99) {
+				hitPoints = 0;
+			}
+
 			if (dynamic_cast<QuestionBlock*>(event->object)) {
 
 			}
-			
+
 			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
 					this->normal.x = -event->normal.x;
@@ -243,10 +248,10 @@ void KoopaTroopa::Render() {
 			sprite.PlayAnimation("Walk", position, D3DXVECTOR2(normal.x, 1.0f));
 			break;		
 		case KoopaState::RETRACT:			
-			sprite.PlayAnimation("Retract", position);
+			sprite.PlayAnimation("Retract", D3DXVECTOR3(position.x, position.y + hitBox.GetHeight(1), 0));
 			
 			if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
-				sprite.PlayAnimation("Out", position);
+				sprite.PlayAnimation("Out", D3DXVECTOR3(position.x, position.y + hitBox.GetHeight(1), 0));
 			}
 			break;
 		case KoopaState::SPIN:

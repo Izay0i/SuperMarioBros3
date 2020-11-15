@@ -1,12 +1,12 @@
 #include "../headers/Camera.h"
 
-GameObject* Camera::cameraInstance = nullptr;
+Camera* Camera::cameraInstance = nullptr;
 
 Camera* Camera::GetInstance() {
 	if (!cameraInstance) {
 		cameraInstance = new Camera;
 	}
-	return static_cast<Camera*>(cameraInstance);
+	return cameraInstance;
 }
 
 void Camera::SetPosition(D3DXVECTOR3 pos) {

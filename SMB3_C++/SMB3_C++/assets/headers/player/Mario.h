@@ -13,7 +13,7 @@ class MarioStateMachine;
 
 class Mario : public Entity {
 private:
-	static Entity* marioInstance;
+	static Mario* marioInstance;
 
 	const static int MAX_FILE_LINE = 1024;
 
@@ -26,16 +26,17 @@ private:
 	std::string fireballPath;
 	std::string texPath;
 
-	bool isOnGround = true;
+	bool isOnGround;
 
-	const float maxAccel = 1.79f;
+	const float MAX_ACCEL = 2.2f;
+	const float ACCEL_THRESHOLD = 2.06f;
 
-	float runSpeed = 0.09f;
+	float runSpeed = 0.082f;
 	float jumpSpeed = 0.4f;
-	float deflectSpeed = 0.3f;
+	float deflectSpeed = 0.4f;
 	float dieflectSpeed = 0.7f;
-	float gravity;
-	float acceleration;
+	float gravity = 0.0045f;
+	float acceleration = 0.0f;
 
 	void LoadTexture();
 
@@ -48,12 +49,13 @@ public:
 
 	static Mario* GetInstance();
 
-	float GetAcceleration() { return acceleration; }
+	float GetAcceleration() const { return acceleration; }
+	float GetAccelThreshold() const { return ACCEL_THRESHOLD; }
 
 	bool IsOnGround() { return isOnGround; }
 
 	RECTF GetBoundingBox(int = 0) const override;
-	AnimatedSprite GetSprite() { return sprite; }
+	AnimatedSprite GetSprite() const { return sprite; }
 
 	void ParseData(std::string, std::string, std::string, D3DCOLOR);
 	

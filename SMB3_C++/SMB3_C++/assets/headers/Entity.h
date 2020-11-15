@@ -20,6 +20,7 @@ protected:
 public:
 	virtual ~Entity() {}	
 
+	void SetCurrenHitPoints(int point) { hitPoints = point; }
 	int GetCurrentHitPoints() const { return hitPoints; }
 
 	virtual void TakeDamage() {}

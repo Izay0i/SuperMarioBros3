@@ -132,15 +132,28 @@ RacSwim	201	380	224	411
 #Climb
 RacClimb	227	380	242	411	1	0
 #Spin
-RacSpin	375	346	398	377	2	75
+RacSpin	375	346	398	377	2	50
 RacSpin	401	346	416	377
 #Fall
 RacFall	131	346	154	377	1	0
 #Slow Fall
 RacSlowFall	131	346	154	377	2	50
 RacSlowFall	157	346	180	377
+#Take off
+RacTakeOff	183	346	206	377	2	50
+RacTakeOff	209	346	232	377
+#Take off jump
+RacTakeOffJump	235	346	258	377	1	0
+#Fly
+RacFly	313	346	336	377	1	0
+#Fly boost
+RacFlyBoost	261	346	284	377	3	50
+RacFlyBoost	287	346	310	377
+RacFlyBoost	313	346	336	377
 
 #left	top	right	bottom
 [HITBOXES]
-0	0	16	16
-0	0	16	32
+#Small
+0	0	15	16
+#Big
+0	0	15	32

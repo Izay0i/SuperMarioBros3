@@ -43,8 +43,8 @@ void Scene::ParseMapSize(std::string line) {
 		return;
 	}
 
-	sceneWidth = atoi(tokens.at(0).c_str());
-	sceneHeight = atoi(tokens.at(1).c_str());
+	sceneWidth = std::stoi(tokens.at(0));
+	sceneHeight = std::stoi(tokens.at(1));
 }
 
 void Scene::ParseBGColor(std::string line) {
@@ -54,9 +54,9 @@ void Scene::ParseBGColor(std::string line) {
 		return;
 	}
 
-	unsigned int r = atoi(tokens.at(0).c_str());
-	unsigned int g = atoi(tokens.at(1).c_str());
-	unsigned int b = atoi(tokens.at(2).c_str());
+	unsigned int r = std::stoul(tokens.at(0));
+	unsigned int g = std::stoul(tokens.at(1));
+	unsigned int b = std::stoul(tokens.at(2));
 
 	backgroundColor = D3DCOLOR_XRGB(r, g, b);
 }
@@ -68,11 +68,11 @@ void Scene::ParseTextures(std::string line) {
 		return;
 	}
 
-	unsigned int texID = atoi(tokens.at(0).c_str());
+	unsigned int texID = std::stoul(tokens.at(0));
 
-	unsigned int r = atoi(tokens.at(2).c_str());
-	unsigned int g = atoi(tokens.at(3).c_str());
-	unsigned int b = atoi(tokens.at(4).c_str());
+	unsigned int r = std::stoul(tokens.at(2));
+	unsigned int g = std::stoul(tokens.at(3));
+	unsigned int b = std::stoul(tokens.at(4));
 
 	textureFiles[texID] = std::pair<std::string, D3DCOLOR>(tokens.at(1), D3DCOLOR_XRGB(r, g, b));
 }
@@ -84,10 +84,17 @@ void Scene::ParseEntityData(std::string line) {
 		return;
 	}
 
-	int texID = atoi(tokens.at(2).c_str());
+	int texID;
+	if (tokens.size() == 4) {
+		texID = std::stoi(tokens.at(3));
+	}
+	else {
+		texID = std::stoi(tokens.at(2));
+	}
+
 	GameObject* object = nullptr;
 
-	ObjectType objectID = static_cast<ObjectType>(atoi(tokens.at(0).c_str()));
+	ObjectType objectID = static_cast<ObjectType>(std::stoi(tokens.at(0)));
 	switch (objectID) {
 		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();			
@@ -140,11 +147,11 @@ void Scene::ParseWorldCoords(std::string line) {
 		return;
 	}
 
-	int posX = atoi(tokens.at(1).c_str());
-	int posY = atoi(tokens.at(2).c_str());
+	int posX = std::stoi(tokens.at(1));
+	int posY = std::stoi(tokens.at(2));
 	D3DXVECTOR3 position(posX, posY, 0);
 
-	ObjectType objectID = static_cast<ObjectType>(atoi(tokens.at(0).c_str()));
+	ObjectType objectID = static_cast<ObjectType>(std::stoi(tokens.at(0)));
 	switch (objectID) {
 		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance->SetPosition(position);
@@ -152,7 +159,7 @@ void Scene::ParseWorldCoords(std::string line) {
 		case ObjectType::OBJECT_TYPE_GOOMBA:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<Goomba*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = atoi(tokens.at(0).c_str());
+					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
 					}
@@ -166,7 +173,7 @@ void Scene::ParseWorldCoords(std::string line) {
 		case ObjectType::OBJECT_TYPE_TROOPA:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<KoopaTroopa*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = atoi(tokens.at(0).c_str());
+					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
 					}
@@ -188,7 +195,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				//dumbass way to check if position is not set
 				//but its almost 2am and im too tired to think of another way
 				if (dynamic_cast<Coin*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = atoi(tokens.at(0).c_str());
+					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {					
 						object->SetPosition(position);
 					}
@@ -199,7 +206,7 @@ void Scene::ParseWorldCoords(std::string line) {
 		case ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<QuestionBlock*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = atoi(tokens.at(0).c_str());
+					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
 					}
@@ -210,7 +217,7 @@ void Scene::ParseWorldCoords(std::string line) {
 		case ObjectType::OBJECT_TYPE_SHINYBRICK:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<ShinyBrick*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = atoi(tokens.at(0).c_str());
+					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
 					}
@@ -221,7 +228,7 @@ void Scene::ParseWorldCoords(std::string line) {
 		case ObjectType::OBJECT_TYPE_BONUSITEM:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<BonusItem*>(object)) {
-					int objectID = atoi(tokens.at(0).c_str());
+					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
 					}
@@ -240,16 +247,16 @@ void Scene::ParseTilesData(std::string line) {
 	}
 
 	GameObject* object = new Tiles;
-	object->SetObjectID(atoi(tokens.at(0).c_str()));
-	dynamic_cast<Tiles*>(object)->SetSpritesArrID(atoi(tokens.at(5).c_str()));
+	object->SetObjectID(std::stoi(tokens.at(0)));
+	dynamic_cast<Tiles*>(object)->SetSpritesArrID(std::stoi(tokens.at(5)));
 
 	int posX, posY;
 
 	RECTF hitbox;
-	hitbox.left = posX = atoi(tokens.at(1).c_str());
-	hitbox.top = posY = atoi(tokens.at(2).c_str());
-	hitbox.right = atoi(tokens.at(3).c_str());
-	hitbox.bottom = atoi(tokens.at(4).c_str());
+	hitbox.left = posX = std::stoi(tokens.at(1));
+	hitbox.top = posY = std::stoi(tokens.at(2));
+	hitbox.right = std::stoi(tokens.at(3));
+	hitbox.bottom = std::stoi(tokens.at(4));
 
 	D3DXVECTOR3 position(posX, posY, 0);
 
@@ -273,24 +280,24 @@ void Scene::ParseTileSprites(std::string line) {
 		if (dynamic_cast<Tiles*>(object)) {
 			Tiles* tile = static_cast<Tiles*>(object);
 
-			int objectID = atoi(tokens.at(0).c_str());
-			int spritesArrID = atoi(tokens.at(1).c_str());
+			int objectID = std::stoi(tokens.at(0));
+			int spritesArrID = std::stoi(tokens.at(1));
 
 			RECT bound;
 			D3DXVECTOR3 pos;
 
 			if (tile->GetObjectID() == objectID) {
 				if (tile->GetSpritesArrID() == spritesArrID) {
-					int texID = atoi(tokens.at(8).c_str());
+					int texID = std::stoi(tokens.at(8));
 					tile->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
 
-					bound.left = atoi(tokens.at(2).c_str());
-					bound.top = atoi(tokens.at(3).c_str());
-					bound.right = atoi(tokens.at(4).c_str()) + 1;
-					bound.bottom = atoi(tokens.at(5).c_str()) + 1;
+					bound.left = std::stoi(tokens.at(2));
+					bound.top = std::stoi(tokens.at(3));
+					bound.right = std::stoi(tokens.at(4)) + 1;
+					bound.bottom = std::stoi(tokens.at(5)) + 1;
 
-					int posX = atoi(tokens.at(6).c_str());
-					int posY = atoi(tokens.at(7).c_str());
+					int posX = std::stoi(tokens.at(6));
+					int posY = std::stoi(tokens.at(7));
 					pos = D3DXVECTOR3(posX, posY, 0);
 
 					tile->AddImage(bound, pos);
@@ -310,28 +317,21 @@ void Scene::ParseBackground(std::string line) {
 	}
 
 	RECT bound;
-	bound.left = atoi(tokens.at(0).c_str());
-	bound.top = atoi(tokens.at(1).c_str());
-	bound.right = atoi(tokens.at(2).c_str()) + 1;
-	bound.bottom = atoi(tokens.at(3).c_str()) + 1;
+	bound.left = std::stoi(tokens.at(0));
+	bound.top = std::stoi(tokens.at(1));
+	bound.right = std::stoi(tokens.at(2)) + 1;
+	bound.bottom = std::stoi(tokens.at(3)) + 1;
 
-	int posX = atoi(tokens.at(4).c_str());
-	int posY = atoi(tokens.at(5).c_str());
+	int posX = std::stoi(tokens.at(4));
+	int posY = std::stoi(tokens.at(5));
 	D3DXVECTOR3 pos = D3DXVECTOR3(posX, posY, 0);
 
-	int texID = atoi(tokens.at(6).c_str());
+	int texID = std::stoi(tokens.at(6));
 	bgInstance->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
 	bgInstance->AddImage(bound, pos);
 }
 
 void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
-	static int read = 0;
-	++read;
-
-	char debugStr[100];
-	sprintf_s(debugStr, "[DEBUG] Read: %d times\n", read);
-	OutputDebugStringA(debugStr);
-	
 	if (!directDevice) {
 		directDevice = device;
 	}
@@ -360,7 +360,7 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 	while (readFile.getline(str, MAX_FILE_LINE)) {
 		std::string line(str);
 
-		if (line[0] == '#' || line.empty()) {
+		if (line.empty() || line.front() == '#') {
 			continue;
 		}
 
@@ -458,6 +458,13 @@ void Scene::Unload() {
 }
 
 void Scene::UpdateCameraPosition() {
+	if (marioInstance->GetPosition().x < 0.0f) {
+		marioInstance->SetPosition(D3DXVECTOR3(0.0f, marioInstance->GetPosition().y, 0));
+	}
+	else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
+		marioInstance->SetPosition(D3DXVECTOR3(sceneWidth - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
+	}
+
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
 	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2;
 	if (camPosition.x < 0) {
@@ -466,20 +473,14 @@ void Scene::UpdateCameraPosition() {
 	else if ((camPosition.x + Game::GetInstance()->GetScreenWidth()) > sceneWidth) {
 		camPosition.x = sceneWidth - Game::GetInstance()->GetScreenWidth();
 	}
-	//camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;
-	camPosition.y = 230;
+	
+	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;	
+	//camPosition.y = 230;
 
 	Camera::GetInstance()->SetPosition(camPosition);
 }
 
 void Scene::Update(DWORD delta) {
-	if (marioInstance->GetPosition().x < 0.0f) {
-		marioInstance->SetPosition(D3DXVECTOR3(0.0f, marioInstance->GetPosition().y, 0));
-	}
-	else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
-		marioInstance->SetPosition(D3DXVECTOR3(sceneWidth - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
-	}
-
 	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
 		collidableObjects.push_back(object);
@@ -493,8 +494,7 @@ void Scene::Update(DWORD delta) {
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
 				//erase-remove idiom
-
-				//objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
 			}
 		}
 	}
