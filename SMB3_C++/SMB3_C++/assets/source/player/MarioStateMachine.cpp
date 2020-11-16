@@ -197,7 +197,7 @@ void MarioStateMachine::Render() {
 					if (Device::IsKeyDown(DIK_SPACE) && mario->GetAcceleration() < mario->GetAccelThreshold()) {
 						mario->GetSprite().PlayAnimation("RacSlowFall", mario->GetPosition(), mario->GetScale());
 					}
-					else if (Device::IsKeyDown(DIK_SPACE) && mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+					else if (Device::IsKeyDown(DIK_SPACE) || Device::IsKeyDown(DIK_K) && mario->GetAcceleration() >= mario->GetAccelThreshold()) {
 						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
 					}
 					else if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {

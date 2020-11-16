@@ -175,7 +175,7 @@ void Mario::HandleStates(BYTE* states) {
 void Mario::OnKeyDown(int keyCode) {
 	switch (keyCode) {
 		case DIK_SPACE:
-			//slow falling
+			//slow falling when airborne
 			if (!IsOnGround() && hitPoints == 4) {
 				gravity = 0.0002f;
 			}
@@ -193,11 +193,16 @@ void Mario::OnKeyDown(int keyCode) {
 			}			
 			break;
 		case DIK_J: //hold?
-			OutputDebugStringA("Holding\n");
+			//WIP
 			break;
 		case DIK_K: //spin or shoot
 			if (hitPoints == 3 && !Device::IsKeyDown(DIK_S)) {
 				SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnFireball());
+			}
+
+			//the real slow falling
+			if (hitPoints == 4) {
+				velocity.y *= 0.00002f;
 			}
 			break;
 	}
@@ -213,15 +218,19 @@ Fireball* Mario::SpawnFireball() {
 }
 
 void Mario::TakeDamage() {
-	if (hitPoints == 1) {
-		hitPoints = 0;
+	if (hitPoints > 2) {
+		hitPoints = 2;
 	}
 	else {
-		hitPoints = 1;
+		--hitPoints;
 	}
 }
 
 void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {	
+	if (hitPoints == 0) {
+		velocity.x = 0;
+	}
+	
 	GameObject::Update(delta);
 	
 	velocity.y += gravity * delta;
@@ -234,7 +243,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 
 	//time to mix gravity and change jump heights
-	if (acceleration >= ACCEL_THRESHOLD) {
+	if (acceleration >= ACCEL_THRESHOLD && hitPoints == 4) {
 		gravity = 0.0008f;
 	}
 
@@ -332,6 +341,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						velocity.y = -deflectSpeed;
 					}
 					koopa->TakeDamage();
+					koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 				}
 				else if (event->normal.x != 0.0f) {
 					//is spinning or walking
@@ -341,6 +351,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 							//check if the tail is facing the enemy
 							if (normal != event->normal) {
 								koopa->TakeDamage();
+								koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 							}
 							else {
 								TakeDamage();
@@ -365,6 +376,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					//kick it, i dare you
 					else if (koopa->GetCurrentHitPoints() == 2) {
 						koopa->TakeDamage();
+						koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0 ));
 					}
 				}
 			}
