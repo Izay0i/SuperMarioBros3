@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 4;
+	hitPoints = 3;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -213,7 +213,7 @@ Fireball* Mario::SpawnFireball() {
 	fireball->SetObjectID(99);
 	fireball->ParseData(fireballPath, texPath, colorKey);
 	fireball->SetNormal(D3DXVECTOR3(normal.x, 0, 0));
-	fireball->SetPosition(D3DXVECTOR3(position.x + normal.x * 16, position.y + 10, 0));
+	fireball->SetPosition(D3DXVECTOR3(position.x, position.y + 10, 0));
 	return fireball;
 }
 

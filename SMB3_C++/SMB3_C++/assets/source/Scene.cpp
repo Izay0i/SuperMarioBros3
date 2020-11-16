@@ -475,7 +475,9 @@ void Scene::UpdateCameraPosition() {
 	}
 	
 	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;	
-	//camPosition.y = 230;
+	if (camPosition.y > 230) {
+		camPosition.y = 230;
+	}
 
 	Camera::GetInstance()->SetPosition(camPosition);
 }

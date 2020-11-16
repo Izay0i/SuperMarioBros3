@@ -140,7 +140,7 @@ void Fireball::HandleStates() {
 			velocity.x = runSpeed * normal.x;
 			break;
 		case BallState::EXPLODE:
-			velocity = D3DXVECTOR3(0, 0, 0);
+			velocity = D3DXVECTOR3(0, 9999, 0);
 			break;
 	}
 }

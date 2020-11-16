@@ -160,7 +160,7 @@ void KoopaTroopa::HandleStates() {
 			break;
 		case KoopaState::RETRACT:
 		case KoopaState::DIE:
-			velocity = D3DXVECTOR3(0, 0, 0);
+			velocity = D3DXVECTOR3(0, 9999, 0);
 			break;
 	}
 }

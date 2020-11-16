@@ -1,11 +1,8 @@
-//Let's see if I can make it in 5 days
-//Guess not...
 #include <Windows.h>
 
 #include "assets/headers/Game.h"
 
-//320	240
-const int SCREEN_WIDTH = 320;
+const int SCREEN_WIDTH = 271;
 const int SCREEN_HEIGHT = 240;
 
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {

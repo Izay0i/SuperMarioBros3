@@ -148,7 +148,7 @@ void Goomba::HandleStates() {
 			velocity.x = -runSpeed * normal.x;
 			break;
 		case GoombaState::DIE:
-			velocity = D3DXVECTOR3(0, 0, 0);
+			velocity = D3DXVECTOR3(0, 9999, 0);
 			break;
 	}
 }
