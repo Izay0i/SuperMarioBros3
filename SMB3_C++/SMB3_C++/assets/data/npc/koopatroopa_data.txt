@@ -1,18 +1,33 @@
 #string_id	left	top	right	bottom	frames	speed
 #any consecutive string_id that matches prev string_id will add bounds to it
 [SPRITES]
+#Red variant
 #Walk
-Walk	96	51	111	76	2	100
-Walk	112	51	127	77
+WalkRed	96	51	111	76	2	100
+WalkRed	112	51	127	77
 #Spin
-Spin	128	48	143	63	4	25
-Spin	144	48	159	63
-Spin	160	48	175	63
-Spin	176	48	191	63
+SpinRed	128	48	143	63	4	25
+SpinRed	144	48	159	63
+SpinRed	160	48	175	63
+SpinRed	176	48	191	63
 #Retract
-Retract	128	48	143	63	1	0
+RetractRed	128	48	143	63	1	0
 #Out
-Out	128	64	143	79	1	0
+OutRed	128	64	143	79	1	0
+
+#Green variant
+#Walk
+WalkGreen	0	51	15	76	2	100
+WalkGreen	16	51	31	77
+#Spin
+SpinGreen	32	48	47	63	4	25
+SpinGreen	48	48	63	63
+SpinGreen	64	48	79	63
+SpinGreen	80	48	95	63
+#Retract
+RetractGreen	32	48	47	63	1	0
+#Out
+OutGreen	32	64	47	79	1	0
 
 [HITBOXES]
 0	0	15	27

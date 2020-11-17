@@ -160,7 +160,7 @@ void KoopaTroopa::HandleStates() {
 			break;
 		case KoopaState::RETRACT:
 		case KoopaState::DIE:
-			velocity = D3DXVECTOR3(0, 9999, 0);
+			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
 	}
 }
@@ -245,20 +245,20 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 void KoopaTroopa::Render() {
 	switch (currentState) {
 		case KoopaState::WALK:
-			sprite.PlayAnimation("Walk", position, D3DXVECTOR2(normal.x, 1.0f));
+			sprite.PlayAnimation("WalkRed", position, D3DXVECTOR2(normal.x, 1.0f));
 			break;		
 		case KoopaState::RETRACT:			
-			sprite.PlayAnimation("Retract", D3DXVECTOR3(position.x, position.y + hitBox.GetHeight(1), 0));
+			sprite.PlayAnimation("RetractRed", D3DXVECTOR3(position.x, position.y + 10, 0));
 			
 			if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
-				sprite.PlayAnimation("Out", D3DXVECTOR3(position.x, position.y + hitBox.GetHeight(1), 0));
+				sprite.PlayAnimation("OutRed", D3DXVECTOR3(position.x, position.y + 10, 0));
 			}
 			break;
 		case KoopaState::SPIN:
-			sprite.PlayAnimation("Spin", position);
+			sprite.PlayAnimation("SpinRed", position);
 			break;
 		case KoopaState::DIE:
-			sprite.PlayAnimation("Retract", position);
+			sprite.PlayAnimation("RetractRed", position);
 			break;
 	}
 }

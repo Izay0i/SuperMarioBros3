@@ -29,7 +29,7 @@ private:
 	float gravity = 0.002f;
 
 	DWORD retractStart;
-	DWORD retractTime = 5000;
+	DWORD retractTime = 8000;
 
 	void LoadTexture();
 

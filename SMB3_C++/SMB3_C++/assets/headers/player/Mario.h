@@ -28,15 +28,16 @@ private:
 
 	bool isOnGround;
 
+	const float MAX_JUMP_SPEED = 0.4f;
 	const float MAX_ACCEL = 2.2f;
-	const float ACCEL_THRESHOLD = 2.06f;
+	const float ACCEL_THRESHOLD = 1.86f;
 
-	float runSpeed = 0.082f;
-	float jumpSpeed = 0.4f;
+	float runSpeed = 0.09f;
+	float jumpSpeed = 0.2f;
 	float deflectSpeed = 0.4f;
 	float dieflectSpeed = 0.7f;
 	float gravity = 0.0045f;
-	float acceleration = 0.0f;
+	float acceleration = 1.0f;
 
 	void LoadTexture();
 

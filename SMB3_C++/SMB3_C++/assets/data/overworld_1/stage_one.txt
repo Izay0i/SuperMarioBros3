@@ -19,15 +19,16 @@
 4	assets\textures\gui_and_font.png	255	255	255
 5	assets\textures\goal_roulette.png	0	183	239
 
-#obj_id	data_path	tex_id
+#obj_id	data_path	tex_id	extra_data
 #0-99:		moving entities
 #100:		portal
 #101-200:	animated tiles, eg: question block
 #201-300:	tiles, eg: ground
+#201:	one-way platform
 
 [ENTITY_DATA]
 #Mario
-0	assets\data\player\mario_data.txt	assets\data\projectiles\fireball_data.txt	0
+0	assets\data\player\mario_data.txt	0	assets\data\projectiles\fireball_data.txt
 
 #NPCs
 #Goomba
@@ -38,9 +39,9 @@
 #Red Paragoomba
 2	assets\data\npc\redparagoomba_data.txt	1
 #Koopa troopa
-3	assets\data\npc\koopatroopa_data.txt	1
-3	assets\data\npc\koopatroopa_data.txt	1
-3	assets\data\npc\koopatroopa_data.txt	1
+3	assets\data\npc\koopatroopa_data.txt	1	r
+3	assets\data\npc\koopatroopa_data.txt	1	g
+3	assets\data\npc\koopatroopa_data.txt	1	r
 #Para troopa
 4	assets\data\npc\paratroopa_data.txt	1
 4	assets\data\npc\paratroopa_data.txt	1
@@ -48,8 +49,8 @@
 #Pirana plant
 5	assets\data\npc\piranaplant_data.txt	1
 #Venus fire trap
-6	assets\data\npc\venustrap_data.txt	1
-6	assets\data\npc\venustrap_data.txt	1
+6	assets\data\npc\venustrap_data.txt	1	r
+6	assets\data\npc\venustrap_data.txt	1	g
 
 #Animated Tiles
 #Coin

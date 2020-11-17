@@ -30,7 +30,6 @@ private:
 	enum class MarioState {
 		IDLE,
 		RUN,
-		TURN,
 		JUMP,
 		FALL,
 		FRONT,

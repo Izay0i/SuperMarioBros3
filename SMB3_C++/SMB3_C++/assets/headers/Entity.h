@@ -13,6 +13,8 @@ protected:
 		DATA_SECTION_HITBOXES
 	};
 
+	std::string extraData;
+
 	int hitPoints = 1;
 
 	AnimatedSprite sprite;

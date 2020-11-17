@@ -84,13 +84,7 @@ void Scene::ParseEntityData(std::string line) {
 		return;
 	}
 
-	int texID;
-	if (tokens.size() == 4) {
-		texID = std::stoi(tokens.at(3));
-	}
-	else {
-		texID = std::stoi(tokens.at(2));
-	}
+	int texID = std::stoi(tokens.at(2));
 
 	GameObject* object = nullptr;
 
@@ -99,7 +93,7 @@ void Scene::ParseEntityData(std::string line) {
 		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();			
 			marioInstance->SetObjectID(static_cast<int>(objectID));
-			marioInstance->ParseData(tokens.at(1), tokens.at(2), GetTexturePath(texID), GetTextureColorKey(texID));
+			marioInstance->ParseData(tokens.at(1), tokens.at(3), GetTexturePath(texID), GetTextureColorKey(texID));
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
 			object = new Goomba;
@@ -475,9 +469,10 @@ void Scene::UpdateCameraPosition() {
 	}
 	
 	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;	
-	if (camPosition.y > 230) {
+	/*if (camPosition.y > 230) {
 		camPosition.y = 230;
-	}
+	}*/
+	camPosition.y = 230;
 
 	Camera::GetInstance()->SetPosition(camPosition);
 }

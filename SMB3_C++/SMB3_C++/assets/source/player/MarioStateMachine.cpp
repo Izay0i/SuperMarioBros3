@@ -37,10 +37,10 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			else if (Device::IsKeyDown(DIK_S)) {
 				currentState = MarioState::CROUCH;
 			}
-			else if (Device::IsKeyDown(DIK_K) && currentForm == MarioForm::FIRE) {
+			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::FIRE) {
 				currentState = MarioState::SHOOT;
 			}
-			else if (Device::IsKeyDown(DIK_K) && currentForm == MarioForm::RACOON) {
+			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::RACOON) {
 				currentState = MarioState::SPIN;
 			}
 			break;
@@ -55,9 +55,6 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 				currentState = MarioState::FALL;
 			}
 			break;
-		case MarioState::TURN:
-			
-			break;
 		case MarioState::JUMP:
 			if (mario->GetVelocity().y > 0.0f) {
 				currentState = MarioState::FALL;
@@ -65,10 +62,16 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			else if (mario->IsOnGround()) {
 				currentState = MarioState::IDLE;
 			}
+			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::RACOON && mario->GetVelocity().x == 0.0f) {
+				currentState = MarioState::SPIN;
+			}
 			break;
 		case MarioState::FALL:
 			if (mario->IsOnGround()) {
 				currentState = MarioState::IDLE;
+			}
+			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::RACOON && mario->GetVelocity().x == 0.0f) {
+				currentState = MarioState::SPIN;
 			}
 			break;
 		case MarioState::CROUCH:
@@ -84,13 +87,13 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			break;		
 		//fire
 		case MarioState::SHOOT:
-			if (!Device::IsKeyDown(DIK_K)) {
+			if (!Device::IsKeyDown(DIK_J) || mario->GetVelocity().x != 0.0f) {
 				currentState = MarioState::IDLE;
 			}
 			break;
 			//racoon
 		case MarioState::SPIN:
-			if (!Device::IsKeyDown(DIK_K)) {
+			if (!Device::IsKeyDown(DIK_J) || mario->GetVelocity().x != 0.0f) {
 				currentState = MarioState::IDLE;
 			}
 			break;
@@ -108,76 +111,96 @@ void MarioStateMachine::Render() {
 					mario->GetSprite().PlayAnimation("Idle", mario->GetPosition(), mario->GetScale());
 					break;
 				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigIdle", mario->GetPosition(), mario->GetScale());
+					mario->GetSprite().PlayAnimation("BigIdle", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					break;
 				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireIdle", mario->GetPosition(), mario->GetScale());
+					mario->GetSprite().PlayAnimation("FireIdle", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					break;
 				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacIdle", mario->GetPosition(), mario->GetScale());
+					mario->GetSprite().PlayAnimation("RacIdle", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					break;
 			}
 			break;
 		case MarioState::RUN:
 			switch (currentForm) {
 				case MarioForm::SMALL:
-					mario->GetSprite().PlayAnimation("Run", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
+						mario->GetSprite().PlayAnimation("TakeOff", mario->GetPosition(), mario->GetScale());
+					}
+					else {
+						mario->GetSprite().PlayAnimation("Run", mario->GetPosition(), mario->GetScale());
+					}
 					break;
 				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigRun", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
+						mario->GetSprite().PlayAnimation("BigTakeOff", mario->GetPosition(), mario->GetScale());
+					}
+					else {
+						mario->GetSprite().PlayAnimation("BigRun", mario->GetPosition(), mario->GetScale());
+					}
 					break;
 				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireRun", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
+						mario->GetSprite().PlayAnimation("FireTakeOff", mario->GetPosition(), mario->GetScale());
+					}
+					else {
+						mario->GetSprite().PlayAnimation("FireRun", mario->GetPosition(), mario->GetScale());
+					}
 					break;
 				case MarioForm::RACOON:
 					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
-						mario->GetSprite().PlayAnimation("RacTakeOff", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("RacTakeOff", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					}
 					else {
-						mario->GetSprite().PlayAnimation("RacRun", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("RacRun", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					}
 					break;
 			}
 			break;
-		case MarioState::TURN:
-			/*switch (currentForm) {
-				case MarioForm::SMALL:
-					mario->GetSprite().PlayAnimation("Turn", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigTurn", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireTurn", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacTurn", mario->GetPosition(), mario->GetScale());
-					break;
-			}*/
-			break;
 		case MarioState::JUMP:
 			switch (currentForm) {
 				case MarioForm::SMALL:
-					mario->GetSprite().PlayAnimation("Jump", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("Fly", mario->GetPosition(), mario->GetScale());
+					}
+					else {
+						mario->GetSprite().PlayAnimation("Jump", mario->GetPosition(), mario->GetScale());
+					}
 					break;
 				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigJump", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
+						mario->GetSprite().PlayAnimation("BigTakeOffJump", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("BigFly", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else {
+						mario->GetSprite().PlayAnimation("BigJump", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
 					break;
 				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireJump", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
+						mario->GetSprite().PlayAnimation("FireTakeOffJump", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("FireFly", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else {
+						mario->GetSprite().PlayAnimation("FireJump", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
 					break;
 				case MarioForm::RACOON:
 					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround()) {
-						mario->GetSprite().PlayAnimation("RacTakeOffJump", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("RacTakeOffJump", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					}
-					else if (Device::IsKeyDown(DIK_SPACE) && mario->GetAcceleration() >= mario->GetAccelThreshold()) {
-						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
+					else if (Device::IsKeyDown(DIK_K) && mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					}
 					else if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
-						mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					}					
 					else {
-						mario->GetSprite().PlayAnimation("RacJump", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("RacJump", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					}
 					break;
 			}
@@ -185,26 +208,41 @@ void MarioStateMachine::Render() {
 		case MarioState::FALL:
 			switch (currentForm) {
 				case MarioForm::SMALL:
-					mario->GetSprite().PlayAnimation("Jump", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigJump", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireJump", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::RACOON:					
-					if (Device::IsKeyDown(DIK_SPACE) && mario->GetAcceleration() < mario->GetAccelThreshold()) {
-						mario->GetSprite().PlayAnimation("RacSlowFall", mario->GetPosition(), mario->GetScale());
-					}
-					else if (Device::IsKeyDown(DIK_SPACE) || Device::IsKeyDown(DIK_K) && mario->GetAcceleration() >= mario->GetAccelThreshold()) {
-						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
-					}
-					else if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
-						mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale());
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("Fly", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						mario->GetSprite().PlayAnimation("RacFall", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("Jump", mario->GetPosition(), mario->GetScale());
+					}
+					break;
+				case MarioForm::BIG:
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("BigFly", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else {
+						mario->GetSprite().PlayAnimation("BigJump", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					break;
+				case MarioForm::FIRE:
+					if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("FireFly", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else {
+						mario->GetSprite().PlayAnimation("FireJump", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					break;
+				case MarioForm::RACOON:					
+					if (Device::IsKeyDown(DIK_K) && mario->GetAcceleration() < mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacSlowFall", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else if (Device::IsKeyDown(DIK_K) && mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else if (mario->GetAcceleration() >= mario->GetAccelThreshold()) {
+						mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					}
+					else {
+						mario->GetSprite().PlayAnimation("RacFall", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					}
 					break;
 			}
@@ -215,13 +253,13 @@ void MarioStateMachine::Render() {
 					mario->GetSprite().PlayAnimation("Idle", mario->GetPosition(), mario->GetScale());
 					break;
 				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigCrouch", mario->GetPosition(), mario->GetScale());
+					mario->GetSprite().PlayAnimation("BigCrouch", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					break;
 				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireCrouch", mario->GetPosition(), mario->GetScale());
+					mario->GetSprite().PlayAnimation("FireCrouch", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					break;
 				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacCrouch", mario->GetPosition(), mario->GetScale());
+					mario->GetSprite().PlayAnimation("RacCrouch", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 					break;
 			}
 			break;
@@ -233,41 +271,16 @@ void MarioStateMachine::Render() {
 			break;
 		//racoon
 		case MarioState::SPIN:
-			switch (currentForm) {
-				case MarioForm::SMALL:
-					mario->GetSprite().PlayAnimation("Idle", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigIdle", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireIdle", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation(
-						"RacSpin",
-						mario->GetPosition(),
-						D3DXVECTOR2(mario->GetNormal().x, 1.0f)
-					);
-					break;
-			}
+			mario->GetSprite().PlayAnimation(
+				"RacSpin",
+				mario->GetPosition(),
+				D3DXVECTOR2(mario->GetNormal().x, 1.0f),
+				D3DXVECTOR2(8, 16)
+			);
 			break;
 		//fire
 		case MarioState::SHOOT:
-			switch (currentForm) {
-				case MarioForm::SMALL:
-					mario->GetSprite().PlayAnimation("Idle", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigIdle", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireShoot", mario->GetPosition(), mario->GetScale());
-					break;
-				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacIdle", mario->GetPosition(), mario->GetScale());
-					break;
-			}
+			mario->GetSprite().PlayAnimation("FireShoot", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
 			break;
 	}
 }
