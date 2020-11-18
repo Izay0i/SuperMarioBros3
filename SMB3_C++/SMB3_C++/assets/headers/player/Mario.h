@@ -23,10 +23,13 @@ private:
 
 	MarioStateMachine* marioFSM;
 
+	Entity* heldEntity;
+
 	std::string fireballPath;
 	std::string texPath;
 
 	bool isOnGround;
+	bool isHolding;
 
 	const float MAX_JUMP_SPEED = 0.4f;
 	const float MAX_ACCEL = 2.2f;

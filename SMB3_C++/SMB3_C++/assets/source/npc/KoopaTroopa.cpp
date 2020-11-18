@@ -157,6 +157,7 @@ void KoopaTroopa::HandleStates() {
 			break;
 		case KoopaState::WALK:
 			velocity.x = -runSpeed * normal.x;
+			scale = D3DXVECTOR2(1.0f, 1.0f);
 			break;
 		case KoopaState::RETRACT:
 		case KoopaState::DIE:

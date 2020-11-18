@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 4;
+	hitPoints = 2;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -153,6 +153,13 @@ void Mario::ParseData(std::string dataPath, std::string projPath, std::string te
 }
 
 void Mario::HandleStates(BYTE* states) {
+	if (Device::IsKeyDown(DIK_J) && velocity.x != 0.0f) {
+		isHolding = true;
+	}
+	else {
+		isHolding = false;
+	}
+	
 	if (Device::IsKeyDown(DIK_K)) {
 		if (jumpSpeed < MAX_JUMP_SPEED) {
 			jumpSpeed += 0.1f;
@@ -249,8 +256,10 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	if ((Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) && Device::IsKeyDown(DIK_J)) {
 		//GOTTA GO FAAAST
-		if (acceleration < MAX_ACCEL) {
-			acceleration += 0.01f;
+		if (!isHolding) {
+			if (acceleration < MAX_ACCEL) {
+				acceleration += 0.01f;
+			}
 		}
 	}
 	else {
@@ -324,9 +333,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 				else if (event->normal.x != 0.0f) {
 					if (goomba->GetCurrentHitPoints() != 0) {
-						if (Device::IsKeyDown(DIK_J) && hitPoints == 4) {
+						if (Device::IsKeyDown(DIK_J) && velocity.x == 0.0f) {
 							//stand still
-							if (velocity.x == 0.0f) {
+							if (hitPoints == 4) {
 								goomba->TakeDamage();
 							}
 							else {
@@ -373,9 +382,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					//is spinning or walking
 					if (koopa->GetCurrentHitPoints() == 1 || koopa->GetCurrentHitPoints() == 3) {
 						//mario is in racoon form and spins his tail
-						if (Device::IsKeyDown(DIK_J) && hitPoints == 4) {
+						if (Device::IsKeyDown(DIK_J) && velocity.x == 0.0f) {
 							//stand still or die
-							if (velocity.x == 0.0f) {
+							if (hitPoints == 4) {
 								koopa->TakeDamage();
 								koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 							}
@@ -401,14 +410,31 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					}
 					//kick it, i dare you
 					else if (koopa->GetCurrentHitPoints() == 2) {
-						koopa->TakeDamage();
-						koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0 ));
+						if (isHolding) {
+							heldEntity = koopa;							
+						}
+						else {
+							koopa->TakeDamage();
+							koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
+						}
 					}
 				}
 			}
 		}
 	}
 
+	if (heldEntity) {
+		if (isHolding) {
+			heldEntity->SetCurrenHitPoints(2);
+			if (this->normal.x == 1) {
+				heldEntity->SetPosition(D3DXVECTOR3(position.x + 18, position.y, 0));
+			}
+			else {
+				heldEntity->SetPosition(D3DXVECTOR3(position.x - 18, position.y, 0));
+			}
+		}
+	}
+	
 	for (LPCOLLISIONEVENT event : collisionEvents) {
 		delete event;
 	}
