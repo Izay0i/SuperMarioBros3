@@ -325,8 +325,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				else if (event->normal.x != 0.0f) {
 					if (goomba->GetCurrentHitPoints() != 0) {
 						if (Device::IsKeyDown(DIK_J) && hitPoints == 4) {
-							//check if the tail is facing the enemy
-							if (normal != event->normal) {
+							//stand still
+							if (velocity.x == 0.0f) {
 								goomba->TakeDamage();
 							}
 							else {
@@ -360,15 +360,22 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						velocity.y = -deflectSpeed;
 					}
 					koopa->TakeDamage();
-					koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
+					D3DXVECTOR3 direction = position - koopa->GetPosition();
+					D3DXVECTOR3* normal = D3DXVec3Normalize(&direction, &direction);
+					koopa->SetNormal(
+						D3DXVECTOR3(
+							normal->x > 0 ? 1 : -1, 
+							0, 
+							0)
+						);
 				}
 				else if (event->normal.x != 0.0f) {
 					//is spinning or walking
 					if (koopa->GetCurrentHitPoints() == 1 || koopa->GetCurrentHitPoints() == 3) {
 						//mario is in racoon form and spins his tail
 						if (Device::IsKeyDown(DIK_J) && hitPoints == 4) {
-							//check if the tail is facing the enemy
-							if (normal != event->normal) {
+							//stand still or die
+							if (velocity.x == 0.0f) {
 								koopa->TakeDamage();
 								koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 							}
