@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 2;
+	hitPoints = 4;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -153,7 +153,7 @@ void Mario::ParseData(std::string dataPath, std::string projPath, std::string te
 }
 
 void Mario::HandleStates(BYTE* states) {
-	if (Device::IsKeyDown(DIK_J) && velocity.x != 0.0f) {
+	if (Device::IsKeyDown(DIK_J)) {
 		isHolding = true;
 	}
 	else {
@@ -432,6 +432,15 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			else {
 				heldEntity->SetPosition(D3DXVECTOR3(position.x - 18, position.y, 0));
 			}
+		}
+		else {
+			if (this->normal.x == 1) {
+				heldEntity->SetPosition(D3DXVECTOR3(position.x + 16, position.y, 0));
+			}
+			else {
+				heldEntity->SetPosition(D3DXVECTOR3(position.x - 16, position.y, 0));
+			}
+			heldEntity = nullptr;
 		}
 	}
 	
