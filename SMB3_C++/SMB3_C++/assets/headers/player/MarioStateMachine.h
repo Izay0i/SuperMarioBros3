@@ -33,12 +33,9 @@ private:
 		JUMP,
 		FALL,
 		FRONT,
-		HOLD,
-		KICK,
 		SLIDE,
 		SWIM,
 		CLIMB,
-		DIE,
 		//BIG, FIRE, RACOON
 		CROUCH,
 		BACK,

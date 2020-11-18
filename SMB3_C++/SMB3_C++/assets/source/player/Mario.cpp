@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 4;
+	hitPoints = 1;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -256,10 +256,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	if ((Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) && Device::IsKeyDown(DIK_J)) {
 		//GOTTA GO FAAAST
-		if (!isHolding) {
-			if (acceleration < MAX_ACCEL) {
-				acceleration += 0.01f;
-			}
+		if (acceleration < MAX_ACCEL) {
+			acceleration += 0.01f;
 		}
 	}
 	else {
@@ -411,7 +409,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					//kick it, i dare you
 					else if (koopa->GetCurrentHitPoints() == 2) {
 						if (isHolding) {
-							heldEntity = koopa;							
+							if (!heldEntity) {
+								heldEntity = koopa;
+							}
 						}
 						else {
 							koopa->TakeDamage();
@@ -426,20 +426,22 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	if (heldEntity) {
 		if (isHolding) {
 			heldEntity->SetCurrenHitPoints(2);
+
+			int offset = 0;
+			if (hitPoints == 1) {
+				offset = 10;
+			}
+
 			if (this->normal.x == 1) {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x + 18, position.y, 0));
+				heldEntity->SetPosition(D3DXVECTOR3(position.x + 12, position.y - offset, 0));
 			}
 			else {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x - 18, position.y, 0));
+				heldEntity->SetPosition(D3DXVECTOR3(position.x - 12, position.y - offset, 0));
 			}
 		}
 		else {
-			if (this->normal.x == 1) {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x + 16, position.y, 0));
-			}
-			else {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x - 16, position.y, 0));
-			}
+			heldEntity->TakeDamage();
+			heldEntity->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 			heldEntity = nullptr;
 		}
 	}

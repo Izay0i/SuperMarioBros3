@@ -13,9 +13,13 @@ Turn	109	16	124	31	1	0
 Jump	37	16	52	31	1	0
 #Front
 Front	127	16	142	31	1	0
-#Hold
-Hold	145	16	160	31	2	50
-Hold	163	16	178	31
+#Hold idle
+HoldIdle	145	16	160	31	1	0
+#Hold run
+HoldRun	145	16	160	31	2	50
+HoldRun	163	16	178	31
+#Hold jump
+HoldJump	163	16	178	31	1	0
 #Kick
 Kick	181	16	196	31	1	0
 #Slide
@@ -52,10 +56,13 @@ BigTurn	195	88	210	119	1	0
 BigFront	213	88	228	119	1	0
 #Back
 BigBack	231	88	246	119	1	0
-#Hold
-BigHold	249	88	264	119	3	50
-BigHold	267	88	282	119
-BigHold	285	88	300	119
+#Hold idle
+BigHoldIdle	249	88	264	119	1	0
+#Hold run
+BigHoldRun	249	88	264	119	2	50
+BigHoldRun	267	88	282	119
+#Hold jump
+BigHoldJump	285	88	300	119	1	0
 #Kick
 BigKick	303	88	326	119	1	0
 #Slide
@@ -92,10 +99,13 @@ FireTurn	195	260	210	291	1	0
 FireFront	213	260	228	291	1	0
 #Back
 FireBack	231	260	246	291	1	0
-#Hold
-FireHold	249	260	264	291	3	50
-FireHold	267	260	282	291
-FireHold	285	260	300	291
+#Hold idle
+FireHoldIdle	249	260	264	291	1	0
+#Hold run
+FireHoldRun	249	260	264	291	2	50
+FireHoldRun	267	260	282	291
+#Hold jump
+FireHold	285	260	300	291	1	0
 #Kick
 FireKick	303	260	326	291	1	0
 #Slide
@@ -135,10 +145,13 @@ RacTurn	339	346	354	377	1	0
 RacFront	357	346	372	377	1	0
 #Back
 RacBack	401	346	416	377	1	0
-#Hold
-RacHold	1	380	24	411	3	50
-RacHold	27	380	50	411
-RacHold	53	380	76	411
+#Hold idle
+RacHoldIdle	1	380	24	411	1	0
+#Hold run
+RacHoldRun	1	380	24	411	2	50
+RacHoldRun	27	380	50	411
+#Hold jump
+RacHoldJump	53	380	76	411	1	0
 #Kick
 RacKick	79	380	102	411	1	0
 #Slide

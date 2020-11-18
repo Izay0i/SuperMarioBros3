@@ -22,7 +22,6 @@ private:
 	static D3DCOLOR colorKey;
 
 	MarioStateMachine* marioFSM;
-
 	Entity* heldEntity;
 
 	std::string fireballPath;
@@ -60,6 +59,7 @@ public:
 
 	RECTF GetBoundingBox(int = 0) const override;
 	AnimatedSprite GetSprite() const { return sprite; }
+	Entity* GetHeldEntity() { return heldEntity; }
 
 	void ParseData(std::string, std::string, std::string, D3DCOLOR);
 	
