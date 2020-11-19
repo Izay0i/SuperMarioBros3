@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 4;
+	hitPoints = 2;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -153,6 +153,7 @@ void Mario::ParseData(std::string dataPath, std::string projPath, std::string te
 }
 
 void Mario::HandleStates(BYTE* states) {
+	//for picking up koopa shells
 	if (Device::IsKeyDown(DIK_J)) {
 		isHolding = true;
 	}
@@ -160,15 +161,22 @@ void Mario::HandleStates(BYTE* states) {
 		isHolding = false;
 	}
 	
+	//still haven't thought of a proper way to implement variable jump height yet
 	if (Device::IsKeyDown(DIK_K)) {
-		if (jumpSpeed < MAX_JUMP_SPEED) {
-			jumpSpeed += 0.1f;
-		}
-		else if (jumpSpeed >= MAX_JUMP_SPEED) {
-			
+		if (gravity > MAX_GRAVITY) {
+			gravity -= 0.0005f;
+		}		
+	}
+	else {
+		if (gravity < 0.0025f) {
+			gravity += 0.0005f;
 		}
 	}
 	
+	char debugStr[100];
+	sprintf_s(debugStr, "Gravity: %f\n", gravity);
+	OutputDebugStringA(debugStr);
+
 	if (Device::IsKeyDown(DIK_A)) {
 		//to flip sprite
 		scale = D3DXVECTOR2(1.0f, 1.0f);
@@ -211,15 +219,14 @@ void Mario::OnKeyDown(int keyCode) {
 				gravity = 0.0006f;
 			}
 
-			//unlimited jumping
+			//unlimited jumping if Mario is Racoon
 			if (acceleration >= ACCEL_THRESHOLD && hitPoints == 4) {
 				velocity.y = -jumpSpeed;
 				isOnGround = false;
 			}
 
-			//walking speed
+			//apply normal gravity if its just walking
 			if (IsOnGround()) {
-				gravity = 0.0012f;
 				velocity.y = -jumpSpeed;
 				isOnGround = false;
 			}
@@ -246,6 +253,7 @@ void Mario::TakeDamage() {
 }
 
 void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {	
+	//stop moving if Mario dies
 	if (hitPoints == 0) {
 		velocity.x = 0;
 	}
@@ -271,9 +279,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		gravity = 0.0008f;
 	}
 
-	if (!Device::IsKeyDown(DIK_K)) {
+	/*if (!Device::IsKeyDown(DIK_K)) {
 		gravity = 0.0025f;
-	}
+	}*/
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
@@ -358,6 +366,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					}
 				}
 			}
+
 			//koopa troopa
 			if (dynamic_cast<KoopaTroopa*>(event->object)) {
 				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
@@ -367,14 +376,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						velocity.y = -deflectSpeed;
 					}
 					koopa->TakeDamage();
-					D3DXVECTOR3 direction = position - koopa->GetPosition();
-					D3DXVECTOR3* normal = D3DXVec3Normalize(&direction, &direction);
-					koopa->SetNormal(
-						D3DXVECTOR3(
-							normal->x > 0 ? 1 : -1, 
-							0, 
-							0)
-						);
+					koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 				}
 				else if (event->normal.x != 0.0f) {
 					//is spinning or walking
@@ -433,7 +435,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		if (isHolding) {
 			int offset = 0;
 			if (hitPoints == 1) {
-				offset = 10;
+				offset = 11;
 			}
 			else {
 				offset = -4;

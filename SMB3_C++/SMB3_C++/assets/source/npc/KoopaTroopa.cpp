@@ -153,7 +153,7 @@ void KoopaTroopa::HandleStates() {
 
 	switch (currentState) {
 		case KoopaState::SPIN:
-			velocity.x = -runSpeed * normal.x * 6;
+			velocity.x = -runSpeed * normal.x * 8;
 			break;
 		case KoopaState::WALK:
 			velocity.x = -runSpeed * normal.x;

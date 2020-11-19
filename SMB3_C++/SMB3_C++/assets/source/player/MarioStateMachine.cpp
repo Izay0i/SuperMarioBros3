@@ -34,10 +34,10 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			else if (Device::IsKeyDown(DIK_S) && !mario->GetHeldEntity()) {
 				currentState = MarioState::CROUCH;
 			}
-			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::FIRE) {
+			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::FIRE && !mario->GetHeldEntity()) {
 				currentState = MarioState::SHOOT;
 			}
-			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::RACOON) {
+			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::RACOON && !mario->GetHeldEntity()) {
 				currentState = MarioState::SPIN;
 			}
 			break;

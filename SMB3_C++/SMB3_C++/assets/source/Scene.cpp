@@ -490,8 +490,12 @@ void Scene::Update(DWORD delta) {
 
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
-				//erase-remove idiom
-				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				removeStart = GetTickCount64();
+				if (GetTickCount64() - removeStart > removeTime) {
+					removeStart = 0;
+					//erase-remove idiom
+					objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				}
 			}
 		}
 	}
