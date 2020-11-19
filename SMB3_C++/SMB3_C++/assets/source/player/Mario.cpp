@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 2;
+	hitPoints = 4;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -424,12 +424,19 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 
 	if (heldEntity) {
-		if (isHolding) {
-			heldEntity->SetCurrenHitPoints(2);
+		if (heldEntity->GetCurrentHitPoints() == 3) {
+			isHolding = false;
+			heldEntity = nullptr;
+			return;
+		}
 
+		if (isHolding) {
 			int offset = 0;
 			if (hitPoints == 1) {
 				offset = 10;
+			}
+			else {
+				offset = -4;
 			}
 
 			if (this->normal.x == 1) {

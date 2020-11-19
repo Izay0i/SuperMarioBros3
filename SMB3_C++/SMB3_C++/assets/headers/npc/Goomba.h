@@ -22,7 +22,7 @@ private:
 
 	GoombaState currentState;
 
-	float runSpeed = 0.05f;
+	float runSpeed = 0.03f;
 	float jumpSpeed = 0.5f;
 	float gravity = 0.002f;
 

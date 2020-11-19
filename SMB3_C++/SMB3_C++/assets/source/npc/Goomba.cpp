@@ -197,18 +197,18 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
-			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
-				if (event->normal.x != 0.0f) {
-					this->normal.x = -event->normal.x;
-				}
-			}
-			
 			//koopa troopa
 			if (event->object->GetObjectID() == 3) {
 				if (dynamic_cast<Entity*>(event->object)->GetCurrentHitPoints() == 1) {
 					TakeDamage();
 				}
 			}
+
+			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
+				if (event->normal.x != 0.0f) {
+					this->normal.x = -event->normal.x;
+				}
+			}			
 		}
 	}
 

@@ -37,10 +37,10 @@ public:
 
 	RECTF GetBoundingBox(int id = 0) const override {
 		RECTF bound;
-		bound.left = position.x + 1;
+		bound.left = position.x + 2;
 		bound.top = position.y + 1;
-		bound.right = position.x + hitBox.GetWidth(id) - 1;
-		bound.bottom = position.y + hitBox.GetHeight(id) - 1;
+		bound.right = position.x + hitBox.GetWidth(id) - 3;
+		bound.bottom = position.y + hitBox.GetHeight(id);
 
 		return bound;
 	}
