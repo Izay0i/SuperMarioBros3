@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 1;
+	hitPoints = 2;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
