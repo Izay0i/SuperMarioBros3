@@ -228,6 +228,13 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
+				if (hitPoints == 1) {
+					entity->TakeDamage();
+				}
+			}
+			
+			if (dynamic_cast<Entity*>(event->object)) {
+				Entity* entity = static_cast<Entity*>(event->object);
 				if (entity->GetObjectID() == 103) {
 					if (position.x <= entity->GetPosition().x - 5 ||
 						position.x + hitBox.GetWidth() >= entity->GetPosition().x + 5 + entity->GetBoxWidth()) 

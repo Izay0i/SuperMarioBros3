@@ -8,7 +8,7 @@ class Entity;
 
 class ShinyBrick : public Entity {
 private:
-	enum class ItemState {
+	enum class BlockState {
 		ROTATE,
 		PUSHED,
 		SWITCHED
@@ -32,10 +32,10 @@ public:
 
 	RECTF GetBoundingBox(int id = 0) const override {
 		RECTF bound;
-		bound.left = position.x;
+		bound.left = position.x + 2;
 		bound.top = position.y;
-		bound.right = position.x + hitBox.GetWidth(id);
-		bound.bottom = position.y + hitBox.GetHeight(id);
+		bound.right = position.x + hitBox.GetWidth(id) - 3;
+		bound.bottom = position.y + hitBox.GetHeight(id) - 5;
 
 		return bound;
 	}

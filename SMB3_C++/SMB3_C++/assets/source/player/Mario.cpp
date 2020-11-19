@@ -173,10 +173,6 @@ void Mario::HandleStates(BYTE* states) {
 		}
 	}
 	
-	char debugStr[100];
-	sprintf_s(debugStr, "Gravity: %f\n", gravity);
-	OutputDebugStringA(debugStr);
-
 	if (Device::IsKeyDown(DIK_A)) {
 		//to flip sprite
 		scale = D3DXVECTOR2(1.0f, 1.0f);
@@ -279,10 +275,6 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		gravity = 0.0008f;
 	}
 
-	/*if (!Device::IsKeyDown(DIK_K)) {
-		gravity = 0.0025f;
-	}*/
-
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
 
@@ -326,6 +318,13 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 			if (dynamic_cast<Coin*>(event->object)) {
 				//OutputDebugStringA("Coin\n");
+			}
+
+			if (dynamic_cast<QuestionBlock*>(event->object)) {
+				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(event->object);
+				if (event->normal.y > 0.0f) {
+					questionBlock->TakeDamage();
+				}
 			}
 
 			//goomba

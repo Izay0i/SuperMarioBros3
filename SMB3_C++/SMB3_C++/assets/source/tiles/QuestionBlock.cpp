@@ -5,7 +5,9 @@ LPDIRECT3DTEXTURE9 QuestionBlock::texture = nullptr;
 D3DCOLOR QuestionBlock::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 QuestionBlock::QuestionBlock() {
-	
+	//1 - no items
+	//2 - rotate sprite
+	hitPoints = 2;
 }
 
 void QuestionBlock::LoadTexture() {
@@ -115,12 +117,97 @@ void QuestionBlock::ParseData(std::string dataPath, std::string texturePath, D3D
 	readFile.close();
 }
 
-void QuestionBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void QuestionBlock::HandleStates() {
+	switch (hitPoints) {
+		case 1:
+			currentState = BlockState::PUSHED;
+			break;
+		case 2:
+			currentState = BlockState::ROTATE;
+			break;
+	}
+}
 
+void QuestionBlock::TakeDamage() {
+	if (hitPoints > 1) {
+		--hitPoints;
+		velocity.y = -jumpSpeed;
+	}
+}
+
+void QuestionBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	HandleStates();
+
+	GameObject::Update(delta);
+	
+	if (position.y < originalPos.y) {
+		velocity.y += gravity * delta;
+	}
+	else {
+		velocity.y = 0;
+		if (position.y >= originalPos.y) {
+			position = originalPos;			
+		}
+	}
+
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
+	collisionEvents.clear();
+
+	if (hitPoints != 0) {
+		CalcPotentialCollision(objects, collisionEvents);
+	}
+
+	if (collisionEvents.size() == 0) {
+		position += distance;
+	}
+	else {
+		D3DXVECTOR2 minTime;
+		D3DXVECTOR3 normal;
+		D3DXVECTOR3 relativeDistance;
+
+		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
+
+		if (normal.x != 0.0f) {
+			velocity.x = 0.0f;
+		}
+
+		if (normal.y != 0.0f) {
+			velocity.y = 0.0f;
+		}
+
+		for (LPCOLLISIONEVENT result : eventResults) {
+			LPCOLLISIONEVENT event = result;
+
+			/*if (dynamic_cast<Entity*>(event->object)) {
+				Entity* entity = static_cast<Entity*>(event->object);
+				if (entity->GetObjectID() == 3) {
+					if (event->normal.x != 0.0f) {
+						if (entity->GetCurrentHitPoints() == 1) {
+							TakeDamage();
+						}
+					}
+				}
+			}*/
+		}
+	}
+
+	for (LPCOLLISIONEVENT event : collisionEvents) {
+		delete event;
+	}
 }
 
 void QuestionBlock::Render() {
-	sprite.PlayAnimation("Rotate", position);
+	switch (currentState) {
+		case BlockState::PUSHED:
+			sprite.PlayAnimation("None", position);
+			break;
+		case BlockState::ROTATE:
+			sprite.PlayAnimation("Rotate", position);
+			break;
+	}
 }
 
 void QuestionBlock::Release() {

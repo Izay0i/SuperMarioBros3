@@ -40,7 +40,7 @@ public:
 		bound.left = position.x + 2;
 		bound.top = position.y + 1;
 		bound.right = position.x + hitBox.GetWidth(id) - 3;
-		bound.bottom = position.y + hitBox.GetHeight(id);
+		bound.bottom = position.y + hitBox.GetHeight(id) - 5;
 
 		return bound;
 	}
