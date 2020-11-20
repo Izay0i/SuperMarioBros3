@@ -3,7 +3,7 @@
 LPDIRECT3DDEVICE9 Sprite::directDevice = nullptr;
 LPD3DXSPRITE Sprite::spriteHandler = nullptr;
 
-Sprite::Sprite(LPDIRECT3DTEXTURE9 texture, RECT bound, int frames, float animSpeed, D3DCOLOR color) {
+Sprite::Sprite(LPDIRECT3DTEXTURE9 texture, RECT bound, int frames, int animSpeed, D3DCOLOR color) {
 	this->texture = texture;
 	bounds.push_back(bound);
 	totalFrames = frames;

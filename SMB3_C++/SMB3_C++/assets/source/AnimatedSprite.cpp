@@ -49,7 +49,7 @@ void AnimatedSprite::ParseSprites(std::string line, LPDIRECT3DTEXTURE9 texture, 
 
 	if (!HasAnimation(tokens.at(0))) {
 		int totalFrames = std::stoi(tokens.at(5));
-		float animSpeed = std::stof(tokens.at(6));
+		int animSpeed = std::stoi(tokens.at(6));
 		sprites.insert(std::make_pair(tokens.at(0), new Sprite(texture, bound, totalFrames, animSpeed, colorKey)));
 
 		char debugStr[100];

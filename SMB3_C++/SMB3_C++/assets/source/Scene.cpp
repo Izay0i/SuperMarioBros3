@@ -141,8 +141,8 @@ void Scene::ParseWorldCoords(std::string line) {
 		return;
 	}
 
-	int posX = std::stoi(tokens.at(1));
-	int posY = std::stoi(tokens.at(2));
+	float posX = std::stof(tokens.at(1));
+	float posY = std::stof(tokens.at(2));
 	D3DXVECTOR3 position(posX, posY, 0);
 
 	ObjectType objectID = static_cast<ObjectType>(std::stoi(tokens.at(0)));
@@ -244,13 +244,13 @@ void Scene::ParseTilesData(std::string line) {
 	object->SetObjectID(std::stoi(tokens.at(0)));
 	dynamic_cast<Tiles*>(object)->SetSpritesArrID(std::stoi(tokens.at(5)));
 
-	int posX, posY;
+	float posX, posY;
 
 	RECTF hitbox;
-	hitbox.left = posX = std::stoi(tokens.at(1));
-	hitbox.top = posY = std::stoi(tokens.at(2));
-	hitbox.right = std::stoi(tokens.at(3));
-	hitbox.bottom = std::stoi(tokens.at(4));
+	hitbox.left = posX = std::stof(tokens.at(1));
+	hitbox.top = posY = std::stof(tokens.at(2));
+	hitbox.right = std::stof(tokens.at(3));
+	hitbox.bottom = std::stof(tokens.at(4));
 
 	D3DXVECTOR3 position(posX, posY, 0);
 
@@ -290,8 +290,8 @@ void Scene::ParseTileSprites(std::string line) {
 					bound.right = std::stoi(tokens.at(4)) + 1;
 					bound.bottom = std::stoi(tokens.at(5)) + 1;
 
-					int posX = std::stoi(tokens.at(6));
-					int posY = std::stoi(tokens.at(7));
+					float posX = std::stof(tokens.at(6));
+					float posY = std::stof(tokens.at(7));
 					pos = D3DXVECTOR3(posX, posY, 0);
 
 					tile->AddImage(bound, pos);
@@ -316,8 +316,8 @@ void Scene::ParseBackground(std::string line) {
 	bound.right = std::stoi(tokens.at(2)) + 1;
 	bound.bottom = std::stoi(tokens.at(3)) + 1;
 
-	int posX = std::stoi(tokens.at(4));
-	int posY = std::stoi(tokens.at(5));
+	float posX = std::stof(tokens.at(4));
+	float posY = std::stof(tokens.at(5));
 	D3DXVECTOR3 pos = D3DXVECTOR3(posX, posY, 0);
 
 	int texID = std::stoi(tokens.at(6));
@@ -456,7 +456,7 @@ void Scene::UpdateCameraPosition() {
 		marioInstance->SetPosition(D3DXVECTOR3(0.0f, marioInstance->GetPosition().y, 0));
 	}
 	else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
-		marioInstance->SetPosition(D3DXVECTOR3(sceneWidth - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
+		marioInstance->SetPosition(D3DXVECTOR3(static_cast<float>(sceneWidth) - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
 	}
 
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
@@ -465,7 +465,7 @@ void Scene::UpdateCameraPosition() {
 		camPosition.x = 0;
 	}
 	else if ((camPosition.x + Game::GetInstance()->GetScreenWidth()) > sceneWidth) {
-		camPosition.x = sceneWidth - Game::GetInstance()->GetScreenWidth();
+		camPosition.x = static_cast<float>(sceneWidth) - Game::GetInstance()->GetScreenWidth();
 	}
 	
 	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;	
@@ -485,12 +485,12 @@ void Scene::Update(DWORD delta) {
 
 	marioInstance->Update(delta, &collidableObjects);
 
-	for (int i = 0; i < objects.size(); ++i) {
+	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects.at(i)->Update(delta, &collidableObjects);
 
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
-				removeStart = GetTickCount64();
+				removeStart = static_cast<DWORD>(GetTickCount64());
 				if (GetTickCount64() - removeStart > removeTime) {
 					removeStart = 0;
 					//erase-remove idiom

@@ -45,7 +45,7 @@ public:
 
 	void ParseData(std::string, std::string, D3DCOLOR) override;
 
-	void StartRetract() { retractStart = GetTickCount64(); }
+	void StartRetract() { retractStart = static_cast<DWORD>(GetTickCount64()); }
 
 	void TakeDamage() override;
 

@@ -74,8 +74,8 @@ public:
 	int GetObjectID() { return objectID; }
 
 	virtual RECTF GetBoundingBox(int = 0) const = 0;
-	unsigned int GetBoxWidth(int id = 0) { return hitBox.GetWidth(id); }
-	unsigned int GetBoxHeight(int id = 0) { return hitBox.GetHeight(id); }
+	float GetBoxWidth(int id = 0) { return hitBox.GetWidth(id); }
+	float GetBoxHeight(int id = 0) { return hitBox.GetHeight(id); }
 
 	virtual void SetVelocity(D3DXVECTOR3 vel) { velocity = vel; }
 	virtual D3DXVECTOR3 GetVelocity() const { return velocity; }

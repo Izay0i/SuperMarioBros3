@@ -56,10 +56,10 @@ void QuestionBlock::ParseHitboxes(std::string line) {
 		return;
 	}
 
-	unsigned int left = std::stoul(tokens.at(0));
-	unsigned int top = std::stoul(tokens.at(1));
-	unsigned int right = std::stoul(tokens.at(2));
-	unsigned int bottom = std::stoul(tokens.at(3));
+	float left = std::stof(tokens.at(0));
+	float top = std::stof(tokens.at(1));
+	float right = std::stof(tokens.at(2));
+	float bottom = std::stof(tokens.at(3));
 
 	RECTF hitbox;
 	hitbox.left = left;

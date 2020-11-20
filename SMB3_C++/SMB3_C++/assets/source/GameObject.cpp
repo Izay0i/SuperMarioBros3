@@ -5,7 +5,7 @@ LPD3DXSPRITE GameObject::spriteHandler = nullptr;
 
 void GameObject::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	this->delta = delta;
-	distance = velocity * delta;
+	distance = velocity * static_cast<FLOAT>(delta);
 }
 
 void GameObject::SweptAABB(
@@ -116,7 +116,7 @@ CollisionEvent* GameObject::SweptAABBEx(GameObject* object) {
 
 	staticObject = object->GetBoundingBox();
 	D3DXVECTOR3 staticVelocity = object->GetVelocity();
-	D3DXVECTOR3 staticDistance = staticVelocity * delta;
+	D3DXVECTOR3 staticDistance = staticVelocity * static_cast<FLOAT>(delta);
 
 	D3DXVECTOR3 relativeDistance = this->distance - staticDistance;
 
@@ -137,7 +137,7 @@ void GameObject::CalcPotentialCollision(
 	std::vector<GameObject*>* collidableObjects, 
 	std::vector<LPCOLLISIONEVENT>& collisionEvents) 
 {
-	for (int i = 0; i < collidableObjects->size(); ++i) {
+	for (unsigned int i = 0; i < collidableObjects->size(); ++i) {
 		LPCOLLISIONEVENT event = SweptAABBEx(collidableObjects->at(i));
 		if (event->time > 0.0f && event->time <= 1.0f) {
 			collisionEvents.push_back(event);
@@ -161,34 +161,34 @@ void GameObject::FilterCollision(
 	minTime = D3DXVECTOR2(1.0f, 1.0f);
 	normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
-	D3DXVECTOR2 minInd(-1, -1);
+	int minIndX = -1, minIndY = -1;
 
 	eventResults.clear();
 
-	for (int i = 0; i < collisionEvents.size(); ++i) {
+	for (unsigned int i = 0; i < collisionEvents.size(); ++i) {
 		LPCOLLISIONEVENT coEvent = collisionEvents.at(i);
 
 		if (coEvent->time < minTime.x && coEvent->normal.x != 0) {
 			minTime.x = coEvent->time;
 			normal.x = coEvent->normal.x;
 			relativeDistance.x = coEvent->distance.x;
-			minInd.x = i;
+			minIndX = i;
 		}
 
 		if (coEvent->time < minTime.y && coEvent->normal.y != 0) {
 			minTime.y = coEvent->time;
 			normal.y = coEvent->normal.y;
 			relativeDistance.y = coEvent->distance.y;
-			minInd.y = i;
+			minIndY = i;
 		}
 	}
 
-	if (minInd.x >= 0) {
-		eventResults.push_back(collisionEvents.at(minInd.x));
+	if (minIndX >= 0) {
+		eventResults.push_back(collisionEvents.at(minIndX));
 	}
 
-	if (minInd.y >= 0) {
-		eventResults.push_back(collisionEvents.at(minInd.y));
+	if (minIndY >= 0) {
+		eventResults.push_back(collisionEvents.at(minIndY));
 	}
 }
 

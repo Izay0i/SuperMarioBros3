@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#define DIRECTINPUT_VERSION 0x0800
+
 #include <fstream>
 
 #include <dinput.h>

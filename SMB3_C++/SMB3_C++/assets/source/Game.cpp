@@ -111,8 +111,6 @@ void Game::Update(DWORD delta) {
 }
 
 void Game::Render() {
-	//directDevice->Clear(0, nullptr, D3DCLEAR_TARGET, sceneManager->GetCurrentScene()->GetBGColor(), 0.0f, 0);
-
 	if (directDevice->BeginScene()) {
 		directDevice->ColorFill(backBuffer, nullptr, sceneManager->GetCurrentScene()->GetBGColor());
 

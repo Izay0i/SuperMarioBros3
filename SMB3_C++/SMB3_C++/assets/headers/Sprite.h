@@ -24,7 +24,7 @@ private:
 	static LPD3DXSPRITE spriteHandler;
 
 public:
-	Sprite(LPDIRECT3DTEXTURE9, RECT, int, float, D3DCOLOR);
+	Sprite(LPDIRECT3DTEXTURE9, RECT, int, int, D3DCOLOR);
 
 	static void SetDevice(LPDIRECT3DDEVICE9& dev) { if (!directDevice) { directDevice = dev; } }
 	LPDIRECT3DDEVICE9 GetDevice() { return directDevice; }
