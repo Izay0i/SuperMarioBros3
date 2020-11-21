@@ -105,7 +105,7 @@ FireHoldIdle	249	260	264	291	1	0
 FireHoldRun	249	260	264	291	2	50
 FireHoldRun	267	260	282	291
 #Hold jump
-FireHold	285	260	300	291	1	0
+FireHoldJump	285	260	300	291	1	0
 #Kick
 FireKick	303	260	326	291	1	0
 #Slide
