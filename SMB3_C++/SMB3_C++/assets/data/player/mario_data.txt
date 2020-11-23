@@ -34,7 +34,7 @@ Climb	289	16	304	31	1	0
 #Die
 Die	307	16	322	31	1	0
 #Take off
-TakeOff	55	16	70	31	2	50
+TakeOff	55	16	70	31	2	25
 TakeOff	73	16	88	31
 #Fly
 Fly	91	16	106	31	1	0
@@ -75,7 +75,7 @@ BigSwim	425	88	448	119
 #Climb
 BigClimb	451	88	466	119	1	0
 #Take off
-BigTakeOff	91	88	114	119	2	50
+BigTakeOff	91	88	114	119	2	25
 BigTakeOff	117	88	140	119
 #Take off jump
 BigTakeOffJump	143	88	166	119	1	0
@@ -121,7 +121,7 @@ FireClimb	451	260	466	291	1	0
 FireShoot	209	294	224	325	2	50
 FireShoot	227	294	242	325
 #Take off
-FireTakeOff	91	260	114	291	2	50
+FireTakeOff	91	260	114	291	2	25
 FireTakeOff	117	260	140	291
 #Take off jump
 FireTakeOffJump	143	260	166	291	1	0
@@ -172,7 +172,7 @@ RacFall	131	346	154	377	1	0
 RacSlowFall	131	346	154	377	2	50
 RacSlowFall	157	346	180	377
 #Take off
-RacTakeOff	183	346	206	377	2	50
+RacTakeOff	183	346	206	377	2	25
 RacTakeOff	209	346	232	377
 #Take off jump
 RacTakeOffJump	235	346	258	377	1	0

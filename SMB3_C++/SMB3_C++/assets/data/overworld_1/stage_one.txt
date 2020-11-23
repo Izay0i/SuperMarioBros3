@@ -132,6 +132,8 @@
 4	1328	294
 4	1376	294
 4	1424	294
+#Pirana plant
+5	1800	360
 
 #Animated Tiles
 #Coin

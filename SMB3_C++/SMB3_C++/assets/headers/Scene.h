@@ -61,9 +61,6 @@ private:
 
 	const static int MAX_FILE_LINE = 2048;
 
-	DWORD removeStart;
-	DWORD removeTime = 1000;
-
 	int sceneID;
 	int sceneWidth, sceneHeight;
 

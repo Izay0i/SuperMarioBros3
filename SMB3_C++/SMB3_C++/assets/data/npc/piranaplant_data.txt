@@ -1,0 +1,11 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#Bite
+Bite	0	144	15	175	2	100
+Bite	16	144	31	175
+#Die
+Die	16	144	31	175	1	0
+
+[HITBOXES]
+0	0	16	32

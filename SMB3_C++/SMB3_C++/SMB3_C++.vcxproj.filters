@@ -78,6 +78,9 @@
     <ClCompile Include="assets\source\npc\Fireball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\source\npc\PiranaPlant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\headers\Game.h">
@@ -153,6 +156,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\headers\npc\Fireball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\headers\npc\PiranaPlant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

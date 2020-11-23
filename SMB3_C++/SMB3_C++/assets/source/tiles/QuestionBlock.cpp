@@ -180,17 +180,7 @@ void QuestionBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
-
-			/*if (dynamic_cast<Entity*>(event->object)) {
-				Entity* entity = static_cast<Entity*>(event->object);
-				if (entity->GetObjectID() == 3) {
-					if (event->normal.x != 0.0f) {
-						if (entity->GetCurrentHitPoints() == 1) {
-							TakeDamage();
-						}
-					}
-				}
-			}*/
+			
 		}
 	}
 

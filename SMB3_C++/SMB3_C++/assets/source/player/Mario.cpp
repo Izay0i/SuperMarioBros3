@@ -212,7 +212,6 @@ void Mario::OnKeyDown(int keyCode) {
 			//slow falling when in air
 			if (!IsOnGround() && hitPoints == 4) {
 				velocity.y *= 0.02f;
-				gravity = 0.0006f;
 			}
 
 			//unlimited jumping if Mario is Racoon
@@ -320,11 +319,17 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				//OutputDebugStringA("Coin\n");
 			}
 
+			//question block
 			if (dynamic_cast<QuestionBlock*>(event->object)) {
 				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(event->object);
 				if (event->normal.y > 0.0f) {
 					questionBlock->TakeDamage();
 				}
+			}
+
+			//pirana plant
+			if (dynamic_cast<PiranaPlant*>(event->object)) {
+				TakeDamage();
 			}
 
 			//goomba

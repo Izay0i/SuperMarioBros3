@@ -221,11 +221,6 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
-			//mario's fireball
-			if (event->object->GetObjectID() == 99) {
-				hitPoints = 0;
-			}
-
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
@@ -236,11 +231,14 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (entity->GetObjectID() == 103) {
-					if (position.x <= entity->GetPosition().x - 5 ||
-						position.x + hitBox.GetWidth() >= entity->GetPosition().x + 5 + entity->GetBoxWidth()) 
-					{
+					if (position.x <= entity->GetPosition().x - 5) {
 						if (hitPoints != 1) {
-							this->normal.x = -this->normal.x;
+							this->normal.x = -1;
+						}
+					}
+					if (position.x + hitBox.GetWidth() >= entity->GetPosition().x + 5 + entity->GetBoxWidth()) {
+						if (hitPoints != 1) {
+							this->normal.x = 1;
 						}
 					}
 				}
@@ -249,11 +247,14 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<Tiles*>(event->object)) {
 				Tiles* tile = static_cast<Tiles*>(event->object);
 				if (tile->GetObjectID() == 205) {
-					if (position.x <= tile->GetPosition().x -5 || 
-						position.x + hitBox.GetWidth() >= tile->GetPosition().x + 5 + tile->GetBoxWidth()) 
-					{
+					if (position.x <= tile->GetPosition().x - 5) {
 						if (hitPoints != 1) {
-							this->normal.x = -this->normal.x;
+							this->normal.x = -1;
+						}
+					}
+					if (position.x + hitBox.GetWidth() >= tile->GetPosition().x + 5 + tile->GetBoxWidth()) {
+						if (hitPoints != 1) {
+							this->normal.x = 1;
 						}
 					}
 				}

@@ -279,7 +279,7 @@ void MarioStateMachine::Render() {
 					break;
 				case MarioForm::RACOON:					
 					if (Device::IsKeyDown(DIK_K) && mario->GetAcceleration() < mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
-						mario->GetSprite().PlayAnimation("RacSlowFall", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+						mario->GetSprite().PlayAnimation("RacSlowFall", mario->GetPosition(), mario->GetScale());
 					}
 					else if (Device::IsKeyDown(DIK_K) && mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
 						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
@@ -291,7 +291,7 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("RacHoldJump", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						mario->GetSprite().PlayAnimation("RacJump", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("RacFall", mario->GetPosition(), mario->GetScale());
 					}
 					break;
 			}

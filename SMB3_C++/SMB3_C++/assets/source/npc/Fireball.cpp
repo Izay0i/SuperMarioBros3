@@ -189,6 +189,12 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;			
 
+			if (event->object->GetObjectID() == 102) {
+				if (event->normal.y != 0.0f) {
+					continue;
+				}
+			}
+
 			//ignore one-way platforms
 			if (event->object->GetObjectID() == 205) {
 				continue;

@@ -10,4 +10,4 @@ Rotate	1021	69	1036	84
 
 #left	top	right	bottom
 [HITBOXES]
-0	0	16	16
+0	0	4	4

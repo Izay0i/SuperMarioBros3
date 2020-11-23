@@ -108,7 +108,7 @@ void Scene::ParseEntityData(std::string line) {
 
 			break;
 		case ObjectType::OBJECT_TYPE_PIPLANT:
-
+			object = new PiranaPlant;
 			break;
 		case ObjectType::OBJECT_TYPE_VENUSTRAP:
 
@@ -179,7 +179,15 @@ void Scene::ParseWorldCoords(std::string line) {
 
 			break;
 		case ObjectType::OBJECT_TYPE_PIPLANT:
-
+			for (GameObject* object : objects) {
+				if (dynamic_cast<PiranaPlant*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
 			break;
 		case ObjectType::OBJECT_TYPE_VENUSTRAP:
 
@@ -490,12 +498,9 @@ void Scene::Update(DWORD delta) {
 
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
-				removeStart = static_cast<DWORD>(GetTickCount64());
-				if (GetTickCount64() - removeStart > removeTime) {
-					removeStart = 0;
-					//erase-remove idiom
-					objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
-				}
+				objects.at(i)->Release();
+				//erase-remove idiom
+				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
 			}
 		}
 	}
@@ -511,13 +516,19 @@ void Scene::Render() {
 	bgInstance->Render();
 	
 	for (GameObject* object : objects) {
+		if (dynamic_cast<PiranaPlant*>(object)) {
+			object->Render();
+		}
+	}
+
+	for (GameObject* object : objects) {
 		if (!dynamic_cast<Entity*>(object)) {
 			object->Render();
 		}
 	}
 
 	for (GameObject* object : objects) {
-		if (dynamic_cast<Entity*>(object)) {
+		if (dynamic_cast<Entity*>(object) && !dynamic_cast<PiranaPlant*>(object)) {
 			object->Render();
 		}
 	}
