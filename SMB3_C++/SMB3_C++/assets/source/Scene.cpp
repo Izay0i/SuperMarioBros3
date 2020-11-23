@@ -98,7 +98,7 @@ void Scene::ParseEntityData(std::string line) {
 		case ObjectType::OBJECT_TYPE_GOOMBA:
 			object = new Goomba;
 			break;
-		case ObjectType::OBJECT_TYPE_REDPARAGOOMBA:
+		case ObjectType::OBJECT_TYPE_PARAGOOMBA:
 			
 			break;
 		case ObjectType::OBJECT_TYPE_TROOPA:
@@ -161,7 +161,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_REDPARAGOOMBA:
+		case ObjectType::OBJECT_TYPE_PARAGOOMBA:
 
 			break;
 		case ObjectType::OBJECT_TYPE_TROOPA:

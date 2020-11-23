@@ -1,6 +1,7 @@
 #Use Notepad++ and set language to CMake for better readability
 
-#mfw you can use .tmx to build the whole stage
+#mfw you can use .tmx to build the whole stage >:(
+#mfw you have to make a library to read .tmx :|
 
 #width	height	of the map
 [MAPSIZE]
@@ -20,6 +21,10 @@
 5	assets\textures\goal_roulette.png	0	183	239
 
 #obj_id	data_path	tex_id	extra_data
+#extra_data can either be data for projectiles, enemies or sprites variants, etc...
+#default variant is red so no need to specify
+
+#obj_id
 #0-99:		moving entities
 #100:		portal
 #101-200:	animated tiles, eg: question block
@@ -37,19 +42,19 @@
 1	assets\data\npc\goomba_data.txt	1
 1	assets\data\npc\goomba_data.txt	1
 #Red Paragoomba
-2	assets\data\npc\redparagoomba_data.txt	1
+2	assets\data\npc\paragoomba_data.txt	1
 #Koopa troopa
-3	assets\data\npc\koopatroopa_data.txt	1	r
+3	assets\data\npc\koopatroopa_data.txt	1	
 3	assets\data\npc\koopatroopa_data.txt	1	g
-3	assets\data\npc\koopatroopa_data.txt	1	r
+3	assets\data\npc\koopatroopa_data.txt	1	
 #Para troopa
-4	assets\data\npc\paratroopa_data.txt	1
-4	assets\data\npc\paratroopa_data.txt	1
-4	assets\data\npc\paratroopa_data.txt	1
+4	assets\data\npc\paratroopa_data.txt	1	g
+4	assets\data\npc\paratroopa_data.txt	1	g
+4	assets\data\npc\paratroopa_data.txt	1	g
 #Pirana plant
-5	assets\data\npc\piranaplant_data.txt	1
+5	assets\data\npc\piranaplant_data.txt	1	g
 #Venus fire trap
-6	assets\data\npc\venustrap_data.txt	1	r
+6	assets\data\npc\venustrap_data.txt	1	
 6	assets\data\npc\venustrap_data.txt	1	g
 
 #Animated Tiles

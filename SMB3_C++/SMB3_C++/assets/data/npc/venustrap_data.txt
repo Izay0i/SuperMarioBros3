@@ -1,0 +1,27 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#Variants
+#Green
+#Look up
+LookUpGreen	80	144	95	175	1	0
+#Look down
+LookDownGreen	48	144	63	175	1	0
+#Look up open
+LookUpOpenGreen	64	144	79	175	1	0
+#Look down open
+LookDownOpenGreen	32	144	47	175	1	0
+
+#Red
+#Look up
+LookUpRed	176	144	191	175	1	0
+#Look down
+LookDownRed	144	144	159	175	1	0
+#Look up open
+LookUpOpenRed	160	144	175	175	1	0
+#Look down open
+LookDownOpenRed	128	144	143	175	1	0
+
+
+[HITBOXES]
+0	0	16	32
