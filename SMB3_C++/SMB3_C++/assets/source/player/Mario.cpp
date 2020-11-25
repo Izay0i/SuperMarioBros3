@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 3;
+	hitPoints = 4;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -100,7 +100,7 @@ void Mario::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Mario::ParseData(std::string dataPath, std::string projPath, std::string texturePath, D3DCOLOR colorKey) {
+void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::string projPath) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -109,8 +109,7 @@ void Mario::ParseData(std::string dataPath, std::string projPath, std::string te
 		return;
 	}
 
-	fireballPath = projPath;
-	texPath = texturePath;
+	extraData = projPath;
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);
 	this->colorKey = colorKey;
@@ -231,8 +230,8 @@ void Mario::OnKeyDown(int keyCode) {
 
 Fireball* Mario::SpawnFireball() {
 	Fireball* fireball = new Fireball;
-	fireball->SetObjectID(99);
-	fireball->ParseData(fireballPath, texPath, colorKey);
+	fireball->SetObjectID(99);	
+	fireball->ParseData(extraData, Util::ToStr(texturePath), colorKey);
 	fireball->SetNormal(D3DXVECTOR3(normal.x, 0, 0));
 	fireball->SetPosition(D3DXVECTOR3(position.x, position.y + 10, 0));
 	return fireball;

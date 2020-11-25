@@ -91,8 +91,8 @@
 102	assets\data\tiles\questionblock_data.txt	2
 102	assets\data\tiles\questionblock_data.txt	2
 102	assets\data\tiles\questionblock_data.txt	2
-102	assets\data\tiles\questionblock_data.txt	2
 #Shiny brick
+103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
@@ -173,9 +173,9 @@
 102	416	320
 102	656	384
 102	704	352
-102	1440	128
 102	1472	368
 #Shiny brick
+103	1440	128
 103	1984	368
 103	2000	368
 103	2016	368

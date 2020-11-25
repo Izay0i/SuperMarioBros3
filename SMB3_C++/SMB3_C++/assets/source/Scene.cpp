@@ -93,7 +93,7 @@ void Scene::ParseEntityData(std::string line) {
 		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();			
 			marioInstance->SetObjectID(static_cast<int>(objectID));
-			marioInstance->ParseData(tokens.at(1), tokens.at(3), GetTexturePath(texID), GetTextureColorKey(texID));
+			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), tokens.at(3));
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
 			object = new Goomba;

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <codecvt>
 
 #include <Windows.h>
 
@@ -31,6 +32,14 @@ namespace Util {
 		std::wstring* wStr = new std::wstring(wCString);
 
 		return wStr->c_str();
+	}
+
+	//https://stackoverflow.com/questions/26570721/how-to-know-if-wstring-can-be-safely-no-data-loss-converted-to-string
+	static std::string ToStr(const std::wstring& wstr) {
+		typedef std::codecvt_utf8<wchar_t> convertTypeX;
+		std::wstring_convert<convertTypeX, wchar_t> converterX;
+
+		return converterX.to_bytes(wstr);
 	}
 }
 

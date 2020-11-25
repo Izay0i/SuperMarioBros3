@@ -26,9 +26,6 @@ private:
 	MarioStateMachine* marioFSM;
 	Entity* heldEntity;
 
-	std::string fireballPath;
-	std::string texPath;
-
 	bool isOnGround;
 	bool isHolding;
 
@@ -63,7 +60,7 @@ public:
 	AnimatedSprite GetSprite() const { return sprite; }
 	Entity* GetHeldEntity() { return heldEntity; }
 
-	void ParseData(std::string, std::string, std::string, D3DCOLOR);
+	void ParseData(std::string, std::string, D3DCOLOR, std::string);
 	
 	void HandleStates(BYTE*);
 	void OnKeyDown(int);
