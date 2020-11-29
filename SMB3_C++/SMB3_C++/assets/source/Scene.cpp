@@ -485,7 +485,7 @@ void Scene::UpdateCameraPosition() {
 	Camera::GetInstance()->SetPosition(camPosition);
 }
 
-void Scene::Update(DWORD delta) {
+void Scene::Update(DWORD delta) {	
 	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
 		collidableObjects.push_back(object);
@@ -496,11 +496,17 @@ void Scene::Update(DWORD delta) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects.at(i)->Update(delta, &collidableObjects);
 
+		DWORD now = static_cast<DWORD>(GetTickCount64());
+
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
-				objects.at(i)->Release();
-				//erase-remove idiom
-				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				lastTime = now;
+
+				if (now - lastTime > 10000) {
+					objects.at(i)->Release();
+					//erase-remove idiom
+					objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				}
 			}
 		}
 	}

@@ -302,13 +302,13 @@ void MarioStateMachine::Render() {
 					mario->GetSprite().PlayAnimation("Idle", mario->GetPosition(), mario->GetScale());
 					break;
 				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigCrouch", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					mario->GetSprite().PlayAnimation("BigCrouch", mario->GetPosition(), mario->GetScale());
 					break;
 				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireCrouch", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					mario->GetSprite().PlayAnimation("FireCrouch", mario->GetPosition(), mario->GetScale());
 					break;
 				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacCrouch", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+					mario->GetSprite().PlayAnimation("RacCrouch", mario->GetPosition(), mario->GetScale());
 					break;
 			}
 			break;
@@ -317,13 +317,12 @@ void MarioStateMachine::Render() {
 			mario->GetSprite().PlayAnimation(
 				"RacSpin",
 				mario->GetPosition(),
-				D3DXVECTOR2(mario->GetNormal().x, 1.0f),
-				D3DXVECTOR2(8, 16)
+				D3DXVECTOR2(mario->GetNormal().x, 1.0f)
 			);
 			break;
 		//fire
 		case MarioState::SHOOT:
-			mario->GetSprite().PlayAnimation("FireShoot", mario->GetPosition(), mario->GetScale(), D3DXVECTOR2(8, 16));
+			mario->GetSprite().PlayAnimation("FireShoot", mario->GetPosition(), mario->GetScale());
 			break;
 	}
 }

@@ -152,6 +152,10 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 }
 
 void Mario::HandleStates(BYTE* states) {
+	//movement feels choppy
+	//how do i implement the move_and_slide() method from godot
+	//help
+	
 	//for picking up koopa shells
 	if (Device::IsKeyDown(DIK_J)) {
 		isHolding = true;
@@ -160,7 +164,8 @@ void Mario::HandleStates(BYTE* states) {
 		isHolding = false;
 	}
 	
-	//still haven't thought of a proper way to implement variable jump height yet
+	//variable jump height by manupilating gravity
+	//good enough
 	if (Device::IsKeyDown(DIK_K)) {
 		if (gravity > MAX_GRAVITY) {
 			gravity -= 0.0005f;
@@ -216,10 +221,10 @@ void Mario::OnKeyDown(int keyCode) {
 			//unlimited jumping if Mario is Racoon
 			if (acceleration >= ACCEL_THRESHOLD && hitPoints == 4) {
 				velocity.y = -jumpSpeed;
+				//isOnGround false just to make the AnimatedSprite play the _TakeOffJump animation once
 				isOnGround = false;
 			}
-
-			//apply normal gravity if its just walking
+			
 			if (IsOnGround()) {
 				velocity.y = -jumpSpeed;
 				isOnGround = false;
@@ -256,6 +261,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	
 	velocity.y += gravity * delta;
 
+	//MOVEMENT
 	if ((Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) && Device::IsKeyDown(DIK_J)) {
 		//GOTTA GO FAAAST
 		if (acceleration < MAX_ACCEL) {
@@ -270,8 +276,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	
 	//float just a little bit longer when flying
 	if (acceleration >= ACCEL_THRESHOLD) {
-		gravity = 0.0008f;
+		gravity = 0.0013f;
 	}
+	//MOVEMENT
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
@@ -389,6 +396,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 							//stand still or die
 							if (hitPoints == 4) {
 								koopa->TakeDamage();
+								koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
 								koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 							}
 							else {
@@ -453,7 +461,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 		else {
 			heldEntity->TakeDamage();
-			heldEntity->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
+			heldEntity->SetNormal(D3DXVECTOR3(-normal.x, 0, 0));
 			heldEntity = nullptr;
 		}
 	}

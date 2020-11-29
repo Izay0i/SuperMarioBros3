@@ -7,8 +7,8 @@ Idle	1	16	16	31	1	0
 #Run
 Run	1	16	16	31	2	50
 Run	19	16	34	31
-#Turnaround
-Turn	109	16	124	31	1	0
+#Skid
+Skid	109	16	124	31	1	0
 #Jump
 Jump	37	16	52	31	1	0
 #Front
@@ -50,8 +50,8 @@ BigRun	37	88	52	119
 BigCrouch	55	88	70	119	1	0
 #Jump
 BigJump	73	88	88	119	1	0
-#Turnaround
-BigTurn	195	88	210	119	1	0
+#Skid
+BigSkid	195	88	210	119	1	0
 #Front
 BigFront	213	88	228	119	1	0
 #Back
@@ -93,8 +93,8 @@ FireRun	37	260	52	291
 FireCrouch	55	260	70	291	1	0
 #Jump
 FireJump	73	260	88	291	1	0
-#Turnaround
-FireTurn	195	260	210	291	1	0
+#Skid
+FireSkid	195	260	210	291	1	0
 #Front
 FireFront	213	260	228	291	1	0
 #Back
@@ -139,8 +139,8 @@ RacRun	53	346	76	377
 RacCrouch	79	346	102	377	1	0
 #Jump
 RacJump	105	346	128	377	1	0
-#Turnaround
-RacTurn	339	346	354	377	1	0
+#Skid
+RacSkid	339	346	354	377	1	0
 #Front
 RacFront	357	346	372	377	1	0
 #Back

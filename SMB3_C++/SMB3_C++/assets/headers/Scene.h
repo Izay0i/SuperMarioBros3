@@ -40,6 +40,7 @@ private:
 		OBJECT_TYPE_QUESTIONBLOCK = 102,
 		OBJECT_TYPE_SHINYBRICK = 103,
 		OBJECT_TYPE_BONUSITEM = 104,
+		OBJECT_TYPE_SWITCHBLOCK = 105
 	};
 
 	enum class SceneSection {
@@ -54,10 +55,9 @@ private:
 		SCENE_FILE_SECTION_BACKGROUND
 	};
 
-	Background* bgInstance;
-	
 	Mario* marioInstance;
 	Camera* cameraInstance;
+	Background* bgInstance;
 
 	const static int MAX_FILE_LINE = 2048;
 
@@ -70,6 +70,8 @@ private:
 	std::unordered_map<unsigned int, std::pair<std::string, D3DCOLOR>> textureFiles;
 
 	D3DCOLOR backgroundColor;
+
+	DWORD lastTime;
 
 	static LPDIRECT3DDEVICE9 directDevice;
 	static LPD3DXSPRITE spriteHandler;

@@ -43,6 +43,11 @@ void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale, D3DXVECTOR2 center) {
 
 	D3DXMATRIX mat;
 
+	//You know, I thought I had an idea of what the *pScalingCenter does
+	//Turns out I don't know what it does at all
+	//I thought it would scale from the center of the sprite given the name of the pointer
+	//But setting the center vector to (8, 8) didn't make any noticeable visual impact, same for (8, 16) or (8, 20)
+	//idk i dont want to know im too tired to even bother with it so i wont be removing the param
 	D3DXMatrixTransformation2D(&mat, &center, 0.0f, &scale, nullptr, 0.0f, &spritePosition);
 	spriteHandler->SetTransform(&mat);
 

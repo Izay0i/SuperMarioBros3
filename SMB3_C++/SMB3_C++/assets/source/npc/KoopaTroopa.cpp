@@ -283,17 +283,17 @@ void KoopaTroopa::Render() {
 			sprite.PlayAnimation("WalkRed", position, D3DXVECTOR2(normal.x, 1.0f));
 			break;		
 		case KoopaState::RETRACT:			
-			sprite.PlayAnimation("RetractRed", D3DXVECTOR3(position.x, position.y + 10, 0));
+			sprite.PlayAnimation("RetractRed", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
 			
 			if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
-				sprite.PlayAnimation("OutRed", D3DXVECTOR3(position.x, position.y + 10, 0));
+				sprite.PlayAnimation("OutRed", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
 			}
 			break;
 		case KoopaState::SPIN:
-			sprite.PlayAnimation("SpinRed", position);
+			sprite.PlayAnimation("SpinRed", D3DXVECTOR3(position.x, position.y - 1, 0), scale);
 			break;
 		case KoopaState::DIE:
-			sprite.PlayAnimation("RetractRed", position);
+			sprite.PlayAnimation("RetractRed", position, scale);
 			break;
 	}
 }
