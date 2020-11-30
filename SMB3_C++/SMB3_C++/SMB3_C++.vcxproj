@@ -166,6 +166,7 @@
     <ClCompile Include="assets\source\tiles\Coin.cpp" />
     <ClCompile Include="assets\source\tiles\QuestionBlock.cpp" />
     <ClCompile Include="assets\source\tiles\ShinyBrick.cpp" />
+    <ClCompile Include="assets\source\tiles\SwitchBlock.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +195,7 @@
     <ClInclude Include="assets\headers\tiles\Coin.h" />
     <ClInclude Include="assets\headers\tiles\QuestionBlock.h" />
     <ClInclude Include="assets\headers\tiles\ShinyBrick.h" />
+    <ClInclude Include="assets\headers\tiles\SwitchBlock.h" />
     <ClInclude Include="assets\headers\Util.h" />
   </ItemGroup>
   <ItemGroup>

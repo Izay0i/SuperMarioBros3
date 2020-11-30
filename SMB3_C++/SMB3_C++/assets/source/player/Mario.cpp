@@ -301,7 +301,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		position.y += minTime.y * distance.y + normal.y * 0.4f;
 
 		if (normal.x != 0.0f) {
-			velocity.x = 0.0f;
+			//velocity.x = 0.0f;
 		}
 
 		if (normal.y != 0.0f) {
@@ -313,7 +313,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			
 			if (dynamic_cast<Tiles*>(event->object) || 
 				dynamic_cast<QuestionBlock*>(event->object) || 
-				dynamic_cast<ShinyBrick*>(event->object)) 
+				dynamic_cast<ShinyBrick*>(event->object) ||
+				dynamic_cast<SwitchBlock*>(event->object))
 			{
 				if (event->normal.y == -1.0f) {
 					isOnGround = true;
@@ -321,8 +322,20 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				
 			}
 
+			//coin
 			if (dynamic_cast<Coin*>(event->object)) {
-				//OutputDebugStringA("Coin\n");
+				Coin* coin = static_cast<Coin*>(event->object);
+				if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
+					coin->TakeDamage();
+				}
+			}
+
+			//shiny brick
+			if (dynamic_cast<ShinyBrick*>(event->object)) {
+				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(event->object);
+				if (event->normal.y > 0.0f) {
+					shinyBrick->TakeDamage();
+				}
 			}
 
 			//question block
@@ -330,6 +343,15 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(event->object);
 				if (event->normal.y > 0.0f) {
 					questionBlock->TakeDamage();
+				}
+			}
+
+			//switch block
+			if (dynamic_cast<SwitchBlock*>(event->object)) {
+				SwitchBlock* switchBlock = static_cast<SwitchBlock*>(event->object);
+				if (event->normal.y < 0.0f) {
+					switchBlock->TakeDamage();
+					velocity.y = -deflectSpeed;
 				}
 			}
 
@@ -385,7 +407,14 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					if (koopa->GetCurrentHitPoints() > 0) {
 						velocity.y = -deflectSpeed;
 					}
-					koopa->TakeDamage();
+
+					if (koopa->GetCurrentHitPoints() != 1) {
+						koopa->TakeDamage();
+					}
+					else if (koopa->GetCurrentHitPoints() == 1) {
+						koopa->SetCurrenHitPoints(2);
+					}
+
 					koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 				}
 				else if (event->normal.x != 0.0f) {

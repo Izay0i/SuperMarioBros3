@@ -5,7 +5,8 @@ LPDIRECT3DTEXTURE9 Coin::texture = nullptr;
 D3DCOLOR Coin::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Coin::Coin() {
-	
+	//1 - rotate
+	hitPoints = 1;
 }
 
 void Coin::LoadTexture() {
@@ -113,6 +114,12 @@ void Coin::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR col
 	}
 
 	readFile.close();
+}
+
+void Coin::TakeDamage() {
+	if (hitPoints > 0) {
+		--hitPoints;
+	}
 }
 
 void Coin::Update(DWORD delta, std::vector<GameObject*>* objects) {

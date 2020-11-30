@@ -1,13 +1,14 @@
 #string_id	left	top	right	bottom	frames	speed
 #any consecutive string_id that matches prev string_id will add bounds to it
 [SPRITES]
-#Rotate
-Rotate	953	69	968	84	5	50
-Rotate	970	69	985	84
-Rotate	987	69	1002	84
-Rotate	1004	69	1019	84
-Rotate	1021	69	1036	84
+#Active
+Active	1174	69	1189	84	3	50
+Active	1191	69	1206	84
+Active	1208	69	1223	84
+#Inactive
+Inactive	1225	69	1240	84	1	0
 
 #left	top	right	bottom
 [HITBOXES]
-0	0	14	16
+0	0	16	16
+0	0	16	6

@@ -153,7 +153,7 @@ void KoopaTroopa::HandleStates() {
 
 	switch (currentState) {
 		case KoopaState::SPIN:
-			velocity.x = -runSpeed * normal.x * 8;
+			velocity.x = -runSpeed * normal.x * 7.5;
 			break;
 		case KoopaState::WALK:
 			velocity.x = -runSpeed * normal.x;
@@ -225,6 +225,10 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
 					entity->TakeDamage();
+
+					if (dynamic_cast<ShinyBrick*>(event->object)) {
+						entity->SetCurrenHitPoints(0);
+					}
 				}
 			}
 			
@@ -258,10 +262,6 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						}
 					}
 				}
-			}
-
-			if (dynamic_cast<QuestionBlock*>(event->object)) {
-
 			}
 
 			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {

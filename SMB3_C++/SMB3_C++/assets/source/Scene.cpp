@@ -124,7 +124,10 @@ void Scene::ParseEntityData(std::string line) {
 			break;
 		case ObjectType::OBJECT_TYPE_BONUSITEM:
 			object = new BonusItem;			
-			break;	
+			break;
+		case ObjectType::OBJECT_TYPE_SWITCHBLOCK:
+			object = new SwitchBlock;
+			break;
 	}
 
 	if (object) {
@@ -230,6 +233,17 @@ void Scene::ParseWorldCoords(std::string line) {
 		case ObjectType::OBJECT_TYPE_BONUSITEM:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<BonusItem*>(object)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case ObjectType::OBJECT_TYPE_SWITCHBLOCK:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<SwitchBlock*>(object)) {
 					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
@@ -477,10 +491,10 @@ void Scene::UpdateCameraPosition() {
 	}
 	
 	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;	
-	/*if (camPosition.y > 230) {
+	if (camPosition.y > 230) {
 		camPosition.y = 230;
-	}*/
-	camPosition.y = 230;
+	}
+	//camPosition.y = 230;
 
 	Camera::GetInstance()->SetPosition(camPosition);
 }
@@ -496,17 +510,13 @@ void Scene::Update(DWORD delta) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects.at(i)->Update(delta, &collidableObjects);
 
-		DWORD now = static_cast<DWORD>(GetTickCount64());
+		//DWORD now = static_cast<DWORD>(GetTickCount64());
 
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
-				lastTime = now;
-
-				if (now - lastTime > 10000) {
-					objects.at(i)->Release();
-					//erase-remove idiom
-					objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
-				}
+				objects.at(i)->Release();
+				//erase-remove idiom
+				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
 			}
 		}
 	}

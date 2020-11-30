@@ -1,16 +1,16 @@
-#include "../../headers/tiles/ShinyBrick.h"
+#include "../../headers/tiles/SwitchBlock.h"
 
-LPCWSTR ShinyBrick::texturePath = nullptr;
-LPDIRECT3DTEXTURE9 ShinyBrick::texture = nullptr;
-D3DCOLOR ShinyBrick::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+LPCWSTR SwitchBlock::texturePath = nullptr;
+LPDIRECT3DTEXTURE9 SwitchBlock::texture = nullptr;
+D3DCOLOR SwitchBlock::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
-ShinyBrick::ShinyBrick() {
-	//1 - no items
-	//2 - rotate sprite
+SwitchBlock::SwitchBlock() {
+	//1 - inactive
+	//2 - active
 	hitPoints = 2;
 }
 
-void ShinyBrick::LoadTexture() {
+void SwitchBlock::LoadTexture() {
 	if (!texture) {
 		HRESULT hResult;
 		D3DXIMAGE_INFO imageInfo;
@@ -36,7 +36,7 @@ void ShinyBrick::LoadTexture() {
 			&imageInfo,
 			nullptr,
 			&texture
-		);
+			);
 
 		if (hResult != D3D_OK) {
 			OutputDebugStringA("Failed to create entity sprite from file\n");
@@ -45,11 +45,11 @@ void ShinyBrick::LoadTexture() {
 	}
 }
 
-void ShinyBrick::ParseSprites(std::string line) {
+void SwitchBlock::ParseSprites(std::string line) {
 	sprite.ParseSprites(line, texture, colorKey);
 }
 
-void ShinyBrick::ParseHitboxes(std::string line) {
+void SwitchBlock::ParseHitboxes(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
 	if (tokens.size() < 4) {
@@ -70,7 +70,7 @@ void ShinyBrick::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void ShinyBrick::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void SwitchBlock::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -105,65 +105,50 @@ void ShinyBrick::ParseData(std::string dataPath, std::string texturePath, D3DCOL
 		}
 
 		switch (section) {
-			case DataSection::DATA_SECTION_SPRITES:
-				ParseSprites(line);
-				break;
-			case DataSection::DATA_SECTION_HITBOXES:
-				ParseHitboxes(line);
-				break;
+		case DataSection::DATA_SECTION_SPRITES:
+			ParseSprites(line);
+			break;
+		case DataSection::DATA_SECTION_HITBOXES:
+			ParseHitboxes(line);
+			break;
 		}
 	}
 
 	readFile.close();
 }
 
-void ShinyBrick::HandleStates() {
+void SwitchBlock::HandleStates() {
 	switch (hitPoints) {
 		case 1:
-			currentState = BlockState::PUSHED;
+			currentState = BlockState::INACTIVE;
 			break;
 		case 2:
-			currentState = BlockState::ROTATE;
+			currentState = BlockState::ACTIVE;
 			break;
 	}
 }
 
-void ShinyBrick::TakeDamage() {
+void SwitchBlock::TakeDamage() {
 	if (hitPoints > 1) {
 		--hitPoints;
-		velocity.y = -jumpSpeed;
 	}
 }
 
-void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void SwitchBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
-
-	GameObject::Update(delta);
-
-	if (position.y < originalPos.y) {
-		velocity.y += gravity * delta;
-	}
-	else {
-		velocity.y = 0;
-		if (position.y >= originalPos.y) {
-			position = originalPos;
-		}
-	}
-
-	position += distance;
 }
 
-void ShinyBrick::Render() {
+void SwitchBlock::Render() {
 	switch (currentState) {
-		case BlockState::PUSHED:
-			sprite.PlayAnimation("None", position);
+		case BlockState::INACTIVE:
+			sprite.PlayAnimation("Inactive", position);
 			break;
-		case BlockState::ROTATE:
-			sprite.PlayAnimation("Rotate", position);
+		case BlockState::ACTIVE:
+			sprite.PlayAnimation("Active", position);
 			break;
 	}
 }
 
-void ShinyBrick::Release() {
-	
+void SwitchBlock::Release() {
+
 }

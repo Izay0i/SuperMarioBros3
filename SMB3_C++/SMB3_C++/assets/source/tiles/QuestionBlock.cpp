@@ -150,43 +150,7 @@ void QuestionBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 	}
 
-	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
-	collisionEvents.clear();
-
-	if (hitPoints != 0) {
-		CalcPotentialCollision(objects, collisionEvents);
-	}
-
-	if (collisionEvents.size() == 0) {
-		position += distance;
-	}
-	else {
-		D3DXVECTOR2 minTime;
-		D3DXVECTOR3 normal;
-		D3DXVECTOR3 relativeDistance;
-
-		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
-
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
-
-		if (normal.x != 0.0f) {
-			velocity.x = 0.0f;
-		}
-
-		if (normal.y != 0.0f) {
-			velocity.y = 0.0f;
-		}
-
-		for (LPCOLLISIONEVENT result : eventResults) {
-			LPCOLLISIONEVENT event = result;
-			
-		}
-	}
-
-	for (LPCOLLISIONEVENT event : collisionEvents) {
-		delete event;
-	}
+	position += distance;
 }
 
 void QuestionBlock::Render() {

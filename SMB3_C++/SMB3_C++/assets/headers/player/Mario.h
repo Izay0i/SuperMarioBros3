@@ -34,7 +34,7 @@ private:
 	const float ACCEL_THRESHOLD = 1.86f;
 
 	float runSpeed = 0.09f;
-	float jumpSpeed = 0.326f;
+	float jumpSpeed = 0.34f;
 	float deflectSpeed = 0.26f;
 	float dieflectSpeed = 0.4f;
 	float gravity = 0.0025f;

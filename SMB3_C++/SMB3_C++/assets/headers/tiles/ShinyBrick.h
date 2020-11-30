@@ -20,10 +20,19 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	BlockState currentState;
+
+	float jumpSpeed = 0.4f;
+	float gravity = 0.001f;
+
+	D3DXVECTOR3 originalPos;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
+
+	void HandleStates();
 
 public:
 	ShinyBrick();
@@ -39,6 +48,10 @@ public:
 
 		return bound;
 	}
+
+	void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
+
+	void TakeDamage() override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;

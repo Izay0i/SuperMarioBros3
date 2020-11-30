@@ -114,6 +114,8 @@
 103	assets\data\tiles\shinybrick_data.txt	2
 #Bonus item
 104	assets\data\tiles\bonusitem_data.txt	5
+#Switch block
+105	assets\data\tiles\switchblock_data.txt	2
 
 #obj_id	x	y
 [WORLD_COORDS]
@@ -197,6 +199,8 @@
 103	2112	400
 #Bonus item
 104	2688	337
+#Switch block
+105	2032	352
 
 #obj_id	world_x	world_y	width	height	sprites_arr_id
 [TILES_DATA]
