@@ -48,9 +48,9 @@
 3	assets\data\npc\koopatroopa_data.txt	1	g
 3	assets\data\npc\koopatroopa_data.txt	1	
 #Para troopa
-4	assets\data\npc\paratroopa_data.txt	1	g
-4	assets\data\npc\paratroopa_data.txt	1	g
-4	assets\data\npc\paratroopa_data.txt	1	g
+4	assets\data\npc\parakoopa_data.txt	1
+4	assets\data\npc\parakoopa_data.txt	1
+4	assets\data\npc\parakoopa_data.txt	1
 #Pirana plant
 5	assets\data\npc\piranaplant_data.txt	1	g
 #Venus fire trap

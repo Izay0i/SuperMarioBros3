@@ -155,6 +155,7 @@
     <ClCompile Include="assets\source\npc\Fireball.cpp" />
     <ClCompile Include="assets\source\npc\Goomba.cpp" />
     <ClCompile Include="assets\source\npc\KoopaTroopa.cpp" />
+    <ClCompile Include="assets\source\npc\Parakoopa.cpp" />
     <ClCompile Include="assets\source\npc\PiranaPlant.cpp" />
     <ClCompile Include="assets\source\player\Mario.cpp" />
     <ClCompile Include="assets\source\player\MarioStateMachine.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="assets\headers\npc\Fireball.h" />
     <ClInclude Include="assets\headers\npc\Goomba.h" />
     <ClInclude Include="assets\headers\npc\KoopaTroopa.h" />
+    <ClInclude Include="assets\headers\npc\Parakoopa.h" />
     <ClInclude Include="assets\headers\npc\PiranaPlant.h" />
     <ClInclude Include="assets\headers\player\Mario.h" />
     <ClInclude Include="assets\headers\player\MarioStateMachine.h" />

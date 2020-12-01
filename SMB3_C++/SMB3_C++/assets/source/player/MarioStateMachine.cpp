@@ -4,6 +4,8 @@ MarioStateMachine::MarioStateMachine(Mario* mario) {
 	this->mario = mario;
 }
 
+//this doesnt seem to scale well with that many animations
+//there can only be so many ifs you can cram into it before things start to mess up
 void MarioStateMachine::HandleStates(BYTE* states) {
 	switch (mario->GetCurrentHitPoints()) {
 		case 1:
@@ -144,7 +146,12 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("HoldRun", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						mario->GetSprite().PlayAnimation("Run", mario->GetPosition(), mario->GetScale());
+						if (mario->GetAcceleration() < 0.5f) {
+							mario->GetSprite().PlayAnimation("Skid", mario->GetPosition(), mario->GetScale());
+						}
+						else {
+							mario->GetSprite().PlayAnimation("Run", mario->GetPosition(), mario->GetScale());
+						}
 					}
 					break;
 				case MarioForm::BIG:
@@ -155,7 +162,12 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("BigHoldRun", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						mario->GetSprite().PlayAnimation("BigRun", mario->GetPosition(), mario->GetScale());
+						if (mario->GetAcceleration() < 0.5f) {
+							mario->GetSprite().PlayAnimation("BigSkid", mario->GetPosition(), mario->GetScale());
+						}
+						else {
+							mario->GetSprite().PlayAnimation("BigRun", mario->GetPosition(), mario->GetScale());
+						}
 					}
 					break;
 				case MarioForm::FIRE:
@@ -166,7 +178,12 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("FireHoldRun", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						mario->GetSprite().PlayAnimation("FireRun", mario->GetPosition(), mario->GetScale());
+						if (mario->GetAcceleration() < 0.5f) {
+							mario->GetSprite().PlayAnimation("FireSkid", mario->GetPosition(), mario->GetScale());
+						}
+						else {
+							mario->GetSprite().PlayAnimation("FireRun", mario->GetPosition(), mario->GetScale());
+						}
 					}
 					break;
 				case MarioForm::RACOON:
@@ -177,7 +194,12 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("RacHoldRun", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						mario->GetSprite().PlayAnimation("RacRun", mario->GetPosition(), mario->GetScale());
+						if (mario->GetAcceleration() < 0.5f) {
+							mario->GetSprite().PlayAnimation("RacSkid", mario->GetPosition(), mario->GetScale());
+						}
+						else {
+							mario->GetSprite().PlayAnimation("RacRun", mario->GetPosition(), mario->GetScale());
+						}
 					}
 					break;
 			}

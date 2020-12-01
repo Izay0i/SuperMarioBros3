@@ -32,13 +32,8 @@ private:
 		RUN,
 		JUMP,
 		FALL,
-		FRONT,
-		SLIDE,
-		SWIM,
-		CLIMB,
 		//BIG, FIRE, RACOON
 		CROUCH,
-		BACK,
 		//FIRE
 		SHOOT,
 		//RACOON

@@ -5,8 +5,8 @@ LPDIRECT3DTEXTURE9 SwitchBlock::texture = nullptr;
 D3DCOLOR SwitchBlock::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 SwitchBlock::SwitchBlock() {
-	//1 - inactive
-	//2 - active
+	//1 - active
+	//2 - inactive
 	hitPoints = 2;
 }
 
@@ -120,10 +120,10 @@ void SwitchBlock::ParseData(std::string dataPath, std::string texturePath, D3DCO
 void SwitchBlock::HandleStates() {
 	switch (hitPoints) {
 		case 1:
-			currentState = BlockState::INACTIVE;
+			currentState = BlockState::ACTIVE;
 			break;
 		case 2:
-			currentState = BlockState::ACTIVE;
+			currentState = BlockState::INACTIVE;
 			break;
 	}
 }

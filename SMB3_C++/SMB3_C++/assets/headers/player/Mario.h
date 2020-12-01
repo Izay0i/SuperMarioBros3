@@ -31,19 +31,22 @@ private:
 
 	const float MAX_GRAVITY = 0.0005f;
 	const float MAX_ACCEL = 2.2f;
-	const float ACCEL_THRESHOLD = 1.86f;
+	const float MIN_ACCEL = 1.1f; //for walking
+	const float ACCEL_THRESHOLD = 1.86f; //how fast Mario should run before he can fly
 
 	float runSpeed = 0.09f;
 	float jumpSpeed = 0.34f;
 	float deflectSpeed = 0.26f;
 	float dieflectSpeed = 0.4f;
 	float gravity = 0.0025f;
-	float acceleration = 1.0f;
+	float acceleration = 0.5f;
 
 	void LoadTexture();
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
+
+	void HandleMovement();
 
 	Mario();
 

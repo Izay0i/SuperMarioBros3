@@ -1,14 +1,13 @@
 #string_id	left	top	right	bottom	frames	speed
 #any consecutive string_id that matches prev string_id will add bounds to it
 [SPRITES]
-#Active
-Active	1174	69	1189	84	3	50
-Active	1191	69	1206	84
-Active	1208	69	1223	84
 #Inactive
-Inactive	1225	69	1240	84	1	0
+Inactive	1174	69	1189	84	3	50
+Inactive	1191	69	1206	84
+Inactive	1208	69	1223	84
+#Active
+Active	1225	69	1240	84	1	0
 
 #left	top	right	bottom
 [HITBOXES]
 0	0	16	16
-0	0	16	6

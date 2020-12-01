@@ -3,14 +3,18 @@
 #include <fstream>
 
 #include "../Entity.h"
+#include "../TileList.h"
 
 class Entity;
 
-class BonusItem : public Entity {
+class Parakoopa : public Entity {
 private:
-	enum class ItemState {
-		ROTATE,
-		PICKEDUP
+	enum class ParakoopaState {
+		FLY,
+		WALK,
+		RETRACT,
+		SPIN,
+		DIE
 	};
 
 	const static int MAX_FILE_LINE = 1024;
@@ -19,25 +23,32 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	ParakoopaState currentState;
+
+	float runSpeed = 0.03f;
+	float jumpSpeed = 0.012f;
+	float gravity = 0.002f;
+
+	DWORD retractStart;
+	DWORD retractTime = 8000;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
 
+	void HandleStates();
+
 public:
-	BonusItem();
+	Parakoopa();
+
+	RECTF GetBoundingBox(int = 0) const override;
 
 	void ParseData(std::string, std::string, D3DCOLOR) override;
 
-	RECTF GetBoundingBox(int id = 0) const override {
-		RECTF bound;
-		bound.left = position.x + 1;
-		bound.top = position.y;
-		bound.right = position.x + hitBox.GetWidth(id);
-		bound.bottom = position.y + hitBox.GetHeight(id);
+	void StartRetract() { retractStart = static_cast<DWORD>(GetTickCount64()); }
 
-		return bound;
-	}
+	void TakeDamage() override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;

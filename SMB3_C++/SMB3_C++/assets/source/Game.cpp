@@ -31,11 +31,11 @@ HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int he
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
 	wndClass.hIcon = nullptr;
+	wndClass.hIconSm = nullptr;
 	wndClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wndClass.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 	wndClass.lpszMenuName = nullptr;
 	wndClass.lpszClassName = CLASS_NAME;
-	wndClass.hIconSm = nullptr;
 
 	RegisterClassEx(&wndClass);
 

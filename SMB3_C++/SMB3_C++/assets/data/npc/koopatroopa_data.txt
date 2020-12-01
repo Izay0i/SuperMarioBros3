@@ -13,7 +13,8 @@ SpinRed	176	48	191	63
 #Retract
 RetractRed	128	48	143	63	1	0
 #Out
-OutRed	128	64	143	79	1	0
+OutRed	128	48	143	63	2	50
+OutRed	128	64	143	79
 
 #Green variant
 #Walk
@@ -27,7 +28,8 @@ SpinGreen	80	48	95	63
 #Retract
 RetractGreen	32	48	47	63	1	0
 #Out
-OutGreen	32	64	47	79	1	0
+OutGreen	32	48	47	63	2	50
+OutGreen	32	64	47	79
 
 [HITBOXES]
 0	0	15	26

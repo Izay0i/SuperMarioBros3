@@ -105,7 +105,7 @@ void Scene::ParseEntityData(std::string line) {
 			object = new KoopaTroopa;
 			break;
 		case ObjectType::OBJECT_TYPE_PARATROOPA:
-
+			object = new Parakoopa;
 			break;
 		case ObjectType::OBJECT_TYPE_PIPLANT:
 			object = new PiranaPlant;
@@ -179,7 +179,15 @@ void Scene::ParseWorldCoords(std::string line) {
 			}
 			break;
 		case ObjectType::OBJECT_TYPE_PARATROOPA:
-
+			for (GameObject* object : objects) {
+				if (dynamic_cast<Parakoopa*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
 			break;
 		case ObjectType::OBJECT_TYPE_PIPLANT:
 			for (GameObject* object : objects) {
@@ -510,13 +518,17 @@ void Scene::Update(DWORD delta) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects.at(i)->Update(delta, &collidableObjects);
 
-		//DWORD now = static_cast<DWORD>(GetTickCount64());
+		lastTime = static_cast<DWORD>(GetTickCount64());
 
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
-				objects.at(i)->Release();
-				//erase-remove idiom
-				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				DWORD now = static_cast<DWORD>(GetTickCount64());
+
+				if (now - lastTime >= 1000) {
+					//objects.at(i)->Release();
+					//erase-remove idiom
+					//objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				}
 			}
 		}
 	}

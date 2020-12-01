@@ -1,18 +1,19 @@
-#include "../../headers/npc/KoopaTroopa.h"
+#include "../../headers/npc/Parakoopa.h"
 
-LPCWSTR KoopaTroopa::texturePath = nullptr;
-LPDIRECT3DTEXTURE9 KoopaTroopa::texture = nullptr;
-D3DCOLOR KoopaTroopa::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+LPCWSTR Parakoopa::texturePath = nullptr;
+LPDIRECT3DTEXTURE9 Parakoopa::texture = nullptr;
+D3DCOLOR Parakoopa::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
-KoopaTroopa::KoopaTroopa() {
+Parakoopa::Parakoopa() {
 	//0 - dead
 	//1 - spin
 	//2 - shell
 	//3 - normal
-	hitPoints = 3;
+	//4 - flying
+	hitPoints = 4;
 }
 
-void KoopaTroopa::LoadTexture() {
+void Parakoopa::LoadTexture() {
 	if (!texture) {
 		HRESULT hResult;
 		D3DXIMAGE_INFO imageInfo;
@@ -47,13 +48,13 @@ void KoopaTroopa::LoadTexture() {
 	}
 }
 
-RECTF KoopaTroopa::GetBoundingBox(int id) const {
+RECTF Parakoopa::GetBoundingBox(int id) const {
 	RECTF bound;
 	bound.left = position.x + 1;
 	bound.top = position.y;
 	bound.right = position.x + hitBox.GetWidth(id);
 
-	if (hitPoints == 3) {
+	if (hitPoints >= 3) {
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
 	else {
@@ -63,11 +64,11 @@ RECTF KoopaTroopa::GetBoundingBox(int id) const {
 	return bound;
 }
 
-void KoopaTroopa::ParseSprites(std::string line) {
+void Parakoopa::ParseSprites(std::string line) {
 	sprite.ParseSprites(line, texture, colorKey);
 }
 
-void KoopaTroopa::ParseHitboxes(std::string line) {
+void Parakoopa::ParseHitboxes(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
 	if (tokens.size() < 4) {
@@ -88,7 +89,7 @@ void KoopaTroopa::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void Parakoopa::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -123,66 +124,72 @@ void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCO
 		}
 
 		switch (section) {
-			case DataSection::DATA_SECTION_SPRITES:
-				ParseSprites(line);
-				break;
-			case DataSection::DATA_SECTION_HITBOXES:
-				ParseHitboxes(line);
-				break;
+		case DataSection::DATA_SECTION_SPRITES:
+			ParseSprites(line);
+			break;
+		case DataSection::DATA_SECTION_HITBOXES:
+			ParseHitboxes(line);
+			break;
 		}
 	}
 
 	readFile.close();
 }
 
-void KoopaTroopa::HandleStates() {
+void Parakoopa::HandleStates() {
 	switch (hitPoints) {
 		case 0:
-			currentState = KoopaState::DIE;
+			currentState = ParakoopaState::DIE;
 			break;
 		case 1:
-			currentState = KoopaState::SPIN;
+			currentState = ParakoopaState::SPIN;
 			break;
 		case 2:
-			currentState = KoopaState::RETRACT;
+			currentState = ParakoopaState::RETRACT;
 			break;
 		case 3:
-			currentState = KoopaState::WALK;
+			currentState = ParakoopaState::WALK;
+			break;
+		case 4:
+			currentState = ParakoopaState::FLY;
 			break;
 	}
 
 	switch (currentState) {
-		case KoopaState::SPIN:
+		case ParakoopaState::SPIN:
 			velocity.x = -runSpeed * normal.x * 6.0f;
 			break;
-		case KoopaState::WALK:
+		case ParakoopaState::FLY:
+		case ParakoopaState::WALK:
 			velocity.x = -runSpeed * normal.x;
 			scale = D3DXVECTOR2(1.0f, 1.0f);
 			break;
-		case KoopaState::RETRACT:
-		case KoopaState::DIE:
+		case ParakoopaState::RETRACT:
+		case ParakoopaState::DIE:
 			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
 	}
 }
 
-void KoopaTroopa::TakeDamage() {	
-	if (hitPoints >= 2) {
+void Parakoopa::TakeDamage() {
+	if (hitPoints >= 3) {
 		--hitPoints;
 		StartRetract();
 	}
 }
 
-void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
 
-	if (GetTickCount64() - retractStart > retractTime) {
-		retractStart = 0;
-		hitPoints = 3;
+	if (retractStart != 0) {
+		if (GetTickCount64() - retractStart > retractTime) {
+			retractStart = 0;
+			hitPoints = 3;
+		}
 	}
 
 	//shell spinning
@@ -215,7 +222,12 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 
 		if (normal.y != 0.0f) {
-			velocity.y = 0.0f;
+			if (hitPoints == 4) {
+				velocity.y = -jumpSpeed * delta;
+			}
+			else {
+				velocity.y = 0.0f;
+			}
 		}
 
 		for (LPCOLLISIONEVENT result : eventResults) {
@@ -231,7 +243,7 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					}
 				}
 			}
-			
+
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (entity->GetObjectID() == 103) {
@@ -277,27 +289,30 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 }
 
-void KoopaTroopa::Render() {
+void Parakoopa::Render() {
 	switch (currentState) {
-		case KoopaState::WALK:
-			sprite.PlayAnimation("WalkRed", position, D3DXVECTOR2(normal.x, 1.0f));
-			break;		
-		case KoopaState::RETRACT:			
-			sprite.PlayAnimation("RetractRed", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
-			
+		case ParakoopaState::FLY:
+			sprite.PlayAnimation("Fly", position, D3DXVECTOR2(normal.x, 1.0f));
+			break;
+		case ParakoopaState::WALK:
+			sprite.PlayAnimation("Walk", position, D3DXVECTOR2(normal.x, 1.0f));
+			break;
+		case ParakoopaState::RETRACT:
+			sprite.PlayAnimation("Retract", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+
 			if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
-				sprite.PlayAnimation("OutRed", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+				sprite.PlayAnimation("Out", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
 			}
 			break;
-		case KoopaState::SPIN:
-			sprite.PlayAnimation("SpinRed", D3DXVECTOR3(position.x, position.y - 1, 0), scale);
+		case ParakoopaState::SPIN:
+			sprite.PlayAnimation("Spin", D3DXVECTOR3(position.x, position.y - 1, 0), scale);
 			break;
-		case KoopaState::DIE:
-			sprite.PlayAnimation("RetractRed", position, scale);
+		case ParakoopaState::DIE:
+			sprite.PlayAnimation("Retract", position, scale);
 			break;
 	}
 }
 
-void KoopaTroopa::Release() {
+void Parakoopa::Release() {
 
 }

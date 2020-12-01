@@ -54,9 +54,6 @@ RECTF Goomba::GetBoundingBox(int id) const {
 	if (hitPoints != 0) {
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
-	else {
-		bound.bottom = position.y + hitBox.GetHeight(1);
-	}
 
 	return bound;
 }
@@ -148,7 +145,7 @@ void Goomba::HandleStates() {
 			velocity.x = -runSpeed * normal.x;
 			break;
 		case GoombaState::DIE:
-			velocity = D3DXVECTOR3(0, 9999, 0);
+			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
 	}
 }

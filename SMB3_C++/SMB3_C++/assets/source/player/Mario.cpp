@@ -63,12 +63,13 @@ RECTF Mario::GetBoundingBox(int id) const {
 	RECTF bound;
 	bound.left = position.x;
 	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
 
 	if (hitPoints == 1) {		
+		bound.right = position.x + hitBox.GetWidth(id);
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
 	else {
+		bound.right = position.x + hitBox.GetWidth(1);
 		bound.bottom = position.y + hitBox.GetHeight(1);
 	}
 
@@ -151,32 +152,34 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 	marioFSM = new MarioStateMachine(marioInstance);
 }
 
-void Mario::HandleStates(BYTE* states) {
-	//movement feels choppy
-	//how do i implement the move_and_slide() method from godot
-	//help
-	
-	//for picking up koopa shells
-	if (Device::IsKeyDown(DIK_J)) {
-		isHolding = true;
-	}
-	else {
-		isHolding = false;
-	}
-	
+void Mario::HandleMovement() {
 	//variable jump height by manupilating gravity
 	//good enough
 	if (Device::IsKeyDown(DIK_K)) {
 		if (gravity > MAX_GRAVITY) {
 			gravity -= 0.0005f;
-		}		
+		}
 	}
 	else {
 		if (gravity < 0.0025f) {
 			gravity += 0.0005f;
 		}
 	}
-	
+
+	//skid
+	if (acceleration < ACCEL_THRESHOLD) {
+		if (normal.x == -1) {
+			if (Device::IsKeyDown(DIK_D)) {
+				acceleration = 0.01f;
+			}
+		}
+		else if (normal.x == 1) {
+			if (Device::IsKeyDown(DIK_A)) {
+				acceleration = 0.01f;
+			}
+		}
+	}	
+
 	if (Device::IsKeyDown(DIK_A)) {
 		//to flip sprite
 		scale = D3DXVECTOR2(1.0f, 1.0f);
@@ -187,8 +190,48 @@ void Mario::HandleStates(BYTE* states) {
 		velocity.x = runSpeed * acceleration;
 	}
 	else {
-		velocity.x = 0.0f;
+		//slippery movement?
+		//dont ask me
+		//i lost track of all the pluses and minuses
+
+		if (acceleration <= 0.5f) {
+			velocity.x = 0.0f;
+			acceleration = 0.5f;
+		}
+
+		if (acceleration > 0.5f) {
+			acceleration -= 0.06f;
+		}
 	}
+	
+	if ((Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+		//GOTTA GO FAAAST
+		if (Device::IsKeyDown(DIK_J)) {
+			if (acceleration < MAX_ACCEL) {
+				acceleration += 0.02f;
+			}
+		}
+		else {
+			if (acceleration < MIN_ACCEL) {
+				acceleration += 0.03f;
+			}
+			else if (acceleration > MIN_ACCEL) {
+				acceleration -= 0.02f;
+			}
+		}
+	}
+}
+
+void Mario::HandleStates(BYTE* states) {	
+	//for picking up koopa shells
+	if (Device::IsKeyDown(DIK_J)) {
+		isHolding = true;
+	}
+	else {
+		isHolding = false;
+	}	
+
+	HandleMovement();
 
 	marioFSM->HandleStates(states);
 }
@@ -251,7 +294,7 @@ void Mario::TakeDamage() {
 	}
 }
 
-void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {	
+void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {		
 	//stop moving if Mario dies
 	if (hitPoints == 0) {
 		velocity.x = 0;
@@ -260,25 +303,11 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 	
 	velocity.y += gravity * delta;
-
-	//MOVEMENT
-	if ((Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) && Device::IsKeyDown(DIK_J)) {
-		//GOTTA GO FAAAST
-		if (acceleration < MAX_ACCEL) {
-			acceleration += 0.01f;
-		}
-	}
-	else {
-		if (acceleration > 1.0f) {
-			acceleration -= 0.01f;
-		}
-	}
 	
 	//float just a little bit longer when flying
 	if (acceleration >= ACCEL_THRESHOLD) {
 		gravity = 0.0013f;
 	}
-	//MOVEMENT
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
@@ -313,13 +342,11 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			
 			if (dynamic_cast<Tiles*>(event->object) || 
 				dynamic_cast<QuestionBlock*>(event->object) || 
-				dynamic_cast<ShinyBrick*>(event->object) ||
-				dynamic_cast<SwitchBlock*>(event->object))
+				dynamic_cast<ShinyBrick*>(event->object))
 			{
 				if (event->normal.y == -1.0f) {
 					isOnGround = true;
-				}
-				
+				}								
 			}
 
 			//coin
@@ -468,6 +495,14 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	if (heldEntity) {
 		if (heldEntity->GetCurrentHitPoints() == 3) {
 			isHolding = false;
+			
+			if (normal.x == 1) {
+				heldEntity->SetPosition(D3DXVECTOR3(position.x + 16, position.y - 14, 0));
+			}
+			else {
+				heldEntity->SetPosition(D3DXVECTOR3(position.x - 16, position.y - 14, 0));
+			}
+
 			heldEntity = nullptr;
 			return;
 		}
@@ -481,11 +516,11 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				offset = -4;
 			}
 
-			if (this->normal.x == 1) {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x + 12, position.y - offset, 0));
+			if (normal.x == 1) {
+				heldEntity->SetPosition(D3DXVECTOR3(position.x + 11, position.y - offset, 0));
 			}
 			else {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x - 12, position.y - offset, 0));
+				heldEntity->SetPosition(D3DXVECTOR3(position.x - 11, position.y - offset, 0));
 			}
 		}
 		else {

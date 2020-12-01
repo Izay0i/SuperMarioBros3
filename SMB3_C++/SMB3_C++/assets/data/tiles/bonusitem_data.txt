@@ -8,4 +8,4 @@ Rotate	298	350	313	365
 
 #left	top	right	bottom
 [HITBOXES]
-0	0	16	16
+0	0	14	16
