@@ -49,7 +49,7 @@ void KoopaTroopa::LoadTexture() {
 
 RECTF KoopaTroopa::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x + 1;
+	bound.left = position.x;
 	bound.top = position.y;
 
 	if (hitPoints == 3) {

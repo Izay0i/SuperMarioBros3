@@ -267,8 +267,14 @@ void Mario::OnKeyDown(int keyCode) {
 			break;
 		case DIK_J:
 			if (hitPoints == 3 && !Device::IsKeyDown(DIK_S)) {
-				SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnFireball());
-			}
+				if (fireballs.size() < 2) {
+					fireballs.push_back(SpawnFireball());
+
+					for (Fireball* fireball : fireballs) {
+						SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(fireball);
+					}
+				}				
+			}	
 			break;
 		case DIK_K:
 			//slow falling when in air
@@ -314,7 +320,13 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	if (hitPoints == 0) {
 		velocity.x = 0;
 	}
-	
+
+	for (unsigned int i = 0; i < fireballs.size(); ++i) {
+		if (fireballs.at(i)->GetCurrentHitPoints() == -1) {
+			fireballs.erase(std::remove(fireballs.begin(), fireballs.end(), fireballs.at(i)), fireballs.end());
+		}
+	}
+
 	GameObject::Update(delta);
 	
 	velocity.y += gravity * delta;

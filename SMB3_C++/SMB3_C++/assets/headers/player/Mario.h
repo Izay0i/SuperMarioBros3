@@ -27,6 +27,8 @@ private:
 	MarioStateMachine* marioFSM;
 	Entity* heldEntity;
 
+	std::vector<Fireball*> fireballs;
+
 	bool isOnGround;
 	bool isHolding;
 

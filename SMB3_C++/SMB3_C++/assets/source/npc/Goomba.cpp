@@ -8,6 +8,7 @@ Goomba::Goomba() {
 	//0 - dead
 	//1 - walk
 	hitPoints = 1;
+	scale = D3DXVECTOR2(1.0f, 1.0f);
 }
 
 void Goomba::LoadTexture() {

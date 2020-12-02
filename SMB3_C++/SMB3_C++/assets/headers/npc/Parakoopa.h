@@ -25,7 +25,7 @@ private:
 
 	ParakoopaState currentState;
 
-	bool isOnGround = true;
+	bool isOnGround;
 
 	float runSpeed = 0.03f;
 	float jumpSpeed = 0.011f;

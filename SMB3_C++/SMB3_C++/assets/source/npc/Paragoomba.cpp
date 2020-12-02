@@ -8,7 +8,7 @@ Paragoomba::Paragoomba() {
 	//0 - dead
 	//1 - walk
 	//2 - fly
-	hitPoints = 1;
+	hitPoints = 2;
 }
 
 void Paragoomba::LoadTexture() {
@@ -168,6 +168,11 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	velocity.y += gravity * delta;
 
+	if (hitPoints == 2 && isOnGround) {
+		velocity.y = -jumpSpeed * delta;
+		isOnGround = false;
+	}
+
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
 
@@ -199,6 +204,15 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
+			if (dynamic_cast<Tiles*>(event->object) ||
+				dynamic_cast<QuestionBlock*>(event->object) ||
+				dynamic_cast<ShinyBrick*>(event->object))
+			{
+				if (event->normal.y == -1.0f) {
+					isOnGround = true;
+				}
+			}
+
 			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
 					this->normal.x = -event->normal.x;
@@ -214,6 +228,14 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 void Paragoomba::Render() {
 	switch (currentState) {
+		case ParagoombaState::FLY:
+			if (velocity.y > 0.0f) {
+				sprite.PlayAnimation("Fly", D3DXVECTOR3(position.x, position.y - 7, 0));
+			}
+			else {
+				sprite.PlayAnimation("Idle", D3DXVECTOR3(position.x, position.y - 4, 0));
+			}
+			break;
 		case ParagoombaState::WALK:
 			sprite.PlayAnimation("Walk", position);
 			break;

@@ -113,10 +113,11 @@ void Game::Render() {
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 		
-		//texture still bleeds even when set to point sampling
-		directDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-		directDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
-		directDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+		//texture still bleeds even when set to none but less noticeable
+
+		directDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
+		//directDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+		directDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
 
 		sceneManager->GetCurrentScene()->Render();
 

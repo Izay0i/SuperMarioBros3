@@ -23,9 +23,11 @@ private:
 
 	ParagoombaState currentState;
 
+	bool isOnGround;
+
 	float runSpeed = 0.03f;
-	float jumpSpeed = 0.5f;
-	float gravity = 0.002f;
+	float jumpSpeed = 0.006f;
+	float gravity = 0.001f;
 
 	void LoadTexture();
 

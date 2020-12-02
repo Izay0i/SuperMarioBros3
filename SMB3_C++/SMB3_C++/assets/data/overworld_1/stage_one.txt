@@ -35,28 +35,6 @@
 #Mario
 0	assets\data\player\mario_data.txt	0	assets\data\projectiles\fireball_data.txt
 
-#NPCs
-#Goomba
-1	assets\data\npc\goomba_data.txt	1
-1	assets\data\npc\goomba_data.txt	1
-1	assets\data\npc\goomba_data.txt	1
-1	assets\data\npc\goomba_data.txt	1
-#Red Paragoomba
-2	assets\data\npc\paragoomba_data.txt	1
-#Koopa troopa
-3	assets\data\npc\koopatroopa_data.txt	1	
-3	assets\data\npc\koopatroopa_data.txt	1	g
-3	assets\data\npc\koopatroopa_data.txt	1	
-#Para troopa
-4	assets\data\npc\parakoopa_data.txt	1
-4	assets\data\npc\parakoopa_data.txt	1
-4	assets\data\npc\parakoopa_data.txt	1
-#Pirana plant
-5	assets\data\npc\piranaplant_data.txt	1	g
-#Venus fire trap
-6	assets\data\npc\venustrap_data.txt	1	
-6	assets\data\npc\venustrap_data.txt	1	g
-
 #Animated Tiles
 #Coin
 101	assets\data\tiles\coin_data.txt	2
@@ -116,6 +94,28 @@
 104	assets\data\tiles\bonusitem_data.txt	5
 #Switch block
 105	assets\data\tiles\switchblock_data.txt	2
+
+#NPCs
+#Goomba
+1	assets\data\npc\goomba_data.txt	1
+1	assets\data\npc\goomba_data.txt	1
+1	assets\data\npc\goomba_data.txt	1
+1	assets\data\npc\goomba_data.txt	1
+#Red Paragoomba
+2	assets\data\npc\paragoomba_data.txt	1
+#Koopa troopa
+3	assets\data\npc\koopatroopa_data.txt	1	
+3	assets\data\npc\koopatroopa_data.txt	1	g
+3	assets\data\npc\koopatroopa_data.txt	1	
+#Para troopa
+4	assets\data\npc\parakoopa_data.txt	1
+4	assets\data\npc\parakoopa_data.txt	1
+4	assets\data\npc\parakoopa_data.txt	1
+#Pirana plant
+5	assets\data\npc\piranaplant_data.txt	1	g
+#Venus fire trap
+6	assets\data\npc\venustrap_data.txt	1	
+6	assets\data\npc\venustrap_data.txt	1	g
 
 #obj_id	x	y
 [WORLD_COORDS]

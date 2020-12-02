@@ -3,7 +3,7 @@
 [SPRITES]
 #Walk
 Walk	0	51	15	76	2	100
-Walk	16	51	31	77
+Walk	16	51	31	76
 #Spin
 Spin	32	48	47	63	4	25
 Spin	48	48	63	63

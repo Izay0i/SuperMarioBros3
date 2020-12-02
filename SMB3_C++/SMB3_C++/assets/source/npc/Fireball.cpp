@@ -196,7 +196,7 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 
 		if (normal.y != 0.0f) {
-			velocity.y = -jumpSpeed * delta;
+			velocity.y = -jumpSpeed;
 		}
 
 		for (LPCOLLISIONEVENT result : eventResults) {

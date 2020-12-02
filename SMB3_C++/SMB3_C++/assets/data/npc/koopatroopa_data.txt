@@ -4,7 +4,7 @@
 #Red variant
 #Walk
 WalkRed	96	51	111	76	2	100
-WalkRed	112	51	127	77
+WalkRed	112	51	127	76
 #Spin
 SpinRed	128	48	143	63	4	25
 SpinRed	144	48	159	63
@@ -19,7 +19,7 @@ OutRed	128	64	143	79
 #Green variant
 #Walk
 WalkGreen	0	51	15	76	2	100
-WalkGreen	16	51	31	77
+WalkGreen	16	51	31	76
 #Spin
 SpinGreen	32	48	47	63	4	25
 SpinGreen	48	48	63	63
