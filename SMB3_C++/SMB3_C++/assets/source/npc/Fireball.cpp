@@ -46,10 +46,14 @@ void Fireball::LoadTexture() {
 
 RECTF Fireball::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x;
-	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
-	bound.bottom = position.y + hitBox.GetHeight(id);
+	
+	if (hitPoints > 0) {
+		bound.left = position.x;
+		bound.top = position.y;
+		bound.right = position.x + hitBox.GetWidth(id);
+		bound.bottom = position.y + hitBox.GetHeight(id);
+	}
+
 	return bound;
 }
 
@@ -140,14 +144,18 @@ void Fireball::HandleStates() {
 			velocity.x = runSpeed * normal.x;
 			break;
 		case BallState::EXPLODE:
-			velocity = D3DXVECTOR3(0, 9999, 0);
+			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
 	}
 }
 
 void Fireball::TakeDamage() {
-	if (hitPoints >= 1) {
+	if (hitPoints > 0) {
 		--hitPoints;
+	}
+
+	if (hitPoints == 0) {
+		StartRemoveTimer();
 	}
 }
 
@@ -157,6 +165,11 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
+
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
+	}
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
@@ -183,12 +196,13 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 
 		if (normal.y != 0.0f) {
-			velocity.y = -jumpSpeed;
+			velocity.y = -jumpSpeed * delta;
 		}
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;			
 
+			//ignore top and bottom of question block and shiny brick
 			if (event->object->GetObjectID() == 102 || event->object->GetObjectID() == 103) {
 				if (event->normal.y != 0.0f) {
 					continue;

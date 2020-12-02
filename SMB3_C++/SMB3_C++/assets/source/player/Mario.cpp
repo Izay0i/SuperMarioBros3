@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 4;
+	hitPoints = 3;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -170,12 +170,12 @@ void Mario::HandleMovement() {
 	if (acceleration < ACCEL_THRESHOLD && velocity.x != 0.0f) {
 		if (normal.x == -1) {
 			if (Device::IsKeyDown(DIK_D)) {
-				acceleration = 0.04f;
+				acceleration = 0.047f;
 			}
 		}
 		else if (normal.x == 1) {
 			if (Device::IsKeyDown(DIK_A)) {
-				acceleration = 0.04f;
+				acceleration = 0.047f;
 			}
 		}
 	}	
@@ -192,7 +192,7 @@ void Mario::HandleMovement() {
 	else {
 		//slippery movement?
 		//dont ask me
-		//i lost track of all the pluses and minuses
+		//i lost track of all the plusses and minuses
 
 		if (acceleration <= 0.5f) {
 			velocity.x = 0.0f;
@@ -327,7 +327,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
 
-	if (hitPoints != 0) {
+	if (hitPoints > 0) {
 		CalcPotentialCollision(objects, collisionEvents);
 	}
 

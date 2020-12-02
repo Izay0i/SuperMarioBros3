@@ -28,8 +28,8 @@ private:
 	bool isOnGround = true;
 
 	float runSpeed = 0.03f;
-	float jumpSpeed = 0.013f;
-	float gravity = 0.002f;
+	float jumpSpeed = 0.011f;
+	float gravity = 0.001f;
 
 	DWORD retractStart;
 	DWORD retractTime = 8000;

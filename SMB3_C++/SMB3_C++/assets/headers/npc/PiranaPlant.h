@@ -21,6 +21,8 @@ private:
 
 	PlantState currentState;
 
+	DWORD removeTime = 100;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);

@@ -130,10 +130,16 @@ void PiranaPlant::HandleStates() {
 
 void PiranaPlant::TakeDamage() {
 	hitPoints = 0;
+	StartRemoveTimer();
 }
 
 void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
+
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
+	}
 }
 
 void PiranaPlant::Render() {

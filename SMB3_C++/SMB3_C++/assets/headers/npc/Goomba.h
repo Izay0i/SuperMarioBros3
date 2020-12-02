@@ -20,11 +20,15 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	std::string animName = "Die";
+
 	GoombaState currentState;
 
 	float runSpeed = 0.03f;
 	float jumpSpeed = 0.5f;
 	float gravity = 0.002f;
+
+	DWORD removeTime = 800;
 
 	void LoadTexture();
 
@@ -39,7 +43,7 @@ public:
 	RECTF GetBoundingBox(int = 0) const override;
 
 	void ParseData(std::string, std::string, D3DCOLOR) override;
-	
+
 	void TakeDamage() override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;

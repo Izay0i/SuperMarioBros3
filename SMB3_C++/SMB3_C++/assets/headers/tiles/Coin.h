@@ -19,6 +19,8 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	DWORD removeTime = 100;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);

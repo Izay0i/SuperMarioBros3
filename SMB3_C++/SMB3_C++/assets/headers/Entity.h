@@ -15,7 +15,11 @@ protected:
 
 	std::string extraData;
 
+	//-1: flag for removal
 	int hitPoints = 1;
+
+	DWORD removeStart;
+	//Implement your own removeTime
 
 	AnimatedSprite sprite;
 
@@ -24,6 +28,8 @@ public:
 
 	void SetCurrenHitPoints(int point) { hitPoints = point; }
 	int GetCurrentHitPoints() const { return hitPoints; }
+
+	virtual void StartRemoveTimer() { removeStart = static_cast<DWORD>(GetTickCount64()); }
 
 	virtual void TakeDamage() {}
 

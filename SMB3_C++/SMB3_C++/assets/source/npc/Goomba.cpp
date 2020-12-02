@@ -48,7 +48,7 @@ void Goomba::LoadTexture() {
 RECTF Goomba::GetBoundingBox(int id) const {
 	RECTF bound;	
 
-	if (hitPoints != 0) {
+	if (hitPoints > 0) {
 		bound.left = position.x;
 		bound.top = position.y;
 		bound.right = position.x + hitBox.GetWidth(id);
@@ -145,7 +145,7 @@ void Goomba::HandleStates() {
 			velocity.x = -runSpeed * normal.x;
 			break;
 		case GoombaState::DIE:
-			velocity = D3DXVECTOR3(0, 0, 0);
+			velocity.x = 0;
 			break;
 	}
 }
@@ -154,19 +154,28 @@ void Goomba::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
 	}
+
+	if (hitPoints == 0) {
+		StartRemoveTimer();
+	}
 }
 
-void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {	
 	HandleStates();
-	
+
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
 
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
+	}
+
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
 
-	if (hitPoints != 0) {
+	if (hitPoints > 0) {
 		CalcPotentialCollision(objects, collisionEvents);
 	}
 
@@ -194,6 +203,13 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
+			//mario's fireball
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {				
+				animName = "Walk";
+				scale = D3DXVECTOR2(1.0f, -1.0f);
+				velocity.y = -0.33f;
+			}
+
 			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
 					this->normal.x = -event->normal.x;
@@ -213,7 +229,7 @@ void Goomba::Render() {
 			sprite.PlayAnimation("Walk", position);
 			break;
 		case GoombaState::DIE:
-			sprite.PlayAnimation("Die", position);
+			sprite.PlayAnimation(animName, position, scale);
 			break;
 	}
 }

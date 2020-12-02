@@ -161,8 +161,10 @@ void KoopaTroopa::HandleStates() {
 			scale = D3DXVECTOR2(1.0f, 1.0f);
 			break;
 		case KoopaState::RETRACT:
-		case KoopaState::DIE:
 			velocity = D3DXVECTOR3(0, 0, 0);
+			break;
+		case KoopaState::DIE:
+			velocity.x = 0;
 			break;
 	}
 }
@@ -171,6 +173,10 @@ void KoopaTroopa::TakeDamage() {
 	if (hitPoints >= 2) {
 		--hitPoints;
 		StartRetract();
+	}
+
+	if (hitPoints == 0) {
+		StartRemoveTimer();
 	}
 }
 
@@ -181,9 +187,14 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	velocity.y += gravity * delta;
 
-	if (GetTickCount64() - retractStart > retractTime) {
-		retractStart = 0;
+	if (retractStart != 0 && GetTickCount64() - retractStart > retractTime) {
 		hitPoints = 3;
+		retractStart = 0;
+	}
+
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
 	}
 
 	//shell spinning
@@ -194,7 +205,7 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	collisionEvents.clear();
 
-	if (hitPoints != 0) {
+	if (hitPoints > 0) {
 		CalcPotentialCollision(objects, collisionEvents);
 	}
 
@@ -222,13 +233,20 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
+			//mario's fireball
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+				hitPoints = 0;
+				scale = D3DXVECTOR2(1.0f, -1.0f);
+				velocity.y = -0.33f;
+			}
+
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
 					entity->TakeDamage();
 
-					if (dynamic_cast<ShinyBrick*>(event->object)) {
-						entity->SetCurrenHitPoints(0);
+					if (this->normal.y == 0.0f && dynamic_cast<ShinyBrick*>(event->object)) {
+						entity->SetCurrenHitPoints(-1);
 					}
 				}
 			}

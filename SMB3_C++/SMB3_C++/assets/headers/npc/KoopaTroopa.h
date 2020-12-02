@@ -31,6 +31,8 @@ private:
 	DWORD retractStart;
 	DWORD retractTime = 8000;
 
+	DWORD removeTime = 800;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);

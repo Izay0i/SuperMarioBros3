@@ -13,6 +13,7 @@ class Entity;
 class Fireball;
 class MarioStateMachine;
 
+//band-aid fixes baby
 class Mario : public Entity {
 private:
 	static Mario* marioInstance;

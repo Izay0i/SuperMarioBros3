@@ -516,8 +516,6 @@ void Scene::UpdateCameraPosition() {
 }
 
 void Scene::Update(DWORD delta) {
-	lastTime = static_cast<DWORD>(GetTickCount64());
-
 	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
 		collidableObjects.push_back(object);
@@ -529,21 +527,10 @@ void Scene::Update(DWORD delta) {
 		objects.at(i)->Update(delta, &collidableObjects);
 
 		if (dynamic_cast<Entity*>(objects.at(i))) {
-			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
+			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == -1) {
 				//erase-remove idiom
 				objects.at(i)->Release();
 				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
-				
-				DWORD now = static_cast<DWORD>(GetTickCount64());
-
-				if (now - lastTime >= 1000) {
-					//now = lastTime;
-										
-				}
-
-				char debugStr[100];
-				sprintf_s(debugStr, "Last time: %llu Now: %lu\n", GetTickCount64(), now);
-				OutputDebugStringA(debugStr);
 			}
 		}
 	}

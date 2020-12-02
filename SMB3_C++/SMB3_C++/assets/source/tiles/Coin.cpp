@@ -120,10 +120,17 @@ void Coin::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
 	}
+
+	if (hitPoints == 0) {
+		StartRemoveTimer();
+	}
 }
 
 void Coin::Update(DWORD delta, std::vector<GameObject*>* objects) {
-
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
+	}
 }
 
 void Coin::Render() {

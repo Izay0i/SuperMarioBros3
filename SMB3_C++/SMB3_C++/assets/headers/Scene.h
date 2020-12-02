@@ -71,8 +71,6 @@ private:
 
 	D3DCOLOR backgroundColor;
 
-	DWORD lastTime;
-
 	static LPDIRECT3DDEVICE9 directDevice;
 	static LPD3DXSPRITE spriteHandler;
 
