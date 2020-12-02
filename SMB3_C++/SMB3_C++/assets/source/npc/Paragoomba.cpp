@@ -1,15 +1,17 @@
-#include "../../headers/npc/Fireball.h"
+#include "../../headers/npc/Paragoomba.h"
 
-LPCWSTR Fireball::texturePath = nullptr;
-LPDIRECT3DTEXTURE9 Fireball::texture = nullptr;
-D3DCOLOR Fireball::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+LPCWSTR Paragoomba::texturePath = nullptr;
+LPDIRECT3DTEXTURE9 Paragoomba::texture = nullptr;
+D3DCOLOR Paragoomba::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
-Fireball::Fireball() {
+Paragoomba::Paragoomba() {
+	//0 - dead
+	//1 - walk
+	//2 - fly
 	hitPoints = 1;
-	currentState = BallState::BOUNCE;
 }
 
-void Fireball::LoadTexture() {
+void Paragoomba::LoadTexture() {
 	if (!texture) {
 		HRESULT hResult;
 		D3DXIMAGE_INFO imageInfo;
@@ -44,20 +46,24 @@ void Fireball::LoadTexture() {
 	}
 }
 
-RECTF Fireball::GetBoundingBox(int id) const {
+RECTF Paragoomba::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x;
-	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
-	bound.bottom = position.y + hitBox.GetHeight(id);
+
+	if (hitPoints != 0) {
+		bound.left = position.x;
+		bound.top = position.y;
+		bound.right = position.x + hitBox.GetWidth(id);
+		bound.bottom = position.y + hitBox.GetHeight(id);
+	}
+
 	return bound;
 }
 
-void Fireball::ParseSprites(std::string line) {
+void Paragoomba::ParseSprites(std::string line) {
 	sprite.ParseSprites(line, texture, colorKey);
 }
 
-void Fireball::ParseHitboxes(std::string line) {
+void Paragoomba::ParseHitboxes(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
 	if (tokens.size() < 4) {
@@ -78,7 +84,7 @@ void Fireball::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Fireball::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void Paragoomba::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -113,45 +119,49 @@ void Fireball::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR
 		}
 
 		switch (section) {
-			case DataSection::DATA_SECTION_SPRITES:
-				ParseSprites(line);
-				break;
-			case DataSection::DATA_SECTION_HITBOXES:
-				ParseHitboxes(line);
-				break;
+		case DataSection::DATA_SECTION_SPRITES:
+			ParseSprites(line);
+			break;
+		case DataSection::DATA_SECTION_HITBOXES:
+			ParseHitboxes(line);
+			break;
 		}
 	}
 
 	readFile.close();
 }
 
-void Fireball::HandleStates() {
+void Paragoomba::HandleStates() {
 	switch (hitPoints) {
 		case 0:
-			currentState = BallState::EXPLODE;
+			currentState = ParagoombaState::DIE;
 			break;
 		case 1:
-			currentState = BallState::BOUNCE;
+			currentState = ParagoombaState::WALK;
+			break;
+		case 2:
+			currentState = ParagoombaState::FLY;
 			break;
 	}
 
 	switch (currentState) {
-		case BallState::BOUNCE:
-			velocity.x = runSpeed * normal.x;
+		case ParagoombaState::FLY:
+		case ParagoombaState::WALK:
+			velocity.x = -runSpeed * normal.x;
 			break;
-		case BallState::EXPLODE:
-			velocity = D3DXVECTOR3(0, 9999, 0);
+		case ParagoombaState::DIE:
+			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
 	}
 }
 
-void Fireball::TakeDamage() {
-	if (hitPoints >= 1) {
+void Paragoomba::TakeDamage() {
+	if (hitPoints > 0) {
 		--hitPoints;
 	}
 }
 
-void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
 	GameObject::Update(delta);
@@ -183,38 +193,15 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 
 		if (normal.y != 0.0f) {
-			velocity.y = -jumpSpeed;
+			velocity.y = 0.0f;
 		}
 
 		for (LPCOLLISIONEVENT result : eventResults) {
-			LPCOLLISIONEVENT event = result;			
+			LPCOLLISIONEVENT event = result;
 
-			if (event->object->GetObjectID() == 102 || event->object->GetObjectID() == 103) {
-				if (event->normal.y != 0.0f) {
-					continue;
-				}
-			}
-
-			//ignore coins
-			if (event->object->GetObjectID() == 101) {
-				continue;
-			}
-
-			//ignore one-way platforms
-			if (event->object->GetObjectID() == 205) {
-				continue;
-			}
-
-			if (dynamic_cast<Tiles*>(event->object)) {				
+			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
-					TakeDamage();
-				}				
-			}
-			
-			if ((dynamic_cast<Entity*>(event->object))) {
-				if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
-					dynamic_cast<Entity*>(event->object)->TakeDamage();
-					TakeDamage();
+					this->normal.x = -event->normal.x;
 				}
 			}
 		}
@@ -225,17 +212,17 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 }
 
-void Fireball::Render() {
+void Paragoomba::Render() {
 	switch (currentState) {
-		case BallState::BOUNCE:
-			sprite.PlayAnimation("Bounce", position, D3DXVECTOR2(normal.x, 1.0f));
+		case ParagoombaState::WALK:
+			sprite.PlayAnimation("Walk", position);
 			break;
-		case BallState::EXPLODE:
-			sprite.PlayAnimation("Explode", position);
+		case ParagoombaState::DIE:
+			sprite.PlayAnimation("Die", position);
 			break;
 	}
 }
 
-void Fireball::Release() {
+void Paragoomba::Release() {
 
 }

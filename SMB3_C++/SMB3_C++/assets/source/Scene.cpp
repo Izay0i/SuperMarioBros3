@@ -99,7 +99,7 @@ void Scene::ParseEntityData(std::string line) {
 			object = new Goomba;
 			break;
 		case ObjectType::OBJECT_TYPE_PARAGOOMBA:
-			
+			object = new Paragoomba;
 			break;
 		case ObjectType::OBJECT_TYPE_TROOPA:
 			object = new KoopaTroopa;
@@ -165,7 +165,15 @@ void Scene::ParseWorldCoords(std::string line) {
 			}
 			break;
 		case ObjectType::OBJECT_TYPE_PARAGOOMBA:
-
+			for (GameObject* object : objects) {
+				if (dynamic_cast<Paragoomba*>(object)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
 			break;
 		case ObjectType::OBJECT_TYPE_TROOPA:
 			for (GameObject* object : objects) {
@@ -507,7 +515,9 @@ void Scene::UpdateCameraPosition() {
 	Camera::GetInstance()->SetPosition(camPosition);
 }
 
-void Scene::Update(DWORD delta) {	
+void Scene::Update(DWORD delta) {
+	lastTime = static_cast<DWORD>(GetTickCount64());
+
 	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
 		collidableObjects.push_back(object);
@@ -518,17 +528,22 @@ void Scene::Update(DWORD delta) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects.at(i)->Update(delta, &collidableObjects);
 
-		lastTime = static_cast<DWORD>(GetTickCount64());
-
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == 0) {
+				//erase-remove idiom
+				objects.at(i)->Release();
+				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				
 				DWORD now = static_cast<DWORD>(GetTickCount64());
 
 				if (now - lastTime >= 1000) {
-					//objects.at(i)->Release();
-					//erase-remove idiom
-					//objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+					//now = lastTime;
+										
 				}
+
+				char debugStr[100];
+				sprintf_s(debugStr, "Last time: %llu Now: %lu\n", GetTickCount64(), now);
+				OutputDebugStringA(debugStr);
 			}
 		}
 	}

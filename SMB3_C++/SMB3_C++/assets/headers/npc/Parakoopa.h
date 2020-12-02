@@ -25,8 +25,10 @@ private:
 
 	ParakoopaState currentState;
 
+	bool isOnGround = true;
+
 	float runSpeed = 0.03f;
-	float jumpSpeed = 0.012f;
+	float jumpSpeed = 0.013f;
 	float gravity = 0.002f;
 
 	DWORD retractStart;

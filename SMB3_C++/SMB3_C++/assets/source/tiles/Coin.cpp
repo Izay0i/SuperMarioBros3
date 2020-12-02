@@ -123,7 +123,7 @@ void Coin::TakeDamage() {
 }
 
 void Coin::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	
+
 }
 
 void Coin::Render() {

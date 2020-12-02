@@ -52,12 +52,13 @@ RECTF Parakoopa::GetBoundingBox(int id) const {
 	RECTF bound;
 	bound.left = position.x + 1;
 	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
 
 	if (hitPoints >= 3) {
+		bound.right = position.x + hitBox.GetWidth(id);
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
 	else {
+		bound.right = position.x + hitBox.GetWidth(1);
 		bound.bottom = position.y + hitBox.GetHeight(1);
 	}
 
@@ -185,6 +186,11 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	velocity.y += gravity * delta;
 
+	if (hitPoints == 4 && isOnGround) {
+		velocity.y = -jumpSpeed * delta;
+		isOnGround = false;
+	}
+
 	if (retractStart != 0) {
 		if (GetTickCount64() - retractStart > retractTime) {
 			retractStart = 0;
@@ -222,16 +228,20 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 
 		if (normal.y != 0.0f) {
-			if (hitPoints == 4) {
-				velocity.y = -jumpSpeed * delta;
-			}
-			else {
-				velocity.y = 0.0f;
-			}
+			velocity.y = 0.0f;
 		}
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
+
+			if (dynamic_cast<Tiles*>(event->object) ||
+				dynamic_cast<QuestionBlock*>(event->object) ||
+				dynamic_cast<ShinyBrick*>(event->object))
+			{
+				if (event->normal.y == -1.0f) {
+					isOnGround = true;
+				}
+			}
 
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
@@ -240,38 +250,6 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 					if (dynamic_cast<ShinyBrick*>(event->object)) {
 						entity->SetCurrenHitPoints(0);
-					}
-				}
-			}
-
-			if (dynamic_cast<Entity*>(event->object)) {
-				Entity* entity = static_cast<Entity*>(event->object);
-				if (entity->GetObjectID() == 103) {
-					if (position.x <= entity->GetPosition().x - 5) {
-						if (hitPoints != 1) {
-							this->normal.x = -1;
-						}
-					}
-					if (position.x + hitBox.GetWidth() >= entity->GetPosition().x + 5 + entity->GetBoxWidth()) {
-						if (hitPoints != 1) {
-							this->normal.x = 1;
-						}
-					}
-				}
-			}
-
-			if (dynamic_cast<Tiles*>(event->object)) {
-				Tiles* tile = static_cast<Tiles*>(event->object);
-				if (tile->GetObjectID() == 205) {
-					if (position.x <= tile->GetPosition().x - 5) {
-						if (hitPoints != 1) {
-							this->normal.x = -1;
-						}
-					}
-					if (position.x + hitBox.GetWidth() >= tile->GetPosition().x + 5 + tile->GetBoxWidth()) {
-						if (hitPoints != 1) {
-							this->normal.x = 1;
-						}
 					}
 				}
 			}

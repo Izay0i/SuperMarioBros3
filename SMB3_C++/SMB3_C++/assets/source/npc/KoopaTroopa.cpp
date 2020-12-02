@@ -51,12 +51,13 @@ RECTF KoopaTroopa::GetBoundingBox(int id) const {
 	RECTF bound;
 	bound.left = position.x + 1;
 	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
 
 	if (hitPoints == 3) {
+		bound.right = position.x + hitBox.GetWidth(id);
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
 	else {
+		bound.right = position.x + hitBox.GetWidth(1);
 		bound.bottom = position.y + hitBox.GetHeight(1);
 	}
 

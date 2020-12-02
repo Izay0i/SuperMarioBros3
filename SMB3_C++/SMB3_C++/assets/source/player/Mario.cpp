@@ -167,15 +167,15 @@ void Mario::HandleMovement() {
 	}
 
 	//skid
-	if (acceleration < ACCEL_THRESHOLD) {
+	if (acceleration < ACCEL_THRESHOLD && velocity.x != 0.0f) {
 		if (normal.x == -1) {
 			if (Device::IsKeyDown(DIK_D)) {
-				acceleration = 0.01f;
+				acceleration = 0.04f;
 			}
 		}
 		else if (normal.x == 1) {
 			if (Device::IsKeyDown(DIK_A)) {
-				acceleration = 0.01f;
+				acceleration = 0.04f;
 			}
 		}
 	}	
@@ -244,6 +244,21 @@ void Mario::OnKeyDown(int keyCode) {
 	//J: B button - hold object, kick it's ass, wag your tail, shoot fireballs
 	//K: A button - jump, high jump, slow fall
 	switch (keyCode) {
+		//DEBUG
+		case DIK_1:
+			hitPoints = 1;
+			break;
+		case DIK_2:
+			hitPoints = 2;
+			break;
+		case DIK_3:
+			hitPoints = 3;
+			break;
+		case DIK_4:
+			hitPoints = 4;
+			break;
+		//DEBUG
+
 		case DIK_A:
 			normal.x = -1;
 			break;

@@ -146,7 +146,7 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("HoldRun", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						if (mario->GetAcceleration() < 0.5f) {
+						if (mario->GetAcceleration() < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
 							mario->GetSprite().PlayAnimation("Skid", mario->GetPosition(), mario->GetScale());
 						}
 						else {
@@ -162,7 +162,7 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("BigHoldRun", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						if (mario->GetAcceleration() < 0.5f) {
+						if (mario->GetAcceleration() < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
 							mario->GetSprite().PlayAnimation("BigSkid", mario->GetPosition(), mario->GetScale());
 						}
 						else {
@@ -178,7 +178,7 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("FireHoldRun", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						if (mario->GetAcceleration() < 0.5f) {
+						if (mario->GetAcceleration() < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
 							mario->GetSprite().PlayAnimation("FireSkid", mario->GetPosition(), mario->GetScale());
 						}
 						else {
@@ -194,7 +194,7 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("RacHoldRun", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						if (mario->GetAcceleration() < 0.5f) {
+						if (mario->GetAcceleration() < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
 							mario->GetSprite().PlayAnimation("RacSkid", mario->GetPosition(), mario->GetScale());
 						}
 						else {

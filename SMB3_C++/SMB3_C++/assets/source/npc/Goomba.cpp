@@ -46,12 +46,12 @@ void Goomba::LoadTexture() {
 }
 
 RECTF Goomba::GetBoundingBox(int id) const {
-	RECTF bound;
-	bound.left = position.x;
-	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
+	RECTF bound;	
 
 	if (hitPoints != 0) {
+		bound.left = position.x;
+		bound.top = position.y;
+		bound.right = position.x + hitBox.GetWidth(id);
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
 

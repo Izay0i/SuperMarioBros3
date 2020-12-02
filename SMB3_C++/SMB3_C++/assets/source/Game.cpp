@@ -13,9 +13,6 @@ LRESULT CALLBACK Game::WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lP
 				case VK_ESCAPE:
 					PostQuitMessage(0);
 					break;
-				case VK_RETURN:
-					OutputDebugStringA("Enter key pressed\n");
-					break;
 			}
 	}
 

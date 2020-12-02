@@ -3,14 +3,16 @@
 #include <fstream>
 
 #include "../Entity.h"
+#include "../TileList.h"
 
 class Entity;
 
-class Coin : public Entity {
+class Paragoomba : public Entity {
 private:
-	enum class ItemState {
-		ROTATE,
-		PICKEDUP
+	enum class ParagoombaState {
+		FLY,
+		WALK,
+		DIE
 	};
 
 	const static int MAX_FILE_LINE = 1024;
@@ -18,6 +20,12 @@ private:
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
+
+	ParagoombaState currentState;
+
+	float runSpeed = 0.03f;
+	float jumpSpeed = 0.5f;
+	float gravity = 0.002f;
 
 	void LoadTexture();
 
@@ -27,22 +35,11 @@ private:
 	void HandleStates();
 
 public:
-	Coin();
+	Paragoomba();
+
+	RECTF GetBoundingBox(int = 0) const override;
 
 	void ParseData(std::string, std::string, D3DCOLOR) override;
-
-	RECTF GetBoundingBox(int id = 0) const override {
-		RECTF bound;
-		
-		if (hitPoints > 0) {
-			bound.left = position.x + hitBox.GetWidth(id);
-			bound.top = position.y + hitBox.GetHeight(id);
-			bound.right = position.x + hitBox.GetWidth(id);
-			bound.bottom = position.y + hitBox.GetHeight(id);
-		}
-
-		return bound;
-	}
 
 	void TakeDamage() override;
 
