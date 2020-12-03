@@ -1,0 +1,160 @@
+#width	height	of the map
+[MAPSIZE]
+224	152
+
+#r	g	b
+[BGCOLOR]
+248	236	160
+
+#tex_id	file_path	r	g	b
+[TEXTURES]
+1	assets\textures\overworld_1_tileset.png	0	0	255
+
+#obj_id	data_path	tex_id	extra_data
+[ENTITY_DATA]
+#Mario
+0	assets\data\player\mario_data.txt	0
+#Dancing cactus
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	0
+#Help pop-up
+107	assets\data\map\helppopup_data.txt	0
+#Hammer bro
+108	assets\data\map\hammerbro_data.txt	0
+
+#obj_id	x	y
+[WORLD_COORDS]
+#Mario
+0	16	32
+
+#Dancing cactus
+106	0	0
+106	16	0
+106	32	0
+106	192	0
+106	208	0
+106	0	16
+106	16	16
+106	32	16
+106	64	16
+106	80	16
+106	96	16
+106	128	16
+106	144	16
+106	160	16
+106	192	16
+106	208	16
+106	64	32
+106	80	32
+106	96	32
+106	192	32
+106	208	32
+#Help pop-up
+107	192	79
+#Hammer bro
+108	147	97
+
+#from top to bottom, left to right
+#obj_id	world_x	world_y	width	height	sprites_arr_id
+[TILES_DATA]
+201	0	0	48	32	0
+201	64	16	48	48	1
+201	128	16	48	16	2
+201	192	0	32	48	3
+201	128	48	96	32	4
+201	0	48	48	112	5
+201	64	80	16	32	6
+201	64	112	48	16	7
+201	80	80	144	16	8
+201	128	112	64	48	9
+201	192	96	32	64	10
+
+#obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
+[TILE_SPRITES_ARR]
+
+#left	top	right	bottom	world_x	world_y	tex_id
+[BACKGROUND]
+#Start block
+1	33	16	48	16	32	0
+#Boulder
+120	50	135	65	32	96	0
+120	50	135	65	64	96	0
+120	50	135	65	16	112	0
+120	50	135	65	32	112	0
+120	50	135	65	64	112	0
+120	50	135	65	80	112	0
+120	50	135	65	16	128	0
+120	50	135	65	32	128	0
+#Castle top
+35	1	50	15	176	80	0
+#Bridge
+69	50	84	65	128	96	0
+#River
+
+#Vertical	1	50	16	65
+#Horizontal	18	50	33	65
+#Top left	35	50	50	65
+#Top right	52	50	67	65
+#Bottom left	86	50	101	65
+#Bottom right	103	50	118	65
+
+52	50	67	65	160	64	0
+18	50	33	65	176	64	0
+35	50	50	65	192	64	0
+52	50	67	65	128	80	0
+18	50	33	65	144	80	0
+86	50	101	65	160	80	0
+1	50	16	65	192	80	0
+18	50	33	65	192	96	0
+18	50	33	65	128	112	0
+18	50	33	65	192	112	0
+103	50	118	65	128	128	0
+18	50	33	65	144	128	0
+18	50	33	65	160	128	0
+18	50	33	65	176	128	0
+86	50	101	65	192	128	0

@@ -25,11 +25,11 @@
 #default variant is red so no need to specify
 
 #obj_id
-#0-99:		moving entities
+#0-99:		animated entities
 #100:		portal
 #101-200:	animated tiles, eg: question block
 #201-300:	tiles, eg: ground
-#201:	one-way platform
+#205:	one-way platform
 
 [ENTITY_DATA]
 #Mario
