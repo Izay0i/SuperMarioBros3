@@ -6,3 +6,4 @@
 #include "npc/KoopaTroopa.h"
 #include "npc/Parakoopa.h"
 #include "npc/PiranaPlant.h"
+#include "npc/VenusFire.h"

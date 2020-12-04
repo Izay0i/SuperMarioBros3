@@ -21,8 +21,6 @@ private:
 
 	BlockState currentState;
 
-	D3DXVECTOR3 originalPos;
-
 	void LoadTexture();
 
 	void ParseSprites(std::string);
@@ -33,7 +31,7 @@ private:
 public:
 	SwitchBlock();
 
-	void ParseData(std::string, std::string, D3DCOLOR) override;
+	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
 	RECTF GetBoundingBox(int id = 0) const override {
 		RECTF bound;
@@ -47,9 +45,7 @@ public:
 
 		return bound;
 	}
-
-	void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
-
+	
 	void TakeDamage() override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;

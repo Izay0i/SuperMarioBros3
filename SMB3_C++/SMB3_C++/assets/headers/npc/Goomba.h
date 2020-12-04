@@ -8,8 +8,9 @@
 class Entity;
 
 class Goomba : public Entity {
-private:
+protected:
 	enum class GoombaState {
+		FLY,
 		WALK,
 		DIE
 	};
@@ -30,24 +31,24 @@ private:
 
 	DWORD removeTime = 800;
 
-	void LoadTexture();
+	virtual void LoadTexture();
 
-	void ParseSprites(std::string);
-	void ParseHitboxes(std::string);
+	virtual void ParseSprites(std::string);
+	virtual void ParseHitboxes(std::string);
 
-	void HandleStates();
+	virtual void HandleStates();
 
 public:
 	Goomba();
 
-	RECTF GetBoundingBox(int = 0) const override;
+	virtual RECTF GetBoundingBox(int = 0) const override;
 
-	void ParseData(std::string, std::string, D3DCOLOR) override;
+	virtual void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
-	void TakeDamage() override;
+	virtual void TakeDamage() override;
 
-	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
-	void Render() override;
+	virtual void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
+	virtual void Render() override;
 
-	void Release() override;
+	virtual void Release() override;
 };

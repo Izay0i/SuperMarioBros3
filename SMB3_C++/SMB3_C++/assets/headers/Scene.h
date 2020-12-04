@@ -35,12 +35,20 @@ private:
 		OBJECT_TYPE_PARATROOPA = 4,
 		OBJECT_TYPE_PIPLANT = 5,
 		OBJECT_TYPE_VENUSTRAP = 6,
+		//power-ups
+		OBJECT_TYPE_MUSHROOM = 7,
+		OBJECT_TYPE_1UPSHROOM = 8,
+		OBJECT_TYPE_LEAF = 9,
 		//animated tiles
 		OBJECT_TYPE_COIN = 101,
 		OBJECT_TYPE_QUESTIONBLOCK = 102,
 		OBJECT_TYPE_SHINYBRICK = 103,
 		OBJECT_TYPE_BONUSITEM = 104,
-		OBJECT_TYPE_SWITCHBLOCK = 105
+		OBJECT_TYPE_SWITCHBLOCK = 105,
+		//overworld map
+		OBJECT_TYPE_CACTUS = 106,
+		OBJECT_TYPE_HELP = 107,
+		OBJECT_TYPE_HAMMERBRO = 108
 	};
 
 	enum class SceneSection {
@@ -75,6 +83,9 @@ private:
 	static LPD3DXSPRITE spriteHandler;
 
 	~Scene();
+
+	//https://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
+	bool IsInteger(const std::string&);
 
 	void ParseMapSize(std::string);
 	void ParseBGColor(std::string);

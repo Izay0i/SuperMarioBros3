@@ -8,6 +8,7 @@
 
 #tex_id	file_path	r	g	b
 [TEXTURES]
+0	assets\textures\mario.png	68	145	190
 1	assets\textures\overworld_1_tileset.png	0	0	255
 
 #obj_id	data_path	tex_id	extra_data
@@ -15,57 +16,57 @@
 #Mario
 0	assets\data\player\mario_data.txt	0
 #Dancing cactus
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
-106	assets\data\map\dancingcactus_data.txt	0
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
+106	assets\data\map\dancingcactus_data.txt	1
 #Help pop-up
-107	assets\data\map\helppopup_data.txt	0
+107	assets\data\map\helppopup_data.txt	1
 #Hammer bro
-108	assets\data\map\hammerbro_data.txt	0
+108	assets\data\map\hammerbro_data.txt	1
 
 #obj_id	x	y
 [WORLD_COORDS]
@@ -94,6 +95,32 @@
 106	96	32
 106	192	32
 106	208	32
+106	0	48
+106	16	48
+106	32	48
+106	64	48
+106	80	48
+106	96	48
+106	128	48
+106	144	48
+106	160	48
+106	176	48
+106	192	48
+106	208	48
+106	0	64
+106	16	64
+106	32	64
+106	128	64
+106	144	64
+106	208	64
+106	0	80
+106	80	80
+106	96	80
+106	112	80
+106	208	80
+106	208	96
+106	208	112
+106	208	128
 #Help pop-up
 107	192	79
 #Hammer bro
@@ -106,13 +133,14 @@
 201	64	16	48	48	1
 201	128	16	48	16	2
 201	192	0	32	48	3
-201	128	48	96	32	4
-201	0	48	48	112	5
-201	64	80	16	32	6
-201	64	112	48	16	7
-201	80	80	144	16	8
-201	128	112	64	48	9
-201	192	96	32	64	10
+#201	0	32	16	16	4
+201	128	48	96	32	5
+201	0	48	48	112	6
+201	64	80	16	32	7
+201	64	112	48	16	8
+201	80	80	144	16	9
+201	128	112	64	48	10
+201	192	96	32	64	11
 
 #obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
 [TILE_SPRITES_ARR]
@@ -120,20 +148,20 @@
 #left	top	right	bottom	world_x	world_y	tex_id
 [BACKGROUND]
 #Start block
-1	33	16	48	16	32	0
+1	33	16	48	16	32	1
 #Boulder
-120	50	135	65	32	96	0
-120	50	135	65	64	96	0
-120	50	135	65	16	112	0
-120	50	135	65	32	112	0
-120	50	135	65	64	112	0
-120	50	135	65	80	112	0
-120	50	135	65	16	128	0
-120	50	135	65	32	128	0
+120	50	135	65	32	96	1
+120	50	135	65	64	96	1
+120	50	135	65	16	112	1
+120	50	135	65	32	112	1
+120	50	135	65	64	112	1
+120	50	135	65	80	112	1
+120	50	135	65	16	128	1
+120	50	135	65	32	128	1
 #Castle top
-35	1	50	15	176	80	0
+35	1	50	15	176	80	1
 #Bridge
-69	50	84	65	128	96	0
+69	50	84	65	128	96	1
 #River
 
 #Vertical	1	50	16	65
@@ -143,18 +171,18 @@
 #Bottom left	86	50	101	65
 #Bottom right	103	50	118	65
 
-52	50	67	65	160	64	0
-18	50	33	65	176	64	0
-35	50	50	65	192	64	0
-52	50	67	65	128	80	0
-18	50	33	65	144	80	0
-86	50	101	65	160	80	0
-1	50	16	65	192	80	0
-18	50	33	65	192	96	0
-18	50	33	65	128	112	0
-18	50	33	65	192	112	0
-103	50	118	65	128	128	0
-18	50	33	65	144	128	0
-18	50	33	65	160	128	0
-18	50	33	65	176	128	0
-86	50	101	65	192	128	0
+52	50	67	65	160	64	1
+18	50	33	65	176	64	1
+35	50	50	65	192	64	1
+52	50	67	65	128	80	1
+18	50	33	65	144	80	1
+86	50	101	65	160	80	1
+1	50	16	65	192	80	1
+18	50	33	65	192	96	1
+18	50	33	65	128	112	1
+18	50	33	65	192	112	1
+103	50	118	65	128	128	1
+18	50	33	65	144	128	1
+18	50	33	65	160	128	1
+18	50	33	65	176	128	1
+86	50	101	65	192	128	1

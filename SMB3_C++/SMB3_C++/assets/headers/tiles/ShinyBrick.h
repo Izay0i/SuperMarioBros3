@@ -15,12 +15,15 @@ private:
 	};
 
 	const static int MAX_FILE_LINE = 1024;
+	const float MAX_Y_OFFSET = 0.7f; //how far up the object can go
 
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
 	BlockState currentState;
+
+	std::vector<Entity*> items;
 
 	float jumpSpeed = 0.4f;
 	float gravity = 0.001f;
@@ -37,12 +40,12 @@ private:
 public:
 	ShinyBrick();
 
-	void ParseData(std::string, std::string, D3DCOLOR) override;
+	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
 	RECTF GetBoundingBox(int id = 0) const override {
 		RECTF bound;
 		bound.left = position.x + 2;
-		bound.top = position.y;
+		bound.top = position.y + 1;
 		bound.right = position.x + hitBox.GetWidth(id) - 3;
 		bound.bottom = position.y + hitBox.GetHeight(id) - 5;
 

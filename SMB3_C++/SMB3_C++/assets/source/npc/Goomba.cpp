@@ -84,13 +84,17 @@ void Goomba::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Goomba::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void Goomba::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
 	if (!readFile.is_open()) {
 		OutputDebugStringA("Failed to read data\n");
 		return;
+	}
+
+	if (extraData.size() > 0) {
+		this->extraData = extraData;
 	}
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);
@@ -147,6 +151,10 @@ void Goomba::HandleStates() {
 			break;
 		case GoombaState::DIE:
 			velocity.x = 0;
+
+			if (animName == "Die") {
+				velocity.y = 0;
+			}
 			break;
 	}
 }
@@ -209,6 +217,7 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				animName = "Walk";
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.33f;
+				hitPoints = 0;
 			}
 
 			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
@@ -227,10 +236,10 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 void Goomba::Render() {
 	switch (currentState) {
 		case GoombaState::WALK:
-			sprite.PlayAnimation("Walk", position);
+			sprite.PlayAnimation("Walk", D3DXVECTOR3(position.x, position.y - 1, 0));
 			break;
 		case GoombaState::DIE:
-			sprite.PlayAnimation(animName, position, scale);
+			sprite.PlayAnimation(animName, D3DXVECTOR3(position.x, position.y - 1, 0), scale);
 			break;
 	}
 }

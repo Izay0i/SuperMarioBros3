@@ -27,7 +27,7 @@ private:
 public:
 	BonusItem();
 
-	void ParseData(std::string, std::string, D3DCOLOR) override;
+	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
 	RECTF GetBoundingBox(int id = 0) const override {
 		RECTF bound;

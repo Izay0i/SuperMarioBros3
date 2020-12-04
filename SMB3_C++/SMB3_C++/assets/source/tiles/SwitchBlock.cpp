@@ -70,13 +70,17 @@ void SwitchBlock::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void SwitchBlock::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void SwitchBlock::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
 	if (!readFile.is_open()) {
 		OutputDebugStringA("Failed to read data\n");
 		return;
+	}
+
+	if (extraData.size() > 0) {
+		this->extraData = extraData;
 	}
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);

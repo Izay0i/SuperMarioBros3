@@ -13,7 +13,7 @@ protected:
 		DATA_SECTION_HITBOXES
 	};
 
-	std::string extraData;
+	std::vector<std::string> extraData;
 
 	//-1: flag for removal
 	int hitPoints = 1;
@@ -33,7 +33,7 @@ public:
 
 	virtual void TakeDamage() {}
 
-	virtual void ParseData(std::string, std::string, D3DCOLOR) {}
+	virtual void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) {}
 
 	virtual void Update(DWORD, std::vector<GameObject*>* = nullptr) = 0;
 	virtual void Render() = 0;

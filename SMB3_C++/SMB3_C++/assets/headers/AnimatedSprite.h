@@ -18,7 +18,7 @@ private:
 	static LPDIRECT3DDEVICE9 directDevice;
 	static LPD3DXSPRITE spriteHandler;
 
-	bool HasAnimation(std::string);
+	bool HasAnimation(std::string) const;
 
 	void AddBound(RECT, std::string);
 

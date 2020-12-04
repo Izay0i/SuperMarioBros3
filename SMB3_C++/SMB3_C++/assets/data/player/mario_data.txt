@@ -38,154 +38,162 @@ TakeOff	55	16	70	31	2	25
 TakeOff	73	16	88	31
 #Fly
 Fly	91	16	106	31	1	0
+#GUI
+GUI	1	881	16	896	1	0
 
 #==BIG==
 #Idle
-BigIdle	1	88	16	119	1	0
+BigIdle	1	92	16	119	1	0
 #Run
-BigRun	1	88	16	119	3	50
-BigRun	19	88	34	119
-BigRun	37	88	52	119
+BigRun	1	92	16	119	3	50
+BigRun	19	92	34	119
+BigRun	37	92	52	119
 #Crouch
-BigCrouch	55	88	70	119	1	0
+BigCrouch	55	92	70	119	1	0
 #Jump
-BigJump	73	88	88	119	1	0
+BigJump	73	92	88	119	1	0
 #Skid
-BigSkid	195	88	210	119	1	0
+BigSkid	195	92	210	119	1	0
 #Front
-BigFront	213	88	228	119	1	0
+BigFront	213	92	228	119	1	0
 #Back
-BigBack	231	88	246	119	1	0
+BigBack	231	92	246	119	1	0
 #Hold idle
-BigHoldIdle	249	88	264	119	1	0
+BigHoldIdle	249	92	264	119	1	0
 #Hold run
-BigHoldRun	249	88	264	119	2	50
-BigHoldRun	267	88	282	119
+BigHoldRun	249	92	264	119	2	50
+BigHoldRun	267	92	282	119
 #Hold jump
-BigHoldJump	285	88	300	119	1	0
+BigHoldJump	285	92	300	119	1	0
 #Kick
-BigKick	303	88	326	119	1	0
+BigKick	303	92	326	119	1	0
 #Slide
-BigSlide	329	88	344	119	1	0
+BigSlide	329	92	344	119	1	0
 #Swim
-BigSwim	347	88	370	119	4	50
-BigSwim	373	88	396	119
-BigSwim	399	88	422	119
-BigSwim	425	88	448	119
+BigSwim	347	92	370	119	4	50
+BigSwim	373	92	396	119
+BigSwim	399	92	422	119
+BigSwim	425	92	448	119
 #Climb
-BigClimb	451	88	466	119	1	0
+BigClimb	451	92	466	119	1	0
 #Take off
-BigTakeOff	91	88	114	119	2	25
-BigTakeOff	117	88	140	119
+BigTakeOff	91	92	114	119	2	25
+BigTakeOff	117	92	140	119
 #Take off jump
-BigTakeOffJump	143	88	166	119	1	0
+BigTakeOffJump	143	92	166	119	1	0
 #Fly
-BigFly	169	88	192	119	1	0
+BigFly	169	92	192	119	1	0
+#GUI
+BigGUI	91	873	106	896	1	0
 
 #==FIRE==
 #Idle
-FireIdle	1	260	16	291	1	0
+FireIdle	1	264	16	291	1	0
 #Run
-FireRun	1	260	16	291	3	50
-FireRun	19	260	34	291
-FireRun	37	260	52	291
+FireRun	1	264	16	291	3	50
+FireRun	19	264	34	291
+FireRun	37	264	52	291
 #Crouch
-FireCrouch	55	260	70	291	1	0
+FireCrouch	55	264	70	291	1	0
 #Jump
-FireJump	73	260	88	291	1	0
+FireJump	73	264	88	291	1	0
 #Skid
-FireSkid	195	260	210	291	1	0
+FireSkid	195	264	210	291	1	0
 #Front
-FireFront	213	260	228	291	1	0
+FireFront	213	264	228	291	1	0
 #Back
-FireBack	231	260	246	291	1	0
+FireBack	231	264	246	291	1	0
 #Hold idle
-FireHoldIdle	249	260	264	291	1	0
+FireHoldIdle	249	264	264	291	1	0
 #Hold run
-FireHoldRun	249	260	264	291	2	50
-FireHoldRun	267	260	282	291
+FireHoldRun	249	264	264	291	2	50
+FireHoldRun	267	264	282	291
 #Hold jump
-FireHoldJump	285	260	300	291	1	0
+FireHoldJump	285	264	300	291	1	0
 #Kick
-FireKick	303	260	326	291	1	0
+FireKick	303	264	326	291	1	0
 #Slide
-FireSlide	329	260	344	291	1	0
+FireSlide	329	264	344	291	1	0
 #Swim
-FireSwim	347	260	370	291	4	50
-FireSwim	373	260	396	291
-FireSwim	399	260	422	291
-FireSwim	425	260	448	291
+FireSwim	347	264	370	291	4	50
+FireSwim	373	264	396	291
+FireSwim	399	264	422	291
+FireSwim	425	264	448	291
 #Climb
-FireClimb	451	260	466	291	1	0
+FireClimb	451	264	466	291	1	0
 #Shoot
-FireShoot	209	294	224	325	2	50
-FireShoot	227	294	242	325
+FireShoot	209	298	224	325	2	50
+FireShoot	227	298	242	325
 #Take off
-FireTakeOff	91	260	114	291	2	25
-FireTakeOff	117	260	140	291
+FireTakeOff	91	264	114	291	2	25
+FireTakeOff	117	264	140	291
 #Take off jump
-FireTakeOffJump	143	260	166	291	1	0
+FireTakeOffJump	143	264	166	291	1	0
 #Fly
-FireFly	169	260	192	291	1	0
+FireFly	169	264	192	291	1	0
+#GUI
+FireGUI	127	873	142	896	1	0
 
 #==RACOON==
 #Idle
-RacIdle	1	346	24	377	1	0
+RacIdle	1	350	24	377	1	0
 #Run
-RacRun	1	346	24	377	3	50
-RacRun	27	346	50	377
-RacRun	53	346	76	377
+RacRun	1	350	24	377	3	50
+RacRun	27	350	50	377
+RacRun	53	350	76	377
 #Crouch
-RacCrouch	79	346	102	377	1	0
+RacCrouch	79	350	102	377	1	0
 #Jump
-RacJump	105	346	128	377	1	0
+RacJump	105	350	128	377	1	0
 #Skid
-RacSkid	339	346	354	377	1	0
+RacSkid	339	350	354	377	1	0
 #Front
-RacFront	357	346	372	377	1	0
+RacFront	357	350	372	377	1	0
 #Back
-RacBack	401	346	416	377	1	0
+RacBack	401	350	416	377	1	0
 #Hold idle
-RacHoldIdle	1	380	24	411	1	0
+RacHoldIdle	1	384	24	411	1	0
 #Hold run
-RacHoldRun	1	380	24	411	2	50
-RacHoldRun	27	380	50	411
+RacHoldRun	1	384	24	411	2	50
+RacHoldRun	27	384	50	411
 #Hold jump
-RacHoldJump	53	380	76	411	1	0
+RacHoldJump	53	384	76	411	1	0
 #Kick
-RacKick	79	380	102	411	1	0
+RacKick	79	384	102	411	1	0
 #Slide
-RacSlide	105	380	120	411	1	0
+RacSlide	105	384	120	411	1	0
 #Swim
-RacSwim	123	380	146	411	4	50
-RacSwim	149	380	172	411
-RacSwim	175	380	198	411
-RacSwim	201	380	224	411
+RacSwim	123	384	146	411	4	50
+RacSwim	149	384	172	411
+RacSwim	175	384	198	411
+RacSwim	201	384	224	411
 #Climb
-RacClimb	227	380	242	411	1	0
+RacClimb	227	384	242	411	1	0
 #Spin
-RacSpin	375	346	398	377	2	50
-RacSpin	401	346	416	377
+RacSpin	401	350	416	377	2	50
+RacSpin	375	350	398	377
 #Fall
-RacFall	131	346	154	377	1	0
+RacFall	131	350	154	377	1	0
 #Slow Fall
-RacSlowFall	131	346	154	377	2	50
-RacSlowFall	157	346	180	377
+RacSlowFall	131	350	154	377	2	50
+RacSlowFall	157	350	180	377
 #Take off
-RacTakeOff	183	346	206	377	2	25
-RacTakeOff	209	346	232	377
+RacTakeOff	183	350	206	377	2	25
+RacTakeOff	209	350	232	377
 #Take off jump
-RacTakeOffJump	235	346	258	377	1	0
+RacTakeOffJump	235	350	258	377	1	0
 #Fly
-RacFly	313	346	336	377	1	0
+RacFly	313	350	336	377	1	0
 #Fly boost
-RacFlyBoost	261	346	284	377	3	50
-RacFlyBoost	287	346	310	377
-RacFlyBoost	313	346	336	377
+RacFlyBoost	261	350	284	377	3	50
+RacFlyBoost	287	350	310	377
+RacFlyBoost	313	350	336	377
+#GUI
+RacGUI	145	873	160	896	1	0
 
 #left	top	right	bottom
 [HITBOXES]
 #Small
 0	0	15	16
 #Big
-0	0	16	32
+0	0	16	28

@@ -7,7 +7,7 @@
 class Entity;
 
 class PiranaPlant : public Entity {
-private:
+protected:
 	enum class PlantState {
 		BITING,
 		DIE
@@ -22,33 +22,25 @@ private:
 	PlantState currentState;
 
 	DWORD removeTime = 100;
+	
+	virtual void LoadTexture();
 
-	void LoadTexture();
+	virtual void ParseSprites(std::string);
+	virtual void ParseHitboxes(std::string);
 
-	void ParseSprites(std::string);
-	void ParseHitboxes(std::string);
-
-	void HandleStates();
+	virtual void HandleStates();
 
 public:
 	PiranaPlant();
 
-	void ParseData(std::string, std::string, D3DCOLOR) override;
+	virtual RECTF GetBoundingBox(int id = 0) const override;
 
-	RECTF GetBoundingBox(int id = 0) const override {
-		RECTF bound;
-		bound.left = position.x;
-		bound.top = position.y;
-		bound.right = position.x + hitBox.GetWidth(id);
-		bound.bottom = position.y + hitBox.GetHeight(id);
+	virtual void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
-		return bound;
-	}
+	virtual void TakeDamage() override;
 
-	void TakeDamage() override;
+	virtual void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
+	virtual void Render() override;
 
-	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
-	void Render() override;
-
-	void Release() override;
+	virtual void Release() override;
 };

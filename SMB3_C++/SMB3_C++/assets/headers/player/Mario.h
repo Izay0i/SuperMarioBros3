@@ -38,11 +38,17 @@ private:
 	const float ACCEL_THRESHOLD = 1.86f; //how fast Mario should run before he can fly
 
 	float runSpeed = 0.09f;
-	float jumpSpeed = 0.33f;
+	float jumpSpeed = 0.327f;
 	float deflectSpeed = 0.26f;
 	float dieflectSpeed = 0.4f;
 	float gravity = 0.0025f;
 	float acceleration = 0.5f;
+
+	DWORD attackStart;
+	DWORD attackTime = 126;
+
+	DWORD flyStart;
+	DWORD flyTime = 8000;
 
 	void LoadTexture();
 
@@ -60,19 +66,24 @@ public:
 	float GetAcceleration() const { return acceleration; }
 	float GetAccelThreshold() const { return ACCEL_THRESHOLD; }
 
-	bool IsOnGround() { return isOnGround; }
+	bool IsOnGround() const { return isOnGround; }
+	bool IsAttacking() const { return attackStart != 0; }
+	bool IsFlying() const { return flyStart != 0; }
 
 	RECTF GetBoundingBox(int = 0) const override;
 	AnimatedSprite GetSprite() const { return sprite; }
 	Entity* GetHeldEntity() { return heldEntity; }
 
-	void ParseData(std::string, std::string, D3DCOLOR, std::string);
+	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 	
 	void HandleStates(BYTE*);
 	void OnKeyDown(int);
 	void OnKeyUp(int) {}
 
 	Fireball* SpawnFireball();
+
+	void StartAttackTimer() { attackStart = static_cast<DWORD>(GetTickCount64()); }
+	void StartFlyTimer() { flyStart = static_cast<DWORD>(GetTickCount64()); }
 
 	void TakeDamage() override;
 

@@ -52,7 +52,7 @@ RECTF KoopaTroopa::GetBoundingBox(int id) const {
 	bound.left = position.x;
 	bound.top = position.y;
 
-	if (hitPoints == 3) {
+	if (hitPoints >= 3) {
 		bound.right = position.x + hitBox.GetWidth(id);
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
@@ -89,13 +89,17 @@ void KoopaTroopa::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void KoopaTroopa::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
 	if (!readFile.is_open()) {
 		OutputDebugStringA("Failed to read data\n");
 		return;
+	}
+
+	if (extraData.size() > 0) {
+		this->extraData = extraData;
 	}
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);
@@ -299,20 +303,45 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 void KoopaTroopa::Render() {
 	switch (currentState) {
 		case KoopaState::WALK:
-			sprite.PlayAnimation("WalkRed", position, D3DXVECTOR2(normal.x, 1.0f));
+			if (extraData.size() > 0 && extraData.at(0) == "g") {
+				sprite.PlayAnimation("WalkGreen", position, D3DXVECTOR2(normal.x, 1.0f));
+			}
+			else {
+				sprite.PlayAnimation("WalkRed", position, D3DXVECTOR2(normal.x, 1.0f));
+			}
 			break;		
 		case KoopaState::RETRACT:			
-			sprite.PlayAnimation("RetractRed", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+			if (extraData.size() > 0 && extraData.at(0) == "g") {
+				sprite.PlayAnimation("RetractGreen", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+			}
+			else {
+				sprite.PlayAnimation("RetractRed", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+			}
 			
 			if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
-				sprite.PlayAnimation("OutRed", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+				if (extraData.size() > 0 && extraData.at(0) == "g") {
+					sprite.PlayAnimation("OutGreen", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+				}
+				else {
+					sprite.PlayAnimation("OutRed", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+				}
 			}
 			break;
 		case KoopaState::SPIN:
-			sprite.PlayAnimation("SpinRed", D3DXVECTOR3(position.x, position.y - 1, 0), scale);
+			if (extraData.size() > 0 && extraData.at(0) == "g") {
+				sprite.PlayAnimation("SpinGreen", D3DXVECTOR3(position.x, position.y - 1, 0), scale);
+			}
+			else {
+				sprite.PlayAnimation("SpinRed", D3DXVECTOR3(position.x, position.y - 1, 0), scale);
+			}
 			break;
 		case KoopaState::DIE:
-			sprite.PlayAnimation("RetractRed", position, scale);
+			if (extraData.size() > 0 && extraData.at(0) == "g") {
+				sprite.PlayAnimation("RetractGreen", position, scale);
+			}
+			else {
+				sprite.PlayAnimation("RetractRed", position, scale);
+			}
 			break;
 	}
 }

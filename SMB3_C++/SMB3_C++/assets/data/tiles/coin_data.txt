@@ -7,9 +7,9 @@ Rotate	970	69	985	84
 Rotate	987	69	1002	84
 Rotate	1004	69	1019	84
 Rotate	1021	69	1036	84
-#Only appears on question blocks
+#Only appears in question blocks
 #Pushed
-Pushed	936	69	951	84	3	100
+Pushed	936	69	951	84	3	25
 Pushed	936	86	951	101
 Pushed	936	103	951	118
 

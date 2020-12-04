@@ -39,7 +39,7 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::FIRE && !mario->GetHeldEntity()) {
 				currentState = MarioState::SHOOT;
 			}
-			else if (Device::IsKeyDown(DIK_J) && currentForm == MarioForm::RACOON && !mario->GetHeldEntity()) {
+			else if (mario->IsAttacking() && currentForm == MarioForm::RACOON && !mario->GetHeldEntity()) {
 				currentState = MarioState::SPIN;
 			}
 			break;
@@ -87,7 +87,9 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 			//racoon
 		case MarioState::SPIN:
 			if (!Device::IsKeyDown(DIK_J) || mario->GetVelocity().x != 0.0f) {
-				currentState = MarioState::IDLE;
+				if (!mario->IsAttacking()) {
+					currentState = MarioState::IDLE;
+				}
 			}
 			break;
 	}

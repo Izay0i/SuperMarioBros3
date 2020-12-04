@@ -70,13 +70,17 @@ void ShinyBrick::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void ShinyBrick::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void ShinyBrick::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
 	if (!readFile.is_open()) {
 		OutputDebugStringA("Failed to read data\n");
 		return;
+	}
+
+	if (extraData.size() > 0) {
+		this->extraData = extraData;
 	}
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);
@@ -129,8 +133,11 @@ void ShinyBrick::HandleStates() {
 }
 
 void ShinyBrick::TakeDamage() {
-	if (hitPoints > 1) {
+	if (hitPoints > 1 && items.size() != 0) {
 		--hitPoints;
+	}
+	
+	if (position.y >= (originalPos.y - MAX_Y_OFFSET)) {
 		velocity.y = -jumpSpeed;
 	}
 }
@@ -139,7 +146,7 @@ void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
 	GameObject::Update(delta);
-
+	
 	if (position.y < originalPos.y) {
 		velocity.y += gravity * delta;
 	}
@@ -147,6 +154,9 @@ void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		velocity.y = 0;
 		if (position.y >= originalPos.y) {
 			position = originalPos;
+		}
+		else if (position.y < (originalPos.y - MAX_Y_OFFSET)) {
+			position.y = originalPos.y - MAX_Y_OFFSET;
 		}
 	}
 

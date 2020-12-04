@@ -45,6 +45,19 @@ void PiranaPlant::LoadTexture() {
 	}
 }
 
+RECTF PiranaPlant::GetBoundingBox(int id) const {
+	RECTF bound;
+
+	if (hitPoints > 0) {
+		bound.left = position.x;
+		bound.top = position.y;
+		bound.right = position.x + hitBox.GetWidth(id);
+		bound.bottom = position.y + hitBox.GetHeight(id);
+	}
+
+	return bound;
+}
+
 void PiranaPlant::ParseSprites(std::string line) {
 	sprite.ParseSprites(line, texture, colorKey);
 }
@@ -70,13 +83,17 @@ void PiranaPlant::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void PiranaPlant::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey) {
+void PiranaPlant::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
 	if (!readFile.is_open()) {
 		OutputDebugStringA("Failed to read data\n");
 		return;
+	}
+
+	if (extraData.size() > 0) {
+		this->extraData = extraData;
 	}
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);

@@ -27,7 +27,7 @@ Sprite* AnimatedSprite::GetAnimation(std::string animName) {
 	return sprites[animName];
 }
 
-bool AnimatedSprite::HasAnimation(std::string animName) {
+bool AnimatedSprite::HasAnimation(std::string animName) const {
 	return sprites.find(animName) != sprites.end();
 }
 

@@ -158,6 +158,7 @@
     <ClCompile Include="assets\source\npc\Paragoomba.cpp" />
     <ClCompile Include="assets\source\npc\Parakoopa.cpp" />
     <ClCompile Include="assets\source\npc\PiranaPlant.cpp" />
+    <ClCompile Include="assets\source\npc\VenusFire.cpp" />
     <ClCompile Include="assets\source\player\Mario.cpp" />
     <ClCompile Include="assets\source\player\MarioStateMachine.cpp" />
     <ClCompile Include="assets\source\Scene.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="assets\headers\npc\Paragoomba.h" />
     <ClInclude Include="assets\headers\npc\Parakoopa.h" />
     <ClInclude Include="assets\headers\npc\PiranaPlant.h" />
+    <ClInclude Include="assets\headers\npc\VenusFire.h" />
     <ClInclude Include="assets\headers\player\Mario.h" />
     <ClInclude Include="assets\headers\player\MarioStateMachine.h" />
     <ClInclude Include="assets\headers\Scene.h" />

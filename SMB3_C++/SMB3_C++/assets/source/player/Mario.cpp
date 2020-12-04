@@ -101,7 +101,7 @@ void Mario::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::string projPath) {
+void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -110,7 +110,9 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 		return;
 	}
 
-	extraData = projPath;
+	if (extraData.size() > 0) {
+		this->extraData = extraData;
+	}
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);
 	this->colorKey = colorKey;
@@ -170,12 +172,12 @@ void Mario::HandleMovement() {
 	if (acceleration < ACCEL_THRESHOLD && velocity.x != 0.0f) {
 		if (normal.x == -1) {
 			if (Device::IsKeyDown(DIK_D)) {
-				acceleration = 0.047f;
+				acceleration = 0.0499f;
 			}
 		}
 		else if (normal.x == 1) {
 			if (Device::IsKeyDown(DIK_A)) {
-				acceleration = 0.047f;
+				acceleration = 0.0499f;
 			}
 		}
 	}	
@@ -206,9 +208,9 @@ void Mario::HandleMovement() {
 	
 	if ((Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
 		//GOTTA GO FAAAST
-		if (Device::IsKeyDown(DIK_J)) {
+		if (Device::IsKeyDown(DIK_J) || IsFlying()) {
 			if (acceleration < MAX_ACCEL) {
-				acceleration += 0.02f;
+				acceleration += 0.04f;
 			}
 		}
 		else {
@@ -274,19 +276,31 @@ void Mario::OnKeyDown(int keyCode) {
 						SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(fireball);
 					}
 				}				
-			}	
+			}
+
+			if (hitPoints == 4) {
+				if (!IsAttacking() && velocity.x == 0.0f) {
+					StartAttackTimer();
+				}
+			}
 			break;
 		case DIK_K:
 			//slow falling when in air
 			if (!IsOnGround() && hitPoints == 4) {
-				velocity.y *= 0.02f;
+				velocity.y *= 0.04f;
 			}
 
 			//unlimited jumping if Mario is Racoon
-			if (acceleration >= ACCEL_THRESHOLD && hitPoints == 4) {
-				velocity.y = -jumpSpeed;
-				//isOnGround false just to make the AnimatedSprite play the _TakeOffJump animation once
-				isOnGround = false;
+			if (hitPoints == 4) {
+				if (acceleration >= ACCEL_THRESHOLD || IsFlying()) {
+					//isOnGround false just to make the AnimatedSprite play the _TakeOffJump animation once
+					if (!IsFlying() && isOnGround) {
+						isOnGround = false;
+						StartFlyTimer();
+					}
+					
+					velocity.y = -jumpSpeed;
+				}		
 			}
 			
 			if (IsOnGround()) {
@@ -300,7 +314,7 @@ void Mario::OnKeyDown(int keyCode) {
 Fireball* Mario::SpawnFireball() {
 	Fireball* fireball = new Fireball;
 	fireball->SetObjectID(99);	
-	fireball->ParseData(extraData, Util::ToStr(texturePath), colorKey);
+	fireball->ParseData(extraData.at(0), extraData.at(1), colorKey);
 	fireball->SetNormal(D3DXVECTOR3(normal.x, 0, 0));
 	fireball->SetPosition(D3DXVECTOR3(position.x, position.y + 10, 0));
 	return fireball;
@@ -319,12 +333,22 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	//stop moving if Mario dies
 	if (hitPoints == 0) {
 		velocity.x = 0;
+		isOnGround = false;
 	}
 
 	for (unsigned int i = 0; i < fireballs.size(); ++i) {
 		if (fireballs.at(i)->GetCurrentHitPoints() == -1) {
 			fireballs.erase(std::remove(fireballs.begin(), fireballs.end(), fireballs.at(i)), fireballs.end());
 		}
+	}
+
+	if (attackStart != 0 && GetTickCount64() - attackStart > attackTime) {
+		attackStart = 0;
+	}
+
+	//stops flying when time is out or mario get hit
+	if (flyStart != 0 && (GetTickCount64() - flyStart > flyTime || hitPoints != 4)) {
+		flyStart = 0;
 	}
 
 	GameObject::Update(delta);
@@ -357,7 +381,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		position.y += minTime.y * distance.y + normal.y * 0.4f;
 
 		if (normal.x != 0.0f) {
-			//velocity.x = 0.0f;
+			velocity.x = 0.0f;
 		}
 
 		if (normal.y != 0.0f) {
@@ -414,7 +438,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				TakeDamage();
 			}
 
-			//goomba
+			//goomba or paragoomba
 			if (dynamic_cast<Goomba*>(event->object)) {					
 				Goomba* goomba = static_cast<Goomba*>(event->object);
 				if (event->normal.y < 0.0f) {
@@ -423,22 +447,11 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					}
 					goomba->TakeDamage();
 				}
-				else if (event->normal.x != 0.0f) {
-					if (goomba->GetCurrentHitPoints() != 0) {
-						if (Device::IsKeyDown(DIK_J) && velocity.x == 0.0f) {
+				else if (event->normal.x != 0.0f || event->normal.y > 0.0f) {
+					if (goomba->GetCurrentHitPoints() > 0) {
+						if (IsAttacking()) {
 							//stand still
-							if (hitPoints == 4) {
-								goomba->TakeDamage();
-							}
-							else {
-								TakeDamage();
-								if (hitPoints > 0) {
-									velocity.y = -deflectSpeed;
-								}
-								else {
-									velocity.y -= dieflectSpeed;
-								}
-							}
+							goomba->TakeDamage();
 						}
 						else {
 							TakeDamage();
@@ -453,7 +466,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
-			//koopa troopa
+			//koopa troopa or parakoopa
 			if (dynamic_cast<KoopaTroopa*>(event->object)) {
 				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
 				//on koopa
@@ -467,30 +480,18 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					}
 					else if (koopa->GetCurrentHitPoints() == 1) {
 						koopa->SetCurrenHitPoints(2);
+						//dont know why koopa sunk a bit though when you jump on it the second time
+						koopa->SetPosition(D3DXVECTOR3(koopa->GetPosition().x, koopa->GetPosition().y - 11, 0));
 					}
-
-					koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 				}
-				else if (event->normal.x != 0.0f) {
+				else if (event->normal.x != 0.0f || event->normal.y > 0.0f) {
 					//is spinning or walking
-					if (koopa->GetCurrentHitPoints() == 1 || koopa->GetCurrentHitPoints() == 3) {
+					if (koopa->GetCurrentHitPoints() == 1 || koopa->GetCurrentHitPoints() >= 3) {
 						//mario is in racoon form and spins his tail
-						if (Device::IsKeyDown(DIK_J) && velocity.x == 0.0f) {
+						if (IsAttacking()) {
 							//stand still or die
-							if (hitPoints == 4) {
-								koopa->TakeDamage();
-								koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
-								koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
-							}
-							else {
-								TakeDamage();
-								if (hitPoints > 0) {
-									velocity.y = -deflectSpeed;
-								}
-								else {
-									velocity.y -= dieflectSpeed;
-								}
-							}
+							koopa->TakeDamage();
+							koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
 						}
 						else {
 							TakeDamage();
@@ -524,10 +525,10 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			isHolding = false;
 			
 			if (normal.x == 1) {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x + 16, position.y - 14, 0));
+				heldEntity->SetPosition(D3DXVECTOR3(position.x + 17, position.y - 14, 0));
 			}
 			else {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x - 16, position.y - 14, 0));
+				heldEntity->SetPosition(D3DXVECTOR3(position.x - 17, position.y - 14, 0));
 			}
 
 			heldEntity = nullptr;
@@ -540,14 +541,14 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				offset = 11;
 			}
 			else {
-				offset = -4;
+				offset = 2;
 			}
 
 			if (normal.x == 1) {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x + 11, position.y - offset, 0));
+				heldEntity->SetPosition(D3DXVECTOR3(position.x + 10, position.y - offset, 0));
 			}
 			else {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x - 11, position.y - offset, 0));
+				heldEntity->SetPosition(D3DXVECTOR3(position.x - 10, position.y - offset, 0));
 			}
 		}
 		else {
@@ -571,4 +572,6 @@ void Mario::Release() {
 		delete marioInstance;
 		marioInstance = nullptr;
 	}
+
+	fireballs.clear();
 }

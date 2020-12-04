@@ -36,6 +36,17 @@ void Scene::AddObjectToScene(GameObject* object) {
 	objects.push_back(object);
 }
 
+bool Scene::IsInteger(const std::string& s) {
+	if (s.empty() || ((!isdigit(s.front())) && (s.front() != '-') && (s.front() != '+'))) {
+		return false;
+	}
+
+	char* p;
+	std::strtol(s.c_str(), &p, 10);
+
+	return (*p == 0);
+}
+
 void Scene::ParseMapSize(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
@@ -84,6 +95,19 @@ void Scene::ParseEntityData(std::string line) {
 		return;
 	}
 
+	std::vector<std::string> extraData;
+
+	if (tokens.size() > 3) {
+		for (unsigned int i = 3; i < tokens.size(); ++i) {
+			if (IsInteger(tokens.at(i))) {
+				extraData.push_back(GetTexturePath(std::stoi(tokens.at(i))));
+			}
+			else {
+				extraData.push_back(tokens.at(i));
+			}
+		}
+	}
+
 	int texID = std::stoi(tokens.at(2));
 
 	GameObject* object = nullptr;
@@ -93,7 +117,7 @@ void Scene::ParseEntityData(std::string line) {
 		case ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();			
 			marioInstance->SetObjectID(static_cast<int>(objectID));
-			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), tokens.at(3));
+			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
 			break;
 		case ObjectType::OBJECT_TYPE_GOOMBA:
 			object = new Goomba;
@@ -111,7 +135,7 @@ void Scene::ParseEntityData(std::string line) {
 			object = new PiranaPlant;
 			break;
 		case ObjectType::OBJECT_TYPE_VENUSTRAP:
-
+			object = new VenusFire;
 			break;
 		case ObjectType::OBJECT_TYPE_COIN:
 			object = new Coin;
@@ -132,7 +156,7 @@ void Scene::ParseEntityData(std::string line) {
 
 	if (object) {
 		object->SetObjectID(static_cast<int>(objectID));
-		dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID));
+		dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
 		objects.push_back(object);
 	}
 }
@@ -209,7 +233,15 @@ void Scene::ParseWorldCoords(std::string line) {
 			}
 			break;
 		case ObjectType::OBJECT_TYPE_VENUSTRAP:
-
+			for (GameObject* object : objects) {
+				if (dynamic_cast<VenusFire*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
 			break;
 		case ObjectType::OBJECT_TYPE_COIN:
 			for (GameObject* object : objects) {
@@ -490,8 +522,8 @@ void Scene::Unload() {
 }
 
 void Scene::UpdateCameraPosition() {
-	if (marioInstance->GetPosition().x < 0.0f) {
-		marioInstance->SetPosition(D3DXVECTOR3(0.0f, marioInstance->GetPosition().y, 0));
+	if (marioInstance->GetPosition().x < 16.0f) {
+		marioInstance->SetPosition(D3DXVECTOR3(16.0f, marioInstance->GetPosition().y, 0));
 	}
 	else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
 		marioInstance->SetPosition(D3DXVECTOR3(static_cast<float>(sceneWidth) - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
@@ -507,8 +539,11 @@ void Scene::UpdateCameraPosition() {
 	}
 	
 	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;	
-	if (camPosition.y > 230) {
-		camPosition.y = 230;
+	if (camPosition.y > sceneHeight) {
+		camPosition.y = static_cast<float>(sceneHeight);
+	}
+	else if (camPosition.y < sceneHeight) {
+		//camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
 	}
 	//camPosition.y = 230;
 
@@ -525,6 +560,38 @@ void Scene::Update(DWORD delta) {
 
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects.at(i)->Update(delta, &collidableObjects);
+
+		if (dynamic_cast<KoopaTroopa*>(objects.at(i))) {
+			KoopaTroopa* koopaTroopa = static_cast<KoopaTroopa*>(objects.at(i));
+			if (koopaTroopa->GetCurrentHitPoints() == 2) {
+				//mario is on the right side of koopa
+				if ((koopaTroopa->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+					koopaTroopa->SetNormal(D3DXVECTOR3(-1, 0, 0));
+				}
+				else {
+					koopaTroopa->SetNormal(D3DXVECTOR3(1, 0, 0));
+				}
+			}
+		}
+
+		if (dynamic_cast<VenusFire*>(objects.at(i))) {
+			VenusFire* venusFire = static_cast<VenusFire*>(objects.at(i));
+			//mario is on the right side of venus
+			if ((venusFire->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+				venusFire->SetNormal(D3DXVECTOR3(-1, venusFire->GetNormal().y, 0));
+			}
+			else {
+				venusFire->SetNormal(D3DXVECTOR3(1, venusFire->GetNormal().y, 0));
+			}
+
+			//mario is under venus
+			if ((venusFire->GetPosition().y - marioInstance->GetPosition().y) < 0) {
+				venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, -1, 0));
+			}
+			else {
+				venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, 1, 0));
+			}
+		}
 
 		if (dynamic_cast<Entity*>(objects.at(i))) {
 			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == -1) {

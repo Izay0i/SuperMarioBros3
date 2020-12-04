@@ -33,7 +33,7 @@
 
 [ENTITY_DATA]
 #Mario
-0	assets\data\player\mario_data.txt	0	assets\data\projectiles\fireball_data.txt
+0	assets\data\player\mario_data.txt	0	assets\data\projectiles\fireball_data.txt	0
 
 #Animated Tiles
 #Coin
@@ -61,20 +61,24 @@
 101	assets\data\tiles\coin_data.txt	2
 101	assets\data\tiles\coin_data.txt	2
 #Question block
-102	assets\data\tiles\questionblock_data.txt	2
-102	assets\data\tiles\questionblock_data.txt	2
-102	assets\data\tiles\questionblock_data.txt	2
-102	assets\data\tiles\questionblock_data.txt	2
-102	assets\data\tiles\questionblock_data.txt	2
-102	assets\data\tiles\questionblock_data.txt	2
-102	assets\data\tiles\questionblock_data.txt	2
-102	assets\data\tiles\questionblock_data.txt	2
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\tiles\coin_data.txt	2
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\tiles\coin_data.txt	2
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\tiles\coin_data.txt	2
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\tiles\coin_data.txt	2
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\tiles\coin_data.txt	2
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2
 #Shiny brick
+#1UP
+103	assets\data\tiles\shinybrick_data.txt	2	assets\data\npc\1upmushroom_data.txt	2
+#1UP
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
+#Switch  block
+103	assets\data\tiles\shinybrick_data.txt	2	assets\data\tiles\switchblock_data.txt	2
+#Switch block
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
@@ -112,10 +116,10 @@
 4	assets\data\npc\parakoopa_data.txt	1
 4	assets\data\npc\parakoopa_data.txt	1
 #Pirana plant
-5	assets\data\npc\piranaplant_data.txt	1	g
+5	assets\data\npc\piranaplant_data.txt	1
 #Venus fire trap
-6	assets\data\npc\venustrap_data.txt	1	
-6	assets\data\npc\venustrap_data.txt	1	g
+6	assets\data\npc\venustrap_data.txt	1	assets\data\projectiles\fireball_data.txt	0
+6	assets\data\npc\venustrap_data.txt	1	g	assets\data\projectiles\fireball_data.txt	0
 
 #obj_id	x	y
 [WORLD_COORDS]
@@ -137,10 +141,14 @@
 3	2096	352
 #Para troopa
 4	1328	294
+#4	96	384
 4	1376	294
 4	1424	294
 #Pirana plant
 5	1800	360
+#Venus fire trap
+6	360	336
+6	1864	344
 
 #Animated Tiles
 #Coin
@@ -177,11 +185,15 @@
 102	704	352
 102	1472	368
 #Shiny brick
+#1UP
 103	1440	128
+#1UP
 103	1984	368
 103	2000	368
 103	2016	368
+#Switch block
 103	2032	368
+#Switch block
 103	1968	384
 103	1984	384
 103	2000	384
@@ -244,9 +256,9 @@
 #Wood 3
 204	1584	384	32	16	16
 #Wood 4
-204	1600	368	16	16	17
+204	1600	368	16	64	17
 #Wood 5
-204	1664	368	16	16	18
+204	1664	368	16	64	18
 #Wood 6
 204	1664	384	32	16	19
 #Wood 7
