@@ -229,10 +229,10 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}				
 			}
 			
-			if ((dynamic_cast<Entity*>(event->object))) {
+			if (dynamic_cast<Entity*>(event->object)) {
 				if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
-					dynamic_cast<Entity*>(event->object)->TakeDamage();
 					TakeDamage();
+					dynamic_cast<Entity*>(event->object)->TakeDamage();
 				}
 			}
 		}

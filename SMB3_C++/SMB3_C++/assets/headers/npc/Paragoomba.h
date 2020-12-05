@@ -15,8 +15,11 @@ private:
 	int jumpCount;
 
 	float runSpeed = 0.03f;
-	float jumpSpeed = 0.006f;
+	float jumpSpeed = 0.10f;
 	float gravity = 0.001f;
+
+	DWORD walkStart;
+	DWORD walkTime = 500;
 
 	void HandleJumping();
 	void HandleStates() override;
@@ -26,6 +29,9 @@ public:
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;
+
+	void StartWalkTimer() { walkStart = static_cast<DWORD>(GetTickCount64()); }
+	bool IsTired() { return walkStart != 0; }
 
 	void Release() override;
 };

@@ -14,6 +14,8 @@ protected:
 	};
 
 	const static int MAX_FILE_LINE = 1024;
+	const float MAX_Y_OFFSET = 16.0f; //how far up should the plant go
+	const float MIN_Y_OFFSET = 16.0f; //how far down should the plant go
 
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;

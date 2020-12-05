@@ -135,7 +135,10 @@ void QuestionBlock::HandleStates() {
 void QuestionBlock::TakeDamage() {
 	if (hitPoints > 1) {
 		--hitPoints;
-		velocity.y = -jumpSpeed;
+		
+		if (position.y >= (originalPos.y - MAX_Y_OFFSET)) {
+			velocity.y = -jumpSpeed;
+		}
 	}
 }
 
@@ -151,6 +154,9 @@ void QuestionBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		velocity.y = 0;
 		if (position.y >= originalPos.y) {
 			position = originalPos;			
+		}
+		else if (position.y < (originalPos.y - MAX_Y_OFFSET)) {
+			position.y = originalPos.y - MAX_Y_OFFSET;
 		}
 	}
 

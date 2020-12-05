@@ -6,6 +6,11 @@ VenusFire::VenusFire() {
 }
 
 void VenusFire::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
+	}
+	
 	scale.x = normal.x == 1 ? 1.0f : -1.0f;
 }
 

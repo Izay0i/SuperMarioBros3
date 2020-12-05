@@ -8,7 +8,29 @@ Paragoomba::Paragoomba() {
 }
 
 void Paragoomba::HandleJumping() {
+	if (isOnGround && jumpCount < 4) {
+		++jumpCount;
+		
+		if (jumpCount == 4) {
+			StartWalkTimer();
+		}
+	}
+	
+	if (hitPoints == 2 && isOnGround) {
+		if (!IsTired()) {
+			float mod = 1.0f;
+			if (jumpCount == 3) {
+				mod = 2.2f;
+			}
 
+			velocity.y = -jumpSpeed * mod;
+			isOnGround = false;
+
+			/*char debugStr[100];
+			sprintf_s(debugStr, "Jump speed: %f\n", velocity.y);
+			OutputDebugStringA(debugStr);*/
+		}
+	}	
 }
 
 void Paragoomba::HandleStates() {
@@ -29,16 +51,21 @@ void Paragoomba::HandleStates() {
 }
 
 void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	HandleStates();
 	HandleJumping();
+	HandleStates();
 
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
 
-	if (hitPoints == 2 && isOnGround) {
-		velocity.y = -jumpSpeed * delta;
-		isOnGround = false;
+	if (walkStart != 0 && GetTickCount64() - walkStart > walkTime) {
+		walkStart = 0;
+		jumpCount = 0;
+	}
+
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
 	}
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
@@ -72,16 +99,20 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
+			//mario's fireball
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+				animName = "Walk";
+				scale = D3DXVECTOR2(1.0f, -1.0f);
+				velocity.y = -0.33f;
+				hitPoints = 0;
+			}
+
 			if (dynamic_cast<Tiles*>(event->object) ||
 				dynamic_cast<QuestionBlock*>(event->object) ||
 				dynamic_cast<ShinyBrick*>(event->object))
 			{
 				if (event->normal.y == -1.0f) {
 					isOnGround = true;
-
-					if (jumpCount < 2) {
-						++jumpCount;
-					}
 				}
 			}
 
@@ -103,7 +134,7 @@ void Paragoomba::Render() {
 
 	switch (currentState) {
 		case GoombaState::FLY:
-			if (velocity.y > 0.0f) {
+			if (!isOnGround) {
 				sprite.PlayAnimation("Fly", D3DXVECTOR3(position.x, position.y - 8, 0));
 			}
 			else {

@@ -338,11 +338,16 @@ void MarioStateMachine::Render() {
 			break;
 		//racoon
 		case MarioState::SPIN:
-			mario->GetSprite().PlayAnimation(
-				"RacSpin",
-				mario->GetPosition(),
-				D3DXVECTOR2(mario->GetNormal().x, 1.0f)
-			);
+			if (mario->IsAttacking()) {
+				mario->GetSprite().PlayAnimation(
+					"RacSpin",
+					mario->GetPosition(),
+					D3DXVECTOR2(mario->GetNormal().x, 1.0f)
+				);
+			}
+			else {
+				mario->GetSprite().PlayAnimation("RacIdle", mario->GetPosition(), mario->GetScale());
+			}
 			break;
 		//fire
 		case MarioState::SHOOT:

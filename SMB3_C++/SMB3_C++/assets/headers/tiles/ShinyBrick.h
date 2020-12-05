@@ -15,7 +15,7 @@ private:
 	};
 
 	const static int MAX_FILE_LINE = 1024;
-	const float MAX_Y_OFFSET = 0.7f; //how far up the object can go
+	const float MAX_Y_OFFSET = 0.4f; //how far up the object can go
 
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;

@@ -61,16 +61,25 @@ void Mario::LoadTexture() {
 
 RECTF Mario::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x;
-	bound.top = position.y;
-
-	if (hitPoints == 1) {		
-		bound.right = position.x + hitBox.GetWidth(id);
-		bound.bottom = position.y + hitBox.GetHeight(id);
+	
+	if (IsAttacking() && velocity.x == 0.0f) {
+		bound.left = position.x - 8;
+		bound.top = position.y;
+		bound.right = bound.left + hitBox.GetWidth(1) * 2;
+		bound.bottom = position.y + hitBox.GetHeight(1);
 	}
 	else {
-		bound.right = position.x + hitBox.GetWidth(1);
-		bound.bottom = position.y + hitBox.GetHeight(1);
+		bound.left = position.x;
+		bound.top = position.y;
+
+		if (hitPoints == 1) {
+			bound.right = position.x + hitBox.GetWidth(id);
+			bound.bottom = position.y + hitBox.GetHeight(id);
+		}
+		else {
+			bound.right = position.x + hitBox.GetWidth(1);
+			bound.bottom = position.y + hitBox.GetHeight(1);
+		}
 	}
 
 	return bound;
@@ -155,17 +164,24 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 }
 
 void Mario::HandleMovement() {
+	if (isOnGround) {
+		gravity = 0.0025f;
+	}
+	
 	//variable jump height by manupilating gravity
-	//good enough
+	//good enough	
 	if (Device::IsKeyDown(DIK_K)) {
 		if (gravity > MAX_GRAVITY) {
 			gravity -= 0.0005f;
+		}
+		else if (gravity <= MAX_GRAVITY) {
+			gravity = MAX_GRAVITY;
 		}
 	}
 	else {
 		if (gravity < 0.0025f) {
 			gravity += 0.0005f;
-		}
+		} 
 	}
 
 	//skid
@@ -292,7 +308,7 @@ void Mario::OnKeyDown(int keyCode) {
 
 			//unlimited jumping if Mario is Racoon
 			if (hitPoints == 4) {
-				if (acceleration >= ACCEL_THRESHOLD || IsFlying()) {
+				if (acceleration >= ACCEL_THRESHOLD) {
 					//isOnGround false just to make the AnimatedSprite play the _TakeOffJump animation once
 					if (!IsFlying() && isOnGround) {
 						isOnGround = false;
@@ -346,7 +362,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		attackStart = 0;
 	}
 
-	//stops flying when time is out or mario get hit
+	//stops flying when time is up or mario get hit
 	if (flyStart != 0 && (GetTickCount64() - flyStart > flyTime || hitPoints != 4)) {
 		flyStart = 0;
 	}
@@ -397,7 +413,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			{
 				if (event->normal.y == -1.0f) {
 					isOnGround = true;
-				}								
+				}
 			}
 
 			//coin
@@ -433,9 +449,21 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
-			//pirana plant
+			//pirana plant or venus fire trap
 			if (dynamic_cast<PiranaPlant*>(event->object)) {
-				TakeDamage();
+				PiranaPlant* plant = static_cast<PiranaPlant*>(event->object);
+				if (IsAttacking()) {
+					plant->TakeDamage();
+				}
+				else {
+					TakeDamage();
+					if (hitPoints > 0) {
+						velocity.y = -deflectSpeed;
+					}
+					else {
+						velocity.y -= dieflectSpeed;
+					}
+				}
 			}
 
 			//goomba or paragoomba

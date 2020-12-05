@@ -561,6 +561,19 @@ void Scene::Update(DWORD delta) {
 	for (unsigned int i = 0; i < objects.size(); ++i) {
 		objects.at(i)->Update(delta, &collidableObjects);
 
+		if (dynamic_cast<Paragoomba*>(objects.at(i))) {
+			Paragoomba* paraGoomba = static_cast<Paragoomba*>(objects.at(i));
+			if (paraGoomba->IsTired() && paraGoomba->GetCurrentHitPoints() == 2) {
+				//mario is on the right side of goomba
+				if ((paraGoomba->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+					paraGoomba->SetNormal(D3DXVECTOR3(-1, 0, 0));
+				}
+				else {
+					paraGoomba->SetNormal(D3DXVECTOR3(1, 0, 0));
+				}
+			}
+		}
+
 		if (dynamic_cast<KoopaTroopa*>(objects.at(i))) {
 			KoopaTroopa* koopaTroopa = static_cast<KoopaTroopa*>(objects.at(i));
 			if (koopaTroopa->GetCurrentHitPoints() == 2) {
