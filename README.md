@@ -20,7 +20,7 @@
 |<kbd>J</kbd> |Attack/Hold shell  |
 |<kbd>K</kbd> |Jump               |
 
-Credits:
+## Credits
 + 125scratch, Jermungandr for the Mario & Luigi sprites.
 + Fleepa, Superjustinbros for the enemies sprites.
 + JigglyPuffGirl for the goal roulette sprites.
