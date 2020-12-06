@@ -24,6 +24,10 @@ std::string Scene::GetTexturePath(int id) const {
 	return textureFiles.at(id).first;
 }
 
+int Scene::GetSceneID() const {
+	return sceneID;
+}
+
 int Scene::GetSceneWidth() const {
 	return sceneWidth;
 }
@@ -310,9 +314,9 @@ void Scene::ParseTilesData(std::string line) {
 		return;
 	}
 
-	GameObject* object = new Tiles;
-	object->SetObjectID(std::stoi(tokens.at(0)));
-	dynamic_cast<Tiles*>(object)->SetSpritesArrID(std::stoi(tokens.at(5)));
+	Tiles* tile = new Tiles;
+	tile->SetObjectID(std::stoi(tokens.at(0)));
+	tile->SetSpritesArrID(std::stoi(tokens.at(5)));
 
 	float posX, posY;
 
@@ -324,11 +328,11 @@ void Scene::ParseTilesData(std::string line) {
 
 	D3DXVECTOR3 position(posX, posY, 0);
 
-	object->SetPosition(position);
-	dynamic_cast<Tiles*>(object)->AddHitBox(hitbox);
+	tile->SetPosition(position);
+	tile->AddHitBox(hitbox);
 
-	if (object) {
-		objects.push_back(object);
+	if (tile) {
+		objects.push_back(tile);
 	}
 }
 
@@ -626,12 +630,6 @@ void Scene::Render() {
 	bgInstance->Render();
 	
 	for (GameObject* object : objects) {
-		if (dynamic_cast<PiranaPlant*>(object)) {
-			object->Render();
-		}
-	}
-
-	for (GameObject* object : objects) {
 		if (!dynamic_cast<Entity*>(object)) {
 			object->Render();
 		}
@@ -643,6 +641,12 @@ void Scene::Render() {
 		}
 	}
 	
+	for (GameObject* object : objects) {
+		if (dynamic_cast<PiranaPlant*>(object)) {
+			object->Render();
+		}
+	}
+
 	marioInstance->Render();
 }
 

@@ -153,6 +153,26 @@ void PiranaPlant::TakeDamage() {
 void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
+	if (IsRetracting()) {
+		if (position.y > (originalPos.y - MAX_Y_OFFSET)) {
+			position.y -= 0.5f;
+		}
+	}
+
+	if (!IsRetracting()) {
+		if (position.y >= originalPos.y) {
+			position.y = originalPos.y;
+			StartRetractTimer();
+		}
+		else {
+			position.y += 0.5f;		
+		}		
+	}
+
+	if (retractStart != 0 && GetTickCount64() - retractStart > retractTime) {
+		retractStart = 0;
+	}
+
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;

@@ -247,10 +247,11 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
-					entity->TakeDamage();
-
-					if (this->normal.y == 0.0f && dynamic_cast<ShinyBrick*>(event->object)) {
+					if (dynamic_cast<ShinyBrick*>(event->object) && event->normal.y == 0.0f) {
 						entity->SetCurrenHitPoints(-1);
+					}
+					else {
+						entity->TakeDamage();
 					}
 				}
 			}

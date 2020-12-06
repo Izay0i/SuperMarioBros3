@@ -63,11 +63,19 @@ private:
 		SCENE_FILE_SECTION_BACKGROUND
 	};
 
+	enum class SceneType {
+		SCENE_INTRO = 0,
+		SCENE_MAP = 10,
+		SCENE_GAME = 11
+	};
+
+	SceneType currentScene;
+
 	Mario* marioInstance;
 	Camera* cameraInstance;
 	Background* bgInstance;
 
-	const static int MAX_FILE_LINE = 2048;
+	const static int MAX_FILE_LINE = 2512;
 
 	int sceneID;
 	int sceneWidth, sceneHeight;
@@ -106,9 +114,11 @@ public:
 
 	std::string GetTexturePath(int) const;
 
+	int GetSceneID() const;
+
 	int GetSceneWidth() const;
-	int GetSceneHeight() const;
-	
+	int GetSceneHeight() const;	
+
 	void AddObjectToScene(GameObject*);
 
 	void Load(const LPDIRECT3DDEVICE9&, const LPD3DXSPRITE&);

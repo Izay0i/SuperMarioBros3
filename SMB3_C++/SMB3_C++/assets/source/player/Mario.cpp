@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 3;
+	hitPoints = 1;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -224,9 +224,9 @@ void Mario::HandleMovement() {
 	
 	if ((Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
 		//GOTTA GO FAAAST
-		if (Device::IsKeyDown(DIK_J) || IsFlying()) {
+		if (Device::IsKeyDown(DIK_J)) {
 			if (acceleration < MAX_ACCEL) {
-				acceleration += 0.04f;
+				acceleration += 0.03f;
 			}
 		}
 		else {
@@ -308,7 +308,7 @@ void Mario::OnKeyDown(int keyCode) {
 
 			//unlimited jumping if Mario is Racoon
 			if (hitPoints == 4) {
-				if (acceleration >= ACCEL_THRESHOLD) {
+				if (acceleration >= ACCEL_THRESHOLD || IsFlying()) {
 					//isOnGround false just to make the AnimatedSprite play the _TakeOffJump animation once
 					if (!IsFlying() && isOnGround) {
 						isOnGround = false;

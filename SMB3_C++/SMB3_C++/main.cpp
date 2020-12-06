@@ -27,9 +27,11 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	gameInstance->GameRun();
 
 	/*char debugStr[100];
-	for (int i = 1; i < 35; ++i) {
-		sprintf_s(debugStr, "101	assets\\data\\tiles\\coin_data.txt\n");
-		OutputDebugStringW(Util::ToLPCWSTR(debugStr));
+	for (int i = 0; i < 16; ++i) {
+		for (int j = 0; j < 9; ++j) {
+			sprintf_s(debugStr, "698	35	713	50	%d	%d	2\n", 2096 + 16 * i, 480 + 16 * j);
+			OutputDebugStringA(debugStr);
+		}
 	}*/
 
 	return 0;

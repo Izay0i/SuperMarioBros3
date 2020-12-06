@@ -20,7 +20,7 @@ void Paragoomba::HandleJumping() {
 		if (!IsTired()) {
 			float mod = 1.0f;
 			if (jumpCount == 3) {
-				mod = 2.2f;
+				mod = 1.8f;
 			}
 
 			velocity.y = -jumpSpeed * mod;

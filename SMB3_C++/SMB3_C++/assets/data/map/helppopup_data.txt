@@ -1,0 +1,6 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#Help
+Help	18	1	33	15	2	100
+Help	154	98	169	112

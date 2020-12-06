@@ -146,7 +146,7 @@ RacCrouch	79	350	102	377	1	0
 #Jump
 RacJump	105	350	128	377	1	0
 #Skid
-RacSkid	339	350	354	377	1	0
+RacSkid	339	348	354	377	1	0
 #Front
 RacFront	357	350	372	377	1	0
 #Back

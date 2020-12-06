@@ -197,7 +197,7 @@ void MarioStateMachine::Render() {
 					}
 					else {
 						if (mario->GetAcceleration() < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
-							mario->GetSprite().PlayAnimation("RacSkid", mario->GetPosition(), mario->GetScale());
+							mario->GetSprite().PlayAnimation("RacSkid", D3DXVECTOR3(mario->GetPosition().x, mario->GetPosition().y - 2, 0), mario->GetScale());
 						}
 						else {
 							mario->GetSprite().PlayAnimation("RacRun", mario->GetPosition(), mario->GetScale());
@@ -251,11 +251,13 @@ void MarioStateMachine::Render() {
 					if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround() && !mario->GetHeldEntity()) {
 						mario->GetSprite().PlayAnimation("RacTakeOffJump", mario->GetPosition(), mario->GetScale());
 					}
-					else if (Device::IsKeyDown(DIK_K) && mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
-						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
-					}
-					else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
-						mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale());
+					else if (mario->IsFlying() && !mario->GetHeldEntity()) {
+						if (Device::IsKeyDown(DIK_K)) {
+							mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
+						}
+						else {
+							mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale());
+						}
 					}
 					else if (mario->GetHeldEntity()) {
 						mario->GetSprite().PlayAnimation("RacHoldJump", mario->GetPosition(), mario->GetScale());
@@ -302,14 +304,16 @@ void MarioStateMachine::Render() {
 					}
 					break;
 				case MarioForm::RACOON:					
-					if (Device::IsKeyDown(DIK_K) && mario->GetAcceleration() < mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
+					if (Device::IsKeyDown(DIK_K) &&!mario->IsFlying() && !mario->GetHeldEntity()) {
 						mario->GetSprite().PlayAnimation("RacSlowFall", mario->GetPosition(), mario->GetScale());
 					}
-					else if (Device::IsKeyDown(DIK_K) && mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
-						mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
-					}
-					else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
-						mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale());
+					else if (mario->IsFlying() && !mario->GetHeldEntity()) {
+						if (Device::IsKeyDown(DIK_K)) {
+							mario->GetSprite().PlayAnimation("RacFlyBoost", mario->GetPosition(), mario->GetScale());
+						}
+						else {
+							mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale());
+						}
 					}
 					else if (mario->GetHeldEntity()) {
 						mario->GetSprite().PlayAnimation("RacHoldJump", mario->GetPosition(), mario->GetScale());

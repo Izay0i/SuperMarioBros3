@@ -12,6 +12,7 @@
 class Entity;
 class Fireball;
 class MarioStateMachine;
+class BonusItem;
 
 //band-aid fixes baby
 class Mario : public Entity {
@@ -28,6 +29,11 @@ private:
 	Entity* heldEntity;
 
 	std::vector<Fireball*> fireballs;
+
+	//blue row
+	std::vector<BonusItem*> bonusItems;
+	//pink row
+	std::vector<GameObject*> powerUps;
 
 	bool isOnGround;
 	bool isHolding;
