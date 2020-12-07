@@ -20,11 +20,15 @@ private:
 
 	BallState currentState;
 	
+	float shootSpeed = 0.0012f;
 	float runSpeed = 0.2f;
 	float jumpSpeed = 0.2f;
 	float gravity = 0.002f;
 
 	DWORD removeTime = 300;
+
+	DWORD aliveStart;
+	DWORD aliveTime = 10000;
 
 	void LoadTexture();
 
@@ -39,6 +43,9 @@ public:
 	RECTF GetBoundingBox(int = 0) const override;
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
+
+	void StartCountDownTimer() { aliveStart = static_cast<DWORD>(GetTickCount64()); }
+	bool IsAlive() { return aliveStart != 0; }
 
 	void TakeDamage() override;
 

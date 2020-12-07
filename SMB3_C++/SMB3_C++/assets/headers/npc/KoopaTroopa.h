@@ -25,7 +25,6 @@ protected:
 
 	KoopaState currentState;
 
-	bool isBeingHeld = false;
 
 	float runSpeed = 0.03f;
 	float jumpSpeed = 0.5f;
@@ -51,9 +50,6 @@ public:
 	virtual void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
 	virtual void StartRetract() { retractStart = static_cast<DWORD>(GetTickCount64()); }
-
-	virtual void SetStatus(bool b) { isBeingHeld = b; }
-	virtual bool IsBeingHeld() const { return isBeingHeld; }
 
 	virtual void TakeDamage() override;
 

@@ -27,6 +27,10 @@ void Parakoopa::HandleStates() {
 }
 
 void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	if (hitPoints == 0 && !IsBeingRemoved()) {
+		StartRemoveTimer();
+	}
+	
 	HandleStates();
 
 	GameObject::Update(delta);

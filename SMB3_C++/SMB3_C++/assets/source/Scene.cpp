@@ -542,7 +542,7 @@ void Scene::UpdateCameraPosition() {
 		camPosition.x = static_cast<float>(sceneWidth) - Game::GetInstance()->GetScreenWidth();
 	}
 	
-	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;	
+	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 1.5f;	
 	if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
 		camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
 	}

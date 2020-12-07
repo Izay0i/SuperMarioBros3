@@ -181,13 +181,13 @@ void KoopaTroopa::TakeDamage() {
 		--hitPoints;
 		StartRetract();
 	}
-
-	if (hitPoints == 0) {
-		StartRemoveTimer();
-	}
 }
 
 void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	if (hitPoints == 0 && !IsBeingRemoved()) {
+		StartRemoveTimer();
+	}
+	
 	HandleStates();
 
 	GameObject::Update(delta);

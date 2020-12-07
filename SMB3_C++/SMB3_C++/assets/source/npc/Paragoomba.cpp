@@ -51,6 +51,10 @@ void Paragoomba::HandleStates() {
 }
 
 void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	if (hitPoints == 0 && !IsBeingRemoved()) {
+		StartRemoveTimer();
+	}
+	
 	HandleJumping();
 	HandleStates();
 
@@ -98,6 +102,18 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
+
+			//shell is held
+			if ((event->object->GetObjectID() == 3 || event->object->GetObjectID() == 4) && dynamic_cast<Entity*>(event->object)->IsBeingHeld()) {
+				dynamic_cast<Entity*>(event->object)->SetCurrenHitPoints(0);
+				event->object->SetScale(D3DXVECTOR2(1.0f, -1.0f));
+				event->object->SetVelocity(D3DXVECTOR3(0, -0.23f, 0));
+
+				animName = "Walk";
+				scale = D3DXVECTOR2(1.0f, -1.0f);
+				velocity.y = -0.23f;
+				hitPoints = 0;
+			}
 
 			//mario's fireball or koopa shell
 			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99 ||

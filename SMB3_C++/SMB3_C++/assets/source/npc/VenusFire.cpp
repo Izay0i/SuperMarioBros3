@@ -15,8 +15,8 @@ Fireball* VenusFire::SpawnFireball() {
 	}
 
 	fireball->ParseData(extraData.at(ind), extraData.at(ind + 1), colorKey);
-	fireball->SetNormal(D3DXVECTOR3(-normal.x, 0, 0));
-	fireball->SetPosition(D3DXVECTOR3(position.x, position.y + 10, 0));
+	fireball->SetNormal(D3DXVECTOR3(-normal.x, normal.y, 0));
+	fireball->SetPosition(D3DXVECTOR3(position.x + normal.x, position.y + 10, 0));
 	return fireball;
 }
 

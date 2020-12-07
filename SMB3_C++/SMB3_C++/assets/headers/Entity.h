@@ -15,6 +15,8 @@ protected:
 
 	std::vector<std::string> extraData;
 
+	bool isBeingHeld = false;
+
 	//-1: flag for removal
 	int hitPoints = 1;
 
@@ -29,7 +31,11 @@ public:
 	void SetCurrenHitPoints(int point) { hitPoints = point; }
 	int GetCurrentHitPoints() const { return hitPoints; }
 
+	virtual void SetStatus(bool b) { isBeingHeld = b; }
+	virtual bool IsBeingHeld() const { return isBeingHeld; }
+
 	virtual void StartRemoveTimer() { removeStart = static_cast<DWORD>(GetTickCount64()); }
+	virtual bool IsBeingRemoved() { return removeStart != 0; }
 
 	virtual void TakeDamage() {}
 

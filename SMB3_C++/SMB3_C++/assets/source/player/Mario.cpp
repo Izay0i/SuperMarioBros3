@@ -419,6 +419,11 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
+			//venus fire's fireball
+			if (dynamic_cast<Fireball*>(event->object) && event->object->GetObjectID() == 98) {
+				TakeDamage();
+			}
+
 			//coin
 			if (dynamic_cast<Coin*>(event->object)) {
 				Coin* coin = static_cast<Coin*>(event->object);

@@ -7,6 +7,8 @@ D3DCOLOR Fireball::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 Fireball::Fireball() {
 	hitPoints = 1;
 	currentState = BallState::BOUNCE;
+
+	StartCountDownTimer();
 }
 
 void Fireball::LoadTexture() {
@@ -161,26 +163,32 @@ void Fireball::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
 	}
-
-	if (hitPoints == 0) {
-		StartRemoveTimer();
-	}
 }
 
 void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	//objectID:
 	//98 - venus
 	//99 - mario
-	
+
+	if (hitPoints == 0 && !IsBeingRemoved()) {
+		StartRemoveTimer();
+	}
+
 	HandleStates();
 
 	GameObject::Update(delta);
 
-	if (objectID == 99) {
+	if (objectID == 98) {
+		velocity.y = -shootSpeed * normal.y * delta;
+	}
+	else if (objectID == 99) {
 		velocity.y += gravity * delta;
 	}
-		
-
+	
+	if (aliveStart != 0 && GetTickCount64() - aliveStart > aliveTime) {
+		hitPoints = -1;
+		aliveStart = 0;
+	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
@@ -245,16 +253,14 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 
 				if (dynamic_cast<Entity*>(event->object)) {
-					if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
-						if (dynamic_cast<ShinyBrick*>(event->object) ||
-							dynamic_cast<QuestionBlock*>(event->object) ||
-							event->object->GetObjectID() == 5 ||
-							event->object->GetObjectID() == 6)
-						{
-							TakeDamage();
-						}
-						dynamic_cast<Entity*>(event->object)->TakeDamage();
+					if (dynamic_cast<ShinyBrick*>(event->object) ||
+						dynamic_cast<QuestionBlock*>(event->object) ||
+						event->object->GetObjectID() == 5 ||
+						event->object->GetObjectID() == 6)
+					{
+						TakeDamage();
 					}
+					dynamic_cast<Entity*>(event->object)->TakeDamage();
 				}
 			}
 		}
@@ -277,5 +283,5 @@ void Fireball::Render() {
 }
 
 void Fireball::Release() {
-
+	OutputDebugStringA("Fireball released\n");
 }

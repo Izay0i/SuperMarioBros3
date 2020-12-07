@@ -3,7 +3,7 @@
 #include "assets/headers/Game.h"
 
 const int SCREEN_WIDTH = 263;
-const int SCREEN_HEIGHT = 390;
+const int SCREEN_HEIGHT = 263;
 
 int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	Game* gameInstance = Game::GetInstance();
