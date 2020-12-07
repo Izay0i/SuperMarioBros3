@@ -135,11 +135,19 @@ void SwitchBlock::HandleStates() {
 void SwitchBlock::TakeDamage() {
 	if (hitPoints > 1) {
 		--hitPoints;
+		StartActivationTimer();
 	}
 }
 
 void SwitchBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
+
+	GameObject::Update(delta);
+
+	if (activateStart != 0 && GetTickCount64() - activateStart > activateTime) {
+		activateStart = 0;
+		OutputDebugStringA("Activated\n");
+	}
 }
 
 void SwitchBlock::Render() {

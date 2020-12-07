@@ -18,8 +18,6 @@ private:
 public:
 	VenusFire();
 
-	RECTF GetBoundingBox(int = 0) const override;
-
 	Fireball* SpawnFireball();
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;

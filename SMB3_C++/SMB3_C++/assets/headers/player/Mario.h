@@ -32,8 +32,6 @@ private:
 
 	//blue row
 	std::vector<BonusItem*> bonusItems;
-	//pink row
-	std::vector<GameObject*> powerUps;
 
 	bool isOnGround;
 	bool isHolding;
@@ -45,8 +43,7 @@ private:
 
 	float runSpeed = 0.09f;
 	float jumpSpeed = 0.327f;
-	float deflectSpeed = 0.26f;
-	float dieflectSpeed = 0.4f;
+	float deflectSpeed = 0.4f;
 	float gravity = 0.0025f;
 	float acceleration = 0.5f;
 
@@ -55,6 +52,9 @@ private:
 
 	DWORD flyStart;
 	DWORD flyTime = 8000;
+
+	DWORD invulStart;
+	DWORD invulTime = 3000;
 
 	void LoadTexture();
 
@@ -72,13 +72,18 @@ public:
 	float GetAcceleration() const { return acceleration; }
 	float GetAccelThreshold() const { return ACCEL_THRESHOLD; }
 
-	bool IsOnGround() const { return isOnGround; }
-	bool IsAttacking() const { return attackStart != 0; }
-	bool IsFlying() const { return flyStart != 0; }
-
 	RECTF GetBoundingBox(int = 0) const override;
 	AnimatedSprite GetSprite() const { return sprite; }
 	Entity* GetHeldEntity() { return heldEntity; }
+
+	bool IsOnGround() const { return isOnGround; }
+	bool IsAttacking() const { return attackStart != 0; }
+	bool IsFlying() const { return flyStart != 0; }
+	bool IsInvulnerable() const { return invulStart != 0; }
+
+	void StartAttackTimer() { attackStart = static_cast<DWORD>(GetTickCount64()); }
+	void StartFlyTimer() { flyStart = static_cast<DWORD>(GetTickCount64()); }
+	void StartInvulTimer() { invulStart = static_cast<DWORD>(GetTickCount64()); }
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 	
@@ -87,9 +92,6 @@ public:
 	void OnKeyUp(int) {}
 
 	Fireball* SpawnFireball();
-
-	void StartAttackTimer() { attackStart = static_cast<DWORD>(GetTickCount64()); }
-	void StartFlyTimer() { flyStart = static_cast<DWORD>(GetTickCount64()); }
 
 	void TakeDamage() override;
 

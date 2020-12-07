@@ -5,19 +5,6 @@ VenusFire::VenusFire() {
 	normal = D3DXVECTOR3(1, 1, 0);
 }
 
-RECTF VenusFire::GetBoundingBox(int id) const {
-	RECTF bound;
-
-	if (hitPoints > 0) {
-		bound.left = position.x;
-		bound.top = position.y;
-		bound.right = position.x + hitBox.GetWidth(id);
-		bound.bottom = position.y + hitBox.GetHeight(id);
-	}
-
-	return bound;
-}
-
 Fireball* VenusFire::SpawnFireball() {
 	Fireball* fireball = new Fireball;
 	fireball->SetObjectID(98);
@@ -80,7 +67,7 @@ void VenusFire::Render() {
 			//up
 			if (normal.y == 1) {
 				if (extraData.at(0) == "g") {
-					if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
+					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
 						sprite.PlayAnimation("LookUpOpenGreen", position, scale);
 					}
 					else {
@@ -88,7 +75,7 @@ void VenusFire::Render() {
 					}
 				}
 				else {
-					if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
+					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
 						sprite.PlayAnimation("LookUpOpenRed", position, scale);
 					}
 					else {
@@ -99,7 +86,7 @@ void VenusFire::Render() {
 			//down
 			else if (normal.y == -1) {
 				if (extraData.at(0) == "g") {
-					if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
+					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
 						sprite.PlayAnimation("LookDownOpenGreen", position, scale);
 					}
 					else {
@@ -107,7 +94,7 @@ void VenusFire::Render() {
 					}
 				}
 				else {
-					if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
+					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
 						sprite.PlayAnimation("LookDownOpenRed", position, scale);
 					}
 					else {

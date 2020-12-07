@@ -95,20 +95,48 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
+			//mario's fireball
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+				hitPoints = 0;
+				scale = D3DXVECTOR2(1.0f, -1.0f);
+				velocity.y = -0.23f;
+			}
+
+			//ditto
+			if (dynamic_cast<KoopaTroopa*>(event->object) &&
+				(dynamic_cast<KoopaTroopa*>(event->object)->GetCurrentHitPoints() == 1 || isBeingHeld))
+			{
+				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
+				koopa->SetCurrenHitPoints(0);
+				koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
+				koopa->SetVelocity(D3DXVECTOR3(0, -0.23f, 0));
+
+				hitPoints = 0;
+				scale = D3DXVECTOR2(1.0f, -1.0f);
+				velocity.y = -0.23f;
+			}
+
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
-					entity->TakeDamage();
-
-					if (dynamic_cast<ShinyBrick*>(event->object)) {
-						entity->SetCurrenHitPoints(0);
+					if (dynamic_cast<ShinyBrick*>(event->object) && event->normal.y == 0.0f) {
+						entity->SetCurrenHitPoints(-1);
+					}
+					else {
+						entity->TakeDamage();
 					}
 				}
 			}
 
 			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
-					this->normal.x = -event->normal.x;
+					if (hitPoints != 1 || //spinning
+						dynamic_cast<Tiles*>(event->object) ||
+						dynamic_cast<ShinyBrick*>(event->object) ||
+						dynamic_cast<QuestionBlock*>(event->object))
+					{
+						this->normal.x = -event->normal.x;
+					}
 				}
 			}
 		}

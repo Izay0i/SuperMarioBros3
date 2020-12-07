@@ -145,6 +145,10 @@ void Fireball::HandleStates() {
 
 	switch (currentState) {
 		case BallState::BOUNCE:
+			if (objectID == 98) {
+				runSpeed = 0.05f;
+			}
+
 			velocity.x = runSpeed * normal.x;
 			break;
 		case BallState::EXPLODE:
@@ -164,11 +168,19 @@ void Fireball::TakeDamage() {
 }
 
 void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	//objectID:
+	//98 - venus
+	//99 - mario
+	
 	HandleStates();
 
 	GameObject::Update(delta);
 
-	velocity.y += gravity * delta;
+	if (objectID == 99) {
+		velocity.y += gravity * delta;
+	}
+		
+
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
@@ -182,7 +194,7 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		CalcPotentialCollision(objects, collisionEvents);
 	}
 
-	if (collisionEvents.size() == 0) {
+	if (collisionEvents.size() == 0 || objectID == 98) {
 		position += distance;
 	}
 	else {
@@ -200,7 +212,9 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		}
 
 		if (normal.y != 0.0f) {
-			velocity.y = -jumpSpeed;
+			if (objectID == 99) {
+				velocity.y = -jumpSpeed;
+			}
 		}
 
 		for (LPCOLLISIONEVENT result : eventResults) {
@@ -223,16 +237,24 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				continue;
 			}
 
-			if (dynamic_cast<Tiles*>(event->object)) {				
-				if (event->normal.x != 0.0f) {
-					TakeDamage();
-				}				
-			}
-			
-			if (dynamic_cast<Entity*>(event->object)) {
-				if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
-					TakeDamage();
-					dynamic_cast<Entity*>(event->object)->TakeDamage();
+			if (objectID == 99) {
+				if (dynamic_cast<Tiles*>(event->object)) {
+					if (event->normal.x != 0.0f) {
+						TakeDamage();
+					}
+				}
+
+				if (dynamic_cast<Entity*>(event->object)) {
+					if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
+						if (dynamic_cast<ShinyBrick*>(event->object) ||
+							dynamic_cast<QuestionBlock*>(event->object) ||
+							event->object->GetObjectID() == 5 ||
+							event->object->GetObjectID() == 6)
+						{
+							TakeDamage();
+						}
+						dynamic_cast<Entity*>(event->object)->TakeDamage();
+					}
 				}
 			}
 		}

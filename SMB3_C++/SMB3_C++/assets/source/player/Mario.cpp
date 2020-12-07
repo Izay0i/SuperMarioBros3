@@ -62,23 +62,25 @@ void Mario::LoadTexture() {
 RECTF Mario::GetBoundingBox(int id) const {
 	RECTF bound;
 	
-	if (IsAttacking() && velocity.x == 0.0f) {
-		bound.left = position.x - 8;
-		bound.top = position.y;
-		bound.right = bound.left + hitBox.GetWidth(1) * 2;
-		bound.bottom = position.y + hitBox.GetHeight(1);
-	}
-	else {
-		bound.left = position.x;
-		bound.top = position.y;
-
-		if (hitPoints == 1) {
-			bound.right = position.x + hitBox.GetWidth(id);
-			bound.bottom = position.y + hitBox.GetHeight(id);
+	if (hitPoints > 0) {
+		if (IsAttacking() && velocity.x == 0.0f) {
+			bound.left = position.x - 8;
+			bound.top = position.y;
+			bound.right = bound.left + hitBox.GetWidth(1) * 2;
+			bound.bottom = position.y + hitBox.GetHeight(1);
 		}
 		else {
-			bound.right = position.x + hitBox.GetWidth(1);
-			bound.bottom = position.y + hitBox.GetHeight(1);
+			bound.left = position.x;
+			bound.top = position.y;
+
+			if (hitPoints == 1) {
+				bound.right = position.x + hitBox.GetWidth(id);
+				bound.bottom = position.y + hitBox.GetHeight(id);
+			}
+			else {
+				bound.right = position.x + hitBox.GetWidth(1);
+				bound.bottom = position.y + hitBox.GetHeight(1);
+			}
 		}
 	}
 
@@ -350,6 +352,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	if (hitPoints == 0) {
 		velocity.x = 0;
 		isOnGround = false;
+		isHolding = false;
 	}
 
 	for (unsigned int i = 0; i < fireballs.size(); ++i) {
@@ -457,11 +460,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 				else {
 					TakeDamage();
-					if (hitPoints > 0) {
+					if (hitPoints >= 0) {
 						velocity.y = -deflectSpeed;
-					}
-					else {
-						velocity.y -= dieflectSpeed;
 					}
 				}
 			}
@@ -483,11 +483,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						}
 						else {
 							TakeDamage();
-							if (hitPoints > 0) {
+							if (hitPoints >= 0) {
 								velocity.y = -deflectSpeed;
-							}
-							else {
-								velocity.y -= dieflectSpeed;
 							}
 						}
 					}
@@ -523,11 +520,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						}
 						else {
 							TakeDamage();
-							if (hitPoints > 0) {
+							if (hitPoints >= 0) {
 								velocity.y = -deflectSpeed;
-							}
-							else {
-								velocity.y -= dieflectSpeed;
 							}
 						}
 					}
@@ -536,6 +530,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						if (isHolding) {
 							if (!heldEntity) {
 								heldEntity = koopa;
+								koopa->SetStatus(true); //is being held
 							}
 						}
 						else {
@@ -549,17 +544,21 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 
 	if (heldEntity) {
-		if (heldEntity->GetCurrentHitPoints() == 3) {
+		if (heldEntity->GetCurrentHitPoints() == 0 || heldEntity->GetCurrentHitPoints() == 3) {
 			isHolding = false;
 			
-			if (normal.x == 1) {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x + 17, position.y - 14, 0));
-			}
-			else {
-				heldEntity->SetPosition(D3DXVECTOR3(position.x - 17, position.y - 14, 0));
+			if (heldEntity->GetCurrentHitPoints() == 3) {
+				if (normal.x == 1) {
+					heldEntity->SetPosition(D3DXVECTOR3(position.x + 17, position.y - 14, 0));
+				}
+				else {
+					heldEntity->SetPosition(D3DXVECTOR3(position.x - 17, position.y - 14, 0));
+				}
 			}
 
+			dynamic_cast<KoopaTroopa*>(heldEntity)->SetStatus(false);
 			heldEntity = nullptr;
+
 			return;
 		}
 

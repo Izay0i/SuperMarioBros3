@@ -535,21 +535,21 @@ void Scene::UpdateCameraPosition() {
 
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
 	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2;
-	if (camPosition.x < 0) {
-		camPosition.x = 0;
+	if (camPosition.x < 8.0f) {
+		camPosition.x = 8.0f;
 	}
 	else if ((camPosition.x + Game::GetInstance()->GetScreenWidth()) > sceneWidth) {
 		camPosition.x = static_cast<float>(sceneWidth) - Game::GetInstance()->GetScreenWidth();
 	}
 	
 	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2;	
-	if (camPosition.y > sceneHeight) {
-		camPosition.y = static_cast<float>(sceneHeight);
+	if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
+		camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
 	}
-	else if (camPosition.y < sceneHeight) {
-		//camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
+	else if (camPosition.y < sceneHeight + Game::GetInstance()->GetScreenHeight()) {
+		//camPosition.y = static_cast<float>(sceneHeight) + Game::GetInstance()->GetScreenHeight();
 	}
-	//camPosition.y = 230;
+	//camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
 
 	Camera::GetInstance()->SetPosition(camPosition);
 }

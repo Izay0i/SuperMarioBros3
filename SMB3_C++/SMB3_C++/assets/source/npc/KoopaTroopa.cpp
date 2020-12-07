@@ -49,16 +49,19 @@ void KoopaTroopa::LoadTexture() {
 
 RECTF KoopaTroopa::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x;
-	bound.top = position.y;
+	
+	if (hitPoints > 0) {
+		bound.left = position.x;
+		bound.top = position.y;
 
-	if (hitPoints >= 3) {
-		bound.right = position.x + hitBox.GetWidth(id);
-		bound.bottom = position.y + hitBox.GetHeight(id);
-	}
-	else {
-		bound.right = position.x + hitBox.GetWidth(1);
-		bound.bottom = position.y + hitBox.GetHeight(1);
+		if (hitPoints >= 3) {
+			bound.right = position.x + hitBox.GetWidth(id);
+			bound.bottom = position.y + hitBox.GetHeight(id);
+		}
+		else {
+			bound.right = position.x + hitBox.GetWidth(1);
+			bound.bottom = position.y + hitBox.GetHeight(1);
+		}
 	}
 
 	return bound;
@@ -241,7 +244,22 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
 				hitPoints = 0;
 				scale = D3DXVECTOR2(1.0f, -1.0f);
-				velocity.y = -0.33f;
+				velocity.y = -0.23f;
+			}
+
+			//koopa shell
+			//kill both of them if one is spinning or is held by mario
+			if (dynamic_cast<KoopaTroopa*>(event->object) && 
+				(dynamic_cast<KoopaTroopa*>(event->object)->GetCurrentHitPoints() == 1 || isBeingHeld))
+			{
+				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
+				koopa->SetCurrenHitPoints(0);
+				koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
+				koopa->SetVelocity(D3DXVECTOR3(0, -0.23f, 0));
+
+				hitPoints = 0;
+				scale = D3DXVECTOR2(1.0f, -1.0f);
+				velocity.y = -0.23f;
 			}
 
 			if (dynamic_cast<Entity*>(event->object)) {
@@ -256,6 +274,7 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 			
+			//shiny brick
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (entity->GetObjectID() == 103) {
@@ -272,6 +291,7 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
+			//one-way platform
 			if (dynamic_cast<Tiles*>(event->object)) {
 				Tiles* tile = static_cast<Tiles*>(event->object);
 				if (tile->GetObjectID() == 205) {
@@ -290,7 +310,13 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
-					this->normal.x = -event->normal.x;
+					if (hitPoints != 1 || //spinning
+						dynamic_cast<Tiles*>(event->object) ||
+						dynamic_cast<ShinyBrick*>(event->object) ||
+						dynamic_cast<QuestionBlock*>(event->object))
+					{
+						this->normal.x = -event->normal.x;
+					}
 				}
 			}
 		}
@@ -348,5 +374,5 @@ void KoopaTroopa::Render() {
 }
 
 void KoopaTroopa::Release() {
-
+	
 }

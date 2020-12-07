@@ -99,11 +99,13 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
-			//mario's fireball
-			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+			//mario's fireball or koopa shell
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99 ||
+				((event->object->GetObjectID() == 3 || event->object->GetObjectID() == 4) && dynamic_cast<Entity*>(event->object)->GetCurrentHitPoints() == 1))
+			{
 				animName = "Walk";
 				scale = D3DXVECTOR2(1.0f, -1.0f);
-				velocity.y = -0.33f;
+				velocity.y = -0.23f;
 				hitPoints = 0;
 			}
 

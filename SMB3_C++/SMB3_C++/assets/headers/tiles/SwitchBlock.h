@@ -21,6 +21,9 @@ private:
 
 	BlockState currentState;
 
+	DWORD activateStart;
+	DWORD activateTime = 5000;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);
@@ -46,6 +49,9 @@ public:
 		return bound;
 	}
 	
+	void StartActivationTimer() { activateStart = static_cast<DWORD>(GetTickCount64()); }
+	bool IsActivated() { return activateStart != 0; }
+
 	void TakeDamage() override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
