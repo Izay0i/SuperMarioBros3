@@ -409,7 +409,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
-			
+
 			if (dynamic_cast<Tiles*>(event->object) || 
 				dynamic_cast<QuestionBlock*>(event->object) || 
 				dynamic_cast<ShinyBrick*>(event->object))
@@ -561,9 +561,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
-			dynamic_cast<KoopaTroopa*>(heldEntity)->SetStatus(false);
+			heldEntity->SetStatus(false);
 			heldEntity = nullptr;
-
 			return;
 		}
 
@@ -586,6 +585,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		else {
 			heldEntity->TakeDamage();
 			heldEntity->SetNormal(D3DXVECTOR3(-normal.x, 0, 0));
+			heldEntity->SetStatus(false);
 			heldEntity = nullptr;
 		}
 	}

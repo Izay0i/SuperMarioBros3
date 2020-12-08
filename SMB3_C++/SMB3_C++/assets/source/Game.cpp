@@ -27,8 +27,8 @@ HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int he
 	wndClass.lpfnWndProc = reinterpret_cast<WNDPROC>(WinProc);
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
-	wndClass.hIcon = nullptr;
-	wndClass.hIconSm = nullptr;
+	wndClass.hIcon = reinterpret_cast<HICON>(LoadImage(hInstance, GAME_ICON, IMAGE_ICON, 0, 0, LR_LOADFROMFILE));
+	wndClass.hIconSm = reinterpret_cast<HICON>(LoadImage(hInstance, GAME_ICON, IMAGE_ICON, 0, 0, LR_LOADFROMFILE));
 	wndClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wndClass.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 	wndClass.lpszMenuName = nullptr;
@@ -112,12 +112,6 @@ void Game::Render() {
 		directDevice->ColorFill(backBuffer, nullptr, sceneManager->GetCurrentScene()->GetBGColor());
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-		
-		//texture still bleeds even when set to none but less noticeable
-
-		directDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
-		//directDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
-		directDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
 
 		sceneManager->GetCurrentScene()->Render();
 

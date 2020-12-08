@@ -5,30 +5,19 @@
 
 class Entity;
 
-class Fireball : public Entity {
+class SuperMushroom : public Entity {
 private:
-	enum class BallState {
-		BOUNCE,
-		EXPLODE
-	};
-
 	const static int MAX_FILE_LINE = 1024;
 
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
-	BallState currentState;
-	
-	float travelSpeed = 0.0012f;
-	float runSpeed = 0.2f;
+	float runSpeed = 0.02f;
 	float jumpSpeed = 0.2f;
 	float gravity = 0.002f;
 
 	DWORD removeTime = 300;
-
-	DWORD aliveStart;
-	DWORD aliveTime = 10000;
 
 	void LoadTexture();
 
@@ -38,14 +27,11 @@ private:
 	void HandleStates();
 
 public:
-	Fireball();
+	SuperMushroom();
 
 	RECTF GetBoundingBox(int = 0) const override;
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
-
-	void StartCountDownTimer() { aliveStart = static_cast<DWORD>(GetTickCount64()); }
-	bool IsAlive() { return aliveStart != 0; }
 
 	void TakeDamage() override;
 

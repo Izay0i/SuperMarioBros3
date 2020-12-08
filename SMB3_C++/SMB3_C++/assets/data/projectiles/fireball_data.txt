@@ -14,4 +14,4 @@ Explode	469	1	484	16
 
 #left	top	right	bottom
 [HITBOXES]
-0	0	8	8
+0	0	6	6

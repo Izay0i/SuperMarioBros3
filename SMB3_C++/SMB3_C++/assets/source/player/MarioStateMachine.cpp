@@ -289,7 +289,7 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("BigHoldJump", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						mario->GetSprite().PlayAnimation("BigJump", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("BigFall", mario->GetPosition(), mario->GetScale());
 					}
 					break;
 				case MarioForm::FIRE:
@@ -300,7 +300,7 @@ void MarioStateMachine::Render() {
 						mario->GetSprite().PlayAnimation("FireHoldJump", mario->GetPosition(), mario->GetScale());
 					}
 					else {
-						mario->GetSprite().PlayAnimation("FireJump", mario->GetPosition(), mario->GetScale());
+						mario->GetSprite().PlayAnimation("FireFall", mario->GetPosition(), mario->GetScale());
 					}
 					break;
 				case MarioForm::RACOON:					

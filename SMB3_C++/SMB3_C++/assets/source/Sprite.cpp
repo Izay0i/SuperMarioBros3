@@ -35,11 +35,9 @@ void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale, D3DXVECTOR2 center) {
 		}
 	}
 	
-	//int x = static_cast<int>(position.x - Camera::GetInstance()->GetPosition().x);
-	//int y = static_cast<int>(position.y - Camera::GetInstance()->GetPosition().y);
 	float x = position.x - Camera::GetInstance()->GetPosition().x;
 	float y = position.y - Camera::GetInstance()->GetPosition().y;
-	D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);
+	D3DXVECTOR2 spritePosition = D3DXVECTOR2(floor(x), floor(y));
 
 	D3DXMATRIX mat;
 

@@ -52,6 +52,8 @@ BigRun	37	92	52	119
 BigCrouch	55	92	70	119	1	0
 #Jump
 BigJump	73	92	88	119	1	0
+#Fall
+BigFall	37	92	52	119	1	0
 #Skid
 BigSkid	195	92	210	119	1	0
 #Front
@@ -97,6 +99,8 @@ FireRun	37	264	52	291
 FireCrouch	55	264	70	291	1	0
 #Jump
 FireJump	73	264	88	291	1	0
+#Fall
+FireFall	37	264	52	291	1	0
 #Skid
 FireSkid	195	264	210	291	1	0
 #Front

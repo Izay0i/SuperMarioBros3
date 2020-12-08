@@ -34,10 +34,10 @@ void GameObject::SweptAABB(
 	box.right = distance.x > 0 ? movingObject.right + distance.x : movingObject.right;
 	box.bottom = distance.y > 0 ? movingObject.bottom + distance.y : movingObject.bottom;
 
-	if (box.right < staticObject.left || 
-		box.left > staticObject.right || 
-		box.bottom < staticObject.top || 
-		box.top > staticObject.bottom) 
+	if (box.right <= staticObject.left || 
+		box.left >= staticObject.right || 
+		box.bottom <= staticObject.top || 
+		box.top >= staticObject.bottom) 
 	{
 		return;
 	}
@@ -139,7 +139,7 @@ void GameObject::CalcPotentialCollision(
 {
 	for (unsigned int i = 0; i < collidableObjects->size(); ++i) {
 		LPCOLLISIONEVENT event = SweptAABBEx(collidableObjects->at(i));
-		if (event->time > 0.0f && event->time <= 1.0f) {
+		if (event->time >= 0.0f && event->time <= 1.0f) {
 			collisionEvents.push_back(event);
 		}
 		else {

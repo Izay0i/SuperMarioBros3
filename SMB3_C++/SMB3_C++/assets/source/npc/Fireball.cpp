@@ -179,7 +179,7 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 
 	if (objectID == 98) {
-		velocity.y = -shootSpeed * normal.y * delta;
+		velocity.y = -travelSpeed * normal.y * delta;
 	}
 	else if (objectID == 99) {
 		velocity.y += gravity * delta;

@@ -25,7 +25,8 @@ private:
 
 	const WCHAR* CLASS_NAME = L"SMB3_Class";
 	const WCHAR* GAME_TITLE = L"Izay0i - Super Mario Bros 3 [DirectX9]";
-	
+	const WCHAR* GAME_ICON = L"assets/smb3.ico";
+
 	const static int MAX_FILE_LINE = 1024;
 	//EVEN FURTHER BEYOND AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 	const unsigned int FRAME_RATE = 60;

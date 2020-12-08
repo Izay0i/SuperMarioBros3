@@ -48,11 +48,9 @@ void Background::AddImage(RECT bound, D3DXVECTOR3 pos) {
 
 void Background::Render() {			
 	for (const auto &image : images) {
-		//int x = static_cast<int>(image.second.x - Camera::GetInstance()->GetPosition().x);
-		//int y = static_cast<int>(image.second.y - Camera::GetInstance()->GetPosition().y);
 		float x = image.second.x - Camera::GetInstance()->GetPosition().x;
 		float y = image.second.y - Camera::GetInstance()->GetPosition().y;
-		D3DXVECTOR2 spritePosition = D3DXVECTOR2(x, y);
+		D3DXVECTOR2 spritePosition = D3DXVECTOR2(floor(x), floor(y));
 
 		D3DXMATRIX mat;
 
