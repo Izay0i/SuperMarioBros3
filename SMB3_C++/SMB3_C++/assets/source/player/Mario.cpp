@@ -419,6 +419,35 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
+			//super leaf
+			if (dynamic_cast<SuperLeaf*>(event->object)) {				
+				if (hitPoints > 1) {
+					hitPoints = 4;
+				}
+				else {
+					hitPoints = 2;
+				}
+
+				SuperLeaf* leaf = static_cast<SuperLeaf*>(event->object);
+				leaf->TakeDamage();
+			}
+
+			//super mushroom
+			if (dynamic_cast<SuperMushroom*>(event->object)) {
+				if (hitPoints <= 1) {
+					hitPoints = 2;
+				}
+
+				SuperMushroom* mushroom = static_cast<SuperMushroom*>(event->object);
+				mushroom->TakeDamage();
+			}
+
+			//1up mushroom
+			if (dynamic_cast<GMushroom*>(event->object)) {
+				GMushroom* mushroom = static_cast<GMushroom*>(event->object);
+				mushroom->TakeDamage();
+			}
+
 			//venus fire's fireball
 			if (dynamic_cast<Fireball*>(event->object) && event->object->GetObjectID() == 98) {
 				TakeDamage();

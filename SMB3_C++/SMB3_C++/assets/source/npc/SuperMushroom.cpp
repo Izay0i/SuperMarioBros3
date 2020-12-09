@@ -6,6 +6,7 @@ D3DCOLOR SuperMushroom::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 SuperMushroom::SuperMushroom() {
 	hitPoints = 1;
+	normal = D3DXVECTOR3(-1.0f, 1.0f, 0);
 }
 
 void SuperMushroom::LoadTexture() {
@@ -43,12 +44,12 @@ void SuperMushroom::LoadTexture() {
 	}
 }
 
-RECTF SuperMushroom::GetBoundingBox(int id = 0) const {
+RECTF SuperMushroom::GetBoundingBox(int id) const {
 	RECTF bound;
 
 	if (hitPoints > 0) {
-		bound.left = position.x + hitBox.GetWidth(id);
-		bound.top = position.y + hitBox.GetHeight(id);
+		bound.left = position.x;
+		bound.top = position.y;
 		bound.right = position.x + hitBox.GetWidth(id);
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
@@ -143,9 +144,55 @@ void SuperMushroom::TakeDamage() {
 }
 
 void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	GameObject::Update(delta);
+	
+	velocity.x = runSpeed * normal.x * delta;
+	velocity.y += gravity * delta;
+
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
+	}
+
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
+	collisionEvents.clear();
+
+	if (hitPoints > 0) {
+		CalcPotentialCollision(objects, collisionEvents);
+	}
+
+	if (collisionEvents.size() == 0) {
+		position += distance;
+	}
+	else {
+		D3DXVECTOR2 minTime;
+		D3DXVECTOR3 normal;
+		D3DXVECTOR3 relativeDistance;
+
+		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
+
+		if (normal.x != 0.0f) {
+			velocity.x = 0.0f;
+		}
+
+		if (normal.y != 0.0f) {
+			velocity.y = 0.0f;
+		}
+
+		for (LPCOLLISIONEVENT result : eventResults) {
+			LPCOLLISIONEVENT event = result;
+
+			if (dynamic_cast<Tiles*>(event->object) && event->normal.x != 0.0f) {
+				this->normal.x = -this->normal.x;
+			}
+		}
+	}
+
+	for (LPCOLLISIONEVENT event : collisionEvents) {
+		delete event;
 	}
 }
 

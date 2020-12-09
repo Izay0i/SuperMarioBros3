@@ -156,6 +156,16 @@ void Scene::ParseEntityData(std::string line) {
 		case ObjectType::OBJECT_TYPE_SWITCHBLOCK:
 			object = new SwitchBlock;
 			break;
+
+		case ObjectType::OBJECT_TYPE_MUSHROOM:
+			object = new SuperMushroom;
+			break;
+		case ObjectType::OBJECT_TYPE_1UPSHROOM:
+			object = new GMushroom;
+			break;
+		case ObjectType::OBJECT_TYPE_LEAF:
+			object = new SuperLeaf;
+			break;
 	}
 
 	if (object) {
@@ -296,6 +306,40 @@ void Scene::ParseWorldCoords(std::string line) {
 		case ObjectType::OBJECT_TYPE_SWITCHBLOCK:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<SwitchBlock*>(object)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+
+		case ObjectType::OBJECT_TYPE_MUSHROOM:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<SuperMushroom*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case ObjectType::OBJECT_TYPE_1UPSHROOM:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<GMushroom*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case ObjectType::OBJECT_TYPE_LEAF:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<SuperLeaf*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);

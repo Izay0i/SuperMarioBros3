@@ -6,6 +6,8 @@ D3DCOLOR SuperLeaf::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 SuperLeaf::SuperLeaf() {
 	hitPoints = 1;
+	normal = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
+	scale = D3DXVECTOR2(1.0f, 1.0f);
 }
 
 void SuperLeaf::LoadTexture() {
@@ -43,12 +45,12 @@ void SuperLeaf::LoadTexture() {
 	}
 }
 
-RECTF SuperLeaf::GetBoundingBox(int id = 0) const {
+RECTF SuperLeaf::GetBoundingBox(int id) const {
 	RECTF bound;
 
 	if (hitPoints > 0) {
-		bound.left = position.x + hitBox.GetWidth(id);
-		bound.top = position.y + hitBox.GetHeight(id);
+		bound.left = position.x;
+		bound.top = position.y;
 		bound.right = position.x + hitBox.GetWidth(id);
 		bound.bottom = position.y + hitBox.GetHeight(id);
 	}
@@ -143,6 +145,20 @@ void SuperLeaf::TakeDamage() {
 }
 
 void SuperLeaf::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	std::uniform_real_distribution<float> dist(0.0f, 1.2f);
+	
+	GameObject::Update(delta);
+	
+	velocity.y += gravity * delta;
+
+	position.x += sin(distance.x) + dist(randDev) * normal.x;
+	position.y += distance.y;
+
+	if (GetTickCount64() % 1000 == 0) {
+		scale.x = -scale.x;
+		normal.x = -normal.x;
+	}
+
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
@@ -150,7 +166,7 @@ void SuperLeaf::Update(DWORD delta, std::vector<GameObject*>* objects) {
 }
 
 void SuperLeaf::Render() {
-	sprite.PlayAnimation("Default", position);
+	sprite.PlayAnimation("Default", position, scale);
 }
 
 void SuperLeaf::Release() {

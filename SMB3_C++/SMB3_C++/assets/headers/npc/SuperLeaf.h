@@ -1,5 +1,7 @@
 #pragma once
 
+#include <random>
+
 #include "../Entity.h"
 #include "../TileList.h"
 
@@ -7,6 +9,8 @@ class Entity;
 
 class SuperLeaf : public Entity {
 private:
+	std::random_device randDev;
+
 	const static int MAX_FILE_LINE = 1024;
 
 	static LPCWSTR texturePath;
@@ -15,7 +19,7 @@ private:
 	
 	float runSpeed = 0.02f;
 	float jumpSpeed = 0.2f;
-	float gravity = 0.002f;
+	float gravity = 0.00001f;
 
 	DWORD removeTime = 300;
 
