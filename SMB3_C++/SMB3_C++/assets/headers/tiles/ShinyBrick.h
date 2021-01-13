@@ -4,6 +4,10 @@
 
 #include "../Entity.h"
 
+#include "../npc/1UPMushroom.h"
+#include "../tiles/SwitchBlock.h"
+#include "../tiles/Coin.h"
+
 class Entity;
 
 class ShinyBrick : public Entity {
@@ -22,8 +26,6 @@ private:
 	static D3DCOLOR colorKey;
 
 	BlockState currentState;
-
-	std::vector<Entity*> items;
 
 	float jumpSpeed = 0.4f;
 	float gravity = 0.001f;
@@ -53,6 +55,11 @@ public:
 	}
 
 	void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
+
+	Entity* SpawnItem();
+	
+	//7 or 11 coins
+	//std::vector<Coin*> coins;
 
 	void TakeDamage() override;
 

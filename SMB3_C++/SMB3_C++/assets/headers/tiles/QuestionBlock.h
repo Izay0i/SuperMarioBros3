@@ -4,7 +4,15 @@
 
 #include "../Entity.h"
 
+#include "../tiles/Coin.h"
+#include "../npc/SuperLeaf.h"
+#include "../npc/SuperMushroom.h"
+
 class Entity;
+
+class Coin;
+class SuperLeaf;
+class SuperMushroom;
 
 class QuestionBlock : public Entity {
 private:
@@ -21,8 +29,6 @@ private:
 	static D3DCOLOR colorKey;
 	
 	BlockState currentState;
-
-	std::vector<Entity*> items;
 
 	float jumpSpeed = 0.4f;
 	float gravity = 0.001f;
@@ -52,6 +58,8 @@ public:
 	}
 
 	void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
+
+	Entity* SpawnItem(int);
 
 	void TakeDamage() override;
 

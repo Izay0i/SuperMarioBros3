@@ -159,7 +159,7 @@ bool Game::InitGame(HWND hWND) {
 
 	directParams.Windowed = true;
 	directParams.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	directParams.BackBufferFormat = D3DFMT_X8R8G8B8;
+	directParams.BackBufferFormat = D3DFMT_A8R8G8B8;
 	directParams.BackBufferCount = 1;
 
 	RECT window;
@@ -268,6 +268,10 @@ void Game::GameRun() {
 			DWORD now = static_cast<DWORD>(GetTickCount64());
 
 			DWORD deltaTime = now - frameStart;
+
+			/*char debug[100];
+			sprintf_s(debug, "Delta: %lu\n", deltaTime);
+			OutputDebugStringA(debug);*/
 
 			if (deltaTime >= tickPerFrame) {
 				frameStart = now;

@@ -21,7 +21,7 @@ private:
 	float jumpSpeed = 0.2f;
 	float gravity = 0.00001f;
 
-	DWORD removeTime = 300;
+	DWORD removeTime = 1;
 
 	void LoadTexture();
 

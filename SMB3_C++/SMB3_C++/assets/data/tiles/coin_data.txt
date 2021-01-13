@@ -15,4 +15,4 @@ Pushed	936	103	951	118
 
 #left	top	right	bottom
 [HITBOXES]
-0	0	15	16
+0	0	16	16

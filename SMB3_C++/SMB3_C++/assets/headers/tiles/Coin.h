@@ -1,5 +1,8 @@
 #pragma once
 
+//didn't think the coin would move so i put it in the tile folder
+//this is why you plan ahead
+
 #include <fstream>
 
 #include "../Entity.h"
@@ -10,7 +13,8 @@ class Coin : public Entity {
 private:
 	enum class ItemState {
 		ROTATE,
-		PICKEDUP
+		PICKEDUP,
+		POPPEDOUTOFQBLOCK
 	};
 
 	const static int MAX_FILE_LINE = 1024;
@@ -20,6 +24,8 @@ private:
 	static D3DCOLOR colorKey;
 
 	DWORD removeTime = 100;
+
+	float gravity = 0.0005f;
 
 	void LoadTexture();
 
@@ -37,8 +43,8 @@ public:
 		RECTF bound;
 		
 		if (hitPoints > 0) {
-			bound.left = position.x + hitBox.GetWidth(id);
-			bound.top = position.y + hitBox.GetHeight(id);
+			bound.left = position.x;
+			bound.top = position.y;
 			bound.right = position.x + hitBox.GetWidth(id);
 			bound.bottom = position.y + hitBox.GetHeight(id);
 		}

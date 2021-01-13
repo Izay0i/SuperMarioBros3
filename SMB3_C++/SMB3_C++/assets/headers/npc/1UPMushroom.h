@@ -17,7 +17,10 @@ private:
 	float jumpSpeed = 0.2f;
 	float gravity = 0.002f;
 
-	DWORD removeTime = 300;
+	DWORD removeTime = 1;
+
+	DWORD emergeStart;
+	DWORD emergeTime = 605;
 
 	void LoadTexture();
 
@@ -32,6 +35,8 @@ public:
 	RECTF GetBoundingBox(int = 0) const override;
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
+
+	void StartEmergeTimer() { emergeStart = static_cast<DWORD>(GetTickCount64()); }
 
 	void TakeDamage() override;
 

@@ -34,7 +34,6 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
 	GameObject::Update(delta);
-
 	velocity.y += gravity * delta;
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
@@ -43,7 +42,7 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 
 	if (hitPoints == 4 && isOnGround) {
-		velocity.y = -jumpSpeed * delta;
+		velocity.y = -jumpSpeed;
 		isOnGround = false;
 	}
 

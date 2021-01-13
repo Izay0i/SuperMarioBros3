@@ -121,6 +121,34 @@ void ShinyBrick::ParseData(std::string dataPath, std::string texturePath, D3DCOL
 	readFile.close();
 }
 
+Entity* ShinyBrick::SpawnItem() {
+	Entity::ObjectType objectID = static_cast<Entity::ObjectType>(std::stoi(extraData.at(2)));
+
+	Entity* item = nullptr;
+
+	switch (objectID) {
+		case Entity::ObjectType::OBJECT_TYPE_1UPSHROOM:
+			item = new GMushroom;
+			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_1UPSHROOM));
+			item->ParseData(extraData.at(0), extraData.at(1), colorKey);
+			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight() / 3, 0));
+			dynamic_cast<GMushroom*>(item)->StartEmergeTimer();
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK:
+			item = new SwitchBlock;
+			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK));
+			item->ParseData(extraData.at(0), extraData.at(1), colorKey);
+			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight(), 0));
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_COIN:
+
+			break;
+	}
+
+	extraData.clear();
+	return item;
+}
+
 void ShinyBrick::HandleStates() {
 	switch (hitPoints) {
 		case 1:
@@ -133,13 +161,13 @@ void ShinyBrick::HandleStates() {
 }
 
 void ShinyBrick::TakeDamage() {
-	if (hitPoints > 1 && items.size() != 0) {
+	if (hitPoints > 1) {
 		--hitPoints;
-	}
-	
-	if (position.y >= (originalPos.y - MAX_Y_OFFSET)) {
-		velocity.y = -jumpSpeed;
-	}
+
+		if (position.y >= (originalPos.y - MAX_Y_OFFSET)) {
+			velocity.y = -jumpSpeed;
+		}
+	}	
 }
 
 void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {

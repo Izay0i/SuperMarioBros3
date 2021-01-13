@@ -13,7 +13,7 @@ private:
 	bool isOnGround;
 
 	float runSpeed = 0.03f;
-	float jumpSpeed = 0.011f;
+	float jumpSpeed = 0.22f;
 	float gravity = 0.001f;
 
 	void HandleStates() override;

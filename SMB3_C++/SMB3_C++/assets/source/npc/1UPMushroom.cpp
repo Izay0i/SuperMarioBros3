@@ -146,8 +146,13 @@ void GMushroom::TakeDamage() {
 void GMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 
-	velocity.x = runSpeed * normal.x * delta;
-	velocity.y += gravity * delta;
+	if (emergeStart != 0 && GetTickCount64() - emergeStart <= emergeTime) {
+		velocity.y -= 0.00005f * delta;
+	}
+	else {
+		velocity.x = runSpeed * normal.x * delta;
+		velocity.y += gravity * delta;
+	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
@@ -171,8 +176,13 @@ void GMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
+		for (LPCOLLISIONEVENT result : eventResults) {
+			LPCOLLISIONEVENT event = result;
+
+			if (dynamic_cast<Tiles*>(event->object) && event->normal.x != 0.0f) {
+				this->normal.x = -this->normal.x;
+			}
+		}
 
 		if (normal.x != 0.0f) {
 			velocity.x = 0.0f;
@@ -182,13 +192,8 @@ void GMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			velocity.y = 0.0f;
 		}
 
-		for (LPCOLLISIONEVENT result : eventResults) {
-			LPCOLLISIONEVENT event = result;
-
-			if (dynamic_cast<Tiles*>(event->object) && event->normal.x != 0.0f) {
-				this->normal.x = -this->normal.x;
-			}
-		}
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {
@@ -201,5 +206,5 @@ void GMushroom::Render() {
 }
 
 void GMushroom::Release() {
-
+	OutputDebugStringA("1UP released\n");
 }

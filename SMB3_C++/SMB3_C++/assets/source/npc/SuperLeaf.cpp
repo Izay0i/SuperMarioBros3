@@ -170,5 +170,5 @@ void SuperLeaf::Render() {
 }
 
 void SuperLeaf::Release() {
-
+	OutputDebugStringA("Leaf released\n");
 }

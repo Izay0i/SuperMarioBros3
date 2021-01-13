@@ -145,9 +145,14 @@ void SuperMushroom::TakeDamage() {
 
 void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
-	
-	velocity.x = runSpeed * normal.x * delta;
-	velocity.y += gravity * delta;
+		
+	if (emergeStart != 0 && GetTickCount64() - emergeStart <= emergeTime) {
+		velocity.y -= 0.00005f * delta;
+	}
+	else {
+		velocity.x = runSpeed * normal.x * delta;
+		velocity.y += gravity * delta;
+	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
@@ -169,10 +174,15 @@ void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		D3DXVECTOR3 normal;
 		D3DXVECTOR3 relativeDistance;
 
-		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);			
 
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
+		for (LPCOLLISIONEVENT result : eventResults) {
+			LPCOLLISIONEVENT event = result;
+
+			if (dynamic_cast<Tiles*>(event->object) && event->normal.x != 0.0f) {
+				this->normal.x = -this->normal.x;
+			}
+		}
 
 		if (normal.x != 0.0f) {
 			velocity.x = 0.0f;
@@ -182,13 +192,8 @@ void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			velocity.y = 0.0f;
 		}
 
-		for (LPCOLLISIONEVENT result : eventResults) {
-			LPCOLLISIONEVENT event = result;
-
-			if (dynamic_cast<Tiles*>(event->object) && event->normal.x != 0.0f) {
-				this->normal.x = -this->normal.x;
-			}
-		}
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {
@@ -201,5 +206,5 @@ void SuperMushroom::Render() {
 }
 
 void SuperMushroom::Release() {
-
+	OutputDebugStringA("Super shroom released\n");
 }

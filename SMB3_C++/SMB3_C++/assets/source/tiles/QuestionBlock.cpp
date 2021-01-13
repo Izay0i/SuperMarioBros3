@@ -121,6 +121,42 @@ void QuestionBlock::ParseData(std::string dataPath, std::string texturePath, D3D
 	readFile.close();
 }
 
+Entity* QuestionBlock::SpawnItem(int currentHP) {
+	Entity* item = nullptr;
+	
+	//extraData size:
+	//2 -> Coin
+	//4 -> HP: 2 -> Leaf else Mushroom
+
+	if (extraData.size() == 2) {
+		item = new Coin;
+		item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_COIN));
+		item->ParseData(extraData.at(0), extraData.at(1), colorKey);
+		item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight() - 1, 0));
+		item->SetCurrenHitPoints(2);
+		item->SetVelocity(D3DXVECTOR3(0, -0.18f, 0));
+	}
+	else if (extraData.size() > 2) {
+		//Big Mario
+		if (currentHP >= 2) {
+			item = new SuperLeaf;
+			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_LEAF));
+			item->ParseData(extraData.at(2), extraData.at(3), colorKey);
+			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight() * 2, 0));
+		}
+		else {
+			item = new SuperMushroom;
+			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_MUSHROOM));
+			item->ParseData(extraData.at(0), extraData.at(1), colorKey);
+			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight() / 3, 0));
+			dynamic_cast<SuperMushroom*>(item)->StartEmergeTimer();
+		}
+	}
+
+	extraData.clear();
+	return item;
+}
+
 void QuestionBlock::HandleStates() {
 	switch (hitPoints) {
 		case 1:

@@ -46,7 +46,6 @@ void Paragoomba::HandleStates() {
 		case GoombaState::FLY:
 			velocity.x = -runSpeed * normal.x;
 			break;
-			break;
 	}
 }
 
@@ -59,7 +58,6 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
 	GameObject::Update(delta);
-
 	velocity.y += gravity * delta;
 
 	if (walkStart != 0 && GetTickCount64() - walkStart > walkTime) {

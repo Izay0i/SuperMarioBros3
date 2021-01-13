@@ -4,9 +4,11 @@
 #Variants
 #Green
 #Look up
-LookUpGreen	80	144	95	175	1	0
+LookUpGreen	80	144	95	175	2	100
+LookUpGreen	64	144	79	175
 #Look down
-LookDownGreen	48	144	63	175	1	0
+LookDownGreen	48	144	63	175	2	100
+LookDownGreen	32	144	47	175
 #Look up open
 LookUpOpenGreen	64	144	79	175	1	0
 #Look down open
@@ -14,9 +16,11 @@ LookDownOpenGreen	32	144	47	175	1	0
 
 #Red
 #Look up
-LookUpRed	176	144	191	175	1	0
+LookUpRed	176	144	191	175	2	100
+LookUpRed	160	144	175	175
 #Look down
-LookDownRed	144	144	159	175	1	0
+LookDownRed	144	144	159	175	2	100
+LookDownRed	128	144	143	175
 #Look up open
 LookUpOpenRed	160	144	175	175	1	0
 #Look down open

@@ -7,6 +7,9 @@
 [MAPSIZE]
 2816	656
 
+[TIME]
+300
+
 #r	g	b
 [BGCOLOR]
 156	252	240
@@ -83,14 +86,14 @@
 102	assets\data\tiles\questionblock_data.txt	2	assets\data\tiles\coin_data.txt	2
 102	assets\data\tiles\questionblock_data.txt	2	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2
 #Shiny brick
-#1UP
-103	assets\data\tiles\shinybrick_data.txt	2	assets\data\npc\1upmushroom_data.txt	2
+#1UP											data_path								tex_id	obj_id
+103	assets\data\tiles\shinybrick_data.txt	2	assets\data\npc\1upmushroom_data.txt	2	9
 #1UP
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
 #Switch  block
-103	assets\data\tiles\shinybrick_data.txt	2	assets\data\tiles\switchblock_data.txt	2
+103	assets\data\tiles\shinybrick_data.txt	2	assets\data\tiles\switchblock_data.txt	2	105
 #Switch block
 103	assets\data\tiles\shinybrick_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2
@@ -109,8 +112,9 @@
 103	assets\data\tiles\shinybrick_data.txt	2
 #Bonus item
 104	assets\data\tiles\bonusitem_data.txt	5
+
 #Switch block
-105	assets\data\tiles\switchblock_data.txt	2
+#105	assets\data\tiles\switchblock_data.txt	2
 
 #NPCs
 #Goomba
@@ -136,17 +140,17 @@
 
 #For testing
 #Super mushroom
-7	assets\data\npc\supermushroom_data.txt	2
+#7	assets\data\npc\supermushroom_data.txt	2
 #1UP mushroom
-8	assets\data\npc\1upmushroom_data.txt	2
+#8	assets\data\npc\1upmushroom_data.txt	2
 #Super leaf
-9	assets\data\npc\superleaf_data.txt	2
+#9	assets\data\npc\superleaf_data.txt	2
 
 #obj_id	x	y
 [WORLD_COORDS]
-7	2320	368
-8	2336	368
-9	2304	368
+#7	2320	368
+#8	2336	368
+#9	2304	368
 
 #Mario
 #0	25	384
@@ -168,6 +172,7 @@
 3	1472	384
 3	2096	352
 #Para troopa
+#4	128	384
 4	1328	294
 4	1376	294
 4	1424	294
@@ -179,7 +184,8 @@
 
 #Animated Tiles
 #Coin
-101	1072	320
+101	2432	400
+#101	1072	320
 101	1104	288
 101	1136	256
 101	1168	224
@@ -216,23 +222,29 @@
 101	2192	584
 101	2208	584
 #Question block
-102	176	352
-102	192	352
-102	224	304
-102	240	304
+102	2416	368
+102	2432	368
+102	2448	368
+102	2464	368
+#102	176	352
+#102	192	352
+#102	224	304
+#102	240	304
 102	416	320
 102	656	384
 102	704	352
 102	1472	368
 #Shiny brick
 #1UP
-103	1440	128
+103	2480	368
+#103	1440	128
 #1UP
 103	1984	368
 103	2000	368
 103	2016	368
 #Switch block
-103	2032	368
+103	2496	368
+#103	2032	368
 #Switch block
 103	1968	384
 103	1984	384
@@ -251,8 +263,9 @@
 103	2112	400
 #Bonus item
 104	2688	337
+
 #Switch block
-105	2032	352
+#105	2032	352
 
 #obj_id	world_x	world_y	width	height	sprites_arr_id
 [TILES_DATA]

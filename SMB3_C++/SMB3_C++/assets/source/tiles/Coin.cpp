@@ -6,6 +6,7 @@ D3DCOLOR Coin::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Coin::Coin() {
 	//1 - rotate
+	//2 - question block
 	hitPoints = 1;
 }
 
@@ -135,12 +136,51 @@ void Coin::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		hitPoints = -1;
 		removeStart = 0;
 	}
+
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
+	collisionEvents.clear();
+
+	if (hitPoints == 2) {
+		GameObject::Update(delta);
+		velocity.y += gravity * delta;
+
+		position += distance;
+	}
+
+	if (hitPoints > 0) {
+		CalcPotentialCollision(objects, collisionEvents);
+	}
+
+	D3DXVECTOR2 minTime;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 relativeDistance;
+
+	FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+
+	for (LPCOLLISIONEVENT result : eventResults) {
+		LPCOLLISIONEVENT event = result;
+
+		if (event->normal.y == -1.0f) {
+			if (hitPoints == 2) {
+				hitPoints = -1;
+			}
+		}
+	}
+
+	for (LPCOLLISIONEVENT event : collisionEvents) {
+		delete event;
+	}
 }
 
 void Coin::Render() {
-	sprite.PlayAnimation("Rotate", position);
+	if (hitPoints == 2) {
+		sprite.PlayAnimation("Pushed", position);
+	}
+	else {
+		sprite.PlayAnimation("Rotate", position);
+	}
 }
 
 void Coin::Release() {
-	
+	OutputDebugStringA("Coin released\n");
 }

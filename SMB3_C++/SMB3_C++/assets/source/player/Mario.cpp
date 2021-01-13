@@ -66,7 +66,7 @@ RECTF Mario::GetBoundingBox(int id) const {
 		if (IsAttacking() && velocity.x == 0.0f) {
 			bound.left = position.x - 8;
 			bound.top = position.y;
-			bound.right = bound.left + hitBox.GetWidth(1) * 2;
+			bound.right = bound.left + hitBox.GetWidth(1) * 3;
 			bound.bottom = position.y + hitBox.GetHeight(1);
 		}
 		else {
@@ -321,7 +321,7 @@ void Mario::OnKeyDown(int keyCode) {
 				}		
 			}
 			
-			if (IsOnGround()) {
+			if (IsOnGround()) {			
 				velocity.y = -jumpSpeed;
 				isOnGround = false;
 			}
@@ -347,10 +347,11 @@ void Mario::TakeDamage() {
 	}
 }
 
-void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {		
+void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	//stop moving if Mario dies
 	if (hitPoints == 0) {
 		velocity.x = 0;
+		gravity = 0.0010f;
 		isOnGround = false;
 		isHolding = false;
 	}
@@ -370,8 +371,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		flyStart = 0;
 	}
 
-	GameObject::Update(delta);
-	
+	GameObject::Update(delta);	
 	velocity.y += gravity * delta;
 	
 	//float just a little bit longer when flying
@@ -391,73 +391,106 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 	else {
 		D3DXVECTOR2 minTime;
+		D3DXVECTOR2 offSet(0.4f, 0.4f);
 		D3DXVECTOR3 normal;
 		D3DXVECTOR3 relativeDistance;
 
+		//deflect speed
+		float ySpeed = 0.0f;
+
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
-
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
-
-		if (normal.x != 0.0f) {
-			velocity.x = 0.0f;
-		}
-
-		if (normal.y != 0.0f) {
-			velocity.y = 0.0f;
-		}
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
-			if (dynamic_cast<Tiles*>(event->object) || 
+			if ((dynamic_cast<Tiles*>(event->object) || 
 				dynamic_cast<QuestionBlock*>(event->object) || 
-				dynamic_cast<ShinyBrick*>(event->object))
+				dynamic_cast<ShinyBrick*>(event->object)) && 
+				event->normal.y == -1.0f)
 			{
-				if (event->normal.y == -1.0f) {
-					isOnGround = true;
-				}
+				isOnGround = true;
 			}
 
 			//super leaf
-			if (dynamic_cast<SuperLeaf*>(event->object)) {				
+			if (dynamic_cast<SuperLeaf*>(event->object)) {
 				if (hitPoints > 1) {
 					hitPoints = 4;
 				}
 				else {
 					hitPoints = 2;
+					//to not fall out of the stage
+					position.y -= GetBoxHeight();
 				}
 
 				SuperLeaf* leaf = static_cast<SuperLeaf*>(event->object);
 				leaf->TakeDamage();
+
+				//phase through
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
 			}
 
 			//super mushroom
 			if (dynamic_cast<SuperMushroom*>(event->object)) {
 				if (hitPoints <= 1) {
 					hitPoints = 2;
+					position.y -= GetBoxHeight();
 				}
 
 				SuperMushroom* mushroom = static_cast<SuperMushroom*>(event->object);
 				mushroom->TakeDamage();
+
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
 			}
 
 			//1up mushroom
 			if (dynamic_cast<GMushroom*>(event->object)) {
 				GMushroom* mushroom = static_cast<GMushroom*>(event->object);
 				mushroom->TakeDamage();
+
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
 			}
 
 			//venus fire's fireball
 			if (dynamic_cast<Fireball*>(event->object) && event->object->GetObjectID() == 98) {
 				TakeDamage();
+
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
 			}
 
 			//coin
 			if (dynamic_cast<Coin*>(event->object)) {
 				Coin* coin = static_cast<Coin*>(event->object);
 				if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
-					coin->TakeDamage();
+					if (coin->GetCurrentHitPoints() != 2) {
+						coin->TakeDamage();
+					}
+				}
+
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
 			}
 
@@ -472,7 +505,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			//question block
 			if (dynamic_cast<QuestionBlock*>(event->object)) {
 				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(event->object);
-				if (event->normal.y > 0.0f) {
+				if (IsAttacking() || event->normal.y > 0.0f) {
 					questionBlock->TakeDamage();
 				}
 			}
@@ -482,7 +515,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				SwitchBlock* switchBlock = static_cast<SwitchBlock*>(event->object);
 				if (event->normal.y < 0.0f) {
 					switchBlock->TakeDamage();
-					velocity.y = -deflectSpeed;
+					ySpeed = -deflectSpeed;
 				}
 			}
 
@@ -495,7 +528,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				else {
 					TakeDamage();
 					if (hitPoints >= 0) {
-						velocity.y = -deflectSpeed;
+						ySpeed = -deflectSpeed;
 					}
 				}
 			}
@@ -505,7 +538,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				Goomba* goomba = static_cast<Goomba*>(event->object);
 				if (event->normal.y < 0.0f) {
 					if (goomba->GetCurrentHitPoints() > 0) {
-						velocity.y = -deflectSpeed;
+						ySpeed = -deflectSpeed;
 					}
 					goomba->TakeDamage();
 				}
@@ -518,7 +551,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						else {
 							TakeDamage();
 							if (hitPoints >= 0) {
-								velocity.y = -deflectSpeed;
+								ySpeed = -deflectSpeed;
 							}
 						}
 					}
@@ -531,7 +564,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				//on koopa
 				if (event->normal.y < 0.0f) {
 					if (koopa->GetCurrentHitPoints() > 0) {
-						velocity.y = -deflectSpeed;
+						ySpeed = -deflectSpeed;
 					}
 
 					if (koopa->GetCurrentHitPoints() != 1) {
@@ -555,7 +588,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						else {
 							TakeDamage();
 							if (hitPoints >= 0) {
-								velocity.y = -deflectSpeed;
+								ySpeed = -deflectSpeed;
 							}
 						}
 					}
@@ -575,6 +608,17 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 		}
+
+		if (normal.x != 0.0f) {
+			velocity.x = 0.0f;
+		}
+
+		if (normal.y != 0.0f) {
+			velocity.y = ySpeed;
+		}
+
+		position.x += distance.x * minTime.x + normal.x * offSet.x;
+		position.y += distance.y * minTime.y + normal.y * offSet.y;
 	}
 
 	if (heldEntity) {

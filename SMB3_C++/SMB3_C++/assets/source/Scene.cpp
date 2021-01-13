@@ -37,7 +37,12 @@ int Scene::GetSceneHeight() const {
 }
 
 void Scene::AddObjectToScene(GameObject* object) {
-	objects.push_back(object);
+	if (object) {
+		objects.push_back(object);
+	}
+	else {
+		OutputDebugStringA("[SCENE] Inserted object is null\n");
+	}
 }
 
 bool Scene::IsInteger(const std::string& s) {
@@ -102,8 +107,11 @@ void Scene::ParseEntityData(std::string line) {
 	std::vector<std::string> extraData;
 
 	if (tokens.size() > 3) {
+		//(variant) | objID | dataPath | texPath | texID
+		//texPath is added in after dataPath
+		
 		for (unsigned int i = 3; i < tokens.size(); ++i) {
-			if (IsInteger(tokens.at(i))) {
+			if (std::stoi(tokens.at(0)) && i != tokens.size() - 1 && IsInteger(tokens.at(i))) {
 				extraData.push_back(GetTexturePath(std::stoi(tokens.at(i))));
 			}
 			else {
@@ -116,54 +124,54 @@ void Scene::ParseEntityData(std::string line) {
 
 	GameObject* object = nullptr;
 
-	ObjectType objectID = static_cast<ObjectType>(std::stoi(tokens.at(0)));
+	Entity::ObjectType objectID = static_cast<Entity::ObjectType>(std::stoi(tokens.at(0)));
 	switch (objectID) {
-		case ObjectType::OBJECT_TYPE_MARIO:
+		case Entity::ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance = Mario::GetInstance();			
 			marioInstance->SetObjectID(static_cast<int>(objectID));
 			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
 			break;
-		case ObjectType::OBJECT_TYPE_GOOMBA:
+		case Entity::ObjectType::OBJECT_TYPE_GOOMBA:
 			object = new Goomba;
 			break;
-		case ObjectType::OBJECT_TYPE_PARAGOOMBA:
+		case Entity::ObjectType::OBJECT_TYPE_PARAGOOMBA:
 			object = new Paragoomba;
 			break;
-		case ObjectType::OBJECT_TYPE_TROOPA:
+		case Entity::ObjectType::OBJECT_TYPE_TROOPA:
 			object = new KoopaTroopa;
 			break;
-		case ObjectType::OBJECT_TYPE_PARATROOPA:
+		case Entity::ObjectType::OBJECT_TYPE_PARATROOPA:
 			object = new Parakoopa;
 			break;
-		case ObjectType::OBJECT_TYPE_PIPLANT:
+		case Entity::ObjectType::OBJECT_TYPE_PIPLANT:
 			object = new PiranaPlant;
 			break;
-		case ObjectType::OBJECT_TYPE_VENUSTRAP:
+		case Entity::ObjectType::OBJECT_TYPE_VENUSTRAP:
 			object = new VenusFire;
 			break;
-		case ObjectType::OBJECT_TYPE_COIN:
+		case Entity::ObjectType::OBJECT_TYPE_COIN:
 			object = new Coin;
 			break;
-		case ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
+		case Entity::ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
 			object = new QuestionBlock;
 			break;
-		case ObjectType::OBJECT_TYPE_SHINYBRICK:
+		case Entity::ObjectType::OBJECT_TYPE_SHINYBRICK:
 			object = new ShinyBrick;
 			break;
-		case ObjectType::OBJECT_TYPE_BONUSITEM:
+		case Entity::ObjectType::OBJECT_TYPE_BONUSITEM:
 			object = new BonusItem;			
 			break;
-		case ObjectType::OBJECT_TYPE_SWITCHBLOCK:
+		case Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK:
 			object = new SwitchBlock;
 			break;
 
-		case ObjectType::OBJECT_TYPE_MUSHROOM:
+		case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
 			object = new SuperMushroom;
 			break;
-		case ObjectType::OBJECT_TYPE_1UPSHROOM:
+		case Entity::ObjectType::OBJECT_TYPE_1UPSHROOM:
 			object = new GMushroom;
 			break;
-		case ObjectType::OBJECT_TYPE_LEAF:
+		case Entity::ObjectType::OBJECT_TYPE_LEAF:
 			object = new SuperLeaf;
 			break;
 	}
@@ -186,12 +194,12 @@ void Scene::ParseWorldCoords(std::string line) {
 	float posY = std::stof(tokens.at(2));
 	D3DXVECTOR3 position(posX, posY, 0);
 
-	ObjectType objectID = static_cast<ObjectType>(std::stoi(tokens.at(0)));
+	Entity::ObjectType objectID = static_cast<Entity::ObjectType>(std::stoi(tokens.at(0)));
 	switch (objectID) {
-		case ObjectType::OBJECT_TYPE_MARIO:
+		case Entity::ObjectType::OBJECT_TYPE_MARIO:
 			marioInstance->SetPosition(position);
 			break;
-		case ObjectType::OBJECT_TYPE_GOOMBA:
+		case Entity::ObjectType::OBJECT_TYPE_GOOMBA:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<Goomba*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -202,7 +210,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_PARAGOOMBA:
+		case Entity::ObjectType::OBJECT_TYPE_PARAGOOMBA:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<Paragoomba*>(object)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -213,7 +221,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_TROOPA:
+		case Entity::ObjectType::OBJECT_TYPE_TROOPA:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<KoopaTroopa*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -224,7 +232,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_PARATROOPA:
+		case Entity::ObjectType::OBJECT_TYPE_PARATROOPA:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<Parakoopa*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -235,7 +243,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_PIPLANT:
+		case Entity::ObjectType::OBJECT_TYPE_PIPLANT:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<PiranaPlant*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -246,7 +254,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_VENUSTRAP:
+		case Entity::ObjectType::OBJECT_TYPE_VENUSTRAP:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<VenusFire*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -257,7 +265,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_COIN:
+		case Entity::ObjectType::OBJECT_TYPE_COIN:
 			for (GameObject* object : objects) {
 				//dumbass way to check if position is not set
 				//but its almost 2am and im too tired to think of another way
@@ -270,7 +278,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
+		case Entity::ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<QuestionBlock*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -281,7 +289,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_SHINYBRICK:
+		case Entity::ObjectType::OBJECT_TYPE_SHINYBRICK:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<ShinyBrick*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -292,7 +300,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_BONUSITEM:
+		case Entity::ObjectType::OBJECT_TYPE_BONUSITEM:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<BonusItem*>(object)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -303,7 +311,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_SWITCHBLOCK:
+		case Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<SwitchBlock*>(object)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -315,7 +323,7 @@ void Scene::ParseWorldCoords(std::string line) {
 			}
 			break;
 
-		case ObjectType::OBJECT_TYPE_MUSHROOM:
+		case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<SuperMushroom*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -326,7 +334,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_1UPSHROOM:
+		case Entity::ObjectType::OBJECT_TYPE_1UPSHROOM:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<GMushroom*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -337,7 +345,7 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case ObjectType::OBJECT_TYPE_LEAF:
+		case Entity::ObjectType::OBJECT_TYPE_LEAF:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<SuperLeaf*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
@@ -578,7 +586,7 @@ void Scene::UpdateCameraPosition() {
 	}
 
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
-	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 1.5f;
+	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2.0f;
 	if (camPosition.x < 8.0f) {
 		camPosition.x = 8.0f;
 	}
@@ -586,14 +594,14 @@ void Scene::UpdateCameraPosition() {
 		camPosition.x = static_cast<float>(sceneWidth) - Game::GetInstance()->GetScreenWidth();
 	}
 	
-	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 1.5f;	
+	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;	
 	if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
 		camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
 	}
 	else if (camPosition.y + marioInstance->GetPosition().y < 0.0f) {
 		camPosition.y = 0.0f;
 	}
-	//camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
+	camPosition.y = 230.0f;
 
 	/*char debugStr[100];
 	sprintf_s(debugStr, "Cam y: %f\n", camPosition.y);
@@ -610,59 +618,77 @@ void Scene::Update(DWORD delta) {
 
 	marioInstance->Update(delta, &collidableObjects);
 
-	for (unsigned int i = 0; i < objects.size(); ++i) {
-		objects.at(i)->Update(delta, &collidableObjects);
+	if (marioInstance->GetCurrentHitPoints() > 0) {
+		for (unsigned int i = 0; i < objects.size(); ++i) {
+			objects.at(i)->Update(delta, &collidableObjects);
 
-		if (dynamic_cast<Paragoomba*>(objects.at(i))) {
-			Paragoomba* paraGoomba = static_cast<Paragoomba*>(objects.at(i));
-			if (paraGoomba->IsTired() && paraGoomba->GetCurrentHitPoints() == 2) {
-				//mario is on the right side of goomba
-				if ((paraGoomba->GetPosition().x - marioInstance->GetPosition().x) < 0) {
-					paraGoomba->SetNormal(D3DXVECTOR3(-1, 0, 0));
+			if (dynamic_cast<QuestionBlock*>(objects.at(i))) {
+				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(objects.at(i));
+				if (questionBlock->GetCurrentHitPoints() == 1 && questionBlock->GetExtraDataSize() > 0) {
+					Entity* item  = questionBlock->SpawnItem(marioInstance->GetCurrentHitPoints());
+					AddObjectToScene(item);
+				}
+			}
+
+			if (dynamic_cast<ShinyBrick*>(objects.at(i))) {
+				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(objects.at(i));
+				if (shinyBrick->GetCurrentHitPoints() == 1 && shinyBrick->GetExtraDataSize() > 0) {
+					Entity* item = shinyBrick->SpawnItem();
+					AddObjectToScene(item);
+				}
+			}
+
+			if (dynamic_cast<Paragoomba*>(objects.at(i))) {
+				Paragoomba* paraGoomba = static_cast<Paragoomba*>(objects.at(i));
+				if (paraGoomba->IsTired() && paraGoomba->GetCurrentHitPoints() == 2) {
+					//mario is on the right side of goomba
+					if ((paraGoomba->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+						paraGoomba->SetNormal(D3DXVECTOR3(-1, 0, 0));
+					}
+					else {
+						paraGoomba->SetNormal(D3DXVECTOR3(1, 0, 0));
+					}
+				}
+			}
+
+			if (dynamic_cast<KoopaTroopa*>(objects.at(i))) {
+				KoopaTroopa* koopaTroopa = static_cast<KoopaTroopa*>(objects.at(i));
+				if (koopaTroopa->GetCurrentHitPoints() == 2) {
+					//mario is on the right side of koopa
+					if ((koopaTroopa->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+						koopaTroopa->SetNormal(D3DXVECTOR3(-1, 0, 0));
+					}
+					else {
+						koopaTroopa->SetNormal(D3DXVECTOR3(1, 0, 0));
+					}
+				}
+			}
+
+			if (dynamic_cast<VenusFire*>(objects.at(i))) {
+				VenusFire* venusFire = static_cast<VenusFire*>(objects.at(i));
+				//mario is on the right side of venus
+				if ((venusFire->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+					venusFire->SetNormal(D3DXVECTOR3(-1, venusFire->GetNormal().y, 0));
 				}
 				else {
-					paraGoomba->SetNormal(D3DXVECTOR3(1, 0, 0));
+					venusFire->SetNormal(D3DXVECTOR3(1, venusFire->GetNormal().y, 0));
 				}
-			}
-		}
 
-		if (dynamic_cast<KoopaTroopa*>(objects.at(i))) {
-			KoopaTroopa* koopaTroopa = static_cast<KoopaTroopa*>(objects.at(i));
-			if (koopaTroopa->GetCurrentHitPoints() == 2) {
-				//mario is on the right side of koopa
-				if ((koopaTroopa->GetPosition().x - marioInstance->GetPosition().x) < 0) {
-					koopaTroopa->SetNormal(D3DXVECTOR3(-1, 0, 0));
+				//mario is under venus
+				if ((venusFire->GetPosition().y - marioInstance->GetPosition().y) < 0) {
+					venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, -1, 0));
 				}
 				else {
-					koopaTroopa->SetNormal(D3DXVECTOR3(1, 0, 0));
+					venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, 1, 0));
 				}
 			}
-		}
 
-		if (dynamic_cast<VenusFire*>(objects.at(i))) {
-			VenusFire* venusFire = static_cast<VenusFire*>(objects.at(i));
-			//mario is on the right side of venus
-			if ((venusFire->GetPosition().x - marioInstance->GetPosition().x) < 0) {
-				venusFire->SetNormal(D3DXVECTOR3(-1, venusFire->GetNormal().y, 0));
-			}
-			else {
-				venusFire->SetNormal(D3DXVECTOR3(1, venusFire->GetNormal().y, 0));
-			}
-
-			//mario is under venus
-			if ((venusFire->GetPosition().y - marioInstance->GetPosition().y) < 0) {
-				venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, -1, 0));
-			}
-			else {
-				venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, 1, 0));
-			}
-		}
-
-		if (dynamic_cast<Entity*>(objects.at(i))) {
-			if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == -1) {
-				//erase-remove idiom
-				objects.at(i)->Release();
-				objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+			if (dynamic_cast<Entity*>(objects.at(i))) {
+				if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == -1) {
+					//erase-remove idiom
+					objects.at(i)->Release();
+					objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+				}
 			}
 		}
 	}
@@ -675,6 +701,14 @@ void Scene::Update(DWORD delta) {
 }
 
 void Scene::Render() {
+	//Order of rendering:
+	//Background
+	//Piranas and Venus
+	//Tiles
+	//Mushrooms
+	//NPCs
+	//Mario
+
 	bgInstance->Render();
 	
 	for (GameObject* object : objects) {
@@ -684,7 +718,7 @@ void Scene::Render() {
 	}
 
 	for (GameObject* object : objects) {
-		if (dynamic_cast<Entity*>(object) && !dynamic_cast<PiranaPlant*>(object)) {
+		if (dynamic_cast<Entity*>(object)) {
 			object->Render();
 		}
 	}

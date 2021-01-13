@@ -26,10 +26,38 @@ protected:
 	AnimatedSprite sprite;
 
 public:
+	enum class ObjectType {
+		//entities
+		OBJECT_TYPE_MARIO = 0,
+		OBJECT_TYPE_GOOMBA = 1,
+		OBJECT_TYPE_PARAGOOMBA = 2,
+		OBJECT_TYPE_TROOPA = 3,
+		OBJECT_TYPE_PARATROOPA = 4,
+		OBJECT_TYPE_PIPLANT = 5,
+		OBJECT_TYPE_VENUSTRAP = 6,
+		OBJECT_TYPE_HAMMERBRO = 7,
+		//power-ups
+		OBJECT_TYPE_MUSHROOM = 8,
+		OBJECT_TYPE_1UPSHROOM = 9,
+		OBJECT_TYPE_LEAF = 10,
+		//animated tiles
+		OBJECT_TYPE_COIN = 101,
+		OBJECT_TYPE_QUESTIONBLOCK = 102,
+		OBJECT_TYPE_SHINYBRICK = 103,
+		OBJECT_TYPE_BONUSITEM = 104,
+		OBJECT_TYPE_SWITCHBLOCK = 105,
+		//overworld map
+		OBJECT_TYPE_CACTUS = 106,
+		OBJECT_TYPE_HELP = 107,
+		OBJECT_TYPE_HAMMERBRONODE = 108
+	};
+
 	virtual ~Entity() {}	
 
 	void SetCurrenHitPoints(int point) { hitPoints = point; }
 	int GetCurrentHitPoints() const { return hitPoints; }
+
+	virtual unsigned int GetExtraDataSize() const { return extraData.size(); }
 
 	virtual void SetStatus(bool b) { isBeingHeld = b; }
 	virtual bool IsBeingHeld() const { return isBeingHeld; }
