@@ -27,6 +27,8 @@ private:
 
 	BlockState currentState;
 
+	unsigned int amount;
+
 	float jumpSpeed = 0.4f;
 	float gravity = 0.001f;
 

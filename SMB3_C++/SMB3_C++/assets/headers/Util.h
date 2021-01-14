@@ -21,6 +21,18 @@ namespace Util {
 		return tokens;
 	}
 
+	static std::vector<unsigned int> splitDigit(unsigned int number) {
+		std::vector<unsigned int> digits;
+		
+		while (number > 0) {
+			unsigned int digit = number % 10;
+			number /= 10;
+			digits.insert(digits.begin(), digit);
+		}
+
+		return digits;
+	}
+
 	static LPCWSTR ToLPCWSTR(std::string s) {
 		const char* str = s.c_str();
 

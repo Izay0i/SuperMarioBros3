@@ -102,6 +102,9 @@
     <ClCompile Include="assets\source\npc\1UPMushroom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\source\hud\HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\headers\Game.h">
@@ -201,6 +204,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\headers\npc\1UPMushroom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\headers\hud\HUD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

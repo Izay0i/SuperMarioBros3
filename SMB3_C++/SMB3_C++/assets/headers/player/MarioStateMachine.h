@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <random>
+
 #include "Mario.h"
 #include "../StateMachine.h"
 
@@ -40,6 +42,8 @@ private:
 		SPIN,
 	};
 
+	unsigned int alpha = 255;
+
 	Mario* mario;
 
 	MarioForm currentForm;
@@ -49,5 +53,6 @@ public:
 	MarioStateMachine(Mario*);
 
 	void HandleStates(BYTE*) override;
+	void Update(DWORD) override;
 	void Render() override;
 };

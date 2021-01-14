@@ -12,7 +12,6 @@
 class Entity;
 class Fireball;
 class MarioStateMachine;
-class BonusItem;
 
 //band-aid fixes baby
 class Mario : public Entity {
@@ -30,8 +29,13 @@ private:
 
 	std::vector<Fireball*> fireballs;
 
-	//blue row
-	std::vector<BonusItem*> bonusItems;
+	//retries
+	unsigned int lives = 3;
+	unsigned int coins;
+	unsigned int score;
+
+	//blue row	
+	std::vector<Entity::ObjectType> bonusItems;
 
 	bool isOnGround;
 	bool isHolding;
@@ -60,17 +64,24 @@ private:
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
+	void ParseSettings(std::string);
 
 	void HandleMovement();
 
 	Mario();
 
 public:
-
 	static Mario* GetInstance();
+
+	unsigned int GetLivesLeft() const { return lives; }
+	unsigned int GetCoinsCollected() const { return coins; }
+	unsigned int GetCurrentScore() const { return score; }
 
 	float GetAcceleration() const { return acceleration; }
 	float GetAccelThreshold() const { return ACCEL_THRESHOLD; }
+	float GetMaxAcceleration() const { return MAX_ACCEL; }
+
+	std::vector<Entity::ObjectType> GetBonusItems() const { return bonusItems; }
 
 	RECTF GetBoundingBox(int = 0) const override;
 	AnimatedSprite GetSprite() const { return sprite; }

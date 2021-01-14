@@ -20,7 +20,7 @@ private:
 	DWORD removeTime = 1;
 
 	DWORD emergeStart;
-	DWORD emergeTime = 605;
+	DWORD emergeTime = 700;
 
 	void LoadTexture();
 

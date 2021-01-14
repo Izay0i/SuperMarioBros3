@@ -15,7 +15,7 @@ void Sprite::AddBound(RECT bound) {
 	bounds.push_back(bound);
 }
 
-void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale, D3DXVECTOR2 center) {
+void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale, unsigned int alpha) {
 	DWORD now = static_cast<DWORD>(GetTickCount64());
 
 	if (currentFrame == -1) {
@@ -40,9 +40,8 @@ void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale, D3DXVECTOR2 center) {
 	D3DXVECTOR2 spritePosition = D3DXVECTOR2(floor(x), floor(y));
 
 	D3DXMATRIX mat;
+	D3DXVECTOR2 center = D3DXVECTOR2(8, 8);
 
-	//Well I'm dumb
-	//But it's still useless though
 	D3DXMatrixTransformation2D(&mat, &center, 0.0f, &scale, nullptr, 0.0f, &spritePosition);
 	spriteHandler->SetTransform(&mat);
 
@@ -51,7 +50,7 @@ void Sprite::Draw(D3DXVECTOR3 position, D3DXVECTOR2 scale, D3DXVECTOR2 center) {
 		&bounds.at(currentFrame),
 		nullptr,
 		nullptr,
-		D3DCOLOR_ARGB(255, 255, 255, 255)
+		D3DCOLOR_ARGB(alpha, 255, 255, 255)
 	);
 }
 

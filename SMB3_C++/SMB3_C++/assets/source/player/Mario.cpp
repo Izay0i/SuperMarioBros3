@@ -112,6 +112,24 @@ void Mario::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
+void Mario::ParseSettings(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 3) {
+		return;
+	}
+
+	lives = std::stoi(tokens.at(0));
+	coins = std::stoi(tokens.at(1));
+	score = std::stoi(tokens.at(2));
+
+	if (tokens.size() > 3) {
+		for (unsigned int i = 0; i < tokens.size(); ++i) {
+			bonusItems.push_back(static_cast<Entity::ObjectType>(std::stoi(tokens.at(i))));
+		}
+	}
+}
+
 void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
@@ -150,12 +168,19 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 			continue;
 		}
 
+		if (line == "[SETTINGS]") {
+			section = DataSection::DATA_SECTION_SETTINGS;
+		}
+
 		switch (section) {
 			case DataSection::DATA_SECTION_SPRITES:
 				ParseSprites(line);
 				break;
 			case DataSection::DATA_SECTION_HITBOXES:
 				ParseHitboxes(line);
+				break;
+			case DataSection::DATA_SECTION_SETTINGS:
+				ParseSettings(line);
 				break;
 		}
 	}
@@ -339,11 +364,15 @@ Fireball* Mario::SpawnFireball() {
 }
 
 void Mario::TakeDamage() {
-	if (hitPoints > 2) {
-		hitPoints = 2;
-	}
-	else {
-		--hitPoints;
+	if (!IsInvulnerable()) {
+		if (hitPoints > 2) {
+			hitPoints = 2;
+		}
+		else {
+			--hitPoints;
+		}
+
+		StartInvulTimer();
 	}
 }
 
@@ -356,6 +385,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		isHolding = false;
 	}
 
+	marioFSM->Update(delta);
+
+	//fire balls
 	for (unsigned int i = 0; i < fireballs.size(); ++i) {
 		if (fireballs.at(i)->GetCurrentHitPoints() == -1) {
 			fireballs.erase(std::remove(fireballs.begin(), fireballs.end(), fireballs.at(i)), fireballs.end());
@@ -369,6 +401,10 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	//stops flying when time is up or mario get hit
 	if (flyStart != 0 && (GetTickCount64() - flyStart > flyTime || hitPoints != 4)) {
 		flyStart = 0;
+	}
+
+	if (invulStart != 0 && GetTickCount64() - invulStart > invulTime) {
+		invulStart = 0;
 	}
 
 	GameObject::Update(delta);	
@@ -432,6 +468,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					minTime.y = 1.0f;
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
+
+				score += 1000;
 			}
 
 			//super mushroom
@@ -450,6 +488,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					minTime.y = 1.0f;
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
+
+				score += 1000;
 			}
 
 			//1up mushroom
@@ -463,6 +503,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					minTime.y = 1.0f;
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
+
+				++lives;
 			}
 
 			//venus fire's fireball
@@ -492,6 +534,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					minTime.y = 1.0f;
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
+
+				++coins;
+				score += 50;
 			}
 
 			//shiny brick
@@ -499,6 +544,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(event->object);
 				if (event->normal.y > 0.0f) {
 					shinyBrick->TakeDamage();
+					if (shinyBrick->GetExtraDataSize() > 0) {
+						SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(shinyBrick->SpawnItem());
+					}
 				}
 			}
 
@@ -507,6 +555,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(event->object);
 				if (IsAttacking() || event->normal.y > 0.0f) {
 					questionBlock->TakeDamage();
+					if (questionBlock->GetExtraDataSize() > 0) {
+						SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(questionBlock->SpawnItem());
+					}
 				}
 			}
 

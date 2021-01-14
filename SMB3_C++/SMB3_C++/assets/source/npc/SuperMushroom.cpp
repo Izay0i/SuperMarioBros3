@@ -6,7 +6,7 @@ D3DCOLOR SuperMushroom::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 SuperMushroom::SuperMushroom() {
 	hitPoints = 1;
-	normal = D3DXVECTOR3(-1.0f, 1.0f, 0);
+	normal = D3DXVECTOR3(1.0f, 1.0f, 0);
 }
 
 void SuperMushroom::LoadTexture() {

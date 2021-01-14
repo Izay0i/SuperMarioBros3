@@ -22,7 +22,14 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	gameInstance->Load("assets/data/settings.txt");
 
-	SetWindowPos(hWND, 0, 0, 0, SCREEN_WIDTH * 3, SCREEN_HEIGHT * 3, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	//https://forums.codeguru.com/showthread.php?500841-Set-my-window-position-at-screen-center
+	RECT rect;
+	GetWindowRect(hWND, &rect);
+
+	int xPos = (GetSystemMetrics(SM_CXSCREEN) - rect.right) / 2;
+	int yPos = (GetSystemMetrics(SM_CYSCREEN) - rect.bottom) / 2;
+
+	SetWindowPos(hWND, 0, xPos, yPos, SCREEN_WIDTH * 3, SCREEN_HEIGHT * 3, SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	gameInstance->GameRun();
 

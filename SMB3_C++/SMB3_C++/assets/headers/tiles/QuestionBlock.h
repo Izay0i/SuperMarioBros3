@@ -30,6 +30,8 @@ private:
 	
 	BlockState currentState;
 
+	int marioHP;
+
 	float jumpSpeed = 0.4f;
 	float gravity = 0.001f;
 
@@ -59,7 +61,9 @@ public:
 
 	void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
 
-	Entity* SpawnItem(int);
+	void GetMarioCurrentHP(int);
+
+	Entity* SpawnItem();
 
 	void TakeDamage() override;
 

@@ -201,3 +201,11 @@ RacGUI	145	873	160	896	1	0
 0	0	15	16
 #Big
 0	0	16	28
+
+#lives	coins	score	items
+#items_id:
+#8: mushroom
+#11: flower
+#12: star
+[SETTINGS]
+3	0	0	8	11

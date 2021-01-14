@@ -55,6 +55,16 @@ void Tiles::AddImage(RECT bound, D3DXVECTOR3 pos) {
 	images.push_back(std::make_pair(bound, pos));
 }
 
+RECTF Tiles::GetBoundingBox(int id) const {
+	RECTF bound;
+	bound.left = position.x + 2;
+	bound.top = position.y + 1;
+	bound.right = position.x + hitBox.GetWidth(id) - 3;
+	bound.bottom = position.y + hitBox.GetHeight(id) - 5;
+
+	return bound;
+}
+
 void Tiles::Render() {
 	for (const auto& image : images) {
 		float x = image.second.x - Camera::GetInstance()->GetPosition().x;

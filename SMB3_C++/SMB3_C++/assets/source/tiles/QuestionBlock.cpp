@@ -121,7 +121,11 @@ void QuestionBlock::ParseData(std::string dataPath, std::string texturePath, D3D
 	readFile.close();
 }
 
-Entity* QuestionBlock::SpawnItem(int currentHP) {
+void QuestionBlock::GetMarioCurrentHP(int currentHP) {
+	marioHP = currentHP;
+}
+
+Entity* QuestionBlock::SpawnItem() {
 	Entity* item = nullptr;
 	
 	//extraData size:
@@ -138,11 +142,12 @@ Entity* QuestionBlock::SpawnItem(int currentHP) {
 	}
 	else if (extraData.size() > 2) {
 		//Big Mario
-		if (currentHP >= 2) {
+		if (marioHP >= 2) {
 			item = new SuperLeaf;
 			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_LEAF));
 			item->ParseData(extraData.at(2), extraData.at(3), colorKey);
-			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight() * 2, 0));
+			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight() - 1, 0));
+			item->SetVelocity(D3DXVECTOR3(0, -0.008f, 0));
 		}
 		else {
 			item = new SuperMushroom;
@@ -175,6 +180,8 @@ void QuestionBlock::TakeDamage() {
 		if (position.y >= (originalPos.y - MAX_Y_OFFSET)) {
 			velocity.y = -jumpSpeed;
 		}
+
+		//SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnItem());
 	}
 }
 

@@ -16,12 +16,14 @@
 #include "Camera.h"
 
 #include "player/Mario.h"
+#include "hud/HUD.h"
 
 #include "NPCList.h"
 #include "TileList.h"
 
 class Background;
 class Mario;
+class HUD;
 class Camera;
 
 class Scene {
@@ -29,8 +31,10 @@ private:
 	enum class SceneSection {
 		SCENE_FILE_SECTION_UNKNOWN,
 		SCENE_FILE_SECTION_MAPSIZE,
+		SCENE_FILE_SECTION_TIME,
 		SCENE_FILE_SECTION_BGCOLOR,
 		SCENE_FILE_SECTION_TEXTURES,
+		SCENE_FILE_SECTION_HUD,
 		SCENE_FILE_SECTION_ENTITYDATA,
 		SCENE_FILE_SECTION_WORLDCOORDS,
 		SCENE_FILE_SECTION_TILESDATA,
@@ -48,6 +52,7 @@ private:
 	SceneType currentScene;
 
 	Mario* marioInstance;
+	HUD* hudInstance;
 	Camera* cameraInstance;
 	Background* bgInstance;
 
@@ -63,6 +68,9 @@ private:
 
 	D3DCOLOR backgroundColor;
 
+	DWORD sceneTime;
+	DWORD sceneStart;
+
 	static LPDIRECT3DDEVICE9 directDevice;
 	static LPD3DXSPRITE spriteHandler;
 
@@ -72,8 +80,10 @@ private:
 	bool IsInteger(const std::string&);
 
 	void ParseMapSize(std::string);
+	void ParseSceneTime(std::string);
 	void ParseBGColor(std::string);
 	void ParseTextures(std::string);
+	void ParseHUD(std::string);
 	void ParseEntityData(std::string);
 	void ParseWorldCoords(std::string);
 	void ParseTilesData(std::string);
@@ -81,6 +91,7 @@ private:
 	void ParseBackground(std::string);
 
 	void UpdateCameraPosition();
+	void UpdateHUDPosition();
 
 public:
 	Scene(int, std::string);
@@ -89,6 +100,8 @@ public:
 	D3DCOLOR GetTextureColorKey(int) const;
 
 	std::string GetTexturePath(int) const;
+
+	void StartSceneTimer() { sceneStart = static_cast<DWORD>(GetTickCount64()); }
 
 	int GetSceneID() const;
 

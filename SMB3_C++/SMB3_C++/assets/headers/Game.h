@@ -32,7 +32,7 @@ private:
 	const unsigned int FRAME_RATE = 60;
 
 	static Game* gameInstance;
-	
+
 	int screenWidth, screenHeight;
 	int currentSceneID;
 	bool isRunning;
@@ -54,7 +54,7 @@ private:
 	~Game();
 
 	void ParseSettings(std::string);
-	
+
 	void Update(DWORD);
 	void Render();
 

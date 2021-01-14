@@ -118,11 +118,14 @@ void ShinyBrick::ParseData(std::string dataPath, std::string texturePath, D3DCOL
 		}
 	}
 
+	if (extraData.size() > 0) {
+		amount = std::stoi(extraData.at(1));
+	}
 	readFile.close();
 }
 
 Entity* ShinyBrick::SpawnItem() {
-	Entity::ObjectType objectID = static_cast<Entity::ObjectType>(std::stoi(extraData.at(2)));
+	Entity::ObjectType objectID = static_cast<Entity::ObjectType>(std::stoi(extraData.at(0)));
 
 	Entity* item = nullptr;
 
@@ -130,14 +133,14 @@ Entity* ShinyBrick::SpawnItem() {
 		case Entity::ObjectType::OBJECT_TYPE_1UPSHROOM:
 			item = new GMushroom;
 			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_1UPSHROOM));
-			item->ParseData(extraData.at(0), extraData.at(1), colorKey);
+			item->ParseData(extraData.at(2), extraData.at(3), colorKey);
 			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight() / 3, 0));
 			dynamic_cast<GMushroom*>(item)->StartEmergeTimer();
 			break;
 		case Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK:
 			item = new SwitchBlock;
 			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK));
-			item->ParseData(extraData.at(0), extraData.at(1), colorKey);
+			item->ParseData(extraData.at(2), extraData.at(3), colorKey);
 			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight(), 0));
 			break;
 		case Entity::ObjectType::OBJECT_TYPE_COIN:
@@ -145,7 +148,11 @@ Entity* ShinyBrick::SpawnItem() {
 			break;
 	}
 
-	extraData.clear();
+	--amount;
+
+	if (amount == 0) {
+		extraData.clear();
+	}
 	return item;
 }
 
@@ -161,13 +168,17 @@ void ShinyBrick::HandleStates() {
 }
 
 void ShinyBrick::TakeDamage() {
-	if (hitPoints > 1) {
+	if (hitPoints > 1 && amount == 1) {
 		--hitPoints;
+	}
 
+	if (amount != 0) {
 		if (position.y >= (originalPos.y - MAX_Y_OFFSET)) {
 			velocity.y = -jumpSpeed;
 		}
-	}	
+		
+		//SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnItem());
+	}
 }
 
 void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {

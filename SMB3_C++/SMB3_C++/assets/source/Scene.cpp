@@ -8,6 +8,7 @@ Scene::Scene(int id, std::string path) {
 	filePath = path;
 
 	bgInstance = new Background;
+	hudInstance = new HUD;
 }
 
 Scene::~Scene() {}
@@ -67,6 +68,16 @@ void Scene::ParseMapSize(std::string line) {
 	sceneHeight = std::stoi(tokens.at(1));
 }
 
+void Scene::ParseSceneTime(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 1) {
+		return;
+	}
+
+	sceneTime = std::stoul(tokens.at(0));
+}
+
 void Scene::ParseBGColor(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
@@ -97,6 +108,17 @@ void Scene::ParseTextures(std::string line) {
 	textureFiles[texID] = std::pair<std::string, D3DCOLOR>(tokens.at(1), D3DCOLOR_XRGB(r, g, b));
 }
 
+void Scene::ParseHUD(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 2) {
+		return;
+	}
+
+	int texID = std::stoi(tokens.at(1));
+	hudInstance->ParseData(tokens.at(0), GetTexturePath(texID), GetTextureColorKey(texID));
+}
+
 void Scene::ParseEntityData(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
@@ -110,8 +132,17 @@ void Scene::ParseEntityData(std::string line) {
 		//(variant) | objID | dataPath | texPath | texID
 		//texPath is added in after dataPath
 		
-		for (unsigned int i = 3; i < tokens.size(); ++i) {
-			if (std::stoi(tokens.at(0)) && i != tokens.size() - 1 && IsInteger(tokens.at(i))) {
+		unsigned int begin = 3;
+		//applies to bricks
+		//objID | amount | dataPath ..
+		if (std::stoi(tokens.at(0)) == 103) {
+			extraData.push_back(tokens.at(3));
+			extraData.push_back(tokens.at(4));
+			begin = 5;
+		}
+
+		for (unsigned int i = begin; i < tokens.size(); ++i) {
+			if (IsInteger(tokens.at(i))) {
 				extraData.push_back(GetTexturePath(std::stoi(tokens.at(i))));
 			}
 			else {
@@ -494,10 +525,20 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 			continue;
 		}
 
+		if (line == "[TIME]") {
+			section = SceneSection::SCENE_FILE_SECTION_TIME;
+			continue;
+		}
+
 		if (line == "[TEXTURES]") {
 			section = SceneSection::SCENE_FILE_SECTION_TEXTURES;
 			continue;
 		}		
+
+		if (line == "[HUD]") {
+			section = SceneSection::SCENE_FILE_SECTION_HUD;
+			continue;
+		}
 
 		if (line == "[ENTITY_DATA]") {
 			section = SceneSection::SCENE_FILE_SECTION_ENTITYDATA;
@@ -528,12 +569,18 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 			case SceneSection::SCENE_FILE_SECTION_MAPSIZE:
 				ParseMapSize(line);
 				break;
+			case SceneSection::SCENE_FILE_SECTION_TIME:
+				ParseSceneTime(line);
+				break;
 			case SceneSection::SCENE_FILE_SECTION_BGCOLOR:
 				ParseBGColor(line);
 				break;
 			case SceneSection::SCENE_FILE_SECTION_TEXTURES:
 				ParseTextures(line);
-				break;			
+				break;
+			case SceneSection::SCENE_FILE_SECTION_HUD:
+				ParseHUD(line);
+				break;
 			case SceneSection::SCENE_FILE_SECTION_ENTITYDATA:
 				ParseEntityData(line);
 				break;			
@@ -552,7 +599,7 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 		}
 	}
 
-	readFile.close();	
+	readFile.close();
 }
 
 void Scene::Unload() {
@@ -566,6 +613,10 @@ void Scene::Unload() {
 		}
 	}
 	
+	if (hudInstance) {
+		hudInstance->Release();
+	}
+
 	if (marioInstance) {
 		marioInstance->Release();
 	}
@@ -587,6 +638,7 @@ void Scene::UpdateCameraPosition() {
 
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
 	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2.0f;
+	//half a gap in the viewport just like in the original
 	if (camPosition.x < 8.0f) {
 		camPosition.x = 8.0f;
 	}
@@ -598,10 +650,11 @@ void Scene::UpdateCameraPosition() {
 	if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
 		camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
 	}
-	else if (camPosition.y + marioInstance->GetPosition().y < 0.0f) {
+	else if (camPosition.y < 0.0f) {
 		camPosition.y = 0.0f;
 	}
-	camPosition.y = 230.0f;
+
+	//camPosition.y = 230.0f;
 
 	/*char debugStr[100];
 	sprintf_s(debugStr, "Cam y: %f\n", camPosition.y);
@@ -610,11 +663,41 @@ void Scene::UpdateCameraPosition() {
 	Camera::GetInstance()->SetPosition(camPosition);
 }
 
+void Scene::UpdateHUDPosition() {
+	D3DXVECTOR3 hudPosition = Camera::GetInstance()->GetPosition();
+	//hudPosition.x = marioInstance->GetPosition().x;
+	hudPosition.y = Camera::GetInstance()->GetPosition().y + 145.0f;
+
+	hudInstance->SetPosition(hudPosition);
+}
+
 void Scene::Update(DWORD delta) {
+	//scene timer
+	if (sceneTime > 0) {
+		sceneTime -= 100;
+	}
+
+	/*char debug[100];
+	sprintf_s(debug, "Time: %lu\n", sceneTime % 1000);
+	OutputDebugStringA(debug);*/
+
 	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
 		collidableObjects.push_back(object);
 	}
+
+	hudInstance->Update(
+		delta,
+		marioInstance->GetLivesLeft(),
+		marioInstance->GetCoinsCollected(),
+		marioInstance->GetBonusItems(),
+		marioInstance->GetAcceleration(),
+		marioInstance->GetAccelThreshold(),
+		marioInstance->GetCurrentScore(),
+		sceneTime % 1000,
+		marioInstance->IsFlying(),
+		Device::IsKeyDown(DIK_J) //couldn't care less
+	);
 
 	marioInstance->Update(delta, &collidableObjects);
 
@@ -624,17 +707,8 @@ void Scene::Update(DWORD delta) {
 
 			if (dynamic_cast<QuestionBlock*>(objects.at(i))) {
 				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(objects.at(i));
-				if (questionBlock->GetCurrentHitPoints() == 1 && questionBlock->GetExtraDataSize() > 0) {
-					Entity* item  = questionBlock->SpawnItem(marioInstance->GetCurrentHitPoints());
-					AddObjectToScene(item);
-				}
-			}
-
-			if (dynamic_cast<ShinyBrick*>(objects.at(i))) {
-				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(objects.at(i));
-				if (shinyBrick->GetCurrentHitPoints() == 1 && shinyBrick->GetExtraDataSize() > 0) {
-					Entity* item = shinyBrick->SpawnItem();
-					AddObjectToScene(item);
+				if (questionBlock->GetCurrentHitPoints() == 2) {
+					questionBlock->GetMarioCurrentHP(marioInstance->GetCurrentHitPoints());
 				}
 			}
 
@@ -698,6 +772,7 @@ void Scene::Update(DWORD delta) {
 	}
 
 	UpdateCameraPosition();
+	UpdateHUDPosition();
 }
 
 void Scene::Render() {
@@ -708,6 +783,7 @@ void Scene::Render() {
 	//Mushrooms
 	//NPCs
 	//Mario
+	//HUD
 
 	bgInstance->Render();
 	
@@ -730,6 +806,8 @@ void Scene::Render() {
 	}
 
 	marioInstance->Render();
+
+	hudInstance->Render();
 }
 
 void Scene::HandleStates(BYTE* states) {

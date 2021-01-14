@@ -1,0 +1,39 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#==FONTS==
+#Number 0
+0	77	31	84	37	1	0
+#Number 1
+1	87	31	94	37	1	0
+#Number 2
+2	97	31	104	37	1	0
+#Number 3
+3	107	31	114	37	1	0
+#Number 4
+4	117	31	124	37	1	0
+#Number 5
+5	127	31	134	37	1	0
+#Number 6
+6	137	31	144	37	1	0
+#Number 7
+7	147	31	154	37	1	0
+#Number 8
+8	157	31	164	37	1	0
+#Number 9
+9	167	31	174	37	1	0
+
+#==HUD==
+#Panel
+Panel	11	127	244	156	1	0
+#Arrow
+Arrow	64	162	71	168	1	0
+#P node
+PNode	72	162	87	168	2	50
+PNode	99	162	114	168
+#Mushroom node
+Mushroom	184	158	207	187	1	0
+#Flower node
+Flower	208	158	231	187	1	0
+#Star node
+Star	232	158	256	187	1	0

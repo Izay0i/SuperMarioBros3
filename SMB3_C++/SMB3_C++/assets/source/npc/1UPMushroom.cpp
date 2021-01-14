@@ -6,7 +6,7 @@ D3DCOLOR GMushroom::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 GMushroom::GMushroom() {
 	hitPoints = 1;
-	normal = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
+	normal = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
 }
 
 void GMushroom::LoadTexture() {

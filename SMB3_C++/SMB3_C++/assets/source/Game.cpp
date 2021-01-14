@@ -5,6 +5,12 @@ LPD3DXSPRITE Game::spriteHandler = nullptr;
 
 LRESULT CALLBACK Game::WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
+		case WM_SETFOCUS:
+			OutputDebugStringA("Got focus\n");
+			break;
+		case WM_KILLFOCUS:
+			OutputDebugStringA("Lost focus\n");
+			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;
@@ -234,7 +240,7 @@ void Game::Load(std::string filePath) {
 			section = FileSection::GAME_FILE_SECTION_SCENES;
 			continue;
 		}
-		
+
 		switch (section) {
 			case FileSection::GAME_FILE_SECTION_SETTINGS:
 				ParseSettings(line);
@@ -280,9 +286,6 @@ void Game::GameRun() {
 
 				Update(deltaTime);
 				Render();
-			}
-			else {
-				Sleep(tickPerFrame - deltaTime);
 			}
 		}
 	}
