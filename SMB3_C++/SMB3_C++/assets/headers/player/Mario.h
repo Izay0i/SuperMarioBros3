@@ -37,6 +37,8 @@ private:
 	//blue row	
 	std::vector<Entity::ObjectType> bonusItems;
 
+	bool triggeredStageEnd;
+
 	bool isOnGround;
 	bool isHolding;
 
@@ -67,6 +69,8 @@ private:
 	void ParseSettings(std::string);
 
 	void HandleMovement();
+	void HandleStageEnd();
+	void HandleBonusItems();
 
 	Mario();
 
@@ -87,6 +91,9 @@ public:
 	AnimatedSprite GetSprite() const { return sprite; }
 	Entity* GetHeldEntity() { return heldEntity; }
 
+	bool TriggeredStageEnd() const { return triggeredStageEnd; }
+
+	bool IsRunningKeyPressed() const { return isHolding; }
 	bool IsOnGround() const { return isOnGround; }
 	bool IsAttacking() const { return attackStart != 0; }
 	bool IsFlying() const { return flyStart != 0; }
@@ -95,6 +102,8 @@ public:
 	void StartAttackTimer() { attackStart = static_cast<DWORD>(GetTickCount64()); }
 	void StartFlyTimer() { flyStart = static_cast<DWORD>(GetTickCount64()); }
 	void StartInvulTimer() { invulStart = static_cast<DWORD>(GetTickCount64()); }
+
+	void GoRight();
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 	

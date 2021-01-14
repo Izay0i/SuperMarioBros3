@@ -7,6 +7,7 @@ D3DCOLOR Coin::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 Coin::Coin() {
 	//1 - rotate
 	//2 - question block
+	//3 - switched to brick
 	hitPoints = 1;
 }
 
@@ -121,6 +122,20 @@ void Coin::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR col
 	readFile.close();
 }
 
+void Coin::HandleStates() {
+	switch (hitPoints) {
+		case 1:
+			currentState = ItemState::ROTATE;
+			break;
+		case 2:
+			currentState = ItemState::POPPEDOUTOFQBLOCK;
+			break;
+		case 3:
+			currentState = ItemState::SWITCHEDTOBRICK;
+			break;
+	}
+}
+
 void Coin::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
@@ -132,6 +147,8 @@ void Coin::TakeDamage() {
 }
 
 void Coin::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	HandleStates();
+	
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
@@ -173,11 +190,16 @@ void Coin::Update(DWORD delta, std::vector<GameObject*>* objects) {
 }
 
 void Coin::Render() {
-	if (hitPoints == 2) {
-		sprite.PlayAnimation("Pushed", position);
-	}
-	else {
-		sprite.PlayAnimation("Rotate", position);
+	switch (currentState) {
+		case ItemState::ROTATE:
+			sprite.PlayAnimation("Rotate", position);
+			break;
+		case ItemState::POPPEDOUTOFQBLOCK:
+			sprite.PlayAnimation("Pushed", position);
+			break;
+		case ItemState::SWITCHEDTOBRICK:
+			sprite.PlayAnimation("Brick", position);
+			break;
 	}
 }
 

@@ -56,7 +56,7 @@ private:
 	Camera* cameraInstance;
 	Background* bgInstance;
 
-	const static int MAX_FILE_LINE = 2512;
+	const static int MAX_FILE_LINE = 5000;
 
 	int sceneID;
 	int sceneWidth, sceneHeight;
@@ -69,7 +69,9 @@ private:
 	D3DCOLOR backgroundColor;
 
 	DWORD sceneTime;
-	DWORD sceneStart;
+
+	DWORD toMapStart;
+	DWORD toMapTime = 5000;
 
 	static LPDIRECT3DDEVICE9 directDevice;
 	static LPD3DXSPRITE spriteHandler;
@@ -101,12 +103,16 @@ public:
 
 	std::string GetTexturePath(int) const;
 
-	void StartSceneTimer() { sceneStart = static_cast<DWORD>(GetTickCount64()); }
-
 	int GetSceneID() const;
 
 	int GetSceneWidth() const;
 	int GetSceneHeight() const;	
+
+	DWORD GetSceneTime() const;
+
+	bool IsTranstionStarting() const { return toMapStart != 0; }
+
+	void StartChangeSceneToMapTimer() { toMapStart = static_cast<DWORD>(GetTickCount64()); }
 
 	void AddObjectToScene(GameObject*);
 

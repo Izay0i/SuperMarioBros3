@@ -30,7 +30,7 @@ private:
 	
 	BlockState currentState;
 
-	int marioHP;
+	bool tookDamage;
 
 	float jumpSpeed = 0.4f;
 	float gravity = 0.001f;
@@ -47,6 +47,8 @@ private:
 public:
 	QuestionBlock();
 
+	bool TookDamage() const { return tookDamage; }
+
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
 	RECTF GetBoundingBox(int id = 0) const override {
@@ -61,9 +63,7 @@ public:
 
 	void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
 
-	void GetMarioCurrentHP(int);
-
-	Entity* SpawnItem();
+	Entity* SpawnItem(int);
 
 	void TakeDamage() override;
 

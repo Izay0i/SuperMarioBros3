@@ -8,6 +8,8 @@ Rotate	1072	1	1087	16
 Rotate	1089	1	1104	16
 #None
 None	1208	1	1223	16	1	0
+#Coin
+Coin	953	69	968	84	1	0
 
 #left	top	right	bottom
 [HITBOXES]

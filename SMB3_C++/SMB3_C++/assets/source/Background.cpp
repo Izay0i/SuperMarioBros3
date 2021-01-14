@@ -5,7 +5,7 @@ LPDIRECT3DTEXTURE9 Background::texture = nullptr;
 D3DCOLOR Background::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 void Background::LoadTexture(std::string path, D3DCOLOR color) {
-	if (!texture) {
+	if (!texturePath) {
 		texturePath = Util::ToLPCWSTR(path);
 		colorKey = color;
 
@@ -68,15 +68,15 @@ void Background::Render() {
 	}
 }
 
-void Background::Release() {
-	if (texture) {
-		texture->Release();
-	}
+void Background::Release() {	
+	images.clear();
 	
 	if (texturePath) {
 		delete texturePath;
 		texturePath = nullptr;
 	}
 
-	images.clear();	
+	if (texture) {
+		texture->Release();
+	}
 }

@@ -13,8 +13,8 @@ class Coin : public Entity {
 private:
 	enum class ItemState {
 		ROTATE,
-		PICKEDUP,
-		POPPEDOUTOFQBLOCK
+		POPPEDOUTOFQBLOCK,
+		SWITCHEDTOBRICK
 	};
 
 	const static int MAX_FILE_LINE = 1024;
@@ -22,6 +22,8 @@ private:
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
+
+	ItemState currentState;
 
 	DWORD removeTime = 100;
 

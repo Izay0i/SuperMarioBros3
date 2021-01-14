@@ -3,6 +3,8 @@
 #include <fstream>
 
 #include "../Entity.h"
+#include "Coin.h"
+#include "ShinyBrick.h"
 
 class Entity;
 

@@ -104,7 +104,7 @@ void HUD::ParseLives(unsigned int lives) {
 	}
 
 	if (tokens.size() < LIVES_MAX_LENGTH) {
-		for (unsigned int i = 0; i < LIVES_MAX_LENGTH - tokens.size(); ++i) {
+		for (unsigned int i = 0, end = LIVES_MAX_LENGTH - tokens.size(); i < end; ++i) {
 			tokens.insert(tokens.begin(), "0");
 		}
 	}
@@ -124,7 +124,7 @@ void HUD::ParseCoins(unsigned int coins) {
 	}
 
 	if (tokens.size() < COINS_MAX_LENGTH) {
-		for (unsigned int i = 0; i < COINS_MAX_LENGTH - tokens.size(); ++i) {
+		for (unsigned int i = 0, end = COINS_MAX_LENGTH - tokens.size(); i < end; ++i) {
 			tokens.insert(tokens.begin(), "0");
 		}
 	}
@@ -160,6 +160,10 @@ void HUD::ParseSpeedGauge(float currentAccel, float maxAccel, bool isFlying, boo
 			speedGaugeArr.push_back("Arrow");
 		}
 
+		if (currentAccel >= 1.25f / maxAccel || isFlying) {
+			speedGaugeArr.push_back("Arrow");
+		}
+
 		if (currentAccel >= 1.5f / maxAccel || isFlying) {
 			speedGaugeArr.push_back("Arrow");
 		}
@@ -177,10 +181,6 @@ void HUD::ParseSpeedGauge(float currentAccel, float maxAccel, bool isFlying, boo
 		}
 
 		if (currentAccel >= 3.5f / maxAccel || isFlying) {
-			speedGaugeArr.push_back("Arrow");
-		}
-
-		if (currentAccel >= 4.0f / maxAccel || isFlying) {
 			speedGaugeArr.push_back("PNode");
 		}
 	}
@@ -195,7 +195,7 @@ void HUD::ParseScore(unsigned int score) {
 	}
 
 	if (tokens.size() < SCORE_MAX_LENGTH) {
-		for (unsigned int i = 0; i < SCORE_MAX_LENGTH - tokens.size(); ++i) {
+		for (unsigned int i = 0, end = SCORE_MAX_LENGTH - tokens.size(); i < end; ++i) {
 			tokens.insert(tokens.begin(), "0");
 		}
 	}
@@ -215,7 +215,7 @@ void HUD::ParseTime(unsigned long time) {
 	}
 
 	if (tokens.size() < TIME_MAX_LENGTH) {
-		for (unsigned int i = 0; i < TIME_MAX_LENGTH - tokens.size(); ++i) {
+		for (unsigned int i = 0, end = TIME_MAX_LENGTH - tokens.size(); i < end; ++i) {
 			tokens.insert(tokens.begin(), "0");
 		}
 	}

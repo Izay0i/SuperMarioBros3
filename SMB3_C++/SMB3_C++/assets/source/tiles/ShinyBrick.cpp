@@ -7,6 +7,7 @@ D3DCOLOR ShinyBrick::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 ShinyBrick::ShinyBrick() {
 	//1 - no items
 	//2 - rotate sprite
+	//3 - switched to coin
 	hitPoints = 2;
 }
 
@@ -118,9 +119,7 @@ void ShinyBrick::ParseData(std::string dataPath, std::string texturePath, D3DCOL
 		}
 	}
 
-	if (extraData.size() > 0) {
-		amount = std::stoi(extraData.at(1));
-	}
+	amount = extraData.size() > 0 ? std::stoi(extraData.at(1)) : 0;
 	readFile.close();
 }
 
@@ -144,7 +143,12 @@ Entity* ShinyBrick::SpawnItem() {
 			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight(), 0));
 			break;
 		case Entity::ObjectType::OBJECT_TYPE_COIN:
-
+			item = new Coin;
+			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_COIN));
+			item->ParseData(extraData.at(2), extraData.at(3), colorKey);
+			item->SetPosition(D3DXVECTOR3(originalPos.x, originalPos.y - item->GetBoxHeight() - 1, 0));
+			item->SetCurrenHitPoints(2);
+			item->SetVelocity(D3DXVECTOR3(0, -0.18f, 0));
 			break;
 	}
 
@@ -153,6 +157,8 @@ Entity* ShinyBrick::SpawnItem() {
 	if (amount == 0) {
 		extraData.clear();
 	}
+
+	tookDamage = false;
 	return item;
 }
 
@@ -164,6 +170,9 @@ void ShinyBrick::HandleStates() {
 		case 2:
 			currentState = BlockState::ROTATE;
 			break;
+		case 3:
+			currentState = BlockState::SWITCHEDTOCOIN;
+			break;
 	}
 }
 
@@ -172,12 +181,12 @@ void ShinyBrick::TakeDamage() {
 		--hitPoints;
 	}
 
-	if (amount != 0) {
+	if (amount > 0) {
 		if (position.y >= (originalPos.y - MAX_Y_OFFSET)) {
 			velocity.y = -jumpSpeed;
 		}
-		
-		//SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnItem());
+
+		tookDamage = true;
 	}
 }
 
@@ -186,20 +195,22 @@ void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	GameObject::Update(delta);
 	
-	if (position.y < originalPos.y) {
-		velocity.y += gravity * delta;
-	}
-	else {
-		velocity.y = 0;
-		if (position.y >= originalPos.y) {
-			position = originalPos;
+	if (currentState != BlockState::SWITCHEDTOCOIN) {
+		if (position.y < originalPos.y) {
+			velocity.y += gravity * delta;
 		}
-		else if (position.y < (originalPos.y - MAX_Y_OFFSET)) {
-			position.y = originalPos.y - MAX_Y_OFFSET;
+		else {
+			velocity.y = 0;
+			if (position.y >= originalPos.y) {
+				position = originalPos;
+			}
+			else if (position.y < (originalPos.y - MAX_Y_OFFSET)) {
+				position.y = originalPos.y - MAX_Y_OFFSET;
+			}
 		}
-	}
 
-	position += distance;
+		position += distance;
+	}
 }
 
 void ShinyBrick::Render() {
@@ -209,6 +220,9 @@ void ShinyBrick::Render() {
 			break;
 		case BlockState::ROTATE:
 			sprite.PlayAnimation("Rotate", position);
+			break;
+		case BlockState::SWITCHEDTOCOIN:
+			sprite.PlayAnimation("Coin", position);
 			break;
 	}
 }

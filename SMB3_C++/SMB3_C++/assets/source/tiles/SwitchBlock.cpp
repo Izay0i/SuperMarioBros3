@@ -148,6 +148,49 @@ void SwitchBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		activateStart = 0;
 		OutputDebugStringA("Activated\n");
 	}
+
+	std::vector<Coin*> coins;
+	std::vector<ShinyBrick*> bricks;
+
+	for (unsigned int i = 0; i < objects->size(); ++i) {
+		if (dynamic_cast<Entity*>(objects->at(i))) {
+			if (dynamic_cast<Coin*>(objects->at(i))) {
+				Coin* coin = static_cast<Coin*>(objects->at(i));
+				coins.push_back(coin);
+			}
+			else if (dynamic_cast<ShinyBrick*>(objects->at(i))) {
+				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(objects->at(i));
+				bricks.push_back(shinyBrick);
+			}
+		}
+	}
+
+	if (IsActivated()) {
+		for (Coin* coin : coins) {
+			if (coin->GetCurrentHitPoints() == 1) {
+				coin->SetCurrenHitPoints(3);
+			}
+		}
+
+		for (ShinyBrick* brick : bricks) {
+			if (brick->GetCurrentHitPoints() == 2 && brick->GetExtraDataSize() == 0) {
+				brick->SetCurrenHitPoints(3);
+			}
+		}
+	}
+	else {
+		for (Coin* coin : coins) {
+			if (coin->GetCurrentHitPoints() == 3) {
+				coin->SetCurrenHitPoints(1);
+			}
+		}
+
+		for (ShinyBrick* brick : bricks) {
+			if (brick->GetCurrentHitPoints() == 3) {
+				brick->SetCurrenHitPoints(2);
+			}
+		}
+	}
 }
 
 void SwitchBlock::Render() {

@@ -15,7 +15,7 @@ private:
 	enum class BlockState {
 		ROTATE,
 		PUSHED,
-		SWITCHED
+		SWITCHEDTOCOIN
 	};
 
 	const static int MAX_FILE_LINE = 1024;
@@ -26,6 +26,8 @@ private:
 	static D3DCOLOR colorKey;
 
 	BlockState currentState;
+
+	bool tookDamage;
 
 	unsigned int amount;
 
@@ -43,6 +45,8 @@ private:
 
 public:
 	ShinyBrick();
+
+	bool TookDamage() const { return tookDamage; }
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 

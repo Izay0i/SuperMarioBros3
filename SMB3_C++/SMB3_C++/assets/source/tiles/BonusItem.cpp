@@ -5,7 +5,9 @@ LPDIRECT3DTEXTURE9 BonusItem::texture = nullptr;
 D3DCOLOR BonusItem::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 BonusItem::BonusItem() {
-	
+	//1 - pickedup
+	//2 - rotate
+	hitPoints = 2;
 }
 
 void BonusItem::LoadTexture() {
@@ -41,6 +43,23 @@ void BonusItem::LoadTexture() {
 			return;
 		}
 	}
+}
+
+RECTF BonusItem::GetBoundingBox(int id) const {
+	RECTF bound;
+	bound.left = position.x;
+	bound.top = position.y;
+	
+	if (hitPoints >= 2) {
+		bound.right = position.x + hitBox.GetWidth(id);
+		bound.bottom = position.y + hitBox.GetHeight(id);
+	}
+	else {
+		bound.right = position.x + hitBox.GetWidth(1);
+		bound.bottom = position.y + hitBox.GetHeight(1);
+	}
+
+	return bound;
 }
 
 void BonusItem::ParseSprites(std::string line) {
@@ -119,12 +138,85 @@ void BonusItem::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 	readFile.close();
 }
 
+void BonusItem::HandleStates() {
+	switch (hitPoints) {
+		case 1:
+			currentState = ItemState::PICKEDUP;
+			break;
+		case 2:
+			currentState = ItemState::ROTATE;
+			break;
+	}
+}
+
+void BonusItem::TakeDamage() {
+	if (hitPoints > 0) {
+		--hitPoints;
+		StartRemoveTimer();
+	}
+}
+
 void BonusItem::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	HandleStates();
 	
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
+	}
+
+	switch (currentState) {
+		case ItemState::PICKEDUP:
+			velocity.y -= 0.006f;
+			GameObject::Update(delta);
+			position += distance;
+			break;
+		case ItemState::ROTATE:
+			std::vector<Entity::ObjectType> items = {
+				Entity::ObjectType::OBJECT_TYPE_STAR,
+				Entity::ObjectType::OBJECT_TYPE_FLOWER,
+				Entity::ObjectType::OBJECT_TYPE_MUSHROOM
+			};
+			
+			std::random_device device;
+			std::mt19937 rng(device());
+			std::uniform_int_distribution<std::mt19937::result_type> dist(0, 2);
+
+			if (GetTickCount64() % 100 == 0) {
+				currentItem = items.at(dist(rng));
+			}
+			break;
+	}
 }
 
 void BonusItem::Render() {
-	sprite.PlayAnimation("Rotate", position);
+	switch (currentState) {
+		case ItemState::PICKEDUP:
+			{
+				std::string animName;
+				switch (currentItem) {
+					case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
+						animName = "Mushroom";
+						break;
+					case Entity::ObjectType::OBJECT_TYPE_FLOWER:
+						animName = "Flower";
+						break;
+					case Entity::ObjectType::OBJECT_TYPE_STAR:
+						animName = "Star";
+						break;
+				}
+				
+				if (GetTickCount64() - removeStart > (removeTime * 3 / 4)) {
+					sprite.PlayAnimation("Spark", position);
+				}
+				else {
+					sprite.PlayAnimation(animName, position);
+				}
+			}
+			break;
+		case ItemState::ROTATE:
+			sprite.PlayAnimation("Rotate", position);
+			break;
+	}
 }
 
 void BonusItem::Release() {

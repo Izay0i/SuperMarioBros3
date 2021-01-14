@@ -6,6 +6,26 @@ Rotate	258	350	273	365	3	100
 Rotate	277	350	293	365
 Rotate	298	350	313	365
 
+#Mushroom
+Mushroom	257	373	272	388	3	100
+Mushroom	319	375	328	389
+Mushroom	363	374	363	389
+
+#Flower
+Flower	277	374	292	389	3	100
+Flower	332	375	341	390
+Flower	363	374	363	389
+
+#Star
+Star	297	373	312	388	3	100
+Star	347	374	356	389
+Star	363	374	363	389
+
+#Spark
+Spark	370	375	384	389	2	100
+Spark	389	375	403	389
+
 #left	top	right	bottom
 [HITBOXES]
-0	0	14	16
+0	0	16	16
+0	0	0	0

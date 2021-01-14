@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fstream>
+#include <random>
 
 #include "../Entity.h"
 
@@ -19,25 +20,28 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	ItemState currentState;
+	Entity::ObjectType currentItem;
+
+	DWORD removeTime = 3000;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
+
+	void HandleStates();
 
 public:
 	BonusItem();
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
-	RECTF GetBoundingBox(int id = 0) const override {
-		RECTF bound;
-		bound.left = position.x + 1;
-		bound.top = position.y;
-		bound.right = position.x + hitBox.GetWidth(id);
-		bound.bottom = position.y + hitBox.GetHeight(id);
+	Entity::ObjectType GetItem() const { return currentItem; }
 
-		return bound;
-	}
+	RECTF GetBoundingBox(int = 0) const override;
+
+	void TakeDamage() override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;

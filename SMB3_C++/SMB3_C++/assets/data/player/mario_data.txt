@@ -208,4 +208,4 @@ RacGUI	145	873	160	896	1	0
 #11: flower
 #12: star
 [SETTINGS]
-3	0	0	8	11
+3	0	0	8

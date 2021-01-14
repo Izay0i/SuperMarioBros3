@@ -37,6 +37,10 @@ int Scene::GetSceneHeight() const {
 	return sceneHeight;
 }
 
+DWORD Scene::GetSceneTime() const {
+	return sceneTime;
+}
+
 void Scene::AddObjectToScene(GameObject* object) {
 	if (object) {
 		objects.push_back(object);
@@ -603,6 +607,8 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 }
 
 void Scene::Unload() {
+	textureFiles.clear();
+	
 	if (bgInstance) {
 		bgInstance->Release();
 	}
@@ -624,8 +630,6 @@ void Scene::Unload() {
 	if (cameraInstance) {
 		cameraInstance->Release();
 	}
-
-	textureFiles.clear();
 }
 
 void Scene::UpdateCameraPosition() {
@@ -646,7 +650,7 @@ void Scene::UpdateCameraPosition() {
 		camPosition.x = static_cast<float>(sceneWidth) - Game::GetInstance()->GetScreenWidth();
 	}
 	
-	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;	
+	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;
 	if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
 		camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
 	}
@@ -667,25 +671,31 @@ void Scene::UpdateHUDPosition() {
 	D3DXVECTOR3 hudPosition = Camera::GetInstance()->GetPosition();
 	//hudPosition.x = marioInstance->GetPosition().x;
 	hudPosition.y = Camera::GetInstance()->GetPosition().y + 145.0f;
+	//hudPosition.y = marioInstance->GetPosition().y + 45.0f;
 
 	hudInstance->SetPosition(hudPosition);
 }
 
 void Scene::Update(DWORD delta) {
-	//scene timer
-	if (sceneTime > 0) {
-		sceneTime -= 100;
-	}
+	//change scene to overworld map
+	if (marioInstance->TriggeredStageEnd()) {
+		if (!IsTranstionStarting()) {
+			StartChangeSceneToMapTimer();
+		}
 
-	/*char debug[100];
-	sprintf_s(debug, "Time: %lu\n", sceneTime % 1000);
-	OutputDebugStringA(debug);*/
+		if (toMapStart != 0 && GetTickCount64() - toMapStart > toMapTime) {
+			SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
+		}
+	}
 
 	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
 		collidableObjects.push_back(object);
 	}
 
+	marioInstance->Update(delta, &collidableObjects);
+
+	//should've passed mario in
 	hudInstance->Update(
 		delta,
 		marioInstance->GetLivesLeft(),
@@ -694,21 +704,33 @@ void Scene::Update(DWORD delta) {
 		marioInstance->GetAcceleration(),
 		marioInstance->GetAccelThreshold(),
 		marioInstance->GetCurrentScore(),
-		sceneTime % 1000,
+		sceneTime,
 		marioInstance->IsFlying(),
-		Device::IsKeyDown(DIK_J) //couldn't care less
+		marioInstance->IsRunningKeyPressed()
 	);
 
-	marioInstance->Update(delta, &collidableObjects);
-
-	if (marioInstance->GetCurrentHitPoints() > 0) {
+	if (marioInstance->GetCurrentHitPoints() > 0) {		
+		//scene timer
+		if (GetTickCount64() % 1000 == 0 && sceneTime > 0) {
+			sceneTime -= 1;
+		}
+		
 		for (unsigned int i = 0; i < objects.size(); ++i) {
 			objects.at(i)->Update(delta, &collidableObjects);
 
 			if (dynamic_cast<QuestionBlock*>(objects.at(i))) {
 				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(objects.at(i));
-				if (questionBlock->GetCurrentHitPoints() == 2) {
-					questionBlock->GetMarioCurrentHP(marioInstance->GetCurrentHitPoints());
+				if (questionBlock->TookDamage()) {
+					Entity* item = questionBlock->SpawnItem(marioInstance->GetCurrentHitPoints());
+					AddObjectToScene(item);
+				}
+			}
+
+			if (dynamic_cast<ShinyBrick*>(objects.at(i))) {
+				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(objects.at(i));
+				if (shinyBrick->TookDamage()) {
+					Entity* item = shinyBrick->SpawnItem();
+					AddObjectToScene(item);
 				}
 			}
 
@@ -767,12 +789,14 @@ void Scene::Update(DWORD delta) {
 		}
 	}
 
+	if (!marioInstance->TriggeredStageEnd()) {
+		UpdateCameraPosition();
+	}
+	UpdateHUDPosition();
+
 	if (!marioInstance) {
 		return;
 	}
-
-	UpdateCameraPosition();
-	UpdateHUDPosition();
 }
 
 void Scene::Render() {
@@ -785,7 +809,9 @@ void Scene::Render() {
 	//Mario
 	//HUD
 
-	bgInstance->Render();
+	if (bgInstance) {
+		bgInstance->Render();
+	}
 	
 	for (GameObject* object : objects) {
 		if (!dynamic_cast<Entity*>(object)) {
@@ -805,17 +831,25 @@ void Scene::Render() {
 		}
 	}
 
-	marioInstance->Render();
+	if (marioInstance) {
+		marioInstance->Render();
+	}
 
-	hudInstance->Render();
+	if (hudInstance) {
+		hudInstance->Render();
+	}
 }
 
 void Scene::HandleStates(BYTE* states) {
-	marioInstance->HandleStates(states);
+	if (!marioInstance->TriggeredStageEnd()) {
+		marioInstance->HandleStates(states);
+	}
 }
 
 void Scene::OnKeyDown(int keyCode) {
-	marioInstance->OnKeyDown(keyCode);
+	if (!marioInstance->TriggeredStageEnd()) {
+		marioInstance->OnKeyDown(keyCode);
+	}
 }
 
 void Scene::OnKeyUp(int keyCode) {

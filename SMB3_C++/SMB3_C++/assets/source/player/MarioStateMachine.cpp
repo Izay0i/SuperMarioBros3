@@ -96,6 +96,10 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 }
 
 void MarioStateMachine::Update(DWORD delta) {
+	if (mario->TriggeredStageEnd()) {
+		currentState = MarioState::RUN;
+	}
+	
 	if (mario->IsInvulnerable()) {
 		std::random_device device;
 		std::mt19937 rng(device());
@@ -113,7 +117,7 @@ void MarioStateMachine::Render() {
 		mario->GetSprite().PlayAnimation("Die", mario->GetPosition(), mario->GetScale());
 		return;
 	}
-	
+
 	switch (currentState) {
 		case MarioState::IDLE:
 			switch (currentForm) {

@@ -121,11 +121,7 @@ void QuestionBlock::ParseData(std::string dataPath, std::string texturePath, D3D
 	readFile.close();
 }
 
-void QuestionBlock::GetMarioCurrentHP(int currentHP) {
-	marioHP = currentHP;
-}
-
-Entity* QuestionBlock::SpawnItem() {
+Entity* QuestionBlock::SpawnItem(int currentHP) {
 	Entity* item = nullptr;
 	
 	//extraData size:
@@ -142,7 +138,7 @@ Entity* QuestionBlock::SpawnItem() {
 	}
 	else if (extraData.size() > 2) {
 		//Big Mario
-		if (marioHP >= 2) {
+		if (currentHP >= 2) {
 			item = new SuperLeaf;
 			item->SetObjectID(static_cast<int>(Entity::ObjectType::OBJECT_TYPE_LEAF));
 			item->ParseData(extraData.at(2), extraData.at(3), colorKey);
@@ -158,6 +154,7 @@ Entity* QuestionBlock::SpawnItem() {
 		}
 	}
 
+	tookDamage = false;
 	extraData.clear();
 	return item;
 }
@@ -181,7 +178,7 @@ void QuestionBlock::TakeDamage() {
 			velocity.y = -jumpSpeed;
 		}
 
-		//SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnItem());
+		tookDamage = true;
 	}
 }
 

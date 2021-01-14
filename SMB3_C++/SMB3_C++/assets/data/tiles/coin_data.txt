@@ -12,6 +12,11 @@ Rotate	1021	69	1036	84
 Pushed	936	69	951	84	3	25
 Pushed	936	86	951	101
 Pushed	936	103	951	118
+#Brick
+Brick	1038	1	1053	16	4	50
+Brick	1055	1	1070	16
+Brick	1072	1	1087	16
+Brick	1089	1	1104	16
 
 #left	top	right	bottom
 [HITBOXES]
