@@ -533,15 +533,27 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 			//isOnGround true when:
 			//on tiles
+			//on portal
 			//on question block
 			//on shiny bricks if their hp != 3
-			if ((dynamic_cast<Tiles*>(event->object) || 
+			if ((dynamic_cast<Tiles*>(event->object) ||
+				dynamic_cast<Portal*>(event->object) ||
 				dynamic_cast<QuestionBlock*>(event->object)) && 
 				event->normal.y == -1.0f ||
 				(dynamic_cast<ShinyBrick*>(event->object) && 
 				dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3))
 			{
 				isOnGround = true;
+			}
+
+			//portal
+			if (dynamic_cast<Portal*>(event->object)) {
+				OutputDebugStringA("Thinking with portals\n");
+				Portal* portal = static_cast<Portal*>(event->object);
+
+				if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
+					position = portal->GetDestination();
+				}
 			}
 
 			//platform... OF DEATH
@@ -558,7 +570,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 
 				bonusItem->TakeDamage();
-
+				
 				//phase through
 				minTime.x = 1.0f;
 				offSet.x = normal.x = relativeDistance.x = 0.0f;

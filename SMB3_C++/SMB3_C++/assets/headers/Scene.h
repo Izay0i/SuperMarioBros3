@@ -124,3 +124,5 @@ public:
 	void OnKeyDown(int);
 	void OnKeyUp(int);
 };
+
+//To become an insane person, you must first become a software engineer

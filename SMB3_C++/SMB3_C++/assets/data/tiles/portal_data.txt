@@ -1,0 +1,8 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#Maybe for the stage nodes?
+
+#left	top	right	bottom
+[HITBOXES]
+0	0	30	8

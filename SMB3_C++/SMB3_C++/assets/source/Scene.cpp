@@ -131,24 +131,32 @@ void Scene::ParseEntityData(std::string line) {
 	std::vector<std::string> extraData;
 
 	if (tokens.size() > 3) {
-		//(variant) | objID | dataPath | texPath | texID
-		//texPath is added in after dataPath
-		
-		unsigned int begin = 3;
-		//applies to bricks
-		//objID | amount | dataPath ..
-		if (std::stoi(tokens.at(0)) == 103) {
-			extraData.push_back(tokens.at(3));
-			extraData.push_back(tokens.at(4));
-			begin = 5;
-		}
+		int objID = std::stoi(tokens.at(0));
 
-		for (unsigned int i = begin; i < tokens.size(); ++i) {
-			if (IsInteger(tokens.at(i))) {
-				extraData.push_back(GetTexturePath(std::stoi(tokens.at(i))));
-			}
-			else {
+		if (objID == 100) {
+			for (unsigned int i = 3; i < tokens.size(); ++i) {
 				extraData.push_back(tokens.at(i));
+			}
+		}
+		else {
+			//(variant) | objID | dataPath | texPath
+
+			unsigned int begin = 3;
+			//applies to bricks
+			//objID | amount | dataPath ..
+			if (objID == 103) {
+				extraData.push_back(tokens.at(3));
+				extraData.push_back(tokens.at(4));
+				begin = 5;
+			}
+
+			for (unsigned int i = begin; i < tokens.size(); ++i) {
+				if (IsInteger(tokens.at(i))) {
+					extraData.push_back(GetTexturePath(std::stoi(tokens.at(i))));
+				}
+				else {
+					extraData.push_back(tokens.at(i));
+				}
 			}
 		}
 	}
@@ -182,6 +190,9 @@ void Scene::ParseEntityData(std::string line) {
 		case Entity::ObjectType::OBJECT_TYPE_VENUSTRAP:
 			object = new VenusFire;
 			break;
+		case Entity::ObjectType::OBJECT_TYPE_PORTAL:
+			object = new Portal;
+			break;
 		case Entity::ObjectType::OBJECT_TYPE_COIN:
 			object = new Coin;
 			break;
@@ -198,6 +209,7 @@ void Scene::ParseEntityData(std::string line) {
 			object = new SwitchBlock;
 			break;
 
+		//testing
 		case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
 			object = new SuperMushroom;
 			break;
@@ -295,6 +307,17 @@ void Scene::ParseWorldCoords(std::string line) {
 						object->SetPosition(position);
 					}
 					return;
+				}
+			}
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_PORTAL:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<Portal*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return; //dunno why i put the return statement here
 				}
 			}
 			break;
@@ -664,6 +687,14 @@ void Scene::UpdateCameraPosition() {
 	}
 	
 	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 4.0f;
+	//testing
+	/*if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
+		camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
+	}
+	else if (camPosition.y < 0.0f) {
+		camPosition.y = 0.0f;
+	}*/
+
 	if (marioInstance->IsFlying() || (marioInstance->GetPosition().y + marioInstance->GetBoxHeight() < (sceneHeight / 3.5f))) {
 		if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
 			camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
@@ -855,15 +886,15 @@ void Scene::Update(DWORD delta) {
 
 			//change scene to overworld map
 			if (marioInstance->TriggeredStageEnd() || marioInstance->GetCurrentHitPoints() == 0) {
-				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
+				//SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
 
-				/*if (!IsTranstionStarting()) {
+				if (!IsTranstionStarting()) {
 					StartChangeSceneToMapTimer();
 				}
 
 				if (toMapStart != 0 && GetTickCount64() - toMapStart > toMapTime) {
 					SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
-				}*/
+				}
 			}
 			break;
 	}

@@ -44,6 +44,10 @@ assets\data\hud\hud_data.txt	4
 #Mario
 0	assets\data\player\mario_data.txt	0	assets\data\projectiles\fireball_data.txt	0
 
+#Portal							destination	x		y
+100	assets\data\tiles\portal_data.txt	2	2104	496
+100	assets\data\tiles\portal_data.txt	2	2328	352
+
 #Animated Tiles
 #Coin
 101	assets\data\tiles\coin_data.txt	2
@@ -187,6 +191,11 @@ assets\data\hud\hud_data.txt	4
 #Venus fire trap
 6	360	384
 6	1864	384
+
+#Portal
+100	2257	112
+#100	2321	384
+100	2321	488
 
 #Animated Tiles
 #Coin

@@ -14,7 +14,7 @@ HUD* HUD::GetInstance() {
 }
 
 void HUD::LoadTexture() {
-	if (!texturePath) {
+	if (!texture) {
 		HRESULT hResult;
 		D3DXIMAGE_INFO imageInfo;
 
@@ -301,6 +301,7 @@ void HUD::Update(
 	ParseSpeedGauge(currentAccel, maxAccel, iSFlying, keyPressed);
 	ParseScore(score);
 	ParseTime(time);
+	ParseSceneEnd(items);
 
 	this->sceneEnded = sceneEnded;
 }

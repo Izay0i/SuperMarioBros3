@@ -171,6 +171,7 @@
     <ClCompile Include="assets\source\Tiles.cpp" />
     <ClCompile Include="assets\source\tiles\BonusItem.cpp" />
     <ClCompile Include="assets\source\tiles\Coin.cpp" />
+    <ClCompile Include="assets\source\tiles\Portal.cpp" />
     <ClCompile Include="assets\source\tiles\QuestionBlock.cpp" />
     <ClCompile Include="assets\source\tiles\ShinyBrick.cpp" />
     <ClCompile Include="assets\source\tiles\SwitchBlock.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="assets\headers\Tiles.h" />
     <ClInclude Include="assets\headers\tiles\BonusItem.h" />
     <ClInclude Include="assets\headers\tiles\Coin.h" />
+    <ClInclude Include="assets\headers\tiles\Portal.h" />
     <ClInclude Include="assets\headers\tiles\QuestionBlock.h" />
     <ClInclude Include="assets\headers\tiles\ShinyBrick.h" />
     <ClInclude Include="assets\headers\tiles\SwitchBlock.h" />
