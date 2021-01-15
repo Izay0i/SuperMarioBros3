@@ -23,6 +23,9 @@ private:
 	const unsigned int SCORE_MAX_LENGTH = 7;
 	const unsigned int TIME_MAX_LENGTH = 3;
 
+	bool sceneEnded;
+	std::string animName;
+
 	//end me
 	//Components
 	//==Lives
@@ -48,6 +51,7 @@ private:
 	void ParseSpeedGauge(float, float, bool, bool);
 	void ParseScore(unsigned int);
 	void ParseTime(unsigned long);
+	void ParseSceneEnd(std::vector<Entity::ObjectType>);
 
 	std::string DigitToString(std::string);
 
@@ -58,8 +62,8 @@ public:
 
 	RECTF GetBoundingBox(int id = 0) const override { return RECTF(); }
 
-	//delta, lives, coins, items, speed gauge(current acceleration), max acceleration, score, timer, is flying, sprint key pressed
-	void Update(DWORD, const unsigned int, const unsigned int, const std::vector<Entity::ObjectType>, const float, const float, const unsigned int, const unsigned long, bool, bool);
+	//delta, lives, coins, items, speed gauge(current acceleration), max acceleration, score, timer, is flying, sprint key pressed, end scene
+	void Update(DWORD, const unsigned int, const unsigned int, const std::vector<Entity::ObjectType>, const float, const float, const unsigned int, const unsigned long, bool, bool, bool);
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override {}
 	void Render() override;

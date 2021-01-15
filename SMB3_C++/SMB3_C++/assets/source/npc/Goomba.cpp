@@ -254,6 +254,7 @@ void Goomba::Render() {
 			break;
 		case GoombaState::DIE:
 			sprite.PlayAnimation(animName, D3DXVECTOR3(position.x, position.y - 1, 0), scale);
+			sprite.PlayAnimation("100", position, scale);
 			break;
 	}
 }

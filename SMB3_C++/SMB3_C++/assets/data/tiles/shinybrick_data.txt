@@ -11,6 +11,13 @@ None	1208	1	1223	16	1	0
 #Coin
 Coin	953	69	968	84	1	0
 
+#Particle system later
+#This will do
+#Break
+Break	699	138	715	156	3	25
+Break	721	138	748	166
+Break	754	138	788	179
+
 #left	top	right	bottom
 [HITBOXES]
 0	0	16	16

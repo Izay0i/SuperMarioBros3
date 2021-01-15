@@ -5,7 +5,7 @@ LPD3DXSPRITE GameObject::spriteHandler = nullptr;
 
 void GameObject::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	this->delta = delta;
-	distance = velocity * static_cast<FLOAT>(delta);
+	distance = velocity * static_cast<float>(delta);
 }
 
 void GameObject::SweptAABB(

@@ -201,6 +201,10 @@ void Coin::Render() {
 			sprite.PlayAnimation("Brick", position);
 			break;
 	}
+
+	if (hitPoints == -1) {
+		sprite.PlayAnimation("100", position);
+	}
 }
 
 void Coin::Release() {

@@ -19,6 +19,10 @@ Mario::Mario() {
 Mario* Mario::GetInstance() {
 	if (!marioInstance) {
 		marioInstance = new Mario;
+
+		char debug[100];
+		sprintf_s(debug, "[INSTANCE] Mario created, scene ID: %d\n", SceneManager::GetInstance()->GetCurrentScene()->GetSceneID());
+		OutputDebugStringA(debug);
 	}
 
 	return marioInstance;
@@ -66,7 +70,7 @@ RECTF Mario::GetBoundingBox(int id) const {
 		if (IsAttacking() && velocity.x == 0.0f) {
 			bound.left = position.x - 8;
 			bound.top = position.y;
-			bound.right = bound.left + hitBox.GetWidth(1) * 3;
+			bound.right = bound.left + hitBox.GetWidth(1) * 2;
 			bound.bottom = position.y + hitBox.GetHeight(1);
 		}
 		else {
@@ -185,9 +189,9 @@ void Mario::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR co
 		}
 	}
 
-	readFile.close();
-
 	marioFSM = new MarioStateMachine(marioInstance);
+
+	readFile.close();
 }
 
 void Mario::GoRight() {
@@ -347,7 +351,7 @@ void Mario::OnKeyDown(int keyCode) {
 						StartFlyTimer();
 					}
 					
-					velocity.y = -jumpSpeed;
+					velocity.y = -jumpSpeed * 0.8f;
 				}		
 			}
 			
@@ -385,15 +389,17 @@ void Mario::HandleStageEnd() {
 	if (triggeredStageEnd) {
 		acceleration = MIN_ACCEL;
 		isHolding = false;
+
+		//score += SceneManager::GetInstance()->GetCurrentScene()->GetSceneTime() * 50;
 	}
 }
 
-void Mario::HandleBonusItems() {
-	int shroomCount = 0;
-	int flowerCount = 0;
-	int startCount = 0;
-	
+void Mario::HandleBonusItems() {	
 	if (bonusItems.size() == 3) {
+		int shroomCount = 0;
+		int flowerCount = 0;
+		int startCount = 0;
+
 		for (unsigned int i = 0; i < bonusItems.size(); ++i) {
 			switch (bonusItems.at(i)) {
 				case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
@@ -426,8 +432,20 @@ void Mario::HandleBonusItems() {
 }
 
 void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneTime() == 0) {
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == 10) {
+		isInMap = true;
+	}
+	else {
+		isInMap = false;
+	}
+	
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() >= 11 &&
+		SceneManager::GetInstance()->GetCurrentScene()->GetSceneTime() == 0) 
+	{
 		hitPoints = 0;
+	}
+	else if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == 10) {
+		hitPoints = 1;
 	}
 
 	//stop moving if Mario dies
@@ -499,6 +517,19 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
+
+			//enemies
+			if (dynamic_cast<Entity*>(event->object) && 
+				(event->object->GetObjectID() >= 1 && event->object->GetObjectID() <= 7) &&
+				event->normal.x != 0.0f) 
+			{
+				touchedEntity = static_cast<Entity*>(event->object);
+			}
+			else {
+				if (touchedEntity) {
+					touchedEntity = nullptr;
+				}
+			}
 
 			//isOnGround true when:
 			//on tiles
@@ -615,15 +646,21 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			//coin
 			if (dynamic_cast<Coin*>(event->object)) {
 				Coin* coin = static_cast<Coin*>(event->object);
-				if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
-					if (coin->GetCurrentHitPoints() == 1) {
+				if (coin->GetCurrentHitPoints() == 1) {
+					if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
 						coin->TakeDamage();
 
 						++coins;
 						score += 50;
 					}
 				}
-				else if (coin->GetCurrentHitPoints() != 3) {
+				else if (coin->GetCurrentHitPoints() == 3) {
+					if (event->normal.y > 0.0f) {
+						coin->SetCurrenHitPoints(-1);
+					}
+				}
+				
+				if (coin->GetCurrentHitPoints() != 3) {
 					minTime.x = 1.0f;
 					offSet.x = normal.x = relativeDistance.x = 0.0f;
 					if (!isOnGround) {
@@ -648,7 +685,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						}
 					}
 				}
-				else if (shinyBrick->GetCurrentHitPoints() == 3) {
+				else if (shinyBrick->GetCurrentHitPoints() == 3) {					
 					minTime.x = 1.0f;
 					offSet.x = normal.x = relativeDistance.x = 0.0f;
 					if (!isOnGround) {
@@ -657,6 +694,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					}
 
 					shinyBrick->SetCurrenHitPoints(-1);
+
 					++coins;
 					score += 50;
 				}
@@ -830,18 +868,30 @@ void Mario::Render() {
 
 void Mario::Release() {
 	if (marioInstance) {
+		triggeredStageEnd = false;
+
+		for (unsigned int i = 0; i < fireballs.size(); ++i) {
+			if (fireballs.at(i)->GetCurrentHitPoints() == -1) {
+				fireballs.erase(std::remove(fireballs.begin(), fireballs.end(), fireballs.at(i)), fireballs.end());
+			}
+		}
 		fireballs.clear();
 
-		/*if (texturePath) {
+		if (texturePath) {
 			delete texturePath;
 			texturePath = nullptr;
 		}
 
 		if (texture) {
 			texture->Release();
-		}*/
+			texture = nullptr;
+		}
 
-		delete marioInstance;
+		if (marioFSM) {
+			marioFSM->Release();
+		}
+
+		//delete marioInstance;
 		marioInstance = nullptr;
 	}
 }

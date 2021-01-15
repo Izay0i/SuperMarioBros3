@@ -14,7 +14,7 @@ HUD* HUD::GetInstance() {
 }
 
 void HUD::LoadTexture() {
-	if (!texture) {
+	if (!texturePath) {
 		HRESULT hResult;
 		D3DXIMAGE_INFO imageInfo;
 
@@ -226,6 +226,22 @@ void HUD::ParseTime(unsigned long time) {
 	}
 }
 
+void HUD::ParseSceneEnd(std::vector<Entity::ObjectType> items) {
+	Entity::ObjectType item = items.back();
+
+	switch (item) {
+		case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
+			animName = "Mushroom";
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_FLOWER:
+			animName = "Flower";
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_STAR:
+			animName = "Star";
+			break;
+	}
+}
+
 std::string HUD::DigitToString(std::string digitStr) {
 	std::string animName = "Error";
 	unsigned int digit = std::stoi(digitStr);
@@ -276,7 +292,8 @@ void HUD::Update(
 	unsigned int score, 
 	unsigned long time,
 	bool iSFlying,
-	bool keyPressed) 
+	bool keyPressed,
+	bool sceneEnded) 
 {
 	ParseLives(lives);
 	ParseCoins(coins);
@@ -284,6 +301,8 @@ void HUD::Update(
 	ParseSpeedGauge(currentAccel, maxAccel, iSFlying, keyPressed);
 	ParseScore(score);
 	ParseTime(time);
+
+	this->sceneEnded = sceneEnded;
 }
 
 void HUD::Render() {
@@ -333,8 +352,26 @@ void HUD::Render() {
 	for (unsigned int i = 0; i < timeArr.size(); ++i) {
 		sprite.PlayAnimation(timeArr.at(i), D3DXVECTOR3(position.x + 125 + (8 * i), position.y + 16, 0));
 	}
+
+	if (sceneEnded) {
+		sprite.PlayAnimation("CourseClear", D3DXVECTOR3(position.x + 60, position.y - 170, 0));
+		sprite.PlayAnimation(animName, D3DXVECTOR3(position.x + 183, position.y - 155, 0));
+	}	
 }
 
 void HUD::Release() {
+	if (hudInstance) {
+		if (texturePath) {
+			delete texturePath;
+			texturePath = nullptr;
+		}
 
+		if (texture) {
+			texture->Release();
+			texture = nullptr;
+		}
+
+		delete hudInstance;
+		hudInstance = nullptr;
+	}
 }

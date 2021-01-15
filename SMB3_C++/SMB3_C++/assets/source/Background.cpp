@@ -1,8 +1,21 @@
 #include "../headers/Background.h"
 
+Background* Background::bgInstance = nullptr;
 LPCWSTR Background::texturePath = nullptr;
 LPDIRECT3DTEXTURE9 Background::texture = nullptr;
 D3DCOLOR Background::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+
+Background::Background() {
+
+}
+
+Background* Background::GetInstance() {
+	if (!bgInstance) {
+		bgInstance = new Background;
+	}
+
+	return bgInstance;
+}
 
 void Background::LoadTexture(std::string path, D3DCOLOR color) {
 	if (!texturePath) {
@@ -78,5 +91,6 @@ void Background::Release() {
 
 	if (texture) {
 		texture->Release();
+		texture = nullptr;
 	}
 }

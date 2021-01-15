@@ -26,6 +26,7 @@ private:
 
 	MarioStateMachine* marioFSM;
 	Entity* heldEntity;
+	Entity* touchedEntity;
 
 	std::vector<Fireball*> fireballs;
 
@@ -39,6 +40,7 @@ private:
 
 	bool triggeredStageEnd;
 
+	bool isInMap;
 	bool isOnGround;
 	bool isHolding;
 
@@ -57,7 +59,7 @@ private:
 	DWORD attackTime = 126;
 
 	DWORD flyStart;
-	DWORD flyTime = 8000;
+	DWORD flyTime = 6000;
 
 	DWORD invulStart;
 	DWORD invulTime = 3000;
@@ -89,10 +91,12 @@ public:
 
 	RECTF GetBoundingBox(int = 0) const override;
 	AnimatedSprite GetSprite() const { return sprite; }
-	Entity* GetHeldEntity() { return heldEntity; }
+	Entity* GetHeldEntity() const { return heldEntity; }
+	Entity* GetTouchedEntity() const { return touchedEntity; }
 
 	bool TriggeredStageEnd() const { return triggeredStageEnd; }
 
+	bool IsInMap() const { return isInMap; }
 	bool IsRunningKeyPressed() const { return isHolding; }
 	bool IsOnGround() const { return isOnGround; }
 	bool IsAttacking() const { return attackStart != 0; }

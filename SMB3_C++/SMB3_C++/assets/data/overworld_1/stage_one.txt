@@ -276,7 +276,7 @@ assets\data\hud\hud_data.txt	4
 #obj_id	world_x	world_y	width	height	sprites_arr_id
 [TILES_DATA]
 #One hit kill platform
-666	-16	448	2816	16	666
+666	-16	448	2768	16	666
 
 #Ground 1
 201	0	416	624	16	0

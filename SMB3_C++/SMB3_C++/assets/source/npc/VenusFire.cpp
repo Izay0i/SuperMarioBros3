@@ -31,21 +31,21 @@ void VenusFire::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 void VenusFire::Update(DWORD delta, std::vector<GameObject*>* objects) {	
 	if (IsRetracting()) {
 		if (position.y > (originalPos.y - MAX_Y_OFFSET)) {			
-			position.y -= 0.5f;
+			position.y -= 0.02f * delta;			
 		}
 
-		if (GetTickCount64() - retractStart == (retractTime * 3 / 4)) {
+		if (GetTickCount64() - retractStart == (retractTime * 3 / 4) && !playerInRange) {
 			SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnFireball());
 		}
 	}
 
-	if (!IsRetracting()) {
+	if (!IsRetracting() || playerInRange) {
 		if (position.y >= originalPos.y) {
 			position.y = originalPos.y;
 			StartRetractTimer();
 		}
 		else {
-			position.y += 0.5f;
+			position.y += 0.02f * delta;
 		}
 	}
 
@@ -102,6 +102,10 @@ void VenusFire::Render() {
 					}
 				}
 			}
+			break;
+		case PlantState::DIE:
+			sprite.PlayAnimation("Die", position, scale);
+			sprite.PlayAnimation("100", position, scale);
 			break;
 	}
 }

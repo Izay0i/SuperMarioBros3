@@ -13,13 +13,19 @@
 
 class Background : public GameObject {
 private:
+	static Background* bgInstance;
+
 	static LPCWSTR texturePath;
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
 	std::vector<std::pair<RECT, D3DXVECTOR3>> images;
 
+	Background();
+
 public:
+	static Background* GetInstance();
+
 	void LoadTexture(std::string, D3DCOLOR);
 
 	void AddImage(RECT, D3DXVECTOR3);

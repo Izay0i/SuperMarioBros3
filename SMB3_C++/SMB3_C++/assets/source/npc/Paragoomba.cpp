@@ -158,6 +158,10 @@ void Paragoomba::Render() {
 			}
 			break;
 	}
+
+	if (hitPoints == -1) {
+		sprite.PlayAnimation("100", position);
+	}
 }
 
 void Paragoomba::Release() {

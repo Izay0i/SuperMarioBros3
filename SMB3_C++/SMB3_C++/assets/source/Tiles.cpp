@@ -88,14 +88,15 @@ void Tiles::Render() {
 }
 
 void Tiles::Release() {
+	images.clear();
+
 	if (texture) {
 		texture->Release();
+		texture = nullptr;
 	}
 
 	if (texturePath) {
 		delete texturePath;
 		texturePath = nullptr;
 	}
-
-	images.clear();
 }

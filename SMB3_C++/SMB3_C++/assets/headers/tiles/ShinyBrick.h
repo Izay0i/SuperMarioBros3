@@ -25,6 +25,8 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	DWORD removeTime = 500;
+
 	BlockState currentState;
 
 	bool tookDamage;
@@ -50,15 +52,7 @@ public:
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
-	RECTF GetBoundingBox(int id = 0) const override {
-		RECTF bound;
-		bound.left = position.x + 2;
-		bound.top = position.y + 1;
-		bound.right = position.x + hitBox.GetWidth(id) - 3;
-		bound.bottom = position.y + hitBox.GetHeight(id) - 5;
-
-		return bound;
-	}
+	RECTF GetBoundingBox(int = 0) const;
 
 	void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
 

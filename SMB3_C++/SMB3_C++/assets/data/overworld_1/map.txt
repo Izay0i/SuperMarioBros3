@@ -12,6 +12,9 @@
 1	assets\textures\overworld_1_tileset.png	0	0	255
 2	assets\textures\gui_and_font.png	0	224	142
 
+[HUD]
+assets\data\hud\hud_data.txt	2
+
 #obj_id	data_path	tex_id	extra_data
 [ENTITY_DATA]
 #Mario

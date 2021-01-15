@@ -49,8 +49,6 @@ private:
 		SCENE_STAGEFOUR = 14
 	};
 
-	SceneType currentScene;
-
 	Mario* marioInstance;
 	HUD* hudInstance;
 	Camera* cameraInstance;

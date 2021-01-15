@@ -266,7 +266,8 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
 					if (dynamic_cast<ShinyBrick*>(event->object) && event->normal.y == 0.0f) {
-						entity->SetCurrenHitPoints(-1);
+						//entity->SetCurrenHitPoints(-1);
+						entity->StartRemoveTimer();
 					}
 					else {
 						entity->TakeDamage();
@@ -369,6 +370,7 @@ void KoopaTroopa::Render() {
 			else {
 				sprite.PlayAnimation("RetractRed", position, scale);
 			}
+			sprite.PlayAnimation("100", position);
 			break;
 	}
 }

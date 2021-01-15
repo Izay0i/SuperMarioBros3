@@ -57,8 +57,8 @@ public:
 
 	virtual ~Entity() {}	
 
-	void SetCurrenHitPoints(int point) { hitPoints = point; }
-	int GetCurrentHitPoints() const { return hitPoints; }
+	virtual void SetCurrenHitPoints(int point) { hitPoints = point; }
+	virtual int GetCurrentHitPoints() const { return hitPoints; }
 
 	virtual unsigned int GetExtraDataSize() const { return extraData.size(); }
 

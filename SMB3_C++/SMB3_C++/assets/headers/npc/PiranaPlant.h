@@ -21,6 +21,8 @@ protected:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	bool playerInRange;
+
 	PlantState currentState;
 
 	DWORD removeTime = 100;
@@ -41,6 +43,8 @@ public:
 	PiranaPlant();
 
 	virtual RECTF GetBoundingBox(int = 0) const override;
+
+	virtual void PlayerIsInRange(bool b) { playerInRange = b; }
 
 	virtual void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 

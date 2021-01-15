@@ -172,6 +172,10 @@ void Parakoopa::Render() {
 			sprite.PlayAnimation("Retract", position, scale);
 			break;
 	}
+
+	if (hitPoints == -1) {
+		sprite.PlayAnimation("100", position);
+	}
 }
 
 void Parakoopa::Release() {

@@ -203,6 +203,10 @@ void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 void SuperMushroom::Render() {
 	sprite.PlayAnimation("Default", position);
+
+	if (hitPoints == -1) {
+		sprite.PlayAnimation("1000", position);
+	}
 }
 
 void SuperMushroom::Release() {

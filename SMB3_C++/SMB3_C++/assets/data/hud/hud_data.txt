@@ -37,3 +37,6 @@ Mushroom	184	158	207	187	1	0
 Flower	208	158	231	187	1	0
 #Star node
 Star	232	158	256	187	1	0
+
+#==CLEAR TEXT==
+CourseClear	5	193	150	236	1	0

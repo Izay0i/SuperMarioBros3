@@ -203,6 +203,10 @@ void GMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 void GMushroom::Render() {
 	sprite.PlayAnimation("Default", position);
+
+	if (hitPoints == -1) {
+		sprite.PlayAnimation("1UP", position);
+	}
 }
 
 void GMushroom::Release() {

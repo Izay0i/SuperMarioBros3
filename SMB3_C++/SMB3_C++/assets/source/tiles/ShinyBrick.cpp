@@ -11,6 +11,19 @@ ShinyBrick::ShinyBrick() {
 	hitPoints = 2;
 }
 
+RECTF ShinyBrick::GetBoundingBox(int id) const {
+	RECTF bound;
+	
+	if (removeStart == 0) {
+		bound.left = position.x + 2;
+		bound.top = position.y + 1;
+		bound.right = position.x + hitBox.GetWidth(id) - 3;
+		bound.bottom = position.y + hitBox.GetHeight(id) - 5;
+	}
+
+	return bound;
+}
+
 void ShinyBrick::LoadTexture() {
 	if (!texture) {
 		HRESULT hResult;
@@ -195,6 +208,11 @@ void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	GameObject::Update(delta);
 	
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
+	}
+
 	if (currentState != BlockState::SWITCHEDTOCOIN) {
 		if (position.y < originalPos.y) {
 			velocity.y += gravity * delta;
@@ -214,7 +232,12 @@ void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 }
 
 void ShinyBrick::Render() {
-	switch (currentState) {
+	//temporary fix
+	if (removeStart > 0) {
+		sprite.PlayAnimation("Break", D3DXVECTOR3(position.x - 8, position.y, 0));
+	}
+	else {
+		switch (currentState) {
 		case BlockState::PUSHED:
 			sprite.PlayAnimation("None", position);
 			break;
@@ -224,6 +247,7 @@ void ShinyBrick::Render() {
 		case BlockState::SWITCHEDTOCOIN:
 			sprite.PlayAnimation("Coin", position);
 			break;
+		}
 	}
 }
 

@@ -6,9 +6,6 @@ LPD3DXSPRITE Scene::spriteHandler = nullptr;
 Scene::Scene(int id, std::string path) {
 	sceneID = id;
 	filePath = path;
-
-	bgInstance = new Background;
-	hudInstance = new HUD;
 }
 
 Scene::~Scene() {}
@@ -120,6 +117,7 @@ void Scene::ParseHUD(std::string line) {
 	}
 
 	int texID = std::stoi(tokens.at(1));
+	hudInstance = HUD::GetInstance();
 	hudInstance->ParseData(tokens.at(0), GetTexturePath(texID), GetTextureColorKey(texID));
 }
 
@@ -482,11 +480,16 @@ void Scene::ParseBackground(std::string line) {
 	D3DXVECTOR3 pos = D3DXVECTOR3(posX, posY, 0);
 
 	int texID = std::stoi(tokens.at(6));
+	bgInstance = Background::GetInstance();
 	bgInstance->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
 	bgInstance->AddImage(bound, pos);
 }
 
 void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
+	char debug[100];
+	sprintf_s(debug, "[LOAD] Loading scene ID: %d\n", sceneID);
+	OutputDebugStringA(debug);
+	
 	if (!directDevice) {
 		directDevice = device;
 	}
@@ -603,22 +606,20 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 		}
 	}
 
+	cameraInstance = Camera::GetInstance();
+
 	readFile.close();
 }
 
 void Scene::Unload() {
-	textureFiles.clear();
-	
+	char debug[100];
+	sprintf_s(debug, "[UNLOAD] Unloading, scene ID: %d\n", sceneID);
+	OutputDebugStringA(debug);
+
 	if (bgInstance) {
 		bgInstance->Release();
 	}
 
-	for (GameObject* object : objects) {
-		if (object) {
-			object->Release();
-		}
-	}
-	
 	if (hudInstance) {
 		hudInstance->Release();
 	}
@@ -630,6 +631,18 @@ void Scene::Unload() {
 	if (cameraInstance) {
 		cameraInstance->Release();
 	}
+
+	for (GameObject* object : objects) {
+		if (object) {
+			object->Release();
+		}
+	}
+	objects.clear();
+
+	textureFiles.clear();
+
+	sprintf_s(debug, "[UNLOAD] Unloaded scene: %s\n", filePath.c_str());
+	OutputDebugStringW(Util::ToLPCWSTR(debug));
 }
 
 void Scene::UpdateCameraPosition() {
@@ -650,42 +663,41 @@ void Scene::UpdateCameraPosition() {
 		camPosition.x = static_cast<float>(sceneWidth) - Game::GetInstance()->GetScreenWidth();
 	}
 	
-	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;
-	if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
-		camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
+	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 4.0f;
+	if (marioInstance->IsFlying() || (marioInstance->GetPosition().y + marioInstance->GetBoxHeight() < (sceneHeight / 3.5f))) {
+		if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
+			camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
+		}
+		else if (camPosition.y < 0.0f) {
+			camPosition.y = 0.0f;
+		}
 	}
-	else if (camPosition.y < 0.0f) {
-		camPosition.y = 0.0f;
+	else {
+		camPosition.y = 239.0f;
 	}
-
-	//camPosition.y = 230.0f;
 
 	/*char debugStr[100];
 	sprintf_s(debugStr, "Cam y: %f\n", camPosition.y);
 	OutputDebugStringA(debugStr);*/
 
-	Camera::GetInstance()->SetPosition(camPosition);
+	cameraInstance->SetPosition(camPosition);
 }
 
 void Scene::UpdateHUDPosition() {
-	D3DXVECTOR3 hudPosition = Camera::GetInstance()->GetPosition();
+	D3DXVECTOR3 hudPosition = cameraInstance->GetPosition();
 	//hudPosition.x = marioInstance->GetPosition().x;
-	hudPosition.y = Camera::GetInstance()->GetPosition().y + 145.0f;
-	//hudPosition.y = marioInstance->GetPosition().y + 45.0f;
+	//hudPosition.y = Camera::GetInstance()->GetPosition().y + 145.0f;
+	hudPosition.y = 435;
 
 	hudInstance->SetPosition(hudPosition);
 }
 
 void Scene::Update(DWORD delta) {
-	//change scene to overworld map
-	if (marioInstance->TriggeredStageEnd()) {
-		if (!IsTranstionStarting()) {
-			StartChangeSceneToMapTimer();
-		}
-
-		if (toMapStart != 0 && GetTickCount64() - toMapStart > toMapTime) {
-			SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
-		}
+	if (!marioInstance) {
+		/*char debug[100];
+		sprintf_s(debug, "[UPDATE] No mario, scene ID: %d\n", sceneID);
+		OutputDebugStringA(debug);*/
+		return;
 	}
 
 	std::vector<GameObject*> collidableObjects;
@@ -693,109 +705,167 @@ void Scene::Update(DWORD delta) {
 		collidableObjects.push_back(object);
 	}
 
-	marioInstance->Update(delta, &collidableObjects);
+	switch (static_cast<SceneType>(sceneID)) {
+		case SceneType::SCENE_INTRO:
 
-	//should've passed mario in
-	hudInstance->Update(
-		delta,
-		marioInstance->GetLivesLeft(),
-		marioInstance->GetCoinsCollected(),
-		marioInstance->GetBonusItems(),
-		marioInstance->GetAcceleration(),
-		marioInstance->GetAccelThreshold(),
-		marioInstance->GetCurrentScore(),
-		sceneTime,
-		marioInstance->IsFlying(),
-		marioInstance->IsRunningKeyPressed()
-	);
+			break;
+		case SceneType::SCENE_MAP:
+			marioInstance->Update(delta, &collidableObjects);
 
-	if (marioInstance->GetCurrentHitPoints() > 0) {		
-		//scene timer
-		if (GetTickCount64() % 1000 == 0 && sceneTime > 0) {
-			sceneTime -= 1;
-		}
-		
-		for (unsigned int i = 0; i < objects.size(); ++i) {
-			objects.at(i)->Update(delta, &collidableObjects);
-
-			if (dynamic_cast<QuestionBlock*>(objects.at(i))) {
-				QuestionBlock* questionBlock = static_cast<QuestionBlock*>(objects.at(i));
-				if (questionBlock->TookDamage()) {
-					Entity* item = questionBlock->SpawnItem(marioInstance->GetCurrentHitPoints());
-					AddObjectToScene(item);
+			if (hudInstance) {
+				//should've passed mario in
+				hudInstance->Update(
+					delta,
+					marioInstance->GetLivesLeft(),
+					marioInstance->GetCoinsCollected(),
+					marioInstance->GetBonusItems(),
+					marioInstance->GetAcceleration(),
+					marioInstance->GetAccelThreshold(),
+					marioInstance->GetCurrentScore(),
+					sceneTime,
+					marioInstance->IsFlying(),
+					marioInstance->IsRunningKeyPressed(),
+					marioInstance->TriggeredStageEnd()
+				);
+			}
+			break;
+		case SceneType::SCENE_STAGEONE:
+		case SceneType::SCENE_STAGEFOUR:
+			if (marioInstance->GetCurrentHitPoints() > 0 && !marioInstance->TriggeredStageEnd()) {
+				//scene timer
+				if (GetTickCount64() % 1000 == 0 && sceneTime > 0) {
+					sceneTime -= 1;
 				}
 			}
 
-			if (dynamic_cast<ShinyBrick*>(objects.at(i))) {
-				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(objects.at(i));
-				if (shinyBrick->TookDamage()) {
-					Entity* item = shinyBrick->SpawnItem();
-					AddObjectToScene(item);
-				}
+			marioInstance->Update(delta, &collidableObjects);
+
+			if (hudInstance) {
+				hudInstance->Update(
+					delta,
+					marioInstance->GetLivesLeft(),
+					marioInstance->GetCoinsCollected(),
+					marioInstance->GetBonusItems(),
+					marioInstance->GetAcceleration(),
+					marioInstance->GetAccelThreshold(),
+					marioInstance->GetCurrentScore(),
+					sceneTime,
+					marioInstance->IsFlying(),
+					marioInstance->IsRunningKeyPressed(),
+					marioInstance->TriggeredStageEnd()
+				);
 			}
 
-			if (dynamic_cast<Paragoomba*>(objects.at(i))) {
-				Paragoomba* paraGoomba = static_cast<Paragoomba*>(objects.at(i));
-				if (paraGoomba->IsTired() && paraGoomba->GetCurrentHitPoints() == 2) {
-					//mario is on the right side of goomba
-					if ((paraGoomba->GetPosition().x - marioInstance->GetPosition().x) < 0) {
-						paraGoomba->SetNormal(D3DXVECTOR3(-1, 0, 0));
+			if (marioInstance->GetCurrentHitPoints() > 0) {
+				for (unsigned int i = 0; i < objects.size(); ++i) {
+					objects.at(i)->Update(delta, &collidableObjects);
+
+					if (dynamic_cast<QuestionBlock*>(objects.at(i))) {
+						QuestionBlock* questionBlock = static_cast<QuestionBlock*>(objects.at(i));
+						if (questionBlock->TookDamage()) {
+							Entity* item = questionBlock->SpawnItem(marioInstance->GetCurrentHitPoints());
+							AddObjectToScene(item);
+						}
 					}
-					else {
-						paraGoomba->SetNormal(D3DXVECTOR3(1, 0, 0));
+
+					if (dynamic_cast<ShinyBrick*>(objects.at(i))) {
+						ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(objects.at(i));
+						if (shinyBrick->TookDamage()) {
+							Entity* item = shinyBrick->SpawnItem();
+							AddObjectToScene(item);
+						}
+					}
+
+					if (dynamic_cast<Paragoomba*>(objects.at(i))) {
+						Paragoomba* paraGoomba = static_cast<Paragoomba*>(objects.at(i));
+						if (paraGoomba->IsTired() && paraGoomba->GetCurrentHitPoints() == 2) {
+							//mario is on the right side of goomba
+							if ((paraGoomba->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+								paraGoomba->SetNormal(D3DXVECTOR3(-1, 0, 0));
+							}
+							else {
+								paraGoomba->SetNormal(D3DXVECTOR3(1, 0, 0));
+							}
+						}
+					}
+
+					if (dynamic_cast<KoopaTroopa*>(objects.at(i))) {
+						KoopaTroopa* koopaTroopa = static_cast<KoopaTroopa*>(objects.at(i));
+						if (koopaTroopa->GetCurrentHitPoints() == 2) {
+							//mario is on the right side of koopa
+							if ((koopaTroopa->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+								koopaTroopa->SetNormal(D3DXVECTOR3(-1, 0, 0));
+							}
+							else {
+								koopaTroopa->SetNormal(D3DXVECTOR3(1, 0, 0));
+							}
+						}
+					}
+
+					if (dynamic_cast<PiranaPlant*>(objects.at(i))) {
+						PiranaPlant* piranaPlant = static_cast<PiranaPlant*>(objects.at(i));
+
+						/*char debug[100];
+						sprintf_s(debug, "Pirana posx: %f\tMario posx: %f\n", piranaPlant->GetPosition().x - 72, marioInstance->GetPosition().x + marioInstance->GetBoxWidth());
+						OutputDebugStringA(debug);*/
+
+						if (((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) >= piranaPlant->GetPosition().x - 8) &&
+							(marioInstance->GetPosition().x <= piranaPlant->GetPosition().x + piranaPlant->GetBoxWidth() * 2))
+						{
+							piranaPlant->PlayerIsInRange(true);
+						}
+						else {
+							piranaPlant->PlayerIsInRange(false);
+						}
+					}
+
+					if (dynamic_cast<VenusFire*>(objects.at(i))) {
+						VenusFire* venusFire = static_cast<VenusFire*>(objects.at(i));
+						//mario is on the right side of venus
+						if ((venusFire->GetPosition().x - marioInstance->GetPosition().x) < 0) {
+							venusFire->SetNormal(D3DXVECTOR3(-1, venusFire->GetNormal().y, 0));
+						}
+						else {
+							venusFire->SetNormal(D3DXVECTOR3(1, venusFire->GetNormal().y, 0));
+						}
+
+						//mario is under venus
+						if ((venusFire->GetPosition().y - marioInstance->GetPosition().y) < 0) {
+							venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, -1, 0));
+						}
+						else {
+							venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, 1, 0));
+						}
+					}
+
+					if (dynamic_cast<Entity*>(objects.at(i))) {
+						if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == -1) {
+							//erase-remove idiom
+							objects.at(i)->Release();
+							objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+						}
 					}
 				}
 			}
 
-			if (dynamic_cast<KoopaTroopa*>(objects.at(i))) {
-				KoopaTroopa* koopaTroopa = static_cast<KoopaTroopa*>(objects.at(i));
-				if (koopaTroopa->GetCurrentHitPoints() == 2) {
-					//mario is on the right side of koopa
-					if ((koopaTroopa->GetPosition().x - marioInstance->GetPosition().x) < 0) {
-						koopaTroopa->SetNormal(D3DXVECTOR3(-1, 0, 0));
-					}
-					else {
-						koopaTroopa->SetNormal(D3DXVECTOR3(1, 0, 0));
-					}
-				}
+			if (!marioInstance->TriggeredStageEnd()) {
+				UpdateCameraPosition();
 			}
+			UpdateHUDPosition();
 
-			if (dynamic_cast<VenusFire*>(objects.at(i))) {
-				VenusFire* venusFire = static_cast<VenusFire*>(objects.at(i));
-				//mario is on the right side of venus
-				if ((venusFire->GetPosition().x - marioInstance->GetPosition().x) < 0) {
-					venusFire->SetNormal(D3DXVECTOR3(-1, venusFire->GetNormal().y, 0));
-				}
-				else {
-					venusFire->SetNormal(D3DXVECTOR3(1, venusFire->GetNormal().y, 0));
+			//change scene to overworld map
+			if (marioInstance->TriggeredStageEnd() || marioInstance->GetCurrentHitPoints() == 0) {
+				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
+
+				/*if (!IsTranstionStarting()) {
+					StartChangeSceneToMapTimer();
 				}
 
-				//mario is under venus
-				if ((venusFire->GetPosition().y - marioInstance->GetPosition().y) < 0) {
-					venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, -1, 0));
-				}
-				else {
-					venusFire->SetNormal(D3DXVECTOR3(venusFire->GetNormal().x, 1, 0));
-				}
+				if (toMapStart != 0 && GetTickCount64() - toMapStart > toMapTime) {
+					SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
+				}*/
 			}
-
-			if (dynamic_cast<Entity*>(objects.at(i))) {
-				if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == -1) {
-					//erase-remove idiom
-					objects.at(i)->Release();
-					objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
-				}
-			}
-		}
-	}
-
-	if (!marioInstance->TriggeredStageEnd()) {
-		UpdateCameraPosition();
-	}
-	UpdateHUDPosition();
-
-	if (!marioInstance) {
-		return;
+			break;
 	}
 }
 
@@ -834,7 +904,7 @@ void Scene::Render() {
 	if (marioInstance) {
 		marioInstance->Render();
 	}
-
+	
 	if (hudInstance) {
 		hudInstance->Render();
 	}

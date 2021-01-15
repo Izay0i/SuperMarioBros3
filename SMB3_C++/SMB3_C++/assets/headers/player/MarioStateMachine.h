@@ -55,4 +55,6 @@ public:
 	void HandleStates(BYTE*) override;
 	void Update(DWORD) override;
 	void Render() override;
+
+	void Release();
 };

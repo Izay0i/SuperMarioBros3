@@ -167,6 +167,10 @@ void SuperLeaf::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 void SuperLeaf::Render() {
 	sprite.PlayAnimation("Default", position, scale);
+
+	if (hitPoints == -1) {
+		sprite.PlayAnimation("1000", position);
+	}
 }
 
 void SuperLeaf::Release() {

@@ -1,6 +1,11 @@
 #string_id	left	top	right	bottom	frames	speed
 #any consecutive string_id that matches prev string_id will add bounds to it
 [SPRITES]
+#==EFFECTS==
+#Used with tail
+Spark	397	19	412	34	2	100
+Spark	379	19	394	34
+
 #==SMALL==
 #Idle
 Idle	1	16	16	31	1	0
@@ -39,7 +44,8 @@ TakeOff	73	16	88	31
 #Fly
 Fly	91	16	106	31	1	0
 #GUI
-GUI	1	881	16	896	1	0
+GUI	1	881	16	896	2	100
+GUI	1	915	16	930
 
 #==BIG==
 #Idle

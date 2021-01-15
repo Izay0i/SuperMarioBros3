@@ -185,7 +185,7 @@ void SwitchBlock::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			}
 		}
 
-		for (ShinyBrick* brick : bricks) {
+		for (ShinyBrick*& brick : bricks) {
 			if (brick->GetCurrentHitPoints() == 3) {
 				brick->SetCurrenHitPoints(2);
 			}

@@ -23,7 +23,7 @@ void MarioStateMachine::HandleStates(BYTE* states) {
 	}
 	
 	switch (currentState) {
-		case MarioState::IDLE:			
+		case MarioState::IDLE:
 			if (mario->GetVelocity().x != 0.0f && mario->IsOnGround()) {
 				currentState = MarioState::RUN;
 			}
@@ -122,7 +122,10 @@ void MarioStateMachine::Render() {
 		case MarioState::IDLE:
 			switch (currentForm) {
 				case MarioForm::SMALL:
-					if (mario->GetHeldEntity()) {
+					if (mario->IsInMap()) {
+						mario->GetSprite().PlayAnimation("GUI", mario->GetPosition(), mario->GetScale());
+					}					
+					else if (mario->GetHeldEntity()) {
 						mario->GetSprite().PlayAnimation("HoldIdle", mario->GetPosition(), mario->GetScale(), alpha);
 					}
 					else {
@@ -366,6 +369,10 @@ void MarioStateMachine::Render() {
 					D3DXVECTOR2(mario->GetNormal().x, 1.0f), 
 					alpha
 				);
+
+				if (mario->GetTouchedEntity()) {
+					mario->GetSprite().PlayAnimation("Spark", D3DXVECTOR3(mario->GetPosition().x + (16 * mario->GetNormal().x), mario->GetPosition().y + 10, 0), mario->GetScale());
+				}
 			}
 			else {
 				mario->GetSprite().PlayAnimation("RacIdle", mario->GetPosition(), mario->GetScale(), alpha);
@@ -375,5 +382,12 @@ void MarioStateMachine::Render() {
 		case MarioState::SHOOT:
 			mario->GetSprite().PlayAnimation("FireShoot", mario->GetPosition(), mario->GetScale(), alpha);
 			break;
+	}
+}
+
+void MarioStateMachine::Release() {
+	if (mario) {
+		delete mario;
+		mario = nullptr;
 	}
 }

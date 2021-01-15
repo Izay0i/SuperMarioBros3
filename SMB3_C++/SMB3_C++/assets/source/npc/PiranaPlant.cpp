@@ -155,17 +155,17 @@ void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	if (IsRetracting()) {
 		if (position.y > (originalPos.y - MAX_Y_OFFSET)) {
-			position.y -= 0.5f;
+			position.y -= 0.02f * delta;
 		}
 	}
 
-	if (!IsRetracting()) {
+	if (!IsRetracting() || playerInRange) {
 		if (position.y >= originalPos.y) {
 			position.y = originalPos.y;
 			StartRetractTimer();
 		}
 		else {
-			position.y += 0.5f;		
+			position.y += 0.02f * delta;
 		}		
 	}
 
@@ -186,6 +186,7 @@ void PiranaPlant::Render() {
 			break;
 		case PlantState::DIE:
 			sprite.PlayAnimation("Die", position);
+			sprite.PlayAnimation("100", position);
 			break;
 	}
 }

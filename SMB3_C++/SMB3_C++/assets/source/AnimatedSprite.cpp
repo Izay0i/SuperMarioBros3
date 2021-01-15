@@ -52,9 +52,9 @@ void AnimatedSprite::ParseSprites(std::string line, LPDIRECT3DTEXTURE9 texture, 
 		int animSpeed = std::stoi(tokens.at(6));
 		sprites.insert(std::make_pair(tokens.at(0), new Sprite(texture, bound, totalFrames, animSpeed, colorKey)));
 
-		char debugStr[100];
+		/*char debugStr[100];
 		sprintf_s(debugStr, "[ANIMATED SPRITE] Added animation: %s\n", tokens.at(0).c_str());
-		OutputDebugStringW(Util::ToLPCWSTR(debugStr));
+		OutputDebugStringW(Util::ToLPCWSTR(debugStr));*/
 	}
 	else {
 		sprites[tokens.at(0)]->AddBound(bound);
