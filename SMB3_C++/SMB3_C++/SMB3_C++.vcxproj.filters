@@ -108,6 +108,15 @@
     <ClCompile Include="assets\source\tiles\Portal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\source\map\Cactus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\source\map\HelpPopUp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\source\map\HammerBro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\headers\Game.h">
@@ -213,6 +222,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\headers\tiles\Portal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\headers\map\Cactus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\headers\map\HelpPopUp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\headers\map\HammerBro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

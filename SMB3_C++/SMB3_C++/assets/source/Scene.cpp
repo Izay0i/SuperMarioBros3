@@ -208,6 +208,15 @@ void Scene::ParseEntityData(std::string line) {
 		case Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK:
 			object = new SwitchBlock;
 			break;
+		case Entity::ObjectType::OBJECT_TYPE_CACTUS:
+			object = new Cactus;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_HELP:
+			object = new HelpPopUp;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_HAMMERBRONODE:
+			object = new HammerBro;
+			break;
 
 		//testing
 		case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
@@ -378,7 +387,40 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-
+		case Entity::ObjectType::OBJECT_TYPE_CACTUS:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<Cactus*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_HELP:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<HelpPopUp*>(object)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_HAMMERBRONODE:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<HammerBro*>(object)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		//testing
 		case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<SuperMushroom*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
@@ -717,8 +759,12 @@ void Scene::UpdateCameraPosition() {
 void Scene::UpdateHUDPosition() {
 	D3DXVECTOR3 hudPosition = cameraInstance->GetPosition();
 	//hudPosition.x = marioInstance->GetPosition().x;
+	//hudPosition.y = marioInstance->GetPosition().y;
+	//stage
 	//hudPosition.y = Camera::GetInstance()->GetPosition().y + 145.0f;
-	hudPosition.y = 435;
+	//map
+	hudPosition.y = Camera::GetInstance()->GetPosition().y + 185.0f;
+	//hudPosition.y = 435;
 
 	hudInstance->SetPosition(hudPosition);
 }
@@ -758,6 +804,12 @@ void Scene::Update(DWORD delta) {
 					marioInstance->IsRunningKeyPressed(),
 					marioInstance->TriggeredStageEnd()
 				);
+
+				UpdateHUDPosition();
+			}
+
+			if (marioInstance->IsInStageNode()) {
+				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_STAGEONE));
 			}
 			break;
 		case SceneType::SCENE_STAGEONE:

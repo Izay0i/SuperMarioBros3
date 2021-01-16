@@ -6,3 +6,4 @@
 #left	top	right	bottom
 [HITBOXES]
 0	0	30	8
+0	0	16	16

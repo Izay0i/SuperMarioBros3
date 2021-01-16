@@ -234,6 +234,15 @@ void Mario::HandleMovement() {
 		}
 	}	
 
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == 10) {
+		if (Device::IsKeyDown(DIK_W)) {
+			velocity.y = -runSpeed * acceleration;
+		}
+		else if (Device::IsKeyDown(DIK_S)) {
+			velocity.y = runSpeed * acceleration;
+		}
+	}
+
 	if (Device::IsKeyDown(DIK_A)) {
 		//to flip sprite
 		scale = D3DXVECTOR2(1.0f, 1.0f);
@@ -292,9 +301,10 @@ void Mario::HandleStates(BYTE* states) {
 
 void Mario::OnKeyDown(int keyCode) {
 	//Controls:
+	//W: move up
 	//A: move left
 	//D: move right
-	//S: duck/crouch
+	//S: duck/crouch/down
 	//J: B button - hold object, kick it's ass, wag your tail, shoot fireballs
 	//K: A button - jump, high jump, slow fall
 	switch (keyCode) {
@@ -487,8 +497,10 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	marioFSM->Update(delta);
 
-	GameObject::Update(delta);	
-	velocity.y += gravity * delta;
+	GameObject::Update(delta);
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() > 10) {
+		velocity.y += gravity * delta;
+	}
 	
 	//float just a little bit longer when flying
 	if (acceleration >= ACCEL_THRESHOLD) {
@@ -551,8 +563,13 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				OutputDebugStringA("Thinking with portals\n");
 				Portal* portal = static_cast<Portal*>(event->object);
 
-				if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
-					position = portal->GetDestination();
+				if (portal->GetExtraDataSize() == 1) {
+					isInStageNode = true;
+				}
+				else {
+					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
+						position = portal->GetDestination();
+					}
 				}
 			}
 
@@ -880,6 +897,7 @@ void Mario::Render() {
 
 void Mario::Release() {
 	if (marioInstance) {
+		isInStageNode = false;
 		triggeredStageEnd = false;
 
 		for (unsigned int i = 0; i < fireballs.size(); ++i) {

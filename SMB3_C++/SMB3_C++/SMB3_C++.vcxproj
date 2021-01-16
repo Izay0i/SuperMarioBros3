@@ -153,6 +153,9 @@
     <ClCompile Include="assets\source\GameObject.cpp" />
     <ClCompile Include="assets\source\HitBox.cpp" />
     <ClCompile Include="assets\source\hud\HUD.cpp" />
+    <ClCompile Include="assets\source\map\Cactus.cpp" />
+    <ClCompile Include="assets\source\map\HammerBro.cpp" />
+    <ClCompile Include="assets\source\map\HelpPopUp.cpp" />
     <ClCompile Include="assets\source\npc\1UPMushroom.cpp" />
     <ClCompile Include="assets\source\npc\Fireball.cpp" />
     <ClCompile Include="assets\source\npc\Goomba.cpp" />
@@ -187,6 +190,9 @@
     <ClInclude Include="assets\headers\GameObject.h" />
     <ClInclude Include="assets\headers\HitBox.h" />
     <ClInclude Include="assets\headers\hud\HUD.h" />
+    <ClInclude Include="assets\headers\map\Cactus.h" />
+    <ClInclude Include="assets\headers\map\HammerBro.h" />
+    <ClInclude Include="assets\headers\map\HelpPopUp.h" />
     <ClInclude Include="assets\headers\NPCList.h" />
     <ClInclude Include="assets\headers\npc\1UPMushroom.h" />
     <ClInclude Include="assets\headers\npc\Fireball.h" />

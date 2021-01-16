@@ -19,6 +19,10 @@ assets\data\hud\hud_data.txt	2
 [ENTITY_DATA]
 #Mario
 0	assets\data\player\mario_data.txt	0
+
+#Portal
+100	assets\data\tiles\portal_data.txt	1	11
+
 #Dancing cactus
 106	assets\data\map\dancingcactus_data.txt	1
 106	assets\data\map\dancingcactus_data.txt	1
@@ -75,14 +79,90 @@ assets\data\hud\hud_data.txt	2
 #obj_id	x	y
 [WORLD_COORDS]
 #Mario
-0	21	37
+0	28	47
+
+#Portal
+100	60	15
 
 #Dancing cactus
+106	12	16
+106	28	16
+106	44	16
+106	12	32
+106	28	32
+106	44	32
 
+106	76	32
+106	92	32
+106	108	32
+106	76	48
+106	92	48
+106	108	48
+106	76	64
+106	92	64
+106	108	64
+
+106	140	32
+106	156	32
+106	172	32
+
+106	12	64
+106	28	64
+106	44	64
+106	12	80
+106	28	80
+106	44	80
+106	12	96
+
+106	92	96
+106	108	96
+106	124	96
+
+106	140	80
+106	156	80
+
+106	204	16
+106	204	32
+106	204	48
+106	204	64
+
+106	140	64
+106	156	64
+106	172	64
+106	188	64
+
+106	220	16
+106	220	32
+106	220	48
+106	220	64
+106	220	80
+106	220	96
+106	220	112
+106	220	128
+106	220	144
+
+#Help
+107	204	94
+
+#Hammer bro
+108	159	112
 
 #from top to bottom, left to right
 #obj_id	world_x	world_y	width	height	sprites_arr_id
 [TILES_DATA]
+201	12	47	16	16	12
+201	0	0	60	47	0
+201	60	0	188	15	1
+201	76	31	48	48	2
+201	140	31	48	16	3
+201	204	15	44	167	4
+201	12	63	48	119	5
+201	140	63	64	32	6
+201	76	95	128	16	7
+201	60	159	188	23	8
+201	76	95	16	48	9
+201	76	127	48	16	10
+201	140	127	108	32	11
 
 #obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
 [TILE_SPRITES_ARR]

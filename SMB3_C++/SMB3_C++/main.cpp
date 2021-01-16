@@ -41,5 +41,11 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		}
 	}*/
 
+	/*char debug[100];
+	for (int i = 0; i < 9; ++i) {
+		sprintf_s(debug, "106	%d	%d\n", 220, 16 + 16 * i);
+		OutputDebugStringA(debug);
+	}*/
+
 	return 0;
 }

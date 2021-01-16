@@ -1,31 +1,20 @@
-#include "../../headers/tiles/Portal.h"
+#include "../../headers/map/HammerBro.h"
 
-LPCWSTR Portal::texturePath = nullptr;
-LPDIRECT3DTEXTURE9 Portal::texture = nullptr;
-D3DCOLOR Portal::colorKey = D3DCOLOR_XRGB(0, 0, 0);
+LPCWSTR HammerBro::texturePath = nullptr;
+LPDIRECT3DTEXTURE9 HammerBro::texture = nullptr;
+D3DCOLOR HammerBro::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
-RECTF Portal::GetBoundingBox(int id) const {
+RECTF HammerBro::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x + 2;
-	bound.top = position.y + 1;
-	
-	if (extraData.size() > 1) {
-		bound.right = position.x + hitBox.GetWidth(id) - 3;
-		bound.bottom = position.y + hitBox.GetHeight(id) - 5;
-	}
-	else {
-		bound.right = position.x + hitBox.GetWidth(1) - 3;
-		bound.bottom = position.y + hitBox.GetHeight(1) - 5;
-	}
+	bound.left = position.x;
+	bound.top = position.y;
+	bound.right = position.x + hitBox.GetWidth(id);
+	bound.bottom = position.y + hitBox.GetHeight(id);
 
 	return bound;
 }
 
-D3DXVECTOR3 Portal::GetDestination() const {
-	return destination;
-}
-
-void Portal::LoadTexture() {
+void HammerBro::LoadTexture() {
 	if (!texture) {
 		HRESULT hResult;
 		D3DXIMAGE_INFO imageInfo;
@@ -60,11 +49,11 @@ void Portal::LoadTexture() {
 	}
 }
 
-void Portal::ParseSprites(std::string line) {
+void HammerBro::ParseSprites(std::string line) {
 	sprite.ParseSprites(line, texture, colorKey);
 }
 
-void Portal::ParseHitboxes(std::string line) {
+void HammerBro::ParseHitboxes(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
 	if (tokens.size() < 4) {
@@ -85,16 +74,7 @@ void Portal::ParseHitboxes(std::string line) {
 	this->hitBox.AddHitBox(hitbox);
 }
 
-void Portal::ParseExtraData(std::vector<std::string> extraData) {
-	if (extraData.size() > 1) {
-		float posX = std::stof(extraData.at(0));
-		float posY = std::stof(extraData.at(1));
-
-		destination = D3DXVECTOR3(posX, posY, 0);
-	}
-}
-
-void Portal::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
+void HammerBro::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR colorKey, std::vector<std::string> extraData) {
 	std::ifstream readFile;
 	readFile.open(dataPath, std::ios::in);
 
@@ -105,7 +85,6 @@ void Portal::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR c
 
 	if (extraData.size() > 0) {
 		this->extraData = extraData;
-		ParseExtraData(extraData);
 	}
 
 	this->texturePath = Util::ToLPCWSTR(texturePath);
@@ -146,16 +125,14 @@ void Portal::ParseData(std::string dataPath, std::string texturePath, D3DCOLOR c
 	readFile.close();
 }
 
-void Portal::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	/*char debug[100];
-	sprintf_s(debug, "Pos: %f %f\n", position.x, position.y);
-	OutputDebugStringA(debug);*/
-}
-
-void Portal::Render() {
+void HammerBro::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 }
 
-void Portal::Release() {
+void HammerBro::Render() {
+	sprite.PlayAnimation("Walk", position);
+}
+
+void HammerBro::Release() {
 
 }

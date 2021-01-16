@@ -8,3 +8,7 @@
 #include "tiles/ShinyBrick.h"
 #include "tiles/BonusItem.h"
 #include "tiles/SwitchBlock.h"
+
+#include "map/Cactus.h"
+#include "map/HelpPopUp.h"
+#include "map/HammerBro.h"

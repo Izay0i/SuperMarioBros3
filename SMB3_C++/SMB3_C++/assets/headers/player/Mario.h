@@ -40,6 +40,9 @@ private:
 
 	bool triggeredStageEnd;
 
+	//placebo
+	bool isInStageNode;
+
 	bool isInMap;
 	bool isOnGround;
 	bool isHolding;
@@ -95,6 +98,9 @@ public:
 	Entity* GetTouchedEntity() const { return touchedEntity; }
 
 	bool TriggeredStageEnd() const { return triggeredStageEnd; }
+
+	//placebo
+	bool IsInStageNode() const { return isInStageNode; }
 
 	bool IsInMap() const { return isInMap; }
 	bool IsRunningKeyPressed() const { return isHolding; }
