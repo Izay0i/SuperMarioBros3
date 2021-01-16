@@ -3,10 +3,10 @@
 #Luigi: Well I want yours too
 
 [SETTINGS]
-default	10
+default	0
 
 [SCENES]
-0	assets\data\menu.txt
+0	assets\data\start_screen.txt
 1	assets\data\game_over.txt
 
 #World 1

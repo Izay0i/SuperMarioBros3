@@ -771,9 +771,9 @@ void Scene::UpdateHUDPosition() {
 
 void Scene::Update(DWORD delta) {
 	if (!marioInstance) {
-		/*char debug[100];
+		char debug[100];
 		sprintf_s(debug, "[UPDATE] No mario, scene ID: %d\n", sceneID);
-		OutputDebugStringA(debug);*/
+		OutputDebugStringA(debug);
 		return;
 	}
 
@@ -784,7 +784,9 @@ void Scene::Update(DWORD delta) {
 
 	switch (static_cast<SceneType>(sceneID)) {
 		case SceneType::SCENE_INTRO:
-
+			if (marioInstance->TriggeredStageEnd()) {
+				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
+			}
 			break;
 		case SceneType::SCENE_MAP:
 			marioInstance->Update(delta, &collidableObjects);

@@ -330,6 +330,10 @@ void Mario::OnKeyDown(int keyCode) {
 			normal.x = 1;
 			break;
 		case DIK_J:
+			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == 0) {
+				triggeredStageEnd = true;
+			}
+
 			if (hitPoints == 3 && !Device::IsKeyDown(DIK_S)) {
 				if (fireballs.size() < 2) {
 					fireballs.push_back(SpawnFireball());
