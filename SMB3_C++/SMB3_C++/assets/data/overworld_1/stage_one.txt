@@ -7,6 +7,13 @@
 [MAPSIZE]
 2816	656
 
+#Camera limits
+#8: half offset like in the NES version
+#left	top	right	bottom
+[LIMITS]
+8	0	2816	465
+1968	464	2816	689
+
 [TIME]
 300
 #5
@@ -45,8 +52,8 @@ assets\data\hud\hud_data.txt	4
 0	assets\data\player\mario_data.txt	0	assets\data\projectiles\fireball_data.txt	0
 
 #Portal							destination	x		y
-100	assets\data\tiles\portal_data.txt	2	2104	496
-100	assets\data\tiles\portal_data.txt	2	2328	352
+100	assets\data\tiles\portal_data.txt	2	2101	468
+100	assets\data\tiles\portal_data.txt	2	2328	386
 
 #Animated Tiles
 #Coin
@@ -163,9 +170,9 @@ assets\data\hud\hud_data.txt	4
 #9	2304	368
 
 #Mario
-#0	25	384
+0	25	384
 #0	1728	368
-0	2384	384
+#0	2384	384
 #0	2688	384
 #0	2112	512
 

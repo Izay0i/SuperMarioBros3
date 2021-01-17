@@ -25,11 +25,9 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
-	DWORD removeTime = 500;
+	DWORD removeTime = 200;
 
 	BlockState currentState;
-
-	bool tookDamage;
 
 	unsigned int amount;
 
@@ -47,8 +45,6 @@ private:
 
 public:
 	ShinyBrick();
-
-	bool TookDamage() const { return tookDamage; }
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 

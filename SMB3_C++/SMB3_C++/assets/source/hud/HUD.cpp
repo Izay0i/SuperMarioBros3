@@ -156,15 +156,11 @@ void HUD::ParseSpeedGauge(float currentAccel, float maxAccel, bool isFlying, boo
 	speedGaugeArr.clear();
 
 	if (keyPressed || isFlying) {
-		if (currentAccel >= 1.0f / maxAccel || isFlying) {
-			speedGaugeArr.push_back("Arrow");
-		}
-
-		if (currentAccel >= 1.25f / maxAccel || isFlying) {
-			speedGaugeArr.push_back("Arrow");
-		}
-
 		if (currentAccel >= 1.5f / maxAccel || isFlying) {
+			speedGaugeArr.push_back("Arrow");
+		}
+
+		if (currentAccel >= 1.75f / maxAccel || isFlying) {
 			speedGaugeArr.push_back("Arrow");
 		}
 
@@ -181,6 +177,10 @@ void HUD::ParseSpeedGauge(float currentAccel, float maxAccel, bool isFlying, boo
 		}
 
 		if (currentAccel >= 3.5f / maxAccel || isFlying) {
+			speedGaugeArr.push_back("Arrow");
+		}
+
+		if (currentAccel >= 4.0f / maxAccel || isFlying) {
 			speedGaugeArr.push_back("PNode");
 		}
 	}
@@ -321,6 +321,7 @@ void HUD::Render() {
 	//Score
 	//Timer
 
+	sprite.PlayAnimation("Bar", D3DXVECTOR3(position.x - 6, position.y - 3, 0));
 	sprite.PlayAnimation("Panel", position);
 
 	//Lives

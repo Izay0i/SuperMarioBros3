@@ -31,6 +31,7 @@ private:
 	enum class SceneSection {
 		SCENE_FILE_SECTION_UNKNOWN,
 		SCENE_FILE_SECTION_MAPSIZE,
+		SCENE_FILE_SECTION_CAMERALIMITS,
 		SCENE_FILE_SECTION_TIME,
 		SCENE_FILE_SECTION_BGCOLOR,
 		SCENE_FILE_SECTION_TEXTURES,
@@ -40,13 +41,6 @@ private:
 		SCENE_FILE_SECTION_TILESDATA,
 		SCENE_FILE_SECTION_TILESPRITES,
 		SCENE_FILE_SECTION_BACKGROUND
-	};
-
-	enum class SceneType {
-		SCENE_INTRO = 0,
-		SCENE_MAP = 10,
-		SCENE_STAGEONE = 11,
-		SCENE_STAGEFOUR = 14
 	};
 
 	Mario* marioInstance;
@@ -81,6 +75,7 @@ private:
 
 	void ParseMapSize(std::string);
 	void ParseSceneTime(std::string);
+	void ParseCameraLimits(std::string);
 	void ParseBGColor(std::string);
 	void ParseTextures(std::string);
 	void ParseHUD(std::string);
@@ -94,6 +89,13 @@ private:
 	void UpdateHUDPosition();
 
 public:
+	enum class SceneType {
+		SCENE_INTRO = 0,
+		SCENE_MAP = 10,
+		SCENE_STAGEONE = 11,
+		SCENE_STAGEFOUR = 14
+	};
+
 	Scene(int, std::string);
 
 	D3DCOLOR GetBGColor() const;

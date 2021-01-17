@@ -114,7 +114,7 @@ void Game::Update(DWORD delta) {
 }
 
 void Game::Render() {
-	if (directDevice->BeginScene()) {
+	if (directDevice->BeginScene()) {		
 		directDevice->ColorFill(backBuffer, nullptr, sceneManager->GetCurrentScene()->GetBGColor());
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);

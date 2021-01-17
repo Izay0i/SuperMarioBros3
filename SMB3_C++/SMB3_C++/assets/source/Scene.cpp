@@ -79,6 +79,22 @@ void Scene::ParseSceneTime(std::string line) {
 	sceneTime = std::stoul(tokens.at(0));
 }
 
+void Scene::ParseCameraLimits(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 4) {
+		return;
+	}
+
+	RECTF rect;
+	rect.left = std::stof(tokens.at(0));
+	rect.top = std::stof(tokens.at(1));
+	rect.right = std::stof(tokens.at(2));
+	rect.bottom = std::stof(tokens.at(3));
+
+	cameraInstance->AddLimit(rect);
+}
+
 void Scene::ParseBGColor(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
@@ -579,6 +595,8 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 
 	SceneSection section = SceneSection::SCENE_FILE_SECTION_UNKNOWN;
 
+	cameraInstance = Camera::GetInstance();
+
 	char str[MAX_FILE_LINE];
 	while (readFile.getline(str, MAX_FILE_LINE)) {
 		std::string line(str);
@@ -587,18 +605,23 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 			continue;
 		}
 
-		if (line == "[BGCOLOR]") {
-			section = SceneSection::SCENE_FILE_SECTION_BGCOLOR;
-			continue;
-		}
-
 		if (line == "[MAPSIZE]") {
 			section = SceneSection::SCENE_FILE_SECTION_MAPSIZE;
 			continue;
 		}
 
+		if (line == "[LIMITS]") {
+			section = SceneSection::SCENE_FILE_SECTION_CAMERALIMITS;
+			continue;
+		}
+
 		if (line == "[TIME]") {
 			section = SceneSection::SCENE_FILE_SECTION_TIME;
+			continue;
+		}
+
+		if (line == "[BGCOLOR]") {
+			section = SceneSection::SCENE_FILE_SECTION_BGCOLOR;
 			continue;
 		}
 
@@ -641,6 +664,9 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 			case SceneSection::SCENE_FILE_SECTION_MAPSIZE:
 				ParseMapSize(line);
 				break;
+			case SceneSection::SCENE_FILE_SECTION_CAMERALIMITS:
+				ParseCameraLimits(line);
+				break;
 			case SceneSection::SCENE_FILE_SECTION_TIME:
 				ParseSceneTime(line);
 				break;
@@ -670,8 +696,6 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 				break;
 		}
 	}
-
-	cameraInstance = Camera::GetInstance();
 
 	readFile.close();
 }
@@ -711,60 +735,67 @@ void Scene::Unload() {
 }
 
 void Scene::UpdateCameraPosition() {
-	if (marioInstance->GetPosition().x < 16.0f) {
-		marioInstance->SetPosition(D3DXVECTOR3(16.0f, marioInstance->GetPosition().y, 0));
+	if (!marioInstance->TriggeredStageEnd()) {
+		//set mario's position inside the world
+		if (marioInstance->GetPosition().x < 16.0f) {
+			marioInstance->SetPosition(D3DXVECTOR3(16.0f, marioInstance->GetPosition().y, 0));
+		}
+		else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
+			marioInstance->SetPosition(D3DXVECTOR3(static_cast<float>(sceneWidth) - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
+		}
 	}
-	else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
-		marioInstance->SetPosition(D3DXVECTOR3(static_cast<float>(sceneWidth) - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
+
+	int ind = 0;
+	if (marioInstance->WentIntoPipe()) {
+		ind = 1;
+	}
+	else {
+		ind = 0;
 	}
 
 	D3DXVECTOR3 camPosition = marioInstance->GetPosition();
 	camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2.0f;
-	//half a gap in the viewport just like in the original
-	if (camPosition.x < 8.0f) {
-		camPosition.x = 8.0f;
+	if (camPosition.x < cameraInstance->GetLimit(ind).left) {
+		camPosition.x = cameraInstance->GetLimit(ind).left;
+		//OutputDebugStringA("Left\n");
 	}
-	else if ((camPosition.x + Game::GetInstance()->GetScreenWidth()) > sceneWidth) {
-		camPosition.x = static_cast<float>(sceneWidth) - Game::GetInstance()->GetScreenWidth();
+	else if (camPosition.x + Game::GetInstance()->GetScreenWidth() > cameraInstance->GetLimit(ind).right) {
+		camPosition.x = cameraInstance->GetLimit(ind).right - Game::GetInstance()->GetScreenWidth();
+		//OutputDebugStringA("Right\n");
 	}
-	
-	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 4.0f;
-	//testing
-	/*if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
-		camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
-	}
-	else if (camPosition.y < 0.0f) {
-		camPosition.y = 0.0f;
-	}*/
 
-	if (marioInstance->IsFlying() || (marioInstance->GetPosition().y + marioInstance->GetBoxHeight() < (sceneHeight / 3.5f))) {
-		if (camPosition.y > sceneHeight - Game::GetInstance()->GetScreenHeight()) {
-			camPosition.y = static_cast<float>(sceneHeight) - Game::GetInstance()->GetScreenHeight();
-		}
-		else if (camPosition.y < 0.0f) {
-			camPosition.y = 0.0f;
-		}
+	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;
+	if (camPosition.y < cameraInstance->GetLimit(ind).top) {
+		camPosition.y = cameraInstance->GetLimit(ind).top;
+		//OutputDebugStringA("Top\n");
 	}
-	else {
-		camPosition.y = 239.0f;
+	else if (camPosition.y + Game::GetInstance()->GetScreenHeight() > cameraInstance->GetLimit(ind).bottom) {
+		camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
+		//OutputDebugStringA("Bottom\n");
 	}
 
 	/*char debugStr[100];
-	sprintf_s(debugStr, "Cam y: %f\n", camPosition.y);
+	sprintf_s(debugStr, "Cam: %f %f\n", camPosition.x, camPosition.y);
 	OutputDebugStringA(debugStr);*/
 
 	cameraInstance->SetPosition(camPosition);
 }
 
 void Scene::UpdateHUDPosition() {
-	D3DXVECTOR3 hudPosition = cameraInstance->GetPosition();
-	//hudPosition.x = marioInstance->GetPosition().x;
-	//hudPosition.y = marioInstance->GetPosition().y;
-	//stage
-	//hudPosition.y = Camera::GetInstance()->GetPosition().y + 145.0f;
-	//map
-	hudPosition.y = Camera::GetInstance()->GetPosition().y + 185.0f;
-	//hudPosition.y = 435;
+	float offset = 0.0f;
+	switch (static_cast<SceneType>(sceneID)) {
+		case SceneType::SCENE_MAP:
+			offset = 185.0f;
+			break;
+		case SceneType::SCENE_STAGEONE:
+		case SceneType::SCENE_STAGEFOUR:
+			offset = 195.0f;
+			break;
+	}
+
+	D3DXVECTOR3 hudPosition;
+	hudPosition.x = cameraInstance->GetPosition().x + 6.0f;
+	hudPosition.y = cameraInstance->GetPosition().y + offset;
 
 	hudInstance->SetPosition(hudPosition);
 }
@@ -784,7 +815,7 @@ void Scene::Update(DWORD delta) {
 
 	switch (static_cast<SceneType>(sceneID)) {
 		case SceneType::SCENE_INTRO:
-			if (marioInstance->TriggeredStageEnd()) {
+			if (Device::IsKeyDown(DIK_I)) {
 				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
 			}
 			break;
@@ -825,21 +856,19 @@ void Scene::Update(DWORD delta) {
 
 			marioInstance->Update(delta, &collidableObjects);
 
-			if (hudInstance) {
-				hudInstance->Update(
-					delta,
-					marioInstance->GetLivesLeft(),
-					marioInstance->GetCoinsCollected(),
-					marioInstance->GetBonusItems(),
-					marioInstance->GetAcceleration(),
-					marioInstance->GetAccelThreshold(),
-					marioInstance->GetCurrentScore(),
-					sceneTime,
-					marioInstance->IsFlying(),
-					marioInstance->IsRunningKeyPressed(),
-					marioInstance->TriggeredStageEnd()
-				);
-			}
+			hudInstance->Update(
+				delta,
+				marioInstance->GetLivesLeft(),
+				marioInstance->GetCoinsCollected(),
+				marioInstance->GetBonusItems(),
+				marioInstance->GetAcceleration(),
+				marioInstance->GetAccelThreshold(),
+				marioInstance->GetCurrentScore(),
+				sceneTime,
+				marioInstance->IsFlying(),
+				marioInstance->IsRunningKeyPressed(),
+				marioInstance->TriggeredStageEnd()
+			);
 
 			if (marioInstance->GetCurrentHitPoints() > 0) {
 				for (unsigned int i = 0; i < objects.size(); ++i) {
@@ -933,9 +962,7 @@ void Scene::Update(DWORD delta) {
 				}
 			}
 
-			if (!marioInstance->TriggeredStageEnd()) {
-				UpdateCameraPosition();
-			}
+			UpdateCameraPosition();
 			UpdateHUDPosition();
 
 			//change scene to overworld map
@@ -947,6 +974,7 @@ void Scene::Update(DWORD delta) {
 				}
 
 				if (toMapStart != 0 && GetTickCount64() - toMapStart > toMapTime) {
+					toMapStart = 0;
 					SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
 				}
 			}

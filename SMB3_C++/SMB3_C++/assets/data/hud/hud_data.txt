@@ -24,6 +24,8 @@
 9	167	31	174	37	1	0
 
 #==HUD==
+#Black bar
+Bar	266	124	529	236	1	0
 #Panel
 Panel	11	127	244	156	1	0
 #Arrow

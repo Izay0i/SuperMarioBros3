@@ -30,7 +30,7 @@ public:
 
 	void AddImage(RECT, D3DXVECTOR3);
 
-	RECTF GetBoundingBox(int = 0) const override { return RECTF(0, 0, 0, 0); }
+	RECTF GetBoundingBox(int = 0) const override { return hitBox.GetBoundingBox(0); }
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override {}
 	void Render() override;

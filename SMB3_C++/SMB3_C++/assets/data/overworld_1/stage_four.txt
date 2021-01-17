@@ -1,0 +1,199 @@
+#I need a break...
+
+#width	height	of the map
+[MAPSIZE]
+2576	240
+
+#Camera limits
+#8: half offset like in the NES version
+#left	top	right	bottom
+[LIMITS]
+8	0	2048	240
+2064	0	2576	240
+
+[TIME]
+300
+
+#r	g	b
+[BGCOLOR]
+156	252	240
+
+#tex_id	file_path	r	g	b
+[TEXTURES]
+0	assets\textures\mario.png	68	145	190
+1	assets\textures\enemies.png	68	145	190
+2	assets\textures\stage_tileset.png	224	163	216
+3	assets\textures\items_and_misc_blocks.png	255	255	255
+4	assets\textures\gui_and_font.png	0	224	142
+5	assets\textures\goal_roulette.png	0	183	239
+
+[HUD]
+assets\data\hud\hud_data.txt	4
+
+#obj_id	data_path	tex_id	extra_data
+#extra_data can either be data for projectiles, enemies or sprites variants, etc...
+#default variant is red "r" if not specified
+
+#obj_id
+#0-99:		animated entities
+#100:		portal
+#101-200:	animated tiles, eg: question block
+#201-300:	tiles, eg: ground
+#205:	one-way platform
+#666:	one hit platform
+
+[ENTITY_DATA]
+#Mario
+0	assets\data\player\mario_data.txt	0	assets\data\projectiles\fireball_data.txt	0
+
+#Portal							destination	x		y
+100	assets\data\tiles\portal_data.txt	2	2199	160
+
+#Animated Tiles
+#Coin
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+101	assets\data\tiles\coin_data.txt	2
+#Shiny brick
+#1UP											obj_id	amount	data_path						tex_id
+103	assets\data\tiles\shinybrick_data.txt	2	9	1	assets\data\npc\1upmushroom_data.txt	2
+#Coin
+103	assets\data\tiles\shinybrick_data.txt	2	105	11	assets\data\tiles\coin_data.txt	2
+103	assets\data\tiles\shinybrick_data.txt	2	105	7	assets\data\tiles\switchblock_data.txt	2
+
+#NPCs
+
+#obj_id	x	y
+[WORLD_COORDS]
+0	16	96
+
+#You know at first I wanted each tiles to render their own texture to keep things seperated, 
+#but after a while I realize I could just throw everything into [BACKGROUND] not bother with it at all.
+#Tiles still behave the way they are, of course, same goes for the background.
+#No changing now cause it's too late.
+
+#obj_id	world_x	world_y	width	height	sprites_arr_id
+[TILES_DATA]
+
+#obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
+[TILE_SPRITES_ARR]
+
+#Good to see you again, Cloud.
+#Sephiroth!
+#left	top	right	bottom	world_x	world_y	tex_id
+[BACKGROUND]
+#bush
+375	324	390	339	64	112	2
+375	324	390	339	80	112	2
+375	324	390	339	96	112	2
+375	324	390	339	112	112	2
+375	324	390	339	128	112	2
+375	324	390	339	2080	176	2
+375	324	390	339	2096	176	2
+
+#top_left	307	307	322	322
+#top_right	324	307	339	322
+#mid_left	307	324	322	339
+#mid_right	324	324	339	339
+#bot_left	307	341	322	356
+#bot_right	324	341	339	356
+#green_body	341	324	356	339
+
+#tall_bush
+307	307	322	322	2112	176	2
+324	341	339	356	2128	176	2
+341	324	356	339	2144	176	2
+324	324	339	339	2160	176	2
+307	324	322	339	2128	160	2
+307	341	322	356	2144	160	2
+324	307	322	339	2160	160	2
+307	307	322	322	2128	144	2
+324	307	339	322	2144	144	2
+
+#small_cloud
+902	18	917	33	96	80	2
+902	18	917	33	272	64	2
+902	18	917	33	384	160	2
+902	18	917	33	496	144	2
+902	18	917	33	672	112	2
+902	18	917	33	800	96	2
+902	18	917	33	928	160	2
+902	18	917	33	1168	176	2
+902	18	917	33	1264	32	2
+902	18	917	33	1376	96	2
+902	18	917	33	1440	160	2
+902	18	917	33	1664	80	2
+902	18	917	33	1728	176	2
+902	18	917	33	1776	48	2
+902	18	917	33	2000	81	2
+
+#left	902	1	917	16
+#right	919	1	934	16
+
+#big_cloud
+902	1	917	16	16	64	2
+919	1	934	16	32	64	2
+902	1	917	16	160	32	2
+919	1	934	16	176	32	2
+902	1	917	16	224	176	2
+919	1	934	16	240	176	2
+902	1	917	16	416	80	2
+919	1	934	16	432	80	2
+902	1	917	16	544	48	2
+919	1	934	16	560	48	2
+902	1	917	16	704	48	2
+919	1	934	16	720	48	2
+902	1	917	16	800	176	2
+919	1	934	16	816	176	2
+902	1	917	16	896	80	2
+919	1	934	16	912	80	2
+902	1	917	16	1056	49	2
+919	1	934	16	1072	49	2
+902	1	917	16	1152	112	2
+919	1	934	16	1168	112	2
+902	1	917	16	1328	160	2
+919	1	934	16	1344	160	2
+902	1	917	16	1456	64	2
+919	1	934	16	1472	64	2
+902	1	917	16	1568	64	2
+919	1	934	16	1584	64	2
+902	1	917	16	1632	128	2
+919	1	934	16	1648	128	2
+902	1	917	16	1856	128	2
+919	1	934	16	1872	128	2
+902	1	917	16	1920	48	2
+919	1	934	16	1936	48	2
+
+#cloud
+715	1	730	16	2112	64	2
+732	1	747	16	2128	64	2
+749	1	764	16	2144	64	2
+715	18	730	33	2112	80	2
+732	18	747	33	2128	80	2
+749	18	764	33	2144	80	2
+
+#bonus_square
+650	106	675	131	2443	107	2

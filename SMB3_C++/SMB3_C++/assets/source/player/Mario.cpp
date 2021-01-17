@@ -11,7 +11,7 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 4;
+	hitPoints = 2;
 
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
@@ -234,12 +234,16 @@ void Mario::HandleMovement() {
 		}
 	}	
 
-	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == 10) {
+	//map
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 		if (Device::IsKeyDown(DIK_W)) {
-			velocity.y = -runSpeed * acceleration;
+			velocity.y = -0.16f;
 		}
 		else if (Device::IsKeyDown(DIK_S)) {
-			velocity.y = runSpeed * acceleration;
+			velocity.y = 0.16f;
+		}
+		else {
+			velocity.y = 0;
 		}
 	}
 
@@ -330,10 +334,6 @@ void Mario::OnKeyDown(int keyCode) {
 			normal.x = 1;
 			break;
 		case DIK_J:
-			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == 0) {
-				triggeredStageEnd = true;
-			}
-
 			if (hitPoints == 3 && !Device::IsKeyDown(DIK_S)) {
 				if (fireballs.size() < 2) {
 					fireballs.push_back(SpawnFireball());
@@ -353,7 +353,7 @@ void Mario::OnKeyDown(int keyCode) {
 		case DIK_K:
 			//slow falling when in air
 			if (!IsOnGround() && hitPoints == 4) {
-				velocity.y *= 0.04f;
+				velocity.y *= 0.2f;
 			}
 
 			//unlimited jumping if Mario is Racoon
@@ -446,14 +446,14 @@ void Mario::HandleBonusItems() {
 }
 
 void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == 10) {
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 		isInMap = true;
 	}
 	else {
 		isInMap = false;
 	}
 	
-	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() >= 11 &&
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() >= static_cast<int>(Scene::SceneType::SCENE_STAGEONE) &&
 		SceneManager::GetInstance()->GetCurrentScene()->GetSceneTime() == 0) 
 	{
 		hitPoints = 0;
@@ -490,6 +490,20 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		flyStart = 0;
 	}
 
+	if (inPipeStart != 0 && GetTickCount64() - inPipeStart > inPipeTime) {
+		inPipeStart = 0;
+	}
+
+	if (IsInPipe()) {
+		isHolding = false;
+		velocity.x = 0;
+
+		if (GetTickCount64() - inPipeStart == (inPipeTime / 2)) {
+			wentIntoPipe = !wentIntoPipe;
+			position = destination;
+		}
+	}
+
 	if (invulStart != 0 && GetTickCount64() - invulStart > invulTime) {
 		invulStart = 0;
 	}
@@ -502,7 +516,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	marioFSM->Update(delta);
 
 	GameObject::Update(delta);
-	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() > 10) {
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() != static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 		velocity.y += gravity * delta;
 	}
 	
@@ -517,8 +531,13 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		CalcPotentialCollision(objects, collisionEvents);
 	}
 
-	if (collisionEvents.size() == 0) {
-		position += distance;
+	if (collisionEvents.size() == 0 || IsInPipe()) {
+		if (IsInPipe()) {
+			position.y += 0.015f * normal.y * delta;
+		}
+		else {
+			position += distance;
+		}
 	}
 	else {
 		D3DXVECTOR2 minTime;
@@ -564,7 +583,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 			//portal
 			if (dynamic_cast<Portal*>(event->object)) {
-				OutputDebugStringA("Thinking with portals\n");
+				//OutputDebugStringA("Thinking with portals\n");
 				Portal* portal = static_cast<Portal*>(event->object);
 
 				if (portal->GetExtraDataSize() == 1) {
@@ -572,7 +591,17 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 				else {
 					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
-						position = portal->GetDestination();
+						if (event->normal.y == 1.0f && Device::IsKeyDown(DIK_W)) {
+							this->normal.y = -1.0f;
+						}
+						else if (event->normal.y == -1.0f && Device::IsKeyDown(DIK_S)) {
+							this->normal.y = 1.0f;
+						}
+						
+						if (!IsInPipe()) {
+							StartInPipeTimer();
+							destination = portal->GetDestination();
+						}					
 					}
 				}
 			}
@@ -710,7 +739,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					if (IsAttacking() || event->normal.y > 0.0f) {
 						if (shinyBrick->GetExtraDataSize() == 0) {
 							if (hitPoints > 1) {
-								shinyBrick->SetCurrenHitPoints(-1);
+								shinyBrick->StartRemoveTimer();
+								//shinyBrick->SetCurrenHitPoints(-1);
 							}
 						}
 						else {
@@ -896,14 +926,16 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 }
 
 void Mario::Render() {
-	marioFSM->Render();
+	if (IsInMap()) {
+		sprite.PlayAnimation("GUI", position, scale);
+	}
+	else {
+		marioFSM->Render();
+	}
 }
 
 void Mario::Release() {
 	if (marioInstance) {
-		isInStageNode = false;
-		triggeredStageEnd = false;
-
 		for (unsigned int i = 0; i < fireballs.size(); ++i) {
 			if (fireballs.at(i)->GetCurrentHitPoints() == -1) {
 				fireballs.erase(std::remove(fireballs.begin(), fireballs.end(), fireballs.at(i)), fireballs.end());

@@ -20,7 +20,7 @@ assets\data\hud\hud_data.txt	2
 #Mario
 0	assets\data\player\mario_data.txt	0
 
-#Portal
+#Portal										scene_id
 100	assets\data\tiles\portal_data.txt	1	11
 
 #Dancing cactus

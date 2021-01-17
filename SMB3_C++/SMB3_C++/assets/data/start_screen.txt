@@ -7,6 +7,10 @@
 #Mario
 0	assets\data\player\mario_data.txt	0
 
+#obj_id	x	y
+[WORLD_COORDS]
+0	62	156
+
 #left	top	right	bottom	world_x	world_y	tex_id
 [BACKGROUND]
 516	226	771	449	0	0	1

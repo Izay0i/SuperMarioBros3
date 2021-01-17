@@ -39,6 +39,7 @@ private:
 	std::vector<Entity::ObjectType> bonusItems;
 
 	bool triggeredStageEnd;
+	bool wentIntoPipe;
 
 	//placebo
 	bool isInStageNode;
@@ -64,8 +65,13 @@ private:
 	DWORD flyStart;
 	DWORD flyTime = 6000;
 
+	DWORD inPipeStart;
+	DWORD inPipeTime = 4000;
+
 	DWORD invulStart;
 	DWORD invulTime = 3000;
+
+	D3DXVECTOR3 destination;
 
 	void LoadTexture();
 
@@ -98,6 +104,7 @@ public:
 	Entity* GetTouchedEntity() const { return touchedEntity; }
 
 	bool TriggeredStageEnd() const { return triggeredStageEnd; }
+	bool WentIntoPipe() const { return wentIntoPipe; }
 
 	//placebo
 	bool IsInStageNode() const { return isInStageNode; }
@@ -107,10 +114,12 @@ public:
 	bool IsOnGround() const { return isOnGround; }
 	bool IsAttacking() const { return attackStart != 0; }
 	bool IsFlying() const { return flyStart != 0; }
+	bool IsInPipe() const { return inPipeStart != 0; }
 	bool IsInvulnerable() const { return invulStart != 0; }
 
 	void StartAttackTimer() { attackStart = static_cast<DWORD>(GetTickCount64()); }
 	void StartFlyTimer() { flyStart = static_cast<DWORD>(GetTickCount64()); }
+	void StartInPipeTimer() { inPipeStart = static_cast<DWORD>(GetTickCount64()); }
 	void StartInvulTimer() { invulStart = static_cast<DWORD>(GetTickCount64()); }
 
 	void GoRight();

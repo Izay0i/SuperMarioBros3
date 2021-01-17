@@ -8,6 +8,7 @@ SwitchBlock::SwitchBlock() {
 	//1 - active
 	//2 - inactive
 	hitPoints = 2;
+	score = 0;
 }
 
 void SwitchBlock::LoadTexture() {

@@ -33,8 +33,18 @@ int Camera::GetHeight() const {
 	return camHeight;
 }
 
+RECTF Camera::GetLimit(int ind) const {
+	return limits.at(ind);
+}
+
+void Camera::AddLimit(RECTF limitRect) {
+	limits.push_back(limitRect);
+}
+
 void Camera::Release() {
 	if (cameraInstance) {
+		limits.clear();
+
 		delete cameraInstance;
 		cameraInstance = nullptr;
 	}

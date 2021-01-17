@@ -30,8 +30,6 @@ private:
 	
 	BlockState currentState;
 
-	bool tookDamage;
-
 	float jumpSpeed = 0.4f;
 	float gravity = 0.001f;
 
@@ -46,8 +44,6 @@ private:
 
 public:
 	QuestionBlock();
-
-	bool TookDamage() const { return tookDamage; }
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 

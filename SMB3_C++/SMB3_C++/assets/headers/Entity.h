@@ -17,12 +17,19 @@ protected:
 	std::vector<std::string> extraData;
 
 	bool isBeingHeld = false;
+	bool tookDamage;
 
 	//-1: flag for removal
 	int hitPoints = 1;
+	
+	int score = 100;
+	int multiplier = 1;
 
 	DWORD removeStart;
 	//Implement your own removeTime
+
+	DWORD resetScoreStart;
+	DWORD resetScoreTime = 2000;
 
 	AnimatedSprite sprite;
 
@@ -69,6 +76,11 @@ public:
 
 	virtual void StartRemoveTimer() { removeStart = static_cast<DWORD>(GetTickCount64()); }
 	virtual bool IsBeingRemoved() { return removeStart != 0; }
+
+	virtual bool TookDamage() const { return tookDamage; }
+
+	virtual void StartResetScoreTimer() { resetScoreStart = static_cast<DWORD>(GetTickCount64()); }
+	virtual int GetScore() const { return score; }
 
 	virtual void TakeDamage() {}
 

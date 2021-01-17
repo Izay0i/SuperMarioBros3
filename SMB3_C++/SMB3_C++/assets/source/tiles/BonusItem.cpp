@@ -8,6 +8,7 @@ BonusItem::BonusItem() {
 	//1 - pickedup
 	//2 - rotate
 	hitPoints = 2;
+	score = 0;
 }
 
 void BonusItem::LoadTexture() {

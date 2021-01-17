@@ -9,6 +9,8 @@ private:
 
 	int camWidth, camHeight;
 
+	std::vector<RECTF> limits;
+
 public:
 	static Camera* GetInstance();
 
@@ -22,6 +24,9 @@ public:
 	int GetHeight() const;
 
 	RECTF GetBoundingBox(int = 0) const override { return hitBox.GetBoundingBox(0); }
+	
+	RECTF GetLimit(int = 0) const;
+	void AddLimit(RECTF);
 
 	void Update(DWORD, std::vector<GameObject*>*) override {}
 	void Render() override {}

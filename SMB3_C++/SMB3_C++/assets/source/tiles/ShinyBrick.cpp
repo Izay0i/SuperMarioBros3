@@ -9,6 +9,7 @@ ShinyBrick::ShinyBrick() {
 	//2 - rotate sprite
 	//3 - switched to coin
 	hitPoints = 2;
+	score = 0;
 }
 
 RECTF ShinyBrick::GetBoundingBox(int id) const {
@@ -232,21 +233,20 @@ void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 }
 
 void ShinyBrick::Render() {
-	//temporary fix
-	if (removeStart > 0) {
-		sprite.PlayAnimation("Break", D3DXVECTOR3(position.x - 8, position.y, 0));
+	if (IsBeingRemoved()) {
+		sprite.PlayAnimation("Break", D3DXVECTOR3(position.x - 16, position.y - 8, 0));
 	}
 	else {
 		switch (currentState) {
-		case BlockState::PUSHED:
-			sprite.PlayAnimation("None", position);
-			break;
-		case BlockState::ROTATE:
-			sprite.PlayAnimation("Rotate", position);
-			break;
-		case BlockState::SWITCHEDTOCOIN:
-			sprite.PlayAnimation("Coin", position);
-			break;
+			case BlockState::PUSHED:
+				sprite.PlayAnimation("None", position);
+				break;
+			case BlockState::ROTATE:
+				sprite.PlayAnimation("Rotate", position);
+				break;
+			case BlockState::SWITCHEDTOCOIN:
+				sprite.PlayAnimation("Coin", position);
+				break;
 		}
 	}
 }
