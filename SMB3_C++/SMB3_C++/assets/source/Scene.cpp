@@ -765,13 +765,43 @@ void Scene::UpdateCameraPosition() {
 	}
 
 	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;
-	if (camPosition.y < cameraInstance->GetLimit(ind).top) {
-		camPosition.y = cameraInstance->GetLimit(ind).top;
-		//OutputDebugStringA("Top\n");
-	}
-	else if (camPosition.y + Game::GetInstance()->GetScreenHeight() > cameraInstance->GetLimit(ind).bottom) {
-		camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
-		//OutputDebugStringA("Bottom\n");
+	//testing
+	//if (camPosition.y < cameraInstance->GetLimit(ind).top) {
+	//	camPosition.y = cameraInstance->GetLimit(ind).top;
+	//	//OutputDebugStringA("Top\n");
+	//}
+	//else if (camPosition.y + Game::GetInstance()->GetScreenHeight() > cameraInstance->GetLimit(ind).bottom) {
+	//	camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
+	//	//OutputDebugStringA("Bottom\n");
+	//}
+	
+	//stage_one
+	switch (static_cast<SceneType>(sceneID)) {
+		case SceneType::SCENE_STAGEONE:
+			if (marioInstance->IsFlying() || marioInstance->GetPosition().y < sceneHeight / 3.3f) {
+				if (camPosition.y < cameraInstance->GetLimit(ind).top) {
+					camPosition.y = cameraInstance->GetLimit(ind).top;
+					//OutputDebugStringA("Top\n");
+				}
+				else if (camPosition.y + Game::GetInstance()->GetScreenHeight() > cameraInstance->GetLimit(ind).bottom) {
+					camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
+					//OutputDebugStringA("Bottom\n");
+				}
+			}
+			else {
+				camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
+			}
+			break;
+		case SceneType::SCENE_STAGEFOUR:
+			if (camPosition.y < cameraInstance->GetLimit(ind).top) {
+				camPosition.y = cameraInstance->GetLimit(ind).top;
+				//OutputDebugStringA("Top\n");
+			}
+			else if (camPosition.y + Game::GetInstance()->GetScreenHeight() > cameraInstance->GetLimit(ind).bottom) {
+				camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
+				//OutputDebugStringA("Bottom\n");
+			}
+			break;
 	}
 
 	/*char debugStr[100];

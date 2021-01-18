@@ -35,16 +35,16 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	gameInstance->GameRun();
 
 	/*char debugStr[100];
-	for (int i = 0; i < 176; ++i) {
-		for (int j = 0; j < 14; ++j) {
-			sprintf_s(debugStr, "698	35	713	50	%d	%d	2\n", 0 + 16 * i, 432 + 16 * j);
+	for (int i = 0; i < 19; ++i) {
+		for (int j = 0; j < 12; ++j) {
+			sprintf_s(debugStr, "698	35	713	50	%d	%d	2\n", 2272 + 16 * i, 0 + 16 * j);
 			OutputDebugStringA(debugStr);
 		}
 	}*/
 
 	/*char debug[100];
-	for (int i = 0; i < 9; ++i) {
-		sprintf_s(debug, "106	%d	%d\n", 220, 16 + 16 * i);
+	for (int i = 0; i < 12; ++i) {
+		sprintf_s(debug, "698	86		713	101	%d	%d	2\n", 2256, 0 + 16 * i);
 		OutputDebugStringA(debug);
 	}*/
 

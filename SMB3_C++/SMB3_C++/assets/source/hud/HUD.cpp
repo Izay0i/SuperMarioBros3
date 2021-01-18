@@ -136,6 +136,10 @@ void HUD::ParseCoins(unsigned int coins) {
 }
 
 void HUD::ParseItems(std::vector<Entity::ObjectType> items) {
+	if (items.size() == 0) {
+		return;
+	}
+	
 	itemsArr.clear();
 	for (unsigned int i = 0; i < items.size(); ++i) {
 		switch (items.at(i)) {
@@ -227,6 +231,10 @@ void HUD::ParseTime(unsigned long time) {
 }
 
 void HUD::ParseSceneEnd(std::vector<Entity::ObjectType> items) {
+	if (items.size() == 0) {
+		return;
+	}
+	
 	Entity::ObjectType item = items.back();
 
 	switch (item) {

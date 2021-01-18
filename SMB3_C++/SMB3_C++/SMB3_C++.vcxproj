@@ -158,6 +158,7 @@
     <ClCompile Include="assets\source\map\HammerBro.cpp" />
     <ClCompile Include="assets\source\map\HelpPopUp.cpp" />
     <ClCompile Include="assets\source\npc\1UPMushroom.cpp" />
+    <ClCompile Include="assets\source\npc\BoomerangBro.cpp" />
     <ClCompile Include="assets\source\npc\Fireball.cpp" />
     <ClCompile Include="assets\source\npc\Goomba.cpp" />
     <ClCompile Include="assets\source\npc\KoopaTroopa.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="assets\headers\map\HelpPopUp.h" />
     <ClInclude Include="assets\headers\NPCList.h" />
     <ClInclude Include="assets\headers\npc\1UPMushroom.h" />
+    <ClInclude Include="assets\headers\npc\BoomerangBro.h" />
     <ClInclude Include="assets\headers\npc\Fireball.h" />
     <ClInclude Include="assets\headers\npc\Goomba.h" />
     <ClInclude Include="assets\headers\npc\KoopaTroopa.h" />

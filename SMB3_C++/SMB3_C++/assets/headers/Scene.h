@@ -48,7 +48,7 @@ private:
 	Camera* cameraInstance;
 	Background* bgInstance;
 
-	const static int MAX_FILE_LINE = 5000;
+	const static int MAX_FILE_LINE = 3000;
 
 	int sceneID;
 	int sceneWidth, sceneHeight;

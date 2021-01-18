@@ -16,7 +16,7 @@ protected:
 
 	std::vector<std::string> extraData;
 
-	bool isBeingHeld = false;
+	bool isBeingHeld;
 	bool tookDamage;
 
 	//-1: flag for removal
@@ -43,7 +43,7 @@ public:
 		OBJECT_TYPE_PARATROOPA = 4,
 		OBJECT_TYPE_PIPLANT = 5,
 		OBJECT_TYPE_VENUSTRAP = 6,
-		OBJECT_TYPE_HAMMERBRO = 7,
+		OBJECT_TYPE_BOOMERBRO = 7,
 		//power-ups
 		OBJECT_TYPE_MUSHROOM = 8,
 		OBJECT_TYPE_1UPSHROOM = 9,
@@ -80,7 +80,7 @@ public:
 	virtual bool TookDamage() const { return tookDamage; }
 
 	virtual void StartResetScoreTimer() { resetScoreStart = static_cast<DWORD>(GetTickCount64()); }
-	virtual int GetScore() const { return score; }
+	virtual int GetScore() { tookDamage = false; return score; }
 
 	virtual void TakeDamage() {}
 

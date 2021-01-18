@@ -501,6 +501,10 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		if (GetTickCount64() - inPipeStart == (inPipeTime / 2)) {
 			wentIntoPipe = !wentIntoPipe;
 			position = destination;
+
+			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_STAGEFOUR)) {
+				normal.y = -normal.y;
+			}
 		}
 	}
 
