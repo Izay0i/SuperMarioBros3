@@ -30,7 +30,14 @@ private:
 
 	std::vector<Fireball*> fireballs;
 
-	//retries
+	const unsigned int MAX_LIVES = 99;
+	const unsigned int MAX_COINS = 99;
+	const unsigned int MAX_SCORE = 9999999;
+
+	int nextSceneID;
+
+	unsigned int sceneRemainingTime;
+	
 	unsigned int lives = 3;
 	unsigned int coins;
 	unsigned int score;
@@ -41,9 +48,10 @@ private:
 	bool triggeredStageEnd;
 	bool wentIntoPipe;
 
-	//placebo
+	//placeholder
 	bool isInStageNode;
 
+	bool isNextToShell;
 	bool isInMap;
 	bool isOnGround;
 	bool isHolding;
@@ -80,6 +88,9 @@ private:
 	void ParseSettings(std::string);
 
 	void HandleMovement();
+	void HandleCurrentLives();
+	void HandleCoinsCollected();
+	void HandleCurrentScore();
 	void HandleStageEnd();
 	void HandleBonusItems();
 
@@ -87,6 +98,8 @@ private:
 
 public:
 	static Mario* GetInstance();
+
+	int GetNextSceneID() const { return nextSceneID; }
 
 	unsigned int GetLivesLeft() const { return lives; }
 	unsigned int GetCoinsCollected() const { return coins; }
@@ -106,9 +119,10 @@ public:
 	bool TriggeredStageEnd() const { return triggeredStageEnd; }
 	bool WentIntoPipe() const { return wentIntoPipe; }
 
-	//placebo
+	//placeholder
 	bool IsInStageNode() const { return isInStageNode; }
 
+	bool IsNextToShell() const { return isNextToShell; }
 	bool IsInMap() const { return isInMap; }
 	bool IsRunningKeyPressed() const { return isHolding; }
 	bool IsOnGround() const { return isOnGround; }
@@ -123,6 +137,10 @@ public:
 	void StartInvulTimer() { invulStart = static_cast<DWORD>(GetTickCount64()); }
 
 	void GoRight();
+	void GetSceneRemainingTime(const unsigned int time) { sceneRemainingTime = time; }
+
+	void AddCoin() { ++coins; }
+	void AddScore(const unsigned int score) { this->score += score; }
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 	

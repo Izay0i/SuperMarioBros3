@@ -6,7 +6,7 @@
 
 class Entity;
 
-class Cactus : public Entity {
+class Boomerang : public Entity {
 private:
 	const static int MAX_FILE_LINE = 1024;
 
@@ -14,15 +14,23 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
+	DWORD aliveStart;
+	DWORD aliveTime = 8000;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
 
 public:
+	Boomerang();
+
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
 	RECTF GetBoundingBox(int = 0) const;
+
+	void StartCountDownTimer() { aliveStart = static_cast<DWORD>(GetTickCount64()); }
+	bool IsAlive() const { return aliveStart != 0; }
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;

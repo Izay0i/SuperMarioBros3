@@ -206,6 +206,9 @@ void Scene::ParseEntityData(std::string line) {
 		case Entity::ObjectType::OBJECT_TYPE_VENUSTRAP:
 			object = new VenusFire;
 			break;
+		case Entity::ObjectType::OBJECT_TYPE_BOOMERBRO:
+			object = new BoomerBro;
+			break;
 		case Entity::ObjectType::OBJECT_TYPE_PORTAL:
 			object = new Portal;
 			break;
@@ -232,6 +235,9 @@ void Scene::ParseEntityData(std::string line) {
 			break;
 		case Entity::ObjectType::OBJECT_TYPE_HAMMERBRONODE:
 			object = new HammerBro;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_MOVINGPLATFORM:
+			object = new MovingPlatform;
 			break;
 
 		//testing
@@ -335,6 +341,17 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
+		case Entity::ObjectType::OBJECT_TYPE_BOOMERBRO:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<BoomerBro*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
 		case Entity::ObjectType::OBJECT_TYPE_PORTAL:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<Portal*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
@@ -428,6 +445,17 @@ void Scene::ParseWorldCoords(std::string line) {
 		case Entity::ObjectType::OBJECT_TYPE_HAMMERBRONODE:
 			for (GameObject* object : objects) {
 				if (dynamic_cast<HammerBro*>(object)) {
+					int objectID = std::stoi(tokens.at(0));
+					if (object->GetObjectID() == objectID) {
+						object->SetPosition(position);
+					}
+					return;
+				}
+			}
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_MOVINGPLATFORM:
+			for (GameObject* object : objects) {
+				if (dynamic_cast<MovingPlatform*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
 					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
@@ -734,7 +762,7 @@ void Scene::Unload() {
 	OutputDebugStringW(Util::ToLPCWSTR(debug));
 }
 
-void Scene::UpdateCameraPosition() {
+void Scene::UpdateCameraPosition() {	
 	if (!marioInstance->TriggeredStageEnd()) {
 		//set mario's position inside the world
 		if (marioInstance->GetPosition().x < 16.0f) {
@@ -775,10 +803,9 @@ void Scene::UpdateCameraPosition() {
 	//	//OutputDebugStringA("Bottom\n");
 	//}
 	
-	//stage_one
 	switch (static_cast<SceneType>(sceneID)) {
 		case SceneType::SCENE_STAGEONE:
-			if (marioInstance->IsFlying() || marioInstance->GetPosition().y < sceneHeight / 3.3f) {
+			if (marioInstance->IsFlying() || marioInstance->GetPosition().y < sceneHeight / 3.4f) {
 				if (camPosition.y < cameraInstance->GetLimit(ind).top) {
 					camPosition.y = cameraInstance->GetLimit(ind).top;
 					//OutputDebugStringA("Top\n");
@@ -793,14 +820,7 @@ void Scene::UpdateCameraPosition() {
 			}
 			break;
 		case SceneType::SCENE_STAGEFOUR:
-			if (camPosition.y < cameraInstance->GetLimit(ind).top) {
-				camPosition.y = cameraInstance->GetLimit(ind).top;
-				//OutputDebugStringA("Top\n");
-			}
-			else if (camPosition.y + Game::GetInstance()->GetScreenHeight() > cameraInstance->GetLimit(ind).bottom) {
-				camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
-				//OutputDebugStringA("Bottom\n");
-			}
+			camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
 			break;
 	}
 
@@ -872,7 +892,7 @@ void Scene::Update(DWORD delta) {
 			}
 
 			if (marioInstance->IsInStageNode()) {
-				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_STAGEONE));
+				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(marioInstance->GetNextSceneID()));
 			}
 			break;
 		case SceneType::SCENE_STAGEONE:
@@ -1000,6 +1020,10 @@ void Scene::Update(DWORD delta) {
 				//SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
 
 				if (!IsTranstionStarting()) {
+					if (marioInstance->TriggeredStageEnd()) {
+						marioInstance->GetSceneRemainingTime(sceneTime);
+					}
+
 					StartChangeSceneToMapTimer();
 				}
 
@@ -1026,6 +1050,12 @@ void Scene::Render() {
 		bgInstance->Render();
 	}
 	
+	if (marioInstance) {
+		if (marioInstance->IsInPipe()) {
+			marioInstance->Render();
+		}
+	}
+
 	for (GameObject* object : objects) {
 		if (!dynamic_cast<Entity*>(object)) {
 			object->Render();
@@ -1045,7 +1075,9 @@ void Scene::Render() {
 	}
 
 	if (marioInstance) {
-		marioInstance->Render();
+		if (!marioInstance->IsInPipe()) {
+			marioInstance->Render();
+		}
 	}
 	
 	if (hudInstance) {

@@ -42,6 +42,7 @@ assets\data\hud\hud_data.txt	4
 #201-300:	tiles, eg: ground
 #205:	one-way platform
 #666:	one hit platform
+#br:	brick variant
 
 [ENTITY_DATA]
 #Mario
@@ -78,14 +79,13 @@ assets\data\hud\hud_data.txt	4
 101	assets\data\tiles\coin_data.txt	2
 101	assets\data\tiles\coin_data.txt	2
 101	assets\data\tiles\coin_data.txt	2
+#Question block
+102	assets\data\tiles\questionblock_data.txt	2	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2	br
 #Shiny brick
 #1UP											obj_id	amount	data_path						tex_id
 103	assets\data\tiles\shinybrick_data.txt	2	9	1	assets\data\npc\1upmushroom_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2	9	1	assets\data\npc\1upmushroom_data.txt	2
 #1UP
-#Leaf
-
-#Leaf
 #Coin
 103	assets\data\tiles\shinybrick_data.txt	2	101	11	assets\data\tiles\coin_data.txt	2
 103	assets\data\tiles\shinybrick_data.txt	2	101	7	assets\data\tiles\coin_data.txt	2
@@ -158,11 +158,33 @@ assets\data\hud\hud_data.txt	4
 104	assets\data\tiles\bonusitem_data.txt	5
 
 #NPCs
+#Koopa troopa
+3	assets\data\npc\koopatroopa_data.txt	1
+3	assets\data\npc\koopatroopa_data.txt	1
+#Para troopa
+4	assets\data\npc\parakoopa_data.txt	1
+#Hammer bro
+7	assets\data\npc\boomerangbro_data.txt	1
+
+#Moving platforms
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
+109	assets\data\tiles\movingplatform_data.txt	2
 
 #obj_id	x	y
 [WORLD_COORDS]
-0	16	96
-#0	1936	80
+#0	16	96
+0	1936	80
 
 #Portal
 100	1937	112
@@ -195,7 +217,8 @@ assets\data\hud\hud_data.txt	4
 101	1888	80
 101	1904	80
 101	1920	80
-
+#Question block
+102	960	128
 #Shiny brick
 #1UP
 103	640	64
@@ -272,6 +295,30 @@ assets\data\hud\hud_data.txt	4
 #Bonus item
 104	2448	113
 
+#NPCs
+#Koopa troopa
+3	1072	96
+3	1984	112
+#Para troopa
+4	1872	64
+#Hammer bro
+7	2096	160
+
+#Moving platforms
+109	368	96
+109	593	80
+109	560	128
+109	624	176
+109	752	112
+109	1088	160
+109	1200	96
+109	1376	128
+109	1408	112
+109	1552	80
+109	1744	160
+109	1776	112
+109	1792	192
+
 #You know at first I wanted each tiles to render their own texture to keep things seperated, 
 #but after a while I realize I could just throw everything into [BACKGROUND] not bother with it at all.
 #Tiles still behave the way they are, of course, same goes for the background.
@@ -292,9 +339,9 @@ assets\data\hud\hud_data.txt	4
 #green_pipe_2
 201	2192	160	32	32	5
 #wall
-201	2032	-32	32	240	6
+201	2032	-48	32	256	6
 #ceiling
-201	2032	-32	544	16	7
+201	0	-48	2576	16	7
 
 #obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
 [TILE_SPRITES_ARR]

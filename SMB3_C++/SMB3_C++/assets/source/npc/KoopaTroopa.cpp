@@ -171,6 +171,7 @@ void KoopaTroopa::HandleStates() {
 			velocity = D3DXVECTOR3(0, 0, 0);
 			break;
 		case KoopaState::DIE:
+			isOnGround = false;
 			velocity.x = 0;
 			break;
 	}
@@ -184,6 +185,8 @@ void KoopaTroopa::TakeDamage() {
 }
 
 void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	isOnGround = false;
+
 	if (hitPoints == 0 && !IsBeingRemoved()) {
 		StartRemoveTimer();
 	}
@@ -221,30 +224,87 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 	else {
 		D3DXVECTOR2 minTime;
+		D3DXVECTOR2 offSet(0.4f, 0.4f);
 		D3DXVECTOR3 normal;
 		D3DXVECTOR3 relativeDistance;
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
-
-		if (normal.x != 0.0f) {
-			velocity.x = 0.0f;
-		}
-
-		if (normal.y != 0.0f) {
-			velocity.y = 0.0f;
-		}
-
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
+
+			//isOnGround true when:
+			//on tiles
+			//on portals
+			//on question blocks
+			//on moving platforms
+			//on shiny bricks if their hp != 3
+			if ((dynamic_cast<Tiles*>(event->object) ||
+				dynamic_cast<Portal*>(event->object) ||
+				dynamic_cast<QuestionBlock*>(event->object) ||
+				dynamic_cast<MovingPlatform*>(event->object)) &&
+				event->normal.y == -1.0f ||
+				(dynamic_cast<ShinyBrick*>(event->object) &&
+					dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3))
+			{
+				isOnGround = true;
+			}
+
+			//mushroom
+			if (dynamic_cast<SuperMushroom*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//1up shroom
+			if (dynamic_cast<GMushroom*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//leaf
+			if (dynamic_cast<SuperLeaf*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//coin
+			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
 
 			//mario's fireball
 			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
 				hitPoints = 0;
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
+			}
+
+			//parakoopa
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 4) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
 			}
 
 			//koopa shell
@@ -262,6 +322,7 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				velocity.y = -0.23f;
 			}
 
+			//deal damage to other entities
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
@@ -276,26 +337,36 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			}
 			
 			//shiny brick
-			if (dynamic_cast<Entity*>(event->object)) {
-				Entity* entity = static_cast<Entity*>(event->object);
-				if (entity->GetObjectID() == 103) {
-					if (position.x <= entity->GetPosition().x - 5) {
+			if (dynamic_cast<ShinyBrick*>(event->object)) {
+				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(event->object);
+				//not a coin
+				if (shinyBrick->GetCurrentHitPoints() != 3) {
+					if (position.x <= shinyBrick->GetPosition().x - 5) {
 						if (hitPoints != 1) {
 							this->normal.x = -1;
 						}
 					}
-					if (position.x + hitBox.GetWidth() >= entity->GetPosition().x + 5 + entity->GetBoxWidth()) {
+					if (position.x + hitBox.GetWidth() >= shinyBrick->GetPosition().x + 5 + shinyBrick->GetBoxWidth()) {
 						if (hitPoints != 1) {
 							this->normal.x = 1;
 						}
 					}
 				}
+				else if (shinyBrick->GetCurrentHitPoints() == 3) {
+					OutputDebugStringA("Yes\n");
+					minTime.x = 1.0f;
+					offSet.x = normal.x = relativeDistance.x = 0.0f;
+					if (!isOnGround) {
+						minTime.y = 1.0f;
+						offSet.y = normal.y = relativeDistance.y = 0.0f;
+					}
+				}
 			}
 
-			//one-way platform
+			//walk within tiles
 			if (dynamic_cast<Tiles*>(event->object)) {
 				Tiles* tile = static_cast<Tiles*>(event->object);
-				if (tile->GetObjectID() == 205) {
+				if (extraData.size() == 0) {
 					if (position.x <= tile->GetPosition().x - 5) {
 						if (hitPoints != 1) {
 							this->normal.x = -1;
@@ -309,18 +380,35 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
-			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
+			//switch side when collide with anything except
+			//mushroom 8
+			//1up shroom 9
+			//leaf 10
+			//coin 101
+			//when brick turns to coin 103
+			if ((dynamic_cast<Entity*>(event->object) &&
+				event->object->GetObjectID() != 8 &&
+				event->object->GetObjectID() != 9 &&
+				event->object->GetObjectID() != 10 &&
+				event->object->GetObjectID() != 101 &&
+				(event->object->GetObjectID() == 103 && dynamic_cast<Entity*>(event->object)->GetCurrentHitPoints() != 3))
+				|| dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
-					if (hitPoints != 1 || //spinning
-						dynamic_cast<Tiles*>(event->object) ||
-						dynamic_cast<ShinyBrick*>(event->object) ||
-						dynamic_cast<QuestionBlock*>(event->object))
-					{
-						this->normal.x = -event->normal.x;
-					}
+					this->normal.x = -event->normal.x;
 				}
 			}
 		}
+
+		if (normal.x != 0.0f) {
+			velocity.x = 0.0f;
+		}
+
+		if (normal.y != 0.0f) {
+			velocity.y = 0.0f;
+		}
+
+		position.x += minTime.x * distance.x + normal.x * offSet.x;
+		position.y += minTime.y * distance.y + normal.y * offSet.y;
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {

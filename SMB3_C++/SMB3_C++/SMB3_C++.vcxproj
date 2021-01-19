@@ -158,7 +158,8 @@
     <ClCompile Include="assets\source\map\HammerBro.cpp" />
     <ClCompile Include="assets\source\map\HelpPopUp.cpp" />
     <ClCompile Include="assets\source\npc\1UPMushroom.cpp" />
-    <ClCompile Include="assets\source\npc\BoomerangBro.cpp" />
+    <ClCompile Include="assets\source\npc\Boomerang.cpp" />
+    <ClCompile Include="assets\source\npc\BoomerBro.cpp" />
     <ClCompile Include="assets\source\npc\Fireball.cpp" />
     <ClCompile Include="assets\source\npc\Goomba.cpp" />
     <ClCompile Include="assets\source\npc\KoopaTroopa.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="assets\source\Tiles.cpp" />
     <ClCompile Include="assets\source\tiles\BonusItem.cpp" />
     <ClCompile Include="assets\source\tiles\Coin.cpp" />
+    <ClCompile Include="assets\source\tiles\MovingPlatform.cpp" />
     <ClCompile Include="assets\source\tiles\Portal.cpp" />
     <ClCompile Include="assets\source\tiles\QuestionBlock.cpp" />
     <ClCompile Include="assets\source\tiles\ShinyBrick.cpp" />
@@ -198,7 +200,8 @@
     <ClInclude Include="assets\headers\map\HelpPopUp.h" />
     <ClInclude Include="assets\headers\NPCList.h" />
     <ClInclude Include="assets\headers\npc\1UPMushroom.h" />
-    <ClInclude Include="assets\headers\npc\BoomerangBro.h" />
+    <ClInclude Include="assets\headers\npc\Boomerang.h" />
+    <ClInclude Include="assets\headers\npc\BoomerBro.h" />
     <ClInclude Include="assets\headers\npc\Fireball.h" />
     <ClInclude Include="assets\headers\npc\Goomba.h" />
     <ClInclude Include="assets\headers\npc\KoopaTroopa.h" />
@@ -218,6 +221,7 @@
     <ClInclude Include="assets\headers\Tiles.h" />
     <ClInclude Include="assets\headers\tiles\BonusItem.h" />
     <ClInclude Include="assets\headers\tiles\Coin.h" />
+    <ClInclude Include="assets\headers\tiles\MovingPlatform.h" />
     <ClInclude Include="assets\headers\tiles\Portal.h" />
     <ClInclude Include="assets\headers\tiles\QuestionBlock.h" />
     <ClInclude Include="assets\headers\tiles\ShinyBrick.h" />

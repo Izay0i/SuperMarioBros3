@@ -125,6 +125,9 @@ void MarioStateMachine::Render() {
 			if (mario->IsInPipe()) {
 				mario->GetSprite().PlayAnimation("Front", mario->GetPosition(), mario->GetScale());
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("Kick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("HoldIdle", mario->GetPosition(), mario->GetScale(), alpha);
 			}
@@ -135,6 +138,9 @@ void MarioStateMachine::Render() {
 		case MarioForm::BIG:
 			if (mario->IsInPipe()) {
 				mario->GetSprite().PlayAnimation("BigFront", mario->GetPosition(), mario->GetScale());
+			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("BigKick", mario->GetPosition(), mario->GetScale());
 			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("BigHoldIdle", mario->GetPosition(), mario->GetScale(), alpha);
@@ -147,6 +153,9 @@ void MarioStateMachine::Render() {
 			if (mario->IsInPipe()) {
 				mario->GetSprite().PlayAnimation("FireFront", mario->GetPosition(), mario->GetScale());
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("FireKick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("FireHoldIdle", mario->GetPosition(), mario->GetScale(), alpha);
 			}	
@@ -157,6 +166,9 @@ void MarioStateMachine::Render() {
 		case MarioForm::RACOON:
 			if (mario->IsInPipe()) {
 				mario->GetSprite().PlayAnimation("RacFront", mario->GetPosition(), mario->GetScale());
+			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("RacKick", mario->GetPosition(), mario->GetScale());
 			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("RacHoldIdle", mario->GetPosition(), mario->GetScale(), alpha);
@@ -175,6 +187,9 @@ void MarioStateMachine::Render() {
 			}
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("TakeOff", mario->GetPosition(), mario->GetScale(), alpha);
+			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("Kick", mario->GetPosition(), mario->GetScale());
 			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("HoldRun", mario->GetPosition(), mario->GetScale(), alpha);
@@ -195,6 +210,9 @@ void MarioStateMachine::Render() {
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("BigTakeOff", mario->GetPosition(), mario->GetScale(), alpha);
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("BigKick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("BigHoldRun", mario->GetPosition(), mario->GetScale(), alpha);
 			}
@@ -214,6 +232,9 @@ void MarioStateMachine::Render() {
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("FireTakeOff", mario->GetPosition(), mario->GetScale(), alpha);
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("FireKick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("FireHoldRun", mario->GetPosition(), mario->GetScale(), alpha);
 			}
@@ -232,6 +253,9 @@ void MarioStateMachine::Render() {
 			}
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && mario->IsOnGround() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("RacTakeOff", mario->GetPosition(), mario->GetScale(), alpha);
+			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("RacKick", mario->GetPosition(), mario->GetScale());
 			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("RacHoldRun", mario->GetPosition(), mario->GetScale(), alpha);
@@ -256,6 +280,9 @@ void MarioStateMachine::Render() {
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("Fly", mario->GetPosition(), mario->GetScale(), alpha);
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("Kick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("HoldJump", mario->GetPosition(), mario->GetScale(), alpha);
 			}
@@ -273,6 +300,9 @@ void MarioStateMachine::Render() {
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("BigFly", mario->GetPosition(), mario->GetScale(), alpha);
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("BigKick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("BigHoldJump", mario->GetPosition(), mario->GetScale(), alpha);
 			}
@@ -289,6 +319,9 @@ void MarioStateMachine::Render() {
 			}
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("FireFly", mario->GetPosition(), mario->GetScale(), alpha);
+			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("FireKick", mario->GetPosition(), mario->GetScale());
 			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("FireHoldJump", mario->GetPosition(), mario->GetScale(), alpha);
@@ -312,6 +345,9 @@ void MarioStateMachine::Render() {
 					mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale(), alpha);
 				}
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("RacKick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("RacHoldJump", mario->GetPosition(), mario->GetScale(), alpha);
 			}
@@ -330,6 +366,9 @@ void MarioStateMachine::Render() {
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("Fly", mario->GetPosition(), mario->GetScale(), alpha);
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("Kick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("HoldJump", mario->GetPosition(), mario->GetScale());
 			}
@@ -344,6 +383,9 @@ void MarioStateMachine::Render() {
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("BigFly", mario->GetPosition(), mario->GetScale(), alpha);
 			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("BigKick", mario->GetPosition(), mario->GetScale());
+			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("BigHoldJump", mario->GetPosition(), mario->GetScale(), alpha);
 			}
@@ -357,6 +399,9 @@ void MarioStateMachine::Render() {
 			}
 			else if (mario->GetAcceleration() >= mario->GetAccelThreshold() && !mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("FireFly", mario->GetPosition(), mario->GetScale(), alpha);
+			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("FireKick", mario->GetPosition(), mario->GetScale());
 			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("FireHoldJump", mario->GetPosition(), mario->GetScale(), alpha);
@@ -379,6 +424,9 @@ void MarioStateMachine::Render() {
 				else {
 					mario->GetSprite().PlayAnimation("RacFly", mario->GetPosition(), mario->GetScale(), alpha);
 				}
+			}
+			else if (mario->IsNextToShell()) {
+				mario->GetSprite().PlayAnimation("RacKick", mario->GetPosition(), mario->GetScale());
 			}
 			else if (mario->GetHeldEntity()) {
 				mario->GetSprite().PlayAnimation("RacHoldJump", mario->GetPosition(), mario->GetScale(), alpha);

@@ -29,6 +29,7 @@ public:
 
 	RECTF GetBoundingBox(int = 0) const;
 
+	int GetNextSceneID() const;
 	D3DXVECTOR3 GetDestination() const;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;

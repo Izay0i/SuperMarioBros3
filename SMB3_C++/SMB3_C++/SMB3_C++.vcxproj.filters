@@ -120,7 +120,13 @@
     <ClCompile Include="assets\source\effects\BrickDebris.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="assets\source\npc\BoomerangBro.cpp">
+    <ClCompile Include="assets\source\tiles\MovingPlatform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\source\npc\BoomerBro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\source\npc\Boomerang.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -242,7 +248,13 @@
     <ClInclude Include="assets\headers\effects\BrickDebris.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="assets\headers\npc\BoomerangBro.h">
+    <ClInclude Include="assets\headers\tiles\MovingPlatform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\headers\npc\BoomerBro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\headers\npc\Boomerang.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -45,7 +45,7 @@ public:
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
 	void StartCountDownTimer() { aliveStart = static_cast<DWORD>(GetTickCount64()); }
-	bool IsAlive() { return aliveStart != 0; }
+	bool IsAlive() const { return aliveStart != 0; }
 
 	void TakeDamage() override;
 

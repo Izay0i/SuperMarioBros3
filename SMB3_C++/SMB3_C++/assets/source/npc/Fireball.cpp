@@ -207,13 +207,14 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 	else {
 		D3DXVECTOR2 minTime;
+		D3DXVECTOR2 offSet(0.4f, 0.4f);
 		D3DXVECTOR3 normal;
 		D3DXVECTOR3 relativeDistance;
 
-		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);	
 
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
+		position.x += minTime.x * distance.x + normal.x * offSet.x;
+		position.y += minTime.y * distance.y + normal.y * offSet.y;
 
 		if (normal.x != 0.0f) {
 			velocity.x = 0.0f;
@@ -236,12 +237,8 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			}
 
 			//ignore coins
-			if (event->object->GetObjectID() == 101) {
-				continue;
-			}
-
 			//ignore one-way platforms
-			if (event->object->GetObjectID() == 205) {
+			if (event->object->GetObjectID() == 101 || event->object->GetObjectID() == 205) {
 				continue;
 			}
 
@@ -252,14 +249,9 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					}
 				}
 
+				
 				if (dynamic_cast<Entity*>(event->object)) {
-					if (dynamic_cast<ShinyBrick*>(event->object) ||
-						dynamic_cast<QuestionBlock*>(event->object) ||
-						event->object->GetObjectID() == 5 ||
-						event->object->GetObjectID() == 6)
-					{
-						TakeDamage();
-					}
+					TakeDamage();
 					dynamic_cast<Entity*>(event->object)->TakeDamage();
 				}
 			}

@@ -209,7 +209,12 @@ void QuestionBlock::Render() {
 			sprite.PlayAnimation("None", position);
 			break;
 		case BlockState::ROTATE:
-			sprite.PlayAnimation("Rotate", position);
+			if (extraData.size() > 0 && extraData.back() == "br") {
+				sprite.PlayAnimation("Brick", position);
+			}
+			else {
+				sprite.PlayAnimation("Rotate", position);
+			}
 			break;
 	}
 }

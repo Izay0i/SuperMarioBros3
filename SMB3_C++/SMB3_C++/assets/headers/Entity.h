@@ -16,6 +16,7 @@ protected:
 
 	std::vector<std::string> extraData;
 
+	bool isOnGround;
 	bool isBeingHeld;
 	bool tookDamage;
 
@@ -61,7 +62,9 @@ public:
 		//overworld map
 		OBJECT_TYPE_CACTUS = 106,
 		OBJECT_TYPE_HELP = 107,
-		OBJECT_TYPE_HAMMERBRONODE = 108
+		OBJECT_TYPE_HAMMERBRONODE = 108,
+		//moving platform
+		OBJECT_TYPE_MOVINGPLATFORM = 109
 	};
 
 	virtual ~Entity() {}	

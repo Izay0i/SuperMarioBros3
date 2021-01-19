@@ -6,7 +6,7 @@ D3DCOLOR SuperMushroom::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 SuperMushroom::SuperMushroom() {
 	hitPoints = 1;
-	normal = D3DXVECTOR3(1.0f, 1.0f, 0);
+	normal = D3DXVECTOR3(-1.0f, 1.0f, 0);
 }
 
 void SuperMushroom::LoadTexture() {
@@ -171,6 +171,7 @@ void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 	else {
 		D3DXVECTOR2 minTime;
+		D3DXVECTOR2 offSet(0.4f, 0.4f);
 		D3DXVECTOR3 normal;
 		D3DXVECTOR3 relativeDistance;
 
@@ -179,6 +180,64 @@ void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
+			//isOnGround true when:
+			//on tiles
+			//on portals
+			//on question blocks
+			//on moving platforms
+			//on shiny bricks if their hp != 3
+			if ((dynamic_cast<Tiles*>(event->object) ||
+				dynamic_cast<Portal*>(event->object) ||
+				dynamic_cast<QuestionBlock*>(event->object) ||
+				dynamic_cast<MovingPlatform*>(event->object)) &&
+				event->normal.y == -1.0f ||
+				(dynamic_cast<ShinyBrick*>(event->object) &&
+					dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3))
+			{
+				isOnGround = true;
+			}
+
+			//mushroom
+			if (dynamic_cast<SuperMushroom*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//1up shroom
+			if (dynamic_cast<GMushroom*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//leaf
+			if (dynamic_cast<SuperLeaf*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//coin
+			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//switch side when collids with tiles
 			if (dynamic_cast<Tiles*>(event->object) && event->normal.x != 0.0f) {
 				this->normal.x = -this->normal.x;
 			}
@@ -192,8 +251,8 @@ void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			velocity.y = 0.0f;
 		}
 
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
+		position.x += minTime.x * distance.x + normal.x * offSet.x;
+		position.y += minTime.y * distance.y + normal.y * offSet.y;
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {

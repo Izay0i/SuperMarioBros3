@@ -20,7 +20,9 @@ void Parakoopa::HandleStates() {
 
 	switch (currentState) {
 		case KoopaState::FLY:
-			velocity.x = -runSpeed * normal.x;
+			if (extraData.size() > 0 && extraData.at(0) == "g") {
+				velocity.x = -runSpeed * normal.x;
+			}
 			scale = D3DXVECTOR2(1.0f, 1.0f);
 			break;
 	}
@@ -33,24 +35,36 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	
 	HandleStates();
 
+	if (extraData.size() > 0 && extraData.at(0) == "g") {
+		if (hitPoints == 4 && isOnGround) {
+			velocity.y = -jumpSpeed;
+			isOnGround = false;
+		}
+	}
+	else {
+		if (hitPoints == 4) {
+			if (position.y <= originalPos.y) {
+				velocity.y += 0.05f;
+			}
+			else if (position.y >= originalPos.y + MIN_Y_OFFSET) {
+				velocity.y -= 0.05f;
+			}
+		}
+	}
+
 	GameObject::Update(delta);
-	velocity.y += gravity * delta;
+	if (extraData.size() > 0 && extraData.at(0) == "g" || hitPoints != 4) {
+		velocity.y += gravity * delta;
+	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
 	}
 
-	if (hitPoints == 4 && isOnGround) {
-		velocity.y = -jumpSpeed;
-		isOnGround = false;
-	}
-
-	if (retractStart != 0) {
-		if (GetTickCount64() - retractStart > retractTime) {
-			retractStart = 0;
-			hitPoints = 3;
-		}
+	if (retractStart != 0 && GetTickCount64() - retractStart > retractTime) {
+		retractStart = 0;
+		hitPoints = 3;
 	}
 
 	//shell spinning
@@ -70,31 +84,69 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 	else {
 		D3DXVECTOR2 minTime;
+		D3DXVECTOR2 offSet(0.4f, 0.4f);
 		D3DXVECTOR3 normal;
 		D3DXVECTOR3 relativeDistance;
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
-
-		if (normal.x != 0.0f) {
-			velocity.x = 0.0f;
-		}
-
-		if (normal.y != 0.0f) {
-			velocity.y = 0.0f;
-		}
-
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
-			if (dynamic_cast<Tiles*>(event->object) ||
+			//isOnGround true when:
+			//on tiles
+			//on portals
+			//on question blocks
+			//on moving platforms
+			//on shiny bricks if their hp != 3
+			if ((dynamic_cast<Tiles*>(event->object) ||
+				dynamic_cast<Portal*>(event->object) ||
 				dynamic_cast<QuestionBlock*>(event->object) ||
-				dynamic_cast<ShinyBrick*>(event->object))
+				dynamic_cast<MovingPlatform*>(event->object)) &&
+				event->normal.y == -1.0f ||
+				(dynamic_cast<ShinyBrick*>(event->object) &&
+					dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3))
 			{
-				if (event->normal.y == -1.0f) {
-					isOnGround = true;
+				isOnGround = true;
+			}
+
+			//mushroom
+			if (dynamic_cast<SuperMushroom*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//1up shroom
+			if (dynamic_cast<GMushroom*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//leaf
+			if (dynamic_cast<SuperLeaf*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//coin
+			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
 			}
 
@@ -103,6 +155,16 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				hitPoints = 0;
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
+			}
+
+			//koopa
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 3) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
 			}
 
 			//ditto
@@ -119,11 +181,12 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				velocity.y = -0.23f;
 			}
 
+			//deal damage to other entities
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
 					if (dynamic_cast<ShinyBrick*>(event->object) && event->normal.y == 0.0f) {
-						entity->SetCurrenHitPoints(-1);
+						entity->StartRemoveTimer();
 					}
 					else {
 						entity->TakeDamage();
@@ -131,18 +194,35 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
-			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
+			//switch side when collide with anything except
+			//mushroom 8
+			//1up shroom 9
+			//leaf 10
+			//coin 101
+			//when brick turns to coin 103
+			if ((dynamic_cast<Entity*>(event->object) &&
+				event->object->GetObjectID() != 8 &&
+				event->object->GetObjectID() != 9 &&
+				event->object->GetObjectID() != 10 &&
+				event->object->GetObjectID() != 101 &&
+				(event->object->GetObjectID() == 103 && dynamic_cast<Entity*>(event->object)->GetCurrentHitPoints() != 3))
+				|| dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
-					if (hitPoints != 1 || //spinning
-						dynamic_cast<Tiles*>(event->object) ||
-						dynamic_cast<ShinyBrick*>(event->object) ||
-						dynamic_cast<QuestionBlock*>(event->object))
-					{
-						this->normal.x = -event->normal.x;
-					}
+					this->normal.x = -event->normal.x;
 				}
 			}
 		}
+
+		if (normal.x != 0.0f) {
+			velocity.x = 0.0f;
+		}
+
+		if (normal.y != 0.0f) {
+			velocity.y = 0.0f;
+		}
+
+		position.x += minTime.x * distance.x + normal.x * 0.4f;
+		position.y += minTime.y * distance.y + normal.y * 0.4f;
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {
@@ -151,25 +231,16 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 }
 
 void Parakoopa::Render() {
+	KoopaTroopa::Render();
+
 	switch (currentState) {
 		case KoopaState::FLY:
-			sprite.PlayAnimation("Fly", position, D3DXVECTOR2(normal.x, 1.0f));
-			break;
-		case KoopaState::WALK:
-			sprite.PlayAnimation("Walk", position, D3DXVECTOR2(normal.x, 1.0f));
-			break;
-		case KoopaState::RETRACT:
-			sprite.PlayAnimation("Retract", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
-
-			if (GetTickCount64() - retractStart > (retractTime * 3 / 4)) {
-				sprite.PlayAnimation("Out", D3DXVECTOR3(position.x, position.y + 10, 0), scale);
+			if (extraData.size() > 0 && extraData.at(0) == "g") {
+				sprite.PlayAnimation("FlyGreen", position, D3DXVECTOR2(normal.x, 1.0f));
 			}
-			break;
-		case KoopaState::SPIN:
-			sprite.PlayAnimation("Spin", D3DXVECTOR3(position.x, position.y - 1, 0), scale);
-			break;
-		case KoopaState::DIE:
-			sprite.PlayAnimation("Retract", position, scale);
+			else {
+				sprite.PlayAnimation("FlyRed", position, D3DXVECTOR2(normal.x, 1.0f));
+			}
 			break;
 	}
 

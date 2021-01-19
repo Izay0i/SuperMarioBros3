@@ -82,24 +82,91 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 	else {
 		D3DXVECTOR2 minTime;
+		D3DXVECTOR2 offSet(0.4f, 0.4f);
 		D3DXVECTOR3 normal;
 		D3DXVECTOR3 relativeDistance;
 
-		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
-
-		position.x += minTime.x * distance.x + normal.x * 0.4f;
-		position.y += minTime.y * distance.y + normal.y * 0.4f;
-
-		if (normal.x != 0.0f) {
-			velocity.x = 0.0f;
-		}
-
-		if (normal.y != 0.0f) {
-			velocity.y = 0.0f;
-		}
+		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);	
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
+
+			//isOnGround true when:
+			//on tiles
+			//on portals
+			//on question blocks
+			//on moving platforms
+			//on shiny bricks if their hp != 3
+			if ((dynamic_cast<Tiles*>(event->object) ||
+				dynamic_cast<Portal*>(event->object) ||
+				dynamic_cast<QuestionBlock*>(event->object) ||
+				dynamic_cast<MovingPlatform*>(event->object)) &&
+				event->normal.y == -1.0f ||
+				(dynamic_cast<ShinyBrick*>(event->object) &&
+					dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3))
+			{
+				isOnGround = true;
+			}
+
+			//mushroom
+			if (dynamic_cast<SuperMushroom*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//1up shroom
+			if (dynamic_cast<GMushroom*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//leaf
+			if (dynamic_cast<SuperLeaf*>(event->object)) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//coin
+			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//shiny brick is coin
+			if (dynamic_cast<ShinyBrick*>(event->object) && dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() == 3) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
+
+			//goomba
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 1) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
 
 			//shell is held
 			if ((event->object->GetObjectID() == 3 || event->object->GetObjectID() == 4) && dynamic_cast<Entity*>(event->object)->IsBeingHeld()) {
@@ -123,21 +190,33 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				hitPoints = 0;
 			}
 
-			if (dynamic_cast<Tiles*>(event->object) ||
-				dynamic_cast<QuestionBlock*>(event->object) ||
-				dynamic_cast<ShinyBrick*>(event->object))
-			{
-				if (event->normal.y == -1.0f) {
-					isOnGround = true;
-				}
-			}
-
-			if (dynamic_cast<Entity*>(event->object) || dynamic_cast<Tiles*>(event->object)) {
+			//switch side when collide with anything except
+			//mushroom 8
+			//1up shroom 9
+			//leaf 10
+			//coin 101
+			if ((dynamic_cast<Entity*>(event->object) &&
+				event->object->GetObjectID() != 8 &&
+				event->object->GetObjectID() != 9 &&
+				event->object->GetObjectID() != 10 &&
+				event->object->GetObjectID() != 101)
+				|| dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
 					this->normal.x = -event->normal.x;
 				}
 			}
 		}
+
+		if (normal.x != 0.0f) {
+			velocity.x = 0.0f;
+		}
+
+		if (normal.y != 0.0f) {
+			velocity.y = 0.0f;
+		}
+
+		position.x += minTime.x * distance.x + normal.x * offSet.x;
+		position.y += minTime.y * distance.y + normal.y * offSet.y;
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {

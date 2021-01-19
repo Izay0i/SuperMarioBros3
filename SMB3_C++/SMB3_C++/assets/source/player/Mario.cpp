@@ -345,7 +345,7 @@ void Mario::OnKeyDown(int keyCode) {
 			}
 
 			if (hitPoints == 4) {
-				if (!IsAttacking() && velocity.x == 0.0f) {
+				if (!IsAttacking()) {
 					StartAttackTimer();
 				}
 			}
@@ -399,12 +399,39 @@ void Mario::TakeDamage() {
 	}
 }
 
+void Mario::HandleCurrentLives() {
+	if (lives > MAX_LIVES) {
+		lives = MAX_LIVES;
+	}
+	else if (lives < 0) {
+		lives = 0;
+	}
+}
+
+void Mario::HandleCoinsCollected() {
+	if (coins > MAX_COINS) {
+		coins = 0;
+		++lives;
+	}
+}
+
+void Mario::HandleCurrentScore() {
+	if (score > MAX_SCORE) {
+		score = MAX_SCORE;
+	}
+}
+
 void Mario::HandleStageEnd() {
 	if (triggeredStageEnd) {
 		acceleration = MIN_ACCEL;
 		isHolding = false;
 
-		//score += SceneManager::GetInstance()->GetCurrentScene()->GetSceneTime() * 50;
+		if (sceneRemainingTime > 0) {
+			for (unsigned int i = 0; i < sceneRemainingTime; ++i) {
+				score += 50;
+			}
+			sceneRemainingTime = 0;
+		}
 	}
 }
 
@@ -458,7 +485,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	{
 		hitPoints = 0;
 	}
-	else if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == 10) {
+	else if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 		hitPoints = 1;
 	}
 
@@ -470,6 +497,15 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		isHolding = false;
 	}
 
+	//to show the whole kicking animation
+	//hacky and not reliable
+	if (GetTickCount64() % 500 == 0 && isNextToShell) {
+		isNextToShell = false;
+	}
+
+	HandleCurrentLives();
+	HandleCoinsCollected();
+	HandleCurrentScore();
 	HandleStageEnd();
 	HandleBonusItems();
 
@@ -495,7 +531,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 
 	if (IsInPipe()) {
-		isHolding = false;
+		//isHolding = false;
 		velocity.x = 0;
 
 		if (GetTickCount64() - inPipeStart == (inPipeTime / 2)) {
@@ -557,10 +593,9 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
-			//enemies
-			if (dynamic_cast<Entity*>(event->object) && 
-				(event->object->GetObjectID() >= 1 && event->object->GetObjectID() <= 7) &&
-				event->normal.x != 0.0f) 
+			//touch da enemies to make sparkles
+			if (dynamic_cast<Entity*>(event->object) &&
+				(event->object->GetObjectID() >= 1 && event->object->GetObjectID() <= 7)) 
 			{
 				touchedEntity = static_cast<Entity*>(event->object);
 			}
@@ -572,12 +607,14 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 			//isOnGround true when:
 			//on tiles
-			//on portal
-			//on question block
+			//on portals
+			//on question blocks
+			//on moving platforms
 			//on shiny bricks if their hp != 3
 			if ((dynamic_cast<Tiles*>(event->object) ||
 				dynamic_cast<Portal*>(event->object) ||
-				dynamic_cast<QuestionBlock*>(event->object)) && 
+				dynamic_cast<QuestionBlock*>(event->object) ||
+				dynamic_cast<MovingPlatform*>(event->object)) && 
 				event->normal.y == -1.0f ||
 				(dynamic_cast<ShinyBrick*>(event->object) && 
 				dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3))
@@ -585,13 +622,28 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				isOnGround = true;
 			}
 
+			//moving platform
+			if (dynamic_cast<MovingPlatform*>(event->object)) {
+				MovingPlatform* platform = static_cast<MovingPlatform*>(event->object);
+				if (event->normal.y == -1.0f) {
+					platform->TakeDamage();
+				}
+			}
+
 			//portal
 			if (dynamic_cast<Portal*>(event->object)) {
 				//OutputDebugStringA("Thinking with portals\n");
 				Portal* portal = static_cast<Portal*>(event->object);
-
 				if (portal->GetExtraDataSize() == 1) {
-					isInStageNode = true;
+					if (Device::IsKeyDown(DIK_K)) {
+						isInStageNode = true;
+						nextSceneID = portal->GetNextSceneID();
+					}
+
+					minTime.x = 1.0f;
+					offSet.x = normal.x = relativeDistance.x = 0.0f;
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
 				else {
 					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
@@ -692,13 +744,11 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
 
-				if (lives < 99) {
-					++lives;
-				}
+				++lives;
 			}
 
-			//venus fire's fireball
-			if (dynamic_cast<Fireball*>(event->object) && event->object->GetObjectID() == 98) {
+			//boomerang
+			if (dynamic_cast<Boomerang*>(event->object) && event->object->GetObjectID() == 97) {
 				TakeDamage();
 
 				minTime.x = 1.0f;
@@ -707,6 +757,24 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					minTime.y = 1.0f;
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
+				ySpeed = -0.001f;
+			}
+
+			//fireball
+			if (dynamic_cast<Fireball*>(event->object) && 
+				(event->object->GetObjectID() == 98 || event->object->GetObjectID() == 99)) 
+			{
+				if (event->object->GetObjectID() == 98) {
+					TakeDamage();
+				}
+
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+				ySpeed = -0.001f;
 			}
 
 			//coin
@@ -740,7 +808,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<ShinyBrick*>(event->object)) {
 				ShinyBrick* shinyBrick = static_cast<ShinyBrick*>(event->object);
 				if (shinyBrick->GetCurrentHitPoints() == 2) {
-					if (IsAttacking() || event->normal.y > 0.0f) {
+					if ((IsAttacking() && event->normal.x != 0.0f) || event->normal.y > 0.0f) {
 						if (shinyBrick->GetExtraDataSize() == 0) {
 							if (hitPoints > 1) {
 								shinyBrick->StartRemoveTimer();
@@ -760,6 +828,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						offSet.y = normal.y = relativeDistance.y = 0.0f;
 					}
 
+					ySpeed = -0.001f;
 					shinyBrick->SetCurrenHitPoints(-1);
 
 					++coins;
@@ -784,6 +853,32 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 			}
 
+			//hammer bro (or boomerang bro)
+			if (dynamic_cast<BoomerBro*>(event->object)) {
+				BoomerBro* boomer = static_cast<BoomerBro*>(event->object);
+				if (event->normal.y == -1.0f) {
+					if (boomer->GetCurrentHitPoints() > 0) {
+						boomer->TakeDamage();
+						ySpeed = -deflectSpeed;
+					}
+				}
+				else if (event->normal.y == 1.0f) {
+					if (boomer->GetCurrentHitPoints() > 0) {
+						TakeDamage();
+						ySpeed = -deflectSpeed;
+					}
+				}
+				else {
+					if (IsAttacking()) {
+						boomer->TakeDamage();
+					}
+					else {
+						TakeDamage();
+						ySpeed = -deflectSpeed;
+					}
+				}
+			}
+
 			//pirana plant or venus fire trap
 			if (dynamic_cast<PiranaPlant*>(event->object)) {
 				PiranaPlant* plant = static_cast<PiranaPlant*>(event->object);
@@ -792,33 +887,33 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				}
 				else {
 					TakeDamage();
-					if (hitPoints >= 0) {
-						ySpeed = -deflectSpeed;
-					}
+					ySpeed = -deflectSpeed;
 				}
 			}
 
 			//goomba or paragoomba
 			if (dynamic_cast<Goomba*>(event->object)) {					
 				Goomba* goomba = static_cast<Goomba*>(event->object);
-				if (event->normal.y < 0.0f) {
+				//on top
+				if (event->normal.y == -1.0f) {
 					if (goomba->GetCurrentHitPoints() > 0) {
+						goomba->TakeDamage();
 						ySpeed = -deflectSpeed;
 					}
-					goomba->TakeDamage();
 				}
-				else if (event->normal.x != 0.0f || event->normal.y > 0.0f) {
+				else if (event->normal.y == 1.0f) {
 					if (goomba->GetCurrentHitPoints() > 0) {
-						if (IsAttacking()) {
-							//stand still
-							goomba->TakeDamage();
-						}
-						else {
-							TakeDamage();
-							if (hitPoints >= 0) {
-								ySpeed = -deflectSpeed;
-							}
-						}
+						TakeDamage();
+						ySpeed = -deflectSpeed;
+					}
+				}
+				else {
+					if (IsAttacking()) {
+						goomba->TakeDamage();
+					}
+					else {
+						TakeDamage();
+						ySpeed = -deflectSpeed;
 					}
 				}
 			}
@@ -827,7 +922,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<KoopaTroopa*>(event->object)) {
 				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
 				//on koopa
-				if (event->normal.y < 0.0f) {
+				if (event->normal.y == -1.0f) {
 					if (koopa->GetCurrentHitPoints() > 0) {
 						ySpeed = -deflectSpeed;
 					}
@@ -841,20 +936,18 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						koopa->SetPosition(D3DXVECTOR3(koopa->GetPosition().x, koopa->GetPosition().y - 11, 0));
 					}
 				}
-				else if (event->normal.x != 0.0f || event->normal.y > 0.0f) {
-					//is spinning or walking
-					if (koopa->GetCurrentHitPoints() == 1 || koopa->GetCurrentHitPoints() >= 3) {
-						//mario is in racoon form and spins his tail
-						if (IsAttacking()) {
-							//stand still or die
+				else if (event->normal.y == 1.0f) {
+					if (koopa->GetCurrentHitPoints() > 1) {
+						TakeDamage();
+						ySpeed = -deflectSpeed;
+					}
+				}
+				else {
+					if (IsAttacking()) {
+						//is spinning or walking
+						if (koopa->GetCurrentHitPoints() == 1 || koopa->GetCurrentHitPoints() >= 3) {
 							koopa->TakeDamage();
 							koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
-						}
-						else {
-							TakeDamage();
-							if (hitPoints >= 0) {
-								ySpeed = -deflectSpeed;
-							}
 						}
 					}
 					//kick it, i dare you
@@ -866,9 +959,15 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 							}
 						}
 						else {
+							isNextToShell = true;
+
 							koopa->TakeDamage();
 							koopa->SetNormal(D3DXVECTOR3(-this->normal.x, 0, 0));
 						}
+					}
+					else {
+						TakeDamage();
+						ySpeed = -deflectSpeed;
 					}
 				}
 			}
@@ -917,6 +1016,8 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			}
 		}
 		else {
+			isNextToShell = true;
+
 			heldEntity->TakeDamage();
 			heldEntity->SetNormal(D3DXVECTOR3(-normal.x, 0, 0));
 			heldEntity->SetStatus(false);

@@ -22,6 +22,7 @@ assets\data\hud\hud_data.txt	2
 
 #Portal										scene_id
 100	assets\data\tiles\portal_data.txt	1	11
+100	assets\data\tiles\portal_data.txt	1	14
 
 #Dancing cactus
 106	assets\data\map\dancingcactus_data.txt	1
@@ -83,6 +84,7 @@ assets\data\hud\hud_data.txt	2
 
 #Portal
 100	60	15
+100	156	47
 
 #Dancing cactus
 106	12	16
