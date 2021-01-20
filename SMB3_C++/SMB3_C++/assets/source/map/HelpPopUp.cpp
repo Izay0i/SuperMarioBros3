@@ -5,13 +5,7 @@ LPDIRECT3DTEXTURE9 HelpPopUp::texture = nullptr;
 D3DCOLOR HelpPopUp::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 RECTF HelpPopUp::GetBoundingBox(int id) const {
-	RECTF bound;
-	bound.left = position.x;
-	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
-	bound.bottom = position.y + hitBox.GetHeight(id);
-
-	return bound;
+	return hitBox.GetBoundingBox(0);
 }
 
 void HelpPopUp::LoadTexture() {

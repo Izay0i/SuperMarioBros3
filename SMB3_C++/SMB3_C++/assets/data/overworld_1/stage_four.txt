@@ -8,7 +8,7 @@
 #8: half offset like in the NES version
 #left	top	right	bottom
 [LIMITS]
-8	0	2048	240
+8	0	2046	240
 2064	0	2576	240
 
 [TIME]
@@ -164,7 +164,7 @@ assets\data\hud\hud_data.txt	4
 #Para troopa
 4	assets\data\npc\parakoopa_data.txt	1
 #Hammer bro
-7	assets\data\npc\boomerangbro_data.txt	1
+7	assets\data\npc\boomerangbro_data.txt	1	assets\data\projectiles\boomerang_data.txt	1
 
 #Moving platforms
 109	assets\data\tiles\movingplatform_data.txt	2

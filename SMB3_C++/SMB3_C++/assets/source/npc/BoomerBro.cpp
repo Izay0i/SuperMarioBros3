@@ -9,7 +9,7 @@ BoomerBro::BoomerBro() {
 	//1 - walk
 	hitPoints = 1;
 	normal = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
-	scale = D3DXVECTOR2(1.0f, 1.0f);
+	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
 
 RECTF BoomerBro::GetBoundingBox(int id) const {
@@ -160,7 +160,10 @@ void BoomerBro::HandleStates() {
 Boomerang* BoomerBro::SpawnBoomerang() {
 	Boomerang* boomerang = new Boomerang();
 	boomerang->SetObjectID(97);
-	return nullptr;
+	boomerang->ParseData(extraData.at(0), extraData.at(1), colorKey);
+	boomerang->SetNormal(D3DXVECTOR3(normal.x, 0, 0));
+	boomerang->SetPosition(D3DXVECTOR3(position.x + 5 * normal.x, position.y + 10, 0));
+	return boomerang;
 }
 
 void BoomerBro::TakeDamage() {
@@ -182,7 +185,20 @@ void BoomerBro::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	else if (position.x >= originalPos.x + MAX_X_OFFSET) {
 		normal.x = 1.0f;
 	}
-	scale.x = normal.x;
+
+	if (!IsAttacking()) {
+		SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnBoomerang());
+		StartAttackTimer();
+	}
+
+	if (attackStart != 0 && GetTickCount64() - attackStart > attackTime) {
+		attackStart = 0;
+	}
+
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
+		hitPoints = -1;
+		removeStart = 0;
+	}
 
 	GameObject::Update(delta);
 	velocity.y += gravity * delta;
@@ -207,6 +223,11 @@ void BoomerBro::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
+
+			if (dynamic_cast<Boomerang*>(event->object)) {
+				Boomerang* boomerang = static_cast<Boomerang*>(event->object);
+				boomerang->SetCurrenHitPoints(-1);
+			}
 		}
 
 		if (normal.x != 0.0f) {

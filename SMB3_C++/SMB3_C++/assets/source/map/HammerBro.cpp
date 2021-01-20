@@ -4,14 +4,12 @@ LPCWSTR HammerBro::texturePath = nullptr;
 LPDIRECT3DTEXTURE9 HammerBro::texture = nullptr;
 D3DCOLOR HammerBro::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
-RECTF HammerBro::GetBoundingBox(int id) const {
-	RECTF bound;
-	bound.left = position.x;
-	bound.top = position.y;
-	bound.right = position.x + hitBox.GetWidth(id);
-	bound.bottom = position.y + hitBox.GetHeight(id);
+HammerBro::HammerBro() {
+	normal = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
+}
 
-	return bound;
+RECTF HammerBro::GetBoundingBox(int id) const {
+	return hitBox.GetBoundingBox(0);
 }
 
 void HammerBro::LoadTexture() {
@@ -126,11 +124,20 @@ void HammerBro::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 }
 
 void HammerBro::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	velocity.x = 0.02f * normal.x;
+	GameObject::Update(delta);
+	position += distance;
 
+	if (position.x <= originalPos.x - MIN_X_OFFSET) {
+		normal.x = 1.0f;
+	}
+	else if (position.x >= originalPos.x + MAX_X_OFFSET) {
+		normal.x = -1.0f;
+	}
 }
 
 void HammerBro::Render() {
-	sprite.PlayAnimation("Walk", position);
+	sprite.PlayAnimation("Walk", position, D3DXVECTOR2(normal.x, 1.0f));
 }
 
 void HammerBro::Release() {

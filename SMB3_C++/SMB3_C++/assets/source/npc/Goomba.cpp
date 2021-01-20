@@ -166,9 +166,7 @@ void Goomba::TakeDamage() {
 	}
 }
 
-void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {	
-	isOnGround = false;
-	
+void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	if (hitPoints == 0 && !IsBeingRemoved()) {
 		StartRemoveTimer();
 	}
@@ -221,6 +219,19 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			{
 				isOnGround = true;
 			}
+			else {
+				isOnGround = false;
+			}
+
+			//venus' fireball
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 98) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
 
 			//mushroom
 			if (dynamic_cast<SuperMushroom*>(event->object)) {
@@ -253,7 +264,7 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			}
 
 			//coin
-			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3) {
+			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<Coin*>(event->object)->GetCurrentHitPoints() != 3) {
 				minTime.x = 1.0f;
 				offSet.x = normal.x = relativeDistance.x = 0.0f;
 				if (!isOnGround) {

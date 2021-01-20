@@ -228,7 +228,7 @@ void GMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			}
 
 			//coin
-			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3) {
+			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<Coin*>(event->object)->GetCurrentHitPoints() != 3) {
 				minTime.x = 1.0f;
 				offSet.x = normal.x = relativeDistance.x = 0.0f;
 				if (!isOnGround) {

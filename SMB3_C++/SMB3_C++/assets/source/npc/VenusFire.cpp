@@ -3,6 +3,7 @@
 VenusFire::VenusFire() {
 	scale = D3DXVECTOR2(1, 1);
 	normal = D3DXVECTOR3(1, 1, 0);
+	StartCoolDownTimer();
 }
 
 Fireball* VenusFire::SpawnFireball() {
@@ -29,28 +30,12 @@ void VenusFire::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 }
 
 void VenusFire::Update(DWORD delta, std::vector<GameObject*>* objects) {	
-	if (IsRetracting()) {
-		if (position.y > (originalPos.y - MAX_Y_OFFSET)) {			
-			position.y -= 0.02f * delta;			
-		}
+	PiranaPlant::HandleStates();
 
-		if (GetTickCount64() - retractStart == (retractTime * 3 / 4) && !playerInRange) {
-			SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnFireball());
-		}
-	}
 
-	if (!IsRetracting() || playerInRange) {
-		if (position.y >= originalPos.y) {
-			position.y = originalPos.y;
-			StartRetractTimer();
-		}
-		else {
-			position.y += 0.02f * delta;
-		}
-	}
 
-	if (retractStart != 0 && GetTickCount64() - retractStart > retractTime) {
-		retractStart = 0;
+	if (coolDownStart != 0 && GetTickCount64() - coolDownStart > coolDownTime) {
+		coolDownStart = 0;
 	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
@@ -67,7 +52,7 @@ void VenusFire::Render() {
 			//up
 			if (normal.y == 1) {
 				if (extraData.at(0) == "g") {
-					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
+					if (GetTickCount64() - coolDownStart > (coolDownTime * 3 / 5)) {
 						sprite.PlayAnimation("LookUpOpenGreen", position, scale);
 					}
 					else {
@@ -75,7 +60,7 @@ void VenusFire::Render() {
 					}
 				}
 				else {
-					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
+					if (GetTickCount64() - coolDownStart > (coolDownTime * 3 / 5)) {
 						sprite.PlayAnimation("LookUpOpenRed", position, scale);
 					}
 					else {
@@ -86,7 +71,7 @@ void VenusFire::Render() {
 			//down
 			else if (normal.y == -1) {
 				if (extraData.at(0) == "g") {
-					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
+					if (GetTickCount64() - coolDownStart > (coolDownTime * 3 / 5)) {
 						sprite.PlayAnimation("LookDownOpenGreen", position, scale);
 					}
 					else {
@@ -94,7 +79,7 @@ void VenusFire::Render() {
 					}
 				}
 				else {
-					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
+					if (GetTickCount64() - coolDownStart > (coolDownTime * 3 / 5)) {
 						sprite.PlayAnimation("LookDownOpenRed", position, scale);
 					}
 					else {

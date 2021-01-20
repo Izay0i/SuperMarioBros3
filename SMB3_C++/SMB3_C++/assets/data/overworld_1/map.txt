@@ -23,6 +23,25 @@ assets\data\hud\hud_data.txt	2
 #Portal										scene_id
 100	assets\data\tiles\portal_data.txt	1	11
 100	assets\data\tiles\portal_data.txt	1	14
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
+100	assets\data\tiles\portal_data.txt	1	0
 
 #Dancing cactus
 106	assets\data\map\dancingcactus_data.txt	1
@@ -83,8 +102,31 @@ assets\data\hud\hud_data.txt	2
 0	28	47
 
 #Portal
+#Stage one
 100	60	15
+#Stage one
+#Stage four
 100	156	47
+#Stage four
+100	28	47
+100	60	47
+100	92	15
+100	124	15
+100	156	15
+100	188	15
+100	188	47
+100	124	47
+100	124	79
+100	92	79
+100	60	79
+100	60	111
+100	60	143
+100	92	143
+100	124	143
+100	124	111
+100	92	111
+100	156	111
+100	188	111
 
 #Dancing cactus
 106	12	16
@@ -93,7 +135,6 @@ assets\data\hud\hud_data.txt	2
 106	12	32
 106	28	32
 106	44	32
-
 106	76	32
 106	92	32
 106	108	32
@@ -103,11 +144,9 @@ assets\data\hud\hud_data.txt	2
 106	76	64
 106	92	64
 106	108	64
-
 106	140	32
 106	156	32
 106	172	32
-
 106	12	64
 106	28	64
 106	44	64
@@ -115,24 +154,19 @@ assets\data\hud\hud_data.txt	2
 106	28	80
 106	44	80
 106	12	96
-
 106	92	96
 106	108	96
 106	124	96
-
 106	140	80
 106	156	80
-
 106	204	16
 106	204	32
 106	204	48
 106	204	64
-
 106	140	64
 106	156	64
 106	172	64
 106	188	64
-
 106	220	16
 106	220	32
 106	220	48
@@ -165,6 +199,7 @@ assets\data\hud\hud_data.txt	2
 201	76	95	16	48	9
 201	76	127	48	16	10
 201	140	127	108	32	11
+
 
 #obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
 [TILE_SPRITES_ARR]

@@ -8,6 +8,8 @@ Walk	96	432	111	455
 Walk	112	432	127	455
 #Die
 Die	64	432	79	455	1	0
+#Boomerang
+Boomerang	96	528	111	543	1	0
 
 #left	top	right	bottom
 [HITBOXES]

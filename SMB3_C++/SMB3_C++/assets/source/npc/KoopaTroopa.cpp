@@ -185,8 +185,6 @@ void KoopaTroopa::TakeDamage() {
 }
 
 void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	isOnGround = false;
-
 	if (hitPoints == 0 && !IsBeingRemoved()) {
 		StartRemoveTimer();
 	}
@@ -249,6 +247,19 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			{
 				isOnGround = true;
 			}
+			else {
+				isOnGround = false;
+			}
+
+			//venus' fireball
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 98) {
+				minTime.x = 1.0f;
+				offSet.x = normal.x = relativeDistance.x = 0.0f;
+				if (!isOnGround) {
+					minTime.y = 1.0f;
+					offSet.y = normal.y = relativeDistance.y = 0.0f;
+				}
+			}
 
 			//mushroom
 			if (dynamic_cast<SuperMushroom*>(event->object)) {
@@ -281,7 +292,7 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			}
 
 			//coin
-			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3) {
+			if (dynamic_cast<Coin*>(event->object) && dynamic_cast<Coin*>(event->object)->GetCurrentHitPoints() != 3) {
 				minTime.x = 1.0f;
 				offSet.x = normal.x = relativeDistance.x = 0.0f;
 				if (!isOnGround) {
@@ -331,7 +342,10 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 						entity->StartRemoveTimer();
 					}
 					else {
-						entity->TakeDamage();
+						//venus' fireball
+						if (event->object->GetObjectID() != 98) {
+							entity->TakeDamage();
+						}
 					}
 				}
 			}
@@ -390,9 +404,9 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				event->object->GetObjectID() != 8 &&
 				event->object->GetObjectID() != 9 &&
 				event->object->GetObjectID() != 10 &&
-				event->object->GetObjectID() != 101 &&
-				(event->object->GetObjectID() == 103 && dynamic_cast<Entity*>(event->object)->GetCurrentHitPoints() != 3))
-				|| dynamic_cast<Tiles*>(event->object)) {
+				event->object->GetObjectID() != 101) ||
+				(dynamic_cast<ShinyBrick*>(event->object) && dynamic_cast<Entity*>(event->object)->GetCurrentHitPoints() != 3) || 
+				dynamic_cast<Tiles*>(event->object)) {
 				if (event->normal.x != 0.0f) {
 					this->normal.x = -event->normal.x;
 				}

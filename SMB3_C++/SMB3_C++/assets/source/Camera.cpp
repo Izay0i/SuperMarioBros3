@@ -41,6 +41,13 @@ void Camera::AddLimit(RECTF limitRect) {
 	limits.push_back(limitRect);
 }
 
+void Camera::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	velocity.x = 0.045f;
+	
+	GameObject::Update(delta);
+	position += distance;
+}
+
 void Camera::Release() {
 	if (cameraInstance) {
 		limits.clear();

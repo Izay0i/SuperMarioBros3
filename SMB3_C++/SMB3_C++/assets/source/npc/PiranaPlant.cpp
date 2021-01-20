@@ -8,6 +8,8 @@ PiranaPlant::PiranaPlant() {
 	//0 die
 	//1 biting
 	hitPoints = 2;
+	normal = D3DXVECTOR3(1, 1, 0);
+	StartCoolDownTimer();
 }
 
 void PiranaPlant::LoadTexture() {
@@ -153,24 +155,34 @@ void PiranaPlant::TakeDamage() {
 void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
-	if (IsRetracting()) {
-		if (position.y > (originalPos.y - MAX_Y_OFFSET)) {
-			position.y -= 0.02f * delta;
-		}
-	}
+	char debug[100];
+	sprintf_s(debug, "Posy: %f\n", position.y);
+	OutputDebugStringA(debug);
 
-	if (!IsRetracting() || playerInRange) {
-		if (position.y >= originalPos.y) {
+	velocity.y = 0.02f * normal.y;
+	GameObject::Update(delta);
+	position += distance;
+
+	if (IsOnCoolDown()) {
+		//going down
+		if (position.y < (originalPos.y - MAX_Y_OFFSET)) {
+			if (!IsOnCoolDown()) {
+				normal.y = 1.0f;
+				StartCoolDownTimer();
+			}
+		}
+		else if (position.y >= originalPos.y) {
 			position.y = originalPos.y;
-			StartRetractTimer();
+			if (!IsOnCoolDown()) {
+				normal.y = -1.0f;
+				StartCoolDownTimer();
+			}
 		}
-		else {
-			position.y += 0.02f * delta;
-		}		
 	}
+	
 
-	if (retractStart != 0 && GetTickCount64() - retractStart > retractTime) {
-		retractStart = 0;
+	if (coolDownStart != 0 && GetTickCount64() - coolDownStart > coolDownTime) {
+		coolDownStart = 0;
 	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {

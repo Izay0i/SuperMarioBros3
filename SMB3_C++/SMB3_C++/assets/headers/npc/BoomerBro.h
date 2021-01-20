@@ -6,6 +6,7 @@
 #include "Boomerang.h"
 
 class Entity;
+class Boomerang;
 
 class BoomerBro : public Entity {
 private:
@@ -30,6 +31,11 @@ private:
 
 	D3DXVECTOR3 originalPos;
 
+	DWORD attackStart;
+	DWORD attackTime = 2000;
+
+	DWORD removeTime = 800;
+
 	void LoadTexture();
 
 	void ParseSprites(std::string);
@@ -45,6 +51,9 @@ public:
 	RECTF GetBoundingBox(int = 0) const;
 
 	Boomerang* SpawnBoomerang();
+
+	void StartAttackTimer() { attackStart = static_cast<DWORD>(GetTickCount64()); }
+	bool IsAttacking() const { return attackStart != 0; }
 
 	void TakeDamage() override;
 

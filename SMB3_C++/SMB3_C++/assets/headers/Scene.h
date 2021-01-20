@@ -85,8 +85,8 @@ private:
 	void ParseTileSprites(std::string);
 	void ParseBackground(std::string);
 
-	void UpdateCameraPosition();
-	void UpdateHUDPosition();
+	void UpdateCameraPosition(DWORD);
+	void UpdateHUDPosition(DWORD);
 
 public:
 	enum class SceneType {

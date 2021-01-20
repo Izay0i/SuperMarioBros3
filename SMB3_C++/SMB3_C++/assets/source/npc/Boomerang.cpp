@@ -5,7 +5,10 @@ LPDIRECT3DTEXTURE9 Boomerang::texture = nullptr;
 D3DCOLOR Boomerang::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Boomerang::Boomerang() {
+	velocity.x = moveSpeed;
+	velocity.y = -0.12f;
 
+	StartRemoveTimer();
 }
 
 RECTF Boomerang::GetBoundingBox(int id) const {
@@ -114,7 +117,7 @@ void Boomerang::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 		if (line == "[HITBOXES]") {
 			section = DataSection::DATA_SECTION_HITBOXES;
 			continue;
-		}
+		} 
 
 		switch (section) {
 		case DataSection::DATA_SECTION_SPRITES:
@@ -130,9 +133,43 @@ void Boomerang::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 }
 
 void Boomerang::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	if (aliveStart != 0 && GetTickCount64() - aliveStart > aliveTime) {
+	/*char debug[100];
+	sprintf_s(debug, "Velx: %f\n", velocity.x);
+	OutputDebugStringA(debug);*/
+
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
-		aliveStart = 0;
+		removeStart = 0;
+	}
+
+	GameObject::Update(delta);
+	position += distance;
+
+	if (velocity.x > 0) {
+		velocity.y += 0.0002f * delta;
+		if (position.y >= originalPos.y - 4) {
+			velocity.x -= 0.0002f * delta;
+			if (velocity.x <= moveSpeed) {
+				velocity.x = -moveSpeed;
+			}
+		}
+	}
+	else if (velocity.x < 0) {
+		velocity.y -= 0.0002f * delta;
+		if (position.y <= originalPos.y + 4) {
+			velocity.x += 0.0002f * delta;
+			if (velocity.x <= moveSpeed) {
+				velocity.x = -moveSpeed;
+			}
+		}
+	}
+
+	if (position.x - originalPos.x >= MAX_DISTANCE && velocity.x > 0) {
+		velocity.y = 0.1f;
+	}
+	else if (position.x <= originalPos.x && velocity.x < 0) {
+		velocity.y = -0.1f;
+		velocity.x = moveSpeed;
 	}
 }
 

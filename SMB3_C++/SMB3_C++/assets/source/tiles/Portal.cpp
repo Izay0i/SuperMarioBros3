@@ -6,16 +6,18 @@ D3DCOLOR Portal::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 RECTF Portal::GetBoundingBox(int id) const {
 	RECTF bound;
-	bound.left = position.x + 2;
-	bound.top = position.y + 1;
 	
 	if (extraData.size() > 1) {
+		bound.left = position.x + 2;
+		bound.top = position.y + 1;
 		bound.right = position.x + hitBox.GetWidth(id) - 3;
 		bound.bottom = position.y + hitBox.GetHeight(id) - 5;
 	}
 	else {
-		bound.right = position.x + hitBox.GetWidth(1) - 3;
-		bound.bottom = position.y + hitBox.GetHeight(1) - 5;
+		bound.left = position.x;
+		bound.top = position.y;
+		bound.right = position.x + hitBox.GetWidth(1);
+		bound.bottom = position.y + hitBox.GetHeight(1);
 	}
 
 	return bound;

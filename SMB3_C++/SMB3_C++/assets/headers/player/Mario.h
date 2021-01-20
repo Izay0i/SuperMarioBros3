@@ -30,6 +30,9 @@ private:
 
 	std::vector<Fireball*> fireballs;
 
+	//map
+	const float MAX_DISTANCE = 31.0f;
+
 	const unsigned int MAX_LIVES = 99;
 	const unsigned int MAX_COINS = 99;
 	const unsigned int MAX_SCORE = 9999999;
@@ -48,7 +51,7 @@ private:
 	bool triggeredStageEnd;
 	bool wentIntoPipe;
 
-	//placeholder
+	//map
 	bool isInStageNode;
 
 	bool isNextToShell;
@@ -79,6 +82,8 @@ private:
 	DWORD invulStart;
 	DWORD invulTime = 3000;
 
+	D3DXVECTOR3 lastPos; //map
+	D3DXVECTOR3 mapNodePos; //map
 	D3DXVECTOR3 destination;
 
 	void LoadTexture();
@@ -149,6 +154,8 @@ public:
 	void OnKeyUp(int) {}
 
 	Fireball* SpawnFireball();
+
+	void SetPosition(D3DXVECTOR3 pos) override { position = pos; lastPos = position; }
 
 	void TakeDamage() override;
 

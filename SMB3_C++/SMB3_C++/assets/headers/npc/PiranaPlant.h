@@ -14,7 +14,7 @@ protected:
 	};
 
 	const static int MAX_FILE_LINE = 1024;
-	const float MAX_Y_OFFSET = 48.0f; //how far up should the plant go
+	const float MAX_Y_OFFSET = 40.0f; //how far up should the plant go
 	const float MIN_Y_OFFSET = 32.0f; //how far down should the plant go
 
 	static LPCWSTR texturePath;
@@ -27,8 +27,8 @@ protected:
 
 	DWORD removeTime = 100;
 	
-	DWORD retractStart;
-	DWORD retractTime = 2000;
+	DWORD coolDownStart;
+	DWORD coolDownTime = 2000;
 
 	D3DXVECTOR3 originalPos;
 
@@ -48,8 +48,8 @@ public:
 
 	virtual void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
-	virtual void StartRetractTimer() { retractStart = static_cast<DWORD>(GetTickCount64()); }
-	virtual bool IsRetracting() { return retractStart != 0; }
+	virtual void StartCoolDownTimer() { coolDownStart = static_cast<DWORD>(GetTickCount64()); }
+	virtual bool IsOnCoolDown() const { return coolDownStart != 0; }
 
 	virtual void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
 

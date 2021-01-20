@@ -30,6 +30,7 @@ private:
 
 	//Some states only available in certain forms
 	enum class MarioState {
+		GUI, //why did I call it GUI? idk but the animations are *GUI so changing them would be a waste of time anyway
 		IDLE,
 		RUN,
 		JUMP,
@@ -42,6 +43,7 @@ private:
 		SPIN,
 	};
 
+	float scaleX = 1.0f; //no idea why the animation wont play tbh
 	unsigned int alpha = 255;
 
 	Mario* mario;

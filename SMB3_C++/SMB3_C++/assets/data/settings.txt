@@ -3,7 +3,7 @@
 #Luigi: Well I want yours too
 
 [SETTINGS]
-default	11
+default	14
 
 [SCENES]
 0	assets\data\start_screen.txt

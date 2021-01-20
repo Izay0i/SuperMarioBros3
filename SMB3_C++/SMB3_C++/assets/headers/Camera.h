@@ -28,7 +28,7 @@ public:
 	RECTF GetLimit(int = 0) const;
 	void AddLimit(RECTF);
 
-	void Update(DWORD, std::vector<GameObject*>*) override {}
+	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override {}
 
 	void Release() override;
