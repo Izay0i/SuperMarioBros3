@@ -25,7 +25,7 @@ private:
 
 	ItemState currentState;
 
-	DWORD removeTime = 100;
+	DWORD removeTime = 50;
 
 	float gravity = 0.0005f;
 

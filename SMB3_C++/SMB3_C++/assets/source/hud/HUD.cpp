@@ -250,6 +250,8 @@ void HUD::ParseSceneEnd(std::vector<Entity::ObjectType> items) {
 	}
 }
 
+//honestly what the hell was I thinking making this function... std::to_string() exists and I don't need an extra vector<string> every time I need to split something
+//this is what lack of sleep does to your brain
 std::string HUD::DigitToString(std::string digitStr) {
 	std::string animName = "Error";
 	unsigned int digit = std::stoi(digitStr);

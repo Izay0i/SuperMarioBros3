@@ -54,6 +54,8 @@ public:
 
 	Entity* SpawnItem();
 	
+	int GetScore() override { return score; }
+
 	//7 or 11 coins
 	//std::vector<Coin*> coins;
 

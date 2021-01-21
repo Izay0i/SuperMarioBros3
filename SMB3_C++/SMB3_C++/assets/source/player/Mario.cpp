@@ -332,7 +332,7 @@ void Mario::OnKeyDown(int keyCode) {
 			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 				velocity.y = 0.08f;
 			}
-			else {
+			else if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() > static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 				if (!IsInPipe()) {
 					//not crouching
 					position.y -= GetBoxHeight();
@@ -423,6 +423,15 @@ Fireball* Mario::SpawnFireball() {
 	return fireball;
 }
 
+void Mario::AddScore(unsigned int score) {
+	if (score >= 16000) {
+		++lives;
+	}
+	else {
+		this->score += score;
+	}
+}
+
 void Mario::TakeDamage() {
 	if (!IsInvulnerable()) {
 		StartInvulTimer();
@@ -510,11 +519,7 @@ void Mario::HandleBonusItems() {
 	}
 }
 
-void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
-	/*char debug[100];
-	sprintf_s(debug, "Pos: %f %f\n", position.x, position.y);
-	OutputDebugStringA(debug);*/
-	
+void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {	
 	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 		isInMap = true;
 
@@ -748,8 +753,6 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
 				ySpeed = -0.001f;
-
-				score += 1000;
 			}
 
 			//super mushroom
@@ -769,8 +772,6 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
 				ySpeed = -0.001f;
-
-				score += 1000;
 			}
 
 			//1up mushroom
@@ -785,8 +786,6 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					offSet.y = normal.y = relativeDistance.y = 0.0f;
 				}
 				ySpeed = -0.001f;
-
-				++lives;
 			}
 
 			//hammer bro's boomerang
@@ -825,9 +824,6 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				if (coin->GetCurrentHitPoints() == 1) {
 					if (event->normal.x != 0.0f || event->normal.y != 0.0f) {
 						coin->TakeDamage();
-
-						++coins;
-						score += 50;
 					}
 				}
 				else if (coin->GetCurrentHitPoints() == 3) {
@@ -866,12 +862,12 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				else if (shinyBrick->GetCurrentHitPoints() == 3) {					
 					minTime.x = 1.0f;
 					offSet.x = normal.x = relativeDistance.x = 0.0f;
-					if (!isOnGround) {
+					/*if (!isOnGround) {
 						minTime.y = 1.0f;
 						offSet.y = normal.y = relativeDistance.y = 0.0f;
 					}
 
-					ySpeed = -0.001f;
+					ySpeed = -0.001f;*/
 					shinyBrick->SetCurrenHitPoints(-1);
 
 					++coins;
@@ -953,6 +949,7 @@ void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				else {
 					if (IsAttacking()) {
 						goomba->TakeDamage();
+						//goomba->SetAnimationName("Walk");
 					}
 					else {
 						TakeDamage();

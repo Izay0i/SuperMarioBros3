@@ -38,6 +38,11 @@ void VenusFire::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		coolDownStart = 0;
 	}
 
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
+		multiplier = 1;
+		resetScoreStart = 0;
+	}
+
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
@@ -90,8 +95,11 @@ void VenusFire::Render() {
 			break;
 		case PlantState::DIE:
 			sprite.PlayAnimation("Die", position, scale);
-			sprite.PlayAnimation("100", position, scale);
 			break;
+	}
+
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime / 4) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y - 16, 0));
 	}
 }
 

@@ -150,6 +150,12 @@ void PiranaPlant::HandleStates() {
 void PiranaPlant::TakeDamage() {
 	hitPoints = 0;
 	StartRemoveTimer();
+
+	tookDamage = true;
+
+	score *= multiplier;
+	++multiplier;
+	StartResetScoreTimer();
 }
 
 void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
@@ -185,6 +191,11 @@ void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		coolDownStart = 0;
 	}
 
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
+		multiplier = 1;
+		resetScoreStart = 0;
+	}
+
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
@@ -198,8 +209,11 @@ void PiranaPlant::Render() {
 			break;
 		case PlantState::DIE:
 			sprite.PlayAnimation("Die", position);
-			sprite.PlayAnimation("100", position);
 			break;
+	}
+
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime / 4) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y - 16, 0));
 	}
 }
 

@@ -65,6 +65,11 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		jumpCount = 0;
 	}
 
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
+		multiplier = 1;
+		resetScoreStart = 0;
+	}
+
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
@@ -194,6 +199,7 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
 				hitPoints = 0;
+				tookDamage = true;
 			}
 
 			//mario's fireball or koopa shell
@@ -204,6 +210,7 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
 				hitPoints = 0;
+				tookDamage = true;
 			}
 
 			//switch side when collide with anything except
@@ -211,7 +218,9 @@ void Paragoomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			//1up shroom 9
 			//leaf 10
 			//coin 101
+			//goomba 1
 			if ((dynamic_cast<Entity*>(event->object) &&
+				event->object->GetObjectID() != 1 &&
 				event->object->GetObjectID() != 8 &&
 				event->object->GetObjectID() != 9 &&
 				event->object->GetObjectID() != 10 &&
@@ -252,10 +261,6 @@ void Paragoomba::Render() {
 				sprite.PlayAnimation("Idle", D3DXVECTOR3(position.x, position.y - 5, 0));
 			}
 			break;
-	}
-
-	if (hitPoints == -1) {
-		sprite.PlayAnimation("100", position);
 	}
 }
 

@@ -239,16 +239,14 @@ void Scene::ParseEntityData(std::string line) {
 		case Entity::ObjectType::OBJECT_TYPE_MOVINGPLATFORM:
 			object = new MovingPlatform;
 			break;
-
-		//testing
-		case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
-			object = new SuperMushroom;
+		case Entity::ObjectType::OBJECT_TYPE_LOGO:
+			object = new Logo;
 			break;
-		case Entity::ObjectType::OBJECT_TYPE_1UPSHROOM:
-			object = new GMushroom;
+		case Entity::ObjectType::OBJECT_TYPE_SELECT:
+			object = new SelectText;
 			break;
-		case Entity::ObjectType::OBJECT_TYPE_LEAF:
-			object = new SuperLeaf;
+		case Entity::ObjectType::OBJECT_TYPE_CURTAIN:
+			object = new Curtain;
 			break;
 	}
 
@@ -464,10 +462,9 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		//testing
-		case Entity::ObjectType::OBJECT_TYPE_MUSHROOM:
+		case Entity::ObjectType::OBJECT_TYPE_LOGO:
 			for (GameObject* object : objects) {
-				if (dynamic_cast<SuperMushroom*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+				if (dynamic_cast<Logo*>(object)) {
 					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
@@ -476,9 +473,9 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case Entity::ObjectType::OBJECT_TYPE_1UPSHROOM:
+		case Entity::ObjectType::OBJECT_TYPE_SELECT:
 			for (GameObject* object : objects) {
-				if (dynamic_cast<GMushroom*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+				if (dynamic_cast<SelectText*>(object)) {
 					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
@@ -487,9 +484,9 @@ void Scene::ParseWorldCoords(std::string line) {
 				}
 			}
 			break;
-		case Entity::ObjectType::OBJECT_TYPE_LEAF:
+		case Entity::ObjectType::OBJECT_TYPE_CURTAIN:
 			for (GameObject* object : objects) {
-				if (dynamic_cast<SuperLeaf*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
+				if (dynamic_cast<Curtain*>(object)) {
 					int objectID = std::stoi(tokens.at(0));
 					if (object->GetObjectID() == objectID) {
 						object->SetPosition(position);
@@ -897,9 +894,30 @@ void Scene::Update(DWORD delta) {
 
 	switch (static_cast<SceneType>(sceneID)) {
 		case SceneType::SCENE_INTRO:
-			if (Device::IsKeyDown(DIK_I)) {
-				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
-			}
+			{
+				std::string mode = "1Player";
+
+				for (unsigned int i = 0; i < objects.size(); ++i) {
+					objects.at(i)->Update(delta, &collidableObjects);
+
+					if (dynamic_cast<SelectText*>(objects.at(i))) {
+						SelectText* select = static_cast<SelectText*>(objects.at(i));
+
+						if (Device::IsKeyDown(DIK_W)) {
+							select->Select1PMode();
+						}
+						else if (Device::IsKeyDown(DIK_S)) {
+							select->Select2PMode();
+						}
+
+						mode = select->GetMode();
+					}
+				}
+
+				if (Device::IsKeyDown(DIK_I)) {
+					SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(mode == "1Player" ? SceneType::SCENE_MAP : SceneType::SCENE_OVER));
+				}
+			}			
 			break;
 		case SceneType::SCENE_MAP:
 			marioInstance->Update(delta, &collidableObjects);
@@ -920,11 +938,11 @@ void Scene::Update(DWORD delta) {
 					marioInstance->TriggeredStageEnd()
 				);
 
-				for (unsigned int i = 0; i < objects.size(); ++i) {
-					objects.at(i)->Update(delta, &collidableObjects);
-				}
-
 				UpdateHUDPosition(delta);
+			}
+
+			for (unsigned int i = 0; i < objects.size(); ++i) {
+				objects.at(i)->Update(delta, &collidableObjects);
 			}
 
 			if (marioInstance->IsInStageNode()) {
@@ -959,6 +977,14 @@ void Scene::Update(DWORD delta) {
 			if (marioInstance->GetCurrentHitPoints() > 0) {
 				for (unsigned int i = 0; i < objects.size(); ++i) {
 					objects.at(i)->Update(delta, &collidableObjects);
+
+					//add score if mario hits the entity
+					if (dynamic_cast<Entity*>(objects.at(i))) {
+						Entity* entity = static_cast<Entity*>(objects.at(i));
+						if (entity->TookDamage()) {
+							marioInstance->AddScore(entity->GetScore());
+						}
+					}
 
 					if (dynamic_cast<QuestionBlock*>(objects.at(i))) {
 						QuestionBlock* questionBlock = static_cast<QuestionBlock*>(objects.at(i));
@@ -1038,12 +1064,14 @@ void Scene::Update(DWORD delta) {
 						}
 					}
 
-					if (dynamic_cast<Entity*>(objects.at(i))) {
-						if (dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == -1) {
-							//erase-remove idiom
-							objects.at(i)->Release();
-							objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
+					if (dynamic_cast<Entity*>(objects.at(i)) && dynamic_cast<Entity*>(objects.at(i))->GetCurrentHitPoints() == -1) {
+						if (dynamic_cast<Coin*>(objects.at(i))) {
+							marioInstance->AddCoin();
 						}
+
+						//erase-remove idiom
+						objects.at(i)->Release();
+						objects.erase(std::remove(objects.begin(), objects.end(), objects.at(i)), objects.end());
 					}
 				}
 			}

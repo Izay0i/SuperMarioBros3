@@ -8,6 +8,7 @@ QuestionBlock::QuestionBlock() {
 	//1 - no items
 	//2 - rotate sprite
 	hitPoints = 2;
+	score = 0;
 }
 
 void QuestionBlock::LoadTexture() {

@@ -230,6 +230,33 @@ void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		position += distance;
 	}
+
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
+	collisionEvents.clear();
+
+	CalcPotentialCollision(objects, collisionEvents);
+
+	D3DXVECTOR2 minTime;
+	D3DXVECTOR2 offSet(0.4f, 0.4f);
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 relativeDistance;
+
+	FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+
+	for (LPCOLLISIONEVENT result : eventResults) {
+		LPCOLLISIONEVENT event = result;
+
+		//mario's fireball
+		if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+			if (hitPoints == 2 && amount == 0) {
+				StartRemoveTimer();
+			}
+		}
+	}
+
+	for (LPCOLLISIONEVENT event : collisionEvents) {
+		delete event;
+	}
 }
 
 void ShinyBrick::Render() {

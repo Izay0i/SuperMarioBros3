@@ -7,6 +7,7 @@ D3DCOLOR GMushroom::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 GMushroom::GMushroom() {
 	hitPoints = 1;
 	normal = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
+	score = 16000;
 }
 
 void GMushroom::LoadTexture() {
@@ -136,6 +137,7 @@ void GMushroom::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 void GMushroom::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
+		tookDamage = true;
 	}
 
 	if (hitPoints == 0) {
@@ -269,8 +271,8 @@ void GMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 void GMushroom::Render() {
 	sprite.PlayAnimation("Default", position);
 
-	if (hitPoints == -1) {
-		sprite.PlayAnimation("1UP", position);
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime / 2) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y - 16, 0));
 	}
 }
 

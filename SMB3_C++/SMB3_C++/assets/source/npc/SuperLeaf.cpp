@@ -8,6 +8,7 @@ SuperLeaf::SuperLeaf() {
 	hitPoints = 1;
 	normal = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
 	scale = D3DXVECTOR2(1.0f, 1.0f);
+	score = 1000;
 }
 
 void SuperLeaf::LoadTexture() {
@@ -137,6 +138,7 @@ void SuperLeaf::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 void SuperLeaf::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
+		tookDamage = true;
 	}
 
 	if (hitPoints == 0) {
@@ -192,8 +194,8 @@ void SuperLeaf::Update(DWORD delta, std::vector<GameObject*>* objects) {
 void SuperLeaf::Render() {
 	sprite.PlayAnimation("Default", position, scale);
 
-	if (hitPoints == -1) {
-		sprite.PlayAnimation("1000", position);
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime / 2) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y + 6, 0));
 	}
 }
 

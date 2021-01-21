@@ -14,7 +14,7 @@ Coin	953	69	968	84	1	0
 #Particle system later
 #This will do
 #Break
-Break	783	161	826	223	8	8
+Break	783	161	826	223	8	2
 Break	828	161	871	223
 Break	873	161	916	223
 Break	693	225	736	287

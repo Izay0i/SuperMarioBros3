@@ -181,6 +181,12 @@ void KoopaTroopa::TakeDamage() {
 	if (hitPoints >= 2) {
 		--hitPoints;
 		StartRetract();
+
+		tookDamage = true;
+
+		score *= multiplier;
+		++multiplier;
+		StartResetScoreTimer();
 	}
 }
 
@@ -198,6 +204,11 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	if (retractStart != 0 && GetTickCount64() - retractStart > retractTime) {
 		hitPoints = 3;
 		retractStart = 0;
+	}
+
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
+		multiplier = 1;
+		resetScoreStart = 0;
 	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
@@ -319,6 +330,7 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 			//mario's fireball
 			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+				tookDamage = true;
 				hitPoints = 0;
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
@@ -344,6 +356,7 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
 				koopa->SetVelocity(D3DXVECTOR3(0, -0.23f, 0));
 
+				tookDamage = true;
 				hitPoints = 0;
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
@@ -430,7 +443,9 @@ void KoopaTroopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			//leaf 10
 			//coin 101
 			//when brick turns to coin 103
+			//parakoopa 4
 			if ((dynamic_cast<Entity*>(event->object) &&
+				event->object->GetObjectID() != 4 &&
 				event->object->GetObjectID() != 8 &&
 				event->object->GetObjectID() != 9 &&
 				event->object->GetObjectID() != 10 &&
@@ -502,8 +517,11 @@ void KoopaTroopa::Render() {
 			else {
 				sprite.PlayAnimation("RetractRed", position, scale);
 			}
-			sprite.PlayAnimation("100", position);
 			break;
+	}
+
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime / 4) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y - 16, 0));
 	}
 }
 

@@ -148,7 +148,7 @@ public:
 	void GetSceneRemainingTime(const unsigned int time) { sceneRemainingTime = time; }
 
 	void AddCoin() { ++coins; }
-	void AddScore(const unsigned int score) { this->score += score; }
+	void AddScore(const unsigned int);
 
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 	

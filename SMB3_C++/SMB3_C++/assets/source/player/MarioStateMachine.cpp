@@ -132,21 +132,20 @@ void MarioStateMachine::Render() {
 
 	switch (currentState) {
 		case MarioState::GUI:
-			mario->GetSprite().PlayAnimation("GUI", mario->GetPosition(), D3DXVECTOR2(scaleX, 1.0f));
-			/*switch (currentForm) {
+			switch (currentForm) {
 				case MarioForm::SMALL:
-					mario->GetSprite().PlayAnimation("GUI", mario->GetPosition());
+					mario->GetSprite().PlayAnimation("GUI", mario->GetPosition(), D3DXVECTOR2(scaleX, 1.0f));
 					break;
 				case MarioForm::BIG:
-					mario->GetSprite().PlayAnimation("BigGUI", mario->GetPosition());
+					mario->GetSprite().PlayAnimation("BigGUI", D3DXVECTOR3(mario->GetPosition().x, mario->GetPosition().y - 8, 0), D3DXVECTOR2(scaleX, 1.0f));
 					break;
 				case MarioForm::FIRE:
-					mario->GetSprite().PlayAnimation("FireGUI", mario->GetPosition());
+					mario->GetSprite().PlayAnimation("FireGUI", D3DXVECTOR3(mario->GetPosition().x, mario->GetPosition().y - 8, 0), D3DXVECTOR2(scaleX, 1.0f));
 					break;
 				case MarioForm::RACOON:
-					mario->GetSprite().PlayAnimation("RacGUI", mario->GetPosition());
+					mario->GetSprite().PlayAnimation("RacGUI", D3DXVECTOR3(mario->GetPosition().x, mario->GetPosition().y - 8, 0), D3DXVECTOR2(scaleX, 1.0f));
 					break;
-			}*/
+			}
 			break;
 		case MarioState::IDLE:
 			switch (currentForm) {

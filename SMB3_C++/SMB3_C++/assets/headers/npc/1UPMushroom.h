@@ -17,7 +17,7 @@ private:
 	float jumpSpeed = 0.2f;
 	float gravity = 0.002f;
 
-	DWORD removeTime = 1;
+	DWORD removeTime = 50;
 
 	DWORD emergeStart;
 	DWORD emergeTime = 700;

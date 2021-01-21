@@ -229,6 +229,19 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;			
 
+			if (objectID == 99) {
+				if (dynamic_cast<Tiles*>(event->object)) {
+					if (event->normal.x != 0.0f) {
+						TakeDamage();
+					}
+				}
+				else if (dynamic_cast<Entity*>(event->object)) {
+					Entity* entity = static_cast<Entity*>(event->object);
+					entity->TakeDamage();
+					TakeDamage();
+				}
+			}
+
 			//ignore top and bottom of question block and shiny brick
 			if (event->object->GetObjectID() == 102 || event->object->GetObjectID() == 103) {
 				if (event->normal.y != 0.0f) {
@@ -240,21 +253,7 @@ void Fireball::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			//ignore one-way platforms
 			if (event->object->GetObjectID() == 101 || event->object->GetObjectID() == 205) {
 				continue;
-			}
-
-			if (objectID == 99) {
-				if (dynamic_cast<Tiles*>(event->object)) {
-					if (event->normal.x != 0.0f) {
-						TakeDamage();
-					}
-				}
-
-				
-				if (dynamic_cast<Entity*>(event->object)) {
-					TakeDamage();
-					dynamic_cast<Entity*>(event->object)->TakeDamage();
-				}
-			}
+			}	
 		}
 	}
 

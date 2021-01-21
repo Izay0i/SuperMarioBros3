@@ -13,3 +13,7 @@
 #include "map/Cactus.h"
 #include "map/HelpPopUp.h"
 #include "map/HammerBro.h"
+
+#include "intro/Logo.h"
+#include "intro/SelectText.h"
+#include "intro/Curtain.h"

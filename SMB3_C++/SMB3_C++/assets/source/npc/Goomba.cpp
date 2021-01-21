@@ -163,6 +163,12 @@ void Goomba::HandleStates() {
 void Goomba::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
+
+		tookDamage = true;
+
+		score *= multiplier;
+		++multiplier;
+		StartResetScoreTimer();
 	}
 }
 
@@ -176,6 +182,11 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	GameObject::Update(delta);
 
 	velocity.y += gravity * delta;
+
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
+		multiplier = 1;
+		resetScoreStart = 0;
+	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
@@ -218,9 +229,6 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 					dynamic_cast<ShinyBrick*>(event->object)->GetCurrentHitPoints() != 3))
 			{
 				isOnGround = true;
-			}
-			else {
-				isOnGround = false;
 			}
 
 			//death
@@ -309,6 +317,7 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
 				hitPoints = 0;
+				tookDamage = true;
 			}
 
 			//mario's fireball or koopa shell
@@ -319,6 +328,7 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
 				hitPoints = 0;
+				tookDamage = true;
 			}
 
 			//switch side when collide with anything except
@@ -326,7 +336,9 @@ void Goomba::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			//1up shroom 9
 			//leaf 10
 			//coin 101
+			//paragoomba 2
 			if ((dynamic_cast<Entity*>(event->object) && 
+				event->object->GetObjectID() != 2 &&
 				event->object->GetObjectID() != 8 &&
 				event->object->GetObjectID() != 9 &&
 				event->object->GetObjectID() != 10 &&
@@ -362,9 +374,12 @@ void Goomba::Render() {
 			break;
 		case GoombaState::DIE:
 			sprite.PlayAnimation(animName, D3DXVECTOR3(position.x, position.y - 1, 0), scale);
-			sprite.PlayAnimation("100", position, scale);
 			break;
 	}
+
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime / 4) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y - 16, 0));
+	}	
 }
 
 void Goomba::Release() {

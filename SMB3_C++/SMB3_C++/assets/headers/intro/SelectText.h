@@ -1,11 +1,12 @@
 #pragma once
 
+#include <fstream>
+
 #include "../Entity.h"
-#include "../TileList.h"
 
 class Entity;
 
-class SuperMushroom : public Entity {
+class SelectText : public Entity {
 private:
 	const static int MAX_FILE_LINE = 1024;
 
@@ -13,32 +14,22 @@ private:
 	static LPDIRECT3DTEXTURE9 texture;
 	static D3DCOLOR colorKey;
 
-	float runSpeed = 0.002f;
-	float jumpSpeed = 0.2f;
-	float gravity = 0.002f;
-
-	DWORD removeTime = 50;
-
-	DWORD emergeStart;
-	DWORD emergeTime = 700;
+	std::string animName = "1Player";
 
 	void LoadTexture();
 
 	void ParseSprites(std::string);
 	void ParseHitboxes(std::string);
 
-	void HandleStates();
-
 public:
-	SuperMushroom();
-
-	RECTF GetBoundingBox(int = 0) const override;
-
 	void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
-	void StartEmergeTimer() { emergeStart = static_cast<DWORD>(GetTickCount64()); }
+	void Select1PMode() { animName = "1Player"; }
+	void Select2PMode() { animName = "2Player"; }
 
-	void TakeDamage() override;
+	std::string GetMode() const { return animName; }
+
+	RECTF GetBoundingBox(int = 0) const;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;

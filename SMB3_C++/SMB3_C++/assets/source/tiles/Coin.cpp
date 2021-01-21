@@ -126,9 +126,11 @@ void Coin::HandleStates() {
 	switch (hitPoints) {
 		case 1:
 			currentState = ItemState::ROTATE;
+			score = 50;
 			break;
 		case 2:
 			currentState = ItemState::POPPEDOUTOFQBLOCK;
+			score = 100;
 			break;
 		case 3:
 			currentState = ItemState::SWITCHEDTOBRICK;
@@ -139,6 +141,7 @@ void Coin::HandleStates() {
 void Coin::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
+		tookDamage = true;
 	}
 
 	if (hitPoints == 0) {
@@ -179,7 +182,8 @@ void Coin::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 		if (event->normal.y == -1.0f) {
 			if (hitPoints == 2) {
-				hitPoints = -1;
+				tookDamage = true;
+				StartRemoveTimer();
 			}
 		}
 	}
@@ -202,8 +206,8 @@ void Coin::Render() {
 			break;
 	}
 
-	if (hitPoints == -1) {
-		sprite.PlayAnimation("100", position);
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime / 2 && hitPoints == 2) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y + 6, 0));
 	}
 }
 

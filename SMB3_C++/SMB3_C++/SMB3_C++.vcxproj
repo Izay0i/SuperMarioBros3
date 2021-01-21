@@ -154,6 +154,9 @@
     <ClCompile Include="assets\source\GameObject.cpp" />
     <ClCompile Include="assets\source\HitBox.cpp" />
     <ClCompile Include="assets\source\hud\HUD.cpp" />
+    <ClCompile Include="assets\source\intro\Curtain.cpp" />
+    <ClCompile Include="assets\source\intro\Logo.cpp" />
+    <ClCompile Include="assets\source\intro\SelectText.cpp" />
     <ClCompile Include="assets\source\map\Cactus.cpp" />
     <ClCompile Include="assets\source\map\HammerBro.cpp" />
     <ClCompile Include="assets\source\map\HelpPopUp.cpp" />
@@ -195,6 +198,9 @@
     <ClInclude Include="assets\headers\GameObject.h" />
     <ClInclude Include="assets\headers\HitBox.h" />
     <ClInclude Include="assets\headers\hud\HUD.h" />
+    <ClInclude Include="assets\headers\intro\Curtain.h" />
+    <ClInclude Include="assets\headers\intro\Logo.h" />
+    <ClInclude Include="assets\headers\intro\SelectText.h" />
     <ClInclude Include="assets\headers\map\Cactus.h" />
     <ClInclude Include="assets\headers\map\HammerBro.h" />
     <ClInclude Include="assets\headers\map\HelpPopUp.h" />

@@ -57,6 +57,11 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		velocity.y += gravity * delta;
 	}
 
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
+		multiplier = 1;
+		resetScoreStart = 0;
+	}
+
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
@@ -168,6 +173,7 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 			//mario's fireball
 			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+				tookDamage = true;
 				hitPoints = 0;
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
@@ -192,6 +198,7 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
 				koopa->SetVelocity(D3DXVECTOR3(0, -0.23f, 0));
 
+				tookDamage = true;
 				hitPoints = 0;
 				scale = D3DXVECTOR2(1.0f, -1.0f);
 				velocity.y = -0.23f;
@@ -234,7 +241,9 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			//leaf 10
 			//coin 101
 			//when brick turns to coin 103
+			//koopa 3
 			if ((dynamic_cast<Entity*>(event->object) &&
+				event->object->GetObjectID() != 3 &&
 				event->object->GetObjectID() != 8 &&
 				event->object->GetObjectID() != 9 &&
 				event->object->GetObjectID() != 10 &&
@@ -276,10 +285,6 @@ void Parakoopa::Render() {
 				sprite.PlayAnimation("FlyRed", position, D3DXVECTOR2(normal.x, 1.0f));
 			}
 			break;
-	}
-
-	if (hitPoints == -1) {
-		sprite.PlayAnimation("100", position);
 	}
 }
 

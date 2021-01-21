@@ -30,7 +30,7 @@ protected:
 	//Implement your own removeTime
 
 	DWORD resetScoreStart;
-	DWORD resetScoreTime = 2000;
+	DWORD resetScoreTime = 500;
 
 	AnimatedSprite sprite;
 
@@ -64,10 +64,16 @@ public:
 		OBJECT_TYPE_HELP = 107,
 		OBJECT_TYPE_HAMMERBRONODE = 108,
 		//moving platform
-		OBJECT_TYPE_MOVINGPLATFORM = 109
+		OBJECT_TYPE_MOVINGPLATFORM = 109,
+		//intro
+		OBJECT_TYPE_LOGO = 997,
+		OBJECT_TYPE_SELECT = 998,
+		OBJECT_TYPE_CURTAIN = 999
 	};
 
 	virtual ~Entity() {}	
+
+	virtual std::string ScoreToString(const unsigned int score) { return score >= 16000 ? "1UP" : std::to_string(score); }
 
 	virtual void SetCurrenHitPoints(int point) { hitPoints = point; }
 	virtual int GetCurrentHitPoints() const { return hitPoints; }

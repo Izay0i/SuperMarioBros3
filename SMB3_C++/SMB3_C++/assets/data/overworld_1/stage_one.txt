@@ -130,9 +130,6 @@ assets\data\hud\hud_data.txt	4
 #Bonus item
 104	assets\data\tiles\bonusitem_data.txt	5
 
-#Switch block
-#105	assets\data\tiles\switchblock_data.txt	2
-
 #NPCs
 #Goomba
 1	assets\data\npc\goomba_data.txt	1
@@ -155,19 +152,8 @@ assets\data\hud\hud_data.txt	4
 6	assets\data\npc\venustrap_data.txt	1	assets\data\projectiles\fireball_data.txt	0
 6	assets\data\npc\venustrap_data.txt	1	g	assets\data\projectiles\fireball_data.txt	0
 
-#For testing
-#Super mushroom
-#7	assets\data\npc\supermushroom_data.txt	2
-#1UP mushroom
-#8	assets\data\npc\1upmushroom_data.txt	2
-#Super leaf
-#9	assets\data\npc\superleaf_data.txt	2
-
 #obj_id	x	y
 [WORLD_COORDS]
-#7	2320	368
-#8	2336	368
-#9	2304	368
 
 #Mario
 #0	25	384
@@ -285,9 +271,6 @@ assets\data\hud\hud_data.txt	4
 103	2112	400
 #Bonus item
 104	2688	337
-
-#Switch block
-#105	2032	352
 
 #obj_id	world_x	world_y	width	height	sprites_arr_id
 [TILES_DATA]

@@ -47,6 +47,8 @@ public:
 
 	virtual void TakeDamage() override;
 
+	virtual void SetAnimationName(const std::string name) { animName = name; }
+
 	virtual void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	virtual void Render() override;
 

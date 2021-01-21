@@ -1,15 +1,28 @@
 #tex_id	file_path	r	g	b
 [TEXTURES]
 0	assets\textures\mario.png	68	145	190
-1	assets\textures\title_screen.png	0	0	0
+1	assets\textures\title_screen.png	255	0	255
 
 [ENTITY_DATA]
 #Mario
 0	assets\data\player\mario_data.txt	0
 
+#Logo
+997	assets\data\intro\logo_data.txt	1
+#Select text
+998	assets\data\intro\selecttext_data.txt	1
+#Curtain
+999	assets\data\intro\curtain_data.txt	1
+
 #obj_id	x	y
 [WORLD_COORDS]
-0	62	156
+0	999	999
+
+997	112	96
+
+998	72	144
+
+999	0	0
 
 #left	top	right	bottom	world_x	world_y	tex_id
 [BACKGROUND]

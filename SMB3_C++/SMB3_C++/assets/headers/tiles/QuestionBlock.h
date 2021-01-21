@@ -61,6 +61,8 @@ public:
 
 	Entity* SpawnItem(int);
 
+	int GetScore() override { return score; }
+
 	void TakeDamage() override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;

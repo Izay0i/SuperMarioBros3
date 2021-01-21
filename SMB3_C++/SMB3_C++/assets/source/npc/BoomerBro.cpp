@@ -169,6 +169,12 @@ Boomerang* BoomerBro::SpawnBoomerang() {
 void BoomerBro::TakeDamage() {
 	hitPoints = 0;
 	StartRemoveTimer();
+
+	tookDamage = true;
+
+	score *= multiplier;
+	++multiplier;
+	StartResetScoreTimer();
 }
 
 void BoomerBro::Update(DWORD delta, std::vector<GameObject*>* objects) {
@@ -192,6 +198,11 @@ void BoomerBro::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 	if (attackStart != 0 && GetTickCount64() - attackStart > attackTime) {
 		attackStart = 0;
+	}
+
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
+		multiplier = 1;
+		resetScoreStart = 0;
 	}
 
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
@@ -223,6 +234,29 @@ void BoomerBro::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		for (LPCOLLISIONEVENT result : eventResults) {
 			LPCOLLISIONEVENT event = result;
 
+			//mario's fireball
+			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+				tookDamage = true;
+				hitPoints = 0;
+				velocity.y = -0.23f;
+			}
+
+			//ditto
+			if (dynamic_cast<KoopaTroopa*>(event->object) &&
+				(dynamic_cast<KoopaTroopa*>(event->object)->GetCurrentHitPoints() == 1 || isBeingHeld))
+			{
+				KoopaTroopa* koopa = static_cast<KoopaTroopa*>(event->object);
+				koopa->SetCurrenHitPoints(0);
+				koopa->SetScale(D3DXVECTOR2(1.0f, -1.0f));
+				koopa->SetVelocity(D3DXVECTOR3(0, -0.23f, 0));
+
+				tookDamage = true;
+				hitPoints = 0;
+				scale = D3DXVECTOR2(1.0f, -1.0f);
+				velocity.y = -0.23f;
+			}
+
+			//boomerang
 			if (dynamic_cast<Boomerang*>(event->object)) {
 				Boomerang* boomerang = static_cast<Boomerang*>(event->object);
 				boomerang->SetCurrenHitPoints(-1);
@@ -258,6 +292,10 @@ void BoomerBro::Render() {
 		case BroState::DIE:
 			sprite.PlayAnimation("Die", position, scale);
 			break;
+	}
+
+	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime / 4) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y - 16, 0));
 	}
 }
 

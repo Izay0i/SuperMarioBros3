@@ -7,6 +7,7 @@ D3DCOLOR SuperMushroom::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 SuperMushroom::SuperMushroom() {
 	hitPoints = 1;
 	normal = D3DXVECTOR3(-1.0f, 1.0f, 0);
+	score = 1000;
 }
 
 void SuperMushroom::LoadTexture() {
@@ -136,6 +137,7 @@ void SuperMushroom::ParseData(std::string dataPath, std::string texturePath, D3D
 void SuperMushroom::TakeDamage() {
 	if (hitPoints > 0) {
 		--hitPoints;
+		tookDamage = true;
 	}
 
 	if (hitPoints == 0) {
@@ -269,8 +271,8 @@ void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 void SuperMushroom::Render() {
 	sprite.PlayAnimation("Default", position);
 
-	if (hitPoints == -1) {
-		sprite.PlayAnimation("1000", position);
+	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime / 2) {
+		sprite.PlayAnimation(ScoreToString(score), D3DXVECTOR3(position.x + 1, position.y + 6, 0));
 	}
 }
 
