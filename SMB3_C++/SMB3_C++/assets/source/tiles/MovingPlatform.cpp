@@ -138,6 +138,7 @@ void MovingPlatform::HandleStates() {
 			currentState = PlatformState::FALLING;
 			break;
 		case 1:
+			velocity.x = -moveSpeed;
 			currentState = PlatformState::MOVING;
 			break;
 	}
@@ -152,7 +153,6 @@ void MovingPlatform::TakeDamage() {
 void MovingPlatform::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 	
-	velocity.x = -moveSpeed;
 	GameObject::Update(delta);
 	switch (currentState) {
 		case PlatformState::FALLING:

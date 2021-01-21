@@ -234,7 +234,7 @@ void ShinyBrick::Update(DWORD delta, std::vector<GameObject*>* objects) {
 
 void ShinyBrick::Render() {
 	if (IsBeingRemoved()) {
-		sprite.PlayAnimation("Break", D3DXVECTOR3(position.x - 16, position.y - 8, 0));
+		sprite.PlayAnimation("Break", D3DXVECTOR3(position.x - 14, position.y - 13, 0));
 	}
 	else {
 		switch (currentState) {

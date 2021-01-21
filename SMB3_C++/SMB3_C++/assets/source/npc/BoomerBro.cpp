@@ -162,14 +162,13 @@ Boomerang* BoomerBro::SpawnBoomerang() {
 	boomerang->SetObjectID(97);
 	boomerang->ParseData(extraData.at(0), extraData.at(1), colorKey);
 	boomerang->SetNormal(D3DXVECTOR3(normal.x, 0, 0));
-	boomerang->SetPosition(D3DXVECTOR3(position.x + 5 * normal.x, position.y + 10, 0));
+	boomerang->SetPosition(D3DXVECTOR3(position.x + 5, position.y + 10, 0));
 	return boomerang;
 }
 
 void BoomerBro::TakeDamage() {
-	if (hitPoints > 0) {
-		--hitPoints;
-	}
+	hitPoints = 0;
+	StartRemoveTimer();
 }
 
 void BoomerBro::Update(DWORD delta, std::vector<GameObject*>* objects) {
@@ -251,6 +250,10 @@ void BoomerBro::Render() {
 	switch (currentState) {
 		case BroState::WALK:
 			sprite.PlayAnimation("Walk", position, scale);
+			
+			if (attackStart != 0 && GetTickCount64() - attackStart > (attackTime * 3 / 4)) {
+				sprite.PlayAnimation("Boomerang", D3DXVECTOR3(position.x - 5, position.y - 5, 0), scale);
+			}
 			break;
 		case BroState::DIE:
 			sprite.PlayAnimation("Die", position, scale);

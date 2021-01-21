@@ -32,7 +32,7 @@ private:
 	D3DXVECTOR3 originalPos;
 
 	DWORD attackStart;
-	DWORD attackTime = 2000;
+	DWORD attackTime = 3000;
 
 	DWORD removeTime = 800;
 

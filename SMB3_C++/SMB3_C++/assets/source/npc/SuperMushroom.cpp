@@ -197,6 +197,12 @@ void SuperMushroom::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				isOnGround = true;
 			}
 
+			//death
+			if (dynamic_cast<Tiles*>(event->object) && event->object->GetObjectID() == 666) {
+				position.y = 1000;
+				StartRemoveTimer();
+			}
+
 			//mushroom
 			if (dynamic_cast<SuperMushroom*>(event->object)) {
 				minTime.x = 1.0f;

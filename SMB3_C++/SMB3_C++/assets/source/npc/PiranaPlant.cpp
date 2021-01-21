@@ -155,9 +155,9 @@ void PiranaPlant::TakeDamage() {
 void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
-	char debug[100];
+	/*char debug[100];
 	sprintf_s(debug, "Posy: %f\n", position.y);
-	OutputDebugStringA(debug);
+	OutputDebugStringA(debug);*/
 
 	velocity.y = 0.02f * normal.y;
 	GameObject::Update(delta);

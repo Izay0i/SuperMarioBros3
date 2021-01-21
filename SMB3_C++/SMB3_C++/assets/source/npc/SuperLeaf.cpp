@@ -163,6 +163,30 @@ void SuperLeaf::Update(DWORD delta, std::vector<GameObject*>* objects) {
 		hitPoints = -1;
 		removeStart = 0;
 	}
+
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
+	
+	CalcPotentialCollision(objects, collisionEvents);
+
+	D3DXVECTOR2 minTime;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 relativeDistance;
+
+	FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+
+	for (LPCOLLISIONEVENT result : eventResults) {
+		LPCOLLISIONEVENT event = result;
+
+		//death
+		if (dynamic_cast<Tiles*>(event->object) && event->object->GetObjectID() == 666) {
+			position.y = 1000;
+			StartRemoveTimer();
+		}
+	}
+
+	for (LPCOLLISIONEVENT event : collisionEvents) {
+		delete event;
+	}
 }
 
 void SuperLeaf::Render() {

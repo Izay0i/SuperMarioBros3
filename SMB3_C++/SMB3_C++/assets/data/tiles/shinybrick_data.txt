@@ -14,9 +14,14 @@ Coin	953	69	968	84	1	0
 #Particle system later
 #This will do
 #Break
-Break	699	138	715	156	3	25
-Break	721	138	748	166
-Break	754	138	788	179
+Break	783	161	826	223	8	8
+Break	828	161	871	223
+Break	873	161	916	223
+Break	693	225	736	287
+Break	738	225	781	287
+Break	783	225	826	287
+Break	828	225	871	287
+Break	873	225	916	287
 
 #left	top	right	bottom
 [HITBOXES]

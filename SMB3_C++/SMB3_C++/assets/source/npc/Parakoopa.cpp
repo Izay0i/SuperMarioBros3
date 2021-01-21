@@ -110,6 +110,12 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 				isOnGround = true;
 			}
 
+			//death
+			if (dynamic_cast<Tiles*>(event->object) && event->object->GetObjectID() == 666) {
+				position.y = 1000;
+				StartRemoveTimer();
+			}
+
 			//venus' fireball
 			if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 98) {
 				minTime.x = 1.0f;
@@ -195,11 +201,29 @@ void Parakoopa::Update(DWORD delta, std::vector<GameObject*>* objects) {
 			if (dynamic_cast<Entity*>(event->object)) {
 				Entity* entity = static_cast<Entity*>(event->object);
 				if (hitPoints == 1) {
-					if (dynamic_cast<ShinyBrick*>(event->object) && event->normal.y == 0.0f) {
+					if (dynamic_cast<ShinyBrick*>(event->object) && entity->GetCurrentHitPoints() != 3 && event->normal.y == 0.0f) {
+						//entity->SetCurrenHitPoints(-1);
 						entity->StartRemoveTimer();
 					}
 					else {
-						entity->TakeDamage();
+						//deal damage to anything that's not:
+						//mushroom 8
+						//1up shroom 9
+						//leaf 10
+						//venus' fireball 98
+						//coin 101
+						//bonus item 104
+						//moving platform 109
+						if (event->object->GetObjectID() != 8 &&
+							event->object->GetObjectID() != 9 &&
+							event->object->GetObjectID() != 10 &&
+							event->object->GetObjectID() != 98 &&
+							event->object->GetObjectID() != 101 &&
+							event->object->GetObjectID() != 104 &&
+							event->object->GetObjectID() != 109)
+						{
+							entity->TakeDamage();
+						}
 					}
 				}
 			}

@@ -183,8 +183,8 @@ assets\data\hud\hud_data.txt	4
 
 #obj_id	x	y
 [WORLD_COORDS]
-#0	16	96
-0	1936	80
+0	16	96
+#0	1936	80
 
 #Portal
 100	1937	112
@@ -326,6 +326,8 @@ assets\data\hud\hud_data.txt	4
 
 #obj_id	world_x	world_y	width	height	sprites_arr_id
 [TILES_DATA]
+#death
+666	0	208	2048	10	666
 #green_ground_1
 201	0	128	160	80	0
 #green_ground_2

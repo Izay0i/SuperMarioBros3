@@ -775,7 +775,7 @@ void Scene::UpdateCameraPosition(DWORD delta) {
 
 	switch (static_cast<SceneType>(sceneID)) {
 		case SceneType::SCENE_STAGEONE:
-			if (!marioInstance->TriggeredStageEnd()) {
+			if (!marioInstance->TriggeredStageEnd() && !marioInstance->IsInPipe()) {
 				//set mario's position inside the world
 				if (marioInstance->GetPosition().x < cameraInstance->GetPosition().x) {
 					marioInstance->SetPosition(D3DXVECTOR3(cameraInstance->GetPosition().x, marioInstance->GetPosition().y, 0));
@@ -812,53 +812,53 @@ void Scene::UpdateCameraPosition(DWORD delta) {
 			cameraInstance->SetPosition(camPosition);
 			break;
 		case SceneType::SCENE_STAGEFOUR:		
-			//if (camPosition.x + Game::GetInstance()->GetScreenWidth() < cameraInstance->GetLimit(0).right) {
-			//	cameraInstance->Update(delta);
+			if (camPosition.x + Game::GetInstance()->GetScreenWidth() < cameraInstance->GetLimit(0).right) {
+				cameraInstance->Update(delta);
 
-			//	if (!marioInstance->TriggeredStageEnd()) {
-			//		//set mario's position inside the world
-			//		if (marioInstance->GetPosition().x < cameraInstance->GetPosition().x) {
-			//			marioInstance->SetPosition(D3DXVECTOR3(cameraInstance->GetPosition().x, marioInstance->GetPosition().y, 0));
-			//		}
-			//		else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > cameraInstance->GetPosition().x + Game::GetInstance()->GetScreenWidth()) {
-			//			marioInstance->SetPosition(D3DXVECTOR3(marioInstance->GetPosition().x - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
-			//		}
-			//	}
-			//}
-			//else {
-			//	if (ind == 1) {
-			//		if (!marioInstance->TriggeredStageEnd()) {
-			//			//set mario's position inside the world
-			//			if (marioInstance->GetPosition().x < cameraInstance->GetPosition().x) {
-			//				marioInstance->SetPosition(D3DXVECTOR3(cameraInstance->GetPosition().x, marioInstance->GetPosition().y, 0));
-			//			}
-			//			else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
-			//				marioInstance->SetPosition(D3DXVECTOR3(static_cast<float>(sceneWidth) - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
-			//			}
-			//		}
+				if (!marioInstance->TriggeredStageEnd()) {
+					//set mario's position inside the world
+					if (marioInstance->GetPosition().x < cameraInstance->GetPosition().x) {
+						marioInstance->SetPosition(D3DXVECTOR3(cameraInstance->GetPosition().x, marioInstance->GetPosition().y, 0));
+					}
+					else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > cameraInstance->GetPosition().x + Game::GetInstance()->GetScreenWidth()) {
+						marioInstance->SetPosition(D3DXVECTOR3(marioInstance->GetPosition().x - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
+					}
+				}
+			}
+			else {
+				if (ind == 1) {
+					if (!marioInstance->TriggeredStageEnd()) {
+						//set mario's position inside the world
+						if (marioInstance->GetPosition().x < cameraInstance->GetPosition().x) {
+							marioInstance->SetPosition(D3DXVECTOR3(cameraInstance->GetPosition().x, marioInstance->GetPosition().y, 0));
+						}
+						else if ((marioInstance->GetPosition().x + marioInstance->GetBoxWidth()) > sceneWidth) {
+							marioInstance->SetPosition(D3DXVECTOR3(static_cast<float>(sceneWidth) - marioInstance->GetBoxWidth(), marioInstance->GetPosition().y, 0));
+						}
+					}
 
-			//		camPosition = marioInstance->GetPosition();
+					camPosition = marioInstance->GetPosition();
 
-			//		camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2.0f;
-			//		if (camPosition.x < cameraInstance->GetLimit(ind).left) {
-			//			camPosition.x = cameraInstance->GetLimit(ind).left;
-			//		}
-			//		else if (camPosition.x + Game::GetInstance()->GetScreenWidth() > cameraInstance->GetLimit(ind).right) {
-			//			camPosition.x = cameraInstance->GetLimit(ind).right - Game::GetInstance()->GetScreenWidth();
-			//		}
-			//	}
+					camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2.0f;
+					if (camPosition.x < cameraInstance->GetLimit(ind).left) {
+						camPosition.x = cameraInstance->GetLimit(ind).left;
+					}
+					else if (camPosition.x + Game::GetInstance()->GetScreenWidth() > cameraInstance->GetLimit(ind).right) {
+						camPosition.x = cameraInstance->GetLimit(ind).right - Game::GetInstance()->GetScreenWidth();
+					}
+				}
 
-			//	camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;
-			//	camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
+				camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;
+				camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
 
-			//	cameraInstance->SetPosition(camPosition);
-			//}
+				cameraInstance->SetPosition(camPosition);
+			}
 
-			camPosition = marioInstance->GetPosition();
+			/*camPosition = marioInstance->GetPosition();
 			camPosition.x -= Game::GetInstance()->GetScreenWidth() / 2.0f;
 			camPosition.y -= Game::GetInstance()->GetScreenHeight() / 2.0f;
 			camPosition.y = cameraInstance->GetLimit(ind).bottom - Game::GetInstance()->GetScreenHeight();
-			cameraInstance->SetPosition(camPosition);
+			cameraInstance->SetPosition(camPosition);*/
 			break;
 	}
 }

@@ -11,8 +11,6 @@ Mario::Mario() {
 	//2 - big
 	//3 - fire
 	//4 - racoon
-	hitPoints = 2;
-
 	scale = D3DXVECTOR2(-1.0f, 1.0f);
 }
 
@@ -77,7 +75,7 @@ RECTF Mario::GetBoundingBox(int id) const {
 			bound.left = position.x;
 			bound.top = position.y;
 
-			if (hitPoints == 1 || IsInMap()) {
+			if (hitPoints == 1 || IsInMap() || IsCrouching()) {
 				bound.right = position.x + hitBox.GetWidth(id);
 				bound.bottom = position.y + hitBox.GetHeight(id);
 			}
@@ -119,16 +117,17 @@ void Mario::ParseHitboxes(std::string line) {
 void Mario::ParseSettings(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
-	if (tokens.size() < 3) {
+	if (tokens.size() < 4) {
 		return;
 	}
 
-	lives = std::stoi(tokens.at(0));
-	coins = std::stoi(tokens.at(1));
-	score = std::stoi(tokens.at(2));
+	hitPoints = std::stoi(tokens.at(0));
+	lives = std::stoi(tokens.at(1));
+	coins = std::stoi(tokens.at(2));
+	score = std::stoi(tokens.at(3));
 
-	if (tokens.size() > 3) {
-		for (unsigned int i = 0; i < tokens.size(); ++i) {
+	if (tokens.size() > 4) {
+		for (unsigned int i = 4; i < tokens.size(); ++i) {
 			bonusItems.push_back(static_cast<Entity::ObjectType>(std::stoi(tokens.at(i))));
 		}
 	}
@@ -285,6 +284,13 @@ void Mario::HandleStates(BYTE* states) {
 		isHolding = false;
 	}	
 
+	if (Device::IsKeyDown(DIK_S)) {
+		isCrouching = true;
+	}
+	else {
+		isCrouching = false;
+	}
+
 	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() > static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 		HandleMovement();
 	}
@@ -326,6 +332,12 @@ void Mario::OnKeyDown(int keyCode) {
 			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 				velocity.y = 0.08f;
 			}
+			else {
+				if (!IsInPipe()) {
+					//not crouching
+					position.y -= GetBoxHeight();
+				}
+			}
 			break;
 		case DIK_A:
 			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
@@ -350,10 +362,10 @@ void Mario::OnKeyDown(int keyCode) {
 				}				
 			}
 
-			if (hitPoints == 4) {
-				if (!IsAttacking()) {
-					StartAttackTimer();
-				}
+			//tail attack
+			if (hitPoints == 4 && !IsAttacking()) {
+				StartAttackTimer();
+				velocity.x = 0.0f;
 			}
 			break;
 		case DIK_K:
@@ -390,6 +402,18 @@ void Mario::OnKeyDown(int keyCode) {
 	}
 }
 
+void Mario::OnKeyUp(int keyCode) {
+	switch (keyCode) {
+		case DIK_S:
+			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() > static_cast<int>(Scene::SceneType::SCENE_MAP)) {
+				if (!IsInPipe()) {
+					position.y -= GetBoxHeight();
+				}
+			}
+			break;
+	}
+}
+
 Fireball* Mario::SpawnFireball() {
 	Fireball* fireball = new Fireball;
 	fireball->SetObjectID(99);	
@@ -417,7 +441,7 @@ void Mario::HandleCurrentLives() {
 		lives = MAX_LIVES;
 	}
 	else if (lives < 0) {
-		lives = 0;
+		lives = DEFAULT_LIVES;
 	}
 }
 
@@ -448,8 +472,9 @@ void Mario::HandleStageEnd() {
 	}
 }
 
-void Mario::HandleBonusItems() {	
+void Mario::HandleBonusItems() {
 	if (bonusItems.size() == 3) {
+		OutputDebugStringA("YOU GOT A BONUS\n");
 		int shroomCount = 0;
 		int flowerCount = 0;
 		int startCount = 0;
@@ -486,6 +511,10 @@ void Mario::HandleBonusItems() {
 }
 
 void Mario::Update(DWORD delta, std::vector<GameObject*>* objects) {
+	/*char debug[100];
+	sprintf_s(debug, "Pos: %f %f\n", position.x, position.y);
+	OutputDebugStringA(debug);*/
+	
 	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 		isInMap = true;
 
@@ -1043,6 +1072,7 @@ void Mario::Render() {
 
 void Mario::Release() {
 	if (marioInstance) {
+		bonusItems.clear();
 		fireballs.clear();
 
 		if (texturePath) {

@@ -33,6 +33,7 @@ private:
 	//map
 	const float MAX_DISTANCE = 31.0f;
 
+	const unsigned int DEFAULT_LIVES = 3;
 	const unsigned int MAX_LIVES = 99;
 	const unsigned int MAX_COINS = 99;
 	const unsigned int MAX_SCORE = 9999999;
@@ -58,6 +59,7 @@ private:
 	bool isInMap;
 	bool isOnGround;
 	bool isHolding;
+	bool isCrouching;
 
 	const float MAX_GRAVITY = 0.0005f;
 	const float MAX_ACCEL = 2.2f;
@@ -131,6 +133,7 @@ public:
 	bool IsInMap() const { return isInMap; }
 	bool IsRunningKeyPressed() const { return isHolding; }
 	bool IsOnGround() const { return isOnGround; }
+	bool IsCrouching() const { return isCrouching; }
 	bool IsAttacking() const { return attackStart != 0; }
 	bool IsFlying() const { return flyStart != 0; }
 	bool IsInPipe() const { return inPipeStart != 0; }
@@ -151,7 +154,7 @@ public:
 	
 	void HandleStates(BYTE*);
 	void OnKeyDown(int);
-	void OnKeyUp(int) {}
+	void OnKeyUp(int);
 
 	Fireball* SpawnFireball();
 
