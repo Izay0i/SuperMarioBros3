@@ -128,5 +128,13 @@ void SelectText::Render() {
 }
 
 void SelectText::Release() {
+	if (texturePath) {
+		delete texturePath;
+		texturePath = nullptr;
+	}
 
+	if (texture) {
+		texture->Release();
+		texture = nullptr;
+	}
 }

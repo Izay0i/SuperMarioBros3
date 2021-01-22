@@ -154,7 +154,7 @@ void PiranaPlant::TakeDamage() {
 	tookDamage = true;
 
 	score *= multiplier;
-	++multiplier;
+	multiplier *= 2;
 	StartResetScoreTimer();
 }
 

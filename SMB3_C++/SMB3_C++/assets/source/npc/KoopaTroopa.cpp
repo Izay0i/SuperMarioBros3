@@ -185,7 +185,7 @@ void KoopaTroopa::TakeDamage() {
 		tookDamage = true;
 
 		score *= multiplier;
-		++multiplier;
+		multiplier *= 2;
 		StartResetScoreTimer();
 	}
 }

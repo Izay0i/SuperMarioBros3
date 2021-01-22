@@ -33,6 +33,15 @@ int Camera::GetHeight() const {
 	return camHeight;
 }
 
+RECTF Camera::GetViewport() const {
+	RECTF viewPort;
+	viewPort.left = position.x;
+	viewPort.top = position.y;
+	viewPort.right = position.x + Util::SCREEN_WIDTH;
+	viewPort.bottom = position.y + Util::SCREEN_HEIGHT;
+	return viewPort;
+}
+
 RECTF Camera::GetLimit(int ind) const {
 	return limits.at(ind);
 }

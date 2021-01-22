@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{50dd7360-9853-4b51-a1c9-23b6b09ff435}</ProjectGuid>
-    <RootNamespace>SMB3C</RootNamespace>
+    <ProjectGuid>{44aa21a3-4102-4661-8169-9b0e730efa2f}</ProjectGuid>
+    <RootNamespace>GenerateGrid</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,16 +72,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)include;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)lib\x86;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -94,9 +90,8 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;d3d9.lib;d3dx9.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,13 +114,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
-      <AdditionalDependencies>d3dx9.lib;d3d9.lib;dxguid.lib;dxerr.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,101 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="assets\source\AnimatedSprite.cpp" />
-    <ClCompile Include="assets\source\Background.cpp" />
-    <ClCompile Include="assets\source\Camera.cpp" />
-    <ClCompile Include="assets\source\Device.cpp" />
-    <ClCompile Include="assets\source\effects\BrickDebris.cpp" />
-    <ClCompile Include="assets\source\Game.cpp" />
-    <ClCompile Include="assets\source\GameObject.cpp" />
-    <ClCompile Include="assets\source\HitBox.cpp" />
-    <ClCompile Include="assets\source\hud\HUD.cpp" />
-    <ClCompile Include="assets\source\intro\Curtain.cpp" />
-    <ClCompile Include="assets\source\intro\Logo.cpp" />
-    <ClCompile Include="assets\source\intro\SelectText.cpp" />
-    <ClCompile Include="assets\source\map\Cactus.cpp" />
-    <ClCompile Include="assets\source\map\HammerBro.cpp" />
-    <ClCompile Include="assets\source\map\HelpPopUp.cpp" />
-    <ClCompile Include="assets\source\npc\1UPMushroom.cpp" />
-    <ClCompile Include="assets\source\npc\Boomerang.cpp" />
-    <ClCompile Include="assets\source\npc\BoomerBro.cpp" />
-    <ClCompile Include="assets\source\npc\Fireball.cpp" />
-    <ClCompile Include="assets\source\npc\Goomba.cpp" />
-    <ClCompile Include="assets\source\npc\KoopaTroopa.cpp" />
-    <ClCompile Include="assets\source\npc\Paragoomba.cpp" />
-    <ClCompile Include="assets\source\npc\Parakoopa.cpp" />
-    <ClCompile Include="assets\source\npc\PiranaPlant.cpp" />
-    <ClCompile Include="assets\source\npc\SuperLeaf.cpp" />
-    <ClCompile Include="assets\source\npc\SuperMushroom.cpp" />
-    <ClCompile Include="assets\source\npc\VenusFire.cpp" />
-    <ClCompile Include="assets\source\player\Mario.cpp" />
-    <ClCompile Include="assets\source\player\MarioStateMachine.cpp" />
-    <ClCompile Include="assets\source\Scene.cpp" />
-    <ClCompile Include="assets\source\SceneManager.cpp" />
-    <ClCompile Include="assets\source\spatial\Cell.cpp" />
-    <ClCompile Include="assets\source\spatial\Grid.cpp" />
-    <ClCompile Include="assets\source\Sprite.cpp" />
-    <ClCompile Include="assets\source\Tiles.cpp" />
-    <ClCompile Include="assets\source\tiles\BonusItem.cpp" />
-    <ClCompile Include="assets\source\tiles\Coin.cpp" />
-    <ClCompile Include="assets\source\tiles\MovingPlatform.cpp" />
-    <ClCompile Include="assets\source\tiles\Portal.cpp" />
-    <ClCompile Include="assets\source\tiles\QuestionBlock.cpp" />
-    <ClCompile Include="assets\source\tiles\ShinyBrick.cpp" />
-    <ClCompile Include="assets\source\tiles\SwitchBlock.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClInclude Include="..\SMB3_C++\assets\headers\Util.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="assets\headers\AnimatedSprite.h" />
-    <ClInclude Include="assets\headers\Background.h" />
-    <ClInclude Include="assets\headers\Camera.h" />
-    <ClInclude Include="assets\headers\Device.h" />
-    <ClInclude Include="assets\headers\effects\BrickDebris.h" />
-    <ClInclude Include="assets\headers\Entity.h" />
-    <ClInclude Include="assets\headers\Game.h" />
-    <ClInclude Include="assets\headers\GameObject.h" />
-    <ClInclude Include="assets\headers\HitBox.h" />
-    <ClInclude Include="assets\headers\hud\HUD.h" />
-    <ClInclude Include="assets\headers\intro\Curtain.h" />
-    <ClInclude Include="assets\headers\intro\Logo.h" />
-    <ClInclude Include="assets\headers\intro\SelectText.h" />
-    <ClInclude Include="assets\headers\map\Cactus.h" />
-    <ClInclude Include="assets\headers\map\HammerBro.h" />
-    <ClInclude Include="assets\headers\map\HelpPopUp.h" />
-    <ClInclude Include="assets\headers\NPCList.h" />
-    <ClInclude Include="assets\headers\npc\1UPMushroom.h" />
-    <ClInclude Include="assets\headers\npc\Boomerang.h" />
-    <ClInclude Include="assets\headers\npc\BoomerBro.h" />
-    <ClInclude Include="assets\headers\npc\Fireball.h" />
-    <ClInclude Include="assets\headers\npc\Goomba.h" />
-    <ClInclude Include="assets\headers\npc\KoopaTroopa.h" />
-    <ClInclude Include="assets\headers\npc\Paragoomba.h" />
-    <ClInclude Include="assets\headers\npc\Parakoopa.h" />
-    <ClInclude Include="assets\headers\npc\PiranaPlant.h" />
-    <ClInclude Include="assets\headers\npc\SuperLeaf.h" />
-    <ClInclude Include="assets\headers\npc\SuperMushroom.h" />
-    <ClInclude Include="assets\headers\npc\VenusFire.h" />
-    <ClInclude Include="assets\headers\player\Mario.h" />
-    <ClInclude Include="assets\headers\player\MarioStateMachine.h" />
-    <ClInclude Include="assets\headers\Scene.h" />
-    <ClInclude Include="assets\headers\SceneManager.h" />
-    <ClInclude Include="assets\headers\spatial\Cell.h" />
-    <ClInclude Include="assets\headers\spatial\Grid.h" />
-    <ClInclude Include="assets\headers\Sprite.h" />
-    <ClInclude Include="assets\headers\StateMachine.h" />
-    <ClInclude Include="assets\headers\TileList.h" />
-    <ClInclude Include="assets\headers\Tiles.h" />
-    <ClInclude Include="assets\headers\tiles\BonusItem.h" />
-    <ClInclude Include="assets\headers\tiles\Coin.h" />
-    <ClInclude Include="assets\headers\tiles\MovingPlatform.h" />
-    <ClInclude Include="assets\headers\tiles\Portal.h" />
-    <ClInclude Include="assets\headers\tiles\QuestionBlock.h" />
-    <ClInclude Include="assets\headers\tiles\ShinyBrick.h" />
-    <ClInclude Include="assets\headers\tiles\SwitchBlock.h" />
-    <ClInclude Include="assets\headers\Util.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClCompile Include="GenerateGrid.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

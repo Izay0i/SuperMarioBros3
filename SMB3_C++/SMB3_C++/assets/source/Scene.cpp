@@ -140,30 +140,30 @@ void Scene::ParseHUD(std::string line) {
 void Scene::ParseEntityData(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
-	if (tokens.size() < 3) {
+	if (tokens.size() < 5) {
 		return;
 	}
 
 	std::vector<std::string> extraData;
 
-	if (tokens.size() > 3) {
+	if (tokens.size() > 5) {
 		int objID = std::stoi(tokens.at(0));
 
 		if (objID == 100) {
-			for (unsigned int i = 3; i < tokens.size(); ++i) {
+			for (unsigned int i = 5; i < tokens.size(); ++i) {
 				extraData.push_back(tokens.at(i));
 			}
 		}
 		else {
 			//(variant) | objID | dataPath | texPath
 
-			unsigned int begin = 3;
+			unsigned int begin = 5;
 			//applies to bricks
 			//objID | amount | dataPath ..
 			if (objID == 103) {
-				extraData.push_back(tokens.at(3));
-				extraData.push_back(tokens.at(4));
-				begin = 5;
+				extraData.push_back(tokens.at(5));
+				extraData.push_back(tokens.at(6));
+				begin = 7;
 			}
 
 			for (unsigned int i = begin; i < tokens.size(); ++i) {
@@ -177,6 +177,10 @@ void Scene::ParseEntityData(std::string line) {
 		}
 	}
 
+	float posX = std::stof(tokens.at(3));
+	float posY = std::stof(tokens.at(4));
+	D3DXVECTOR3 position = D3DXVECTOR3(posX, posY, 0);
+
 	int texID = std::stoi(tokens.at(2));
 
 	GameObject* object = nullptr;
@@ -187,6 +191,7 @@ void Scene::ParseEntityData(std::string line) {
 			marioInstance = Mario::GetInstance();			
 			marioInstance->SetObjectID(static_cast<int>(objectID));
 			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
+			marioInstance->SetPosition(position);
 			break;
 		case Entity::ObjectType::OBJECT_TYPE_GOOMBA:
 			object = new Goomba;
@@ -253,6 +258,7 @@ void Scene::ParseEntityData(std::string line) {
 	if (object) {
 		object->SetObjectID(static_cast<int>(objectID));
 		dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
+		object->SetPosition(position);
 		objects.push_back(object);
 	}
 }
@@ -809,7 +815,7 @@ void Scene::UpdateCameraPosition(DWORD delta) {
 			cameraInstance->SetPosition(camPosition);
 			break;
 		case SceneType::SCENE_STAGEFOUR:		
-			if (camPosition.x + Game::GetInstance()->GetScreenWidth() < cameraInstance->GetLimit(0).right) {
+			if (marioInstance->GetCurrentHitPoints() > 0 && camPosition.x + Game::GetInstance()->GetScreenWidth() < cameraInstance->GetLimit(0).right) {
 				cameraInstance->Update(delta);
 
 				if (!marioInstance->TriggeredStageEnd()) {
@@ -1081,8 +1087,6 @@ void Scene::Update(DWORD delta) {
 
 			//change scene to overworld map
 			if (marioInstance->TriggeredStageEnd() || marioInstance->GetCurrentHitPoints() == 0) {
-				//SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
-
 				if (!IsTranstionStarting()) {
 					if (marioInstance->TriggeredStageEnd()) {
 						marioInstance->GetSceneRemainingTime(sceneTime);

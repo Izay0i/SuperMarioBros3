@@ -7,6 +7,9 @@
 #include <Windows.h>
 
 namespace Util {
+	const static unsigned int SCREEN_WIDTH = 264;
+	const static unsigned int SCREEN_HEIGHT = 264;
+
 	static std::vector<std::string> split(std::string line, char delimeter = '\t') {
 		std::vector<std::string> tokens;
 		size_t last = 0, next = 0;

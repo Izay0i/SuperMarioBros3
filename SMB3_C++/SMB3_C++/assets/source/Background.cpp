@@ -6,7 +6,7 @@ LPDIRECT3DTEXTURE9 Background::texture = nullptr;
 D3DCOLOR Background::colorKey = D3DCOLOR_XRGB(0, 0, 0);
 
 Background::Background() {
-
+	
 }
 
 Background* Background::GetInstance() {

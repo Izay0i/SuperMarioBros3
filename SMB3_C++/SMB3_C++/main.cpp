@@ -2,7 +2,7 @@
 
 #include "assets/headers/Game.h"
 
-//271
+//264
 const int SCREEN_WIDTH = 263;
 const int SCREEN_HEIGHT = 263;
 

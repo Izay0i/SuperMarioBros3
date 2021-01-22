@@ -128,5 +128,13 @@ void Logo::Render() {
 }
 
 void Logo::Release() {
+	if (texturePath) {
+		delete texturePath;
+		texturePath = nullptr;
+	}
 
+	if (texture) {
+		texture->Release();
+		texture = nullptr;
+	}
 }

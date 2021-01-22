@@ -5,24 +5,14 @@
 
 [ENTITY_DATA]
 #Mario
-0	assets\data\player\mario_data.txt	0
+0	assets\data\player\mario_data.txt	0	999	999
 
 #Logo
-997	assets\data\intro\logo_data.txt	1
+997	assets\data\intro\logo_data.txt	1	112	96
 #Select text
-998	assets\data\intro\selecttext_data.txt	1
+998	assets\data\intro\selecttext_data.txt	1	72	144
 #Curtain
-999	assets\data\intro\curtain_data.txt	1
-
-#obj_id	x	y
-[WORLD_COORDS]
-0	999	999
-
-997	112	96
-
-998	72	144
-
-999	0	0
+999	assets\data\intro\curtain_data.txt	1	0	0
 
 #left	top	right	bottom	world_x	world_y	tex_id
 [BACKGROUND]

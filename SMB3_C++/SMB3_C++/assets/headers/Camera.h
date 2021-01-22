@@ -25,6 +25,7 @@ public:
 
 	RECTF GetBoundingBox(int = 0) const override { return hitBox.GetBoundingBox(0); }
 	
+	RECTF GetViewport() const;
 	RECTF GetLimit(int = 0) const;
 	void AddLimit(RECTF);
 

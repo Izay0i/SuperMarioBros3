@@ -10,6 +10,7 @@
 
 class GameObject;
 class HitBox;
+class Cell;
 
 struct CollisionEvent;
 typedef CollisionEvent* LPCOLLISIONEVENT;
@@ -34,9 +35,13 @@ struct CollisionEvent {
 
 class GameObject {
 protected:
+	bool isActive;
+	
 	int objectID;
 	
 	HitBox hitBox;
+
+	Cell* ownerCell;
 
 	DWORD delta;
 
@@ -55,8 +60,14 @@ protected:
 	static LPD3DXSPRITE spriteHandler;
 	
 public:
-	GameObject() { normal.x = 1; }
+	GameObject() { normal.x = 1.0f; isActive = true; }
 	virtual ~GameObject() {}
+
+	virtual bool IsActive() const { return isActive; }
+	virtual void SetActiveStatus(bool b) { isActive = b; }
+
+	virtual Cell* GetOwnerCell() const { return ownerCell; }
+	virtual void SetOwnerCell(Cell* cell) { if (cell) { ownerCell = cell; } }
 
 	static void SweptAABB(RECTF, RECTF, D3DXVECTOR3, D3DXVECTOR3&, float&);
 	CollisionEvent* SweptAABBEx(GameObject*);

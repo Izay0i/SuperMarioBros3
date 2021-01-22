@@ -3,16 +3,12 @@
 
 #tex_id	file_path	r	g	b
 [TEXTURES]
-0	assets\textures\gestalt.jpg	255	0	255
+0	assets\textures\dante.jpg	255	0	255
 1	assets\textures\mario.png	68	145	190
 
 [ENTITY_DATA]
 #Mario
-0	assets\data\player\mario_data.txt	0
-
-#obj_id	x	y
-[WORLD_COORDS]
-0	999	999
+0	assets\data\player\mario_data.txt	0	999	999
 
 #left	top	right	bottom	world_x	world_y	tex_id
 [BACKGROUND]

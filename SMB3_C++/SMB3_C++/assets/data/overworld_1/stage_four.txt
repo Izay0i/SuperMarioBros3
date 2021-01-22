@@ -12,8 +12,8 @@
 2064	0	2576	240
 
 [TIME]
-#300
-999
+300
+#999
 
 #r	g	b
 [BGCOLOR]
@@ -31,7 +31,7 @@
 [HUD]
 assets\data\hud\hud_data.txt	4
 
-#obj_id	data_path	tex_id	extra_data
+#obj_id	data_path	tex_id	x	y	extra_data
 #extra_data can either be data for projectiles, enemies or sprites variants, etc...
 #default variant is red "r" if not specified
 
@@ -46,278 +46,140 @@ assets\data\hud\hud_data.txt	4
 
 [ENTITY_DATA]
 #Mario
-0	assets\data\player\mario_data.txt	0	assets\data\projectiles\fireball_data.txt	0
+0	assets\data\player\mario_data.txt	0	16	96	assets\data\projectiles\fireball_data.txt	0
 
-#Portal							destination	x		y
-100	assets\data\tiles\portal_data.txt	2	2199	160
-
-#Animated Tiles
-#Coin
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-101	assets\data\tiles\coin_data.txt	2
-#Question block
-102	assets\data\tiles\questionblock_data.txt	2	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2	br
-#Shiny brick
-#1UP											obj_id	amount	data_path						tex_id
-103	assets\data\tiles\shinybrick_data.txt	2	9	1	assets\data\npc\1upmushroom_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2	9	1	assets\data\npc\1upmushroom_data.txt	2
-#1UP
-#Coin
-103	assets\data\tiles\shinybrick_data.txt	2	101	11	assets\data\tiles\coin_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2	101	7	assets\data\tiles\coin_data.txt	2
-#Coin
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-103	assets\data\tiles\shinybrick_data.txt	2
-#Bonus item
-104	assets\data\tiles\bonusitem_data.txt	5
-
-#NPCs
-#Koopa troopa
-3	assets\data\npc\koopatroopa_data.txt	1
-3	assets\data\npc\koopatroopa_data.txt	1
-#Para troopa
-4	assets\data\npc\parakoopa_data.txt	1
-#Hammer bro
-7	assets\data\npc\boomerangbro_data.txt	1	assets\data\projectiles\boomerang_data.txt	1
-
-#Moving platforms
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-109	assets\data\tiles\movingplatform_data.txt	2
-
-#obj_id	x	y
-[WORLD_COORDS]
-0	16	96
-#0	1936	80
-
-#Portal
-100	1937	112
+#Portal													destination_x		y
+100	assets\data\tiles\portal_data.txt	2	1937	112	2199	160
 
 #Animated Tiles
 #Coin
-101	336	80
-101	352	80
-101	368	80
-101	416	48
-101	432	48
-101	448	48
-101	768	80
-101	784	80
-101	800	80
-101	848	48
-101	864	48
-101	880	48
-101	1328	64
-101	1344	64
-101	1360	64
-101	1504	48
-101	1504	64
-101	1504	80
-101	1504	96
-101	1504	112
-101	1504	128
-101	1504	144
-101	1504	160
-101	1888	80
-101	1904	80
-101	1920	80
+101	assets\data\tiles\coin_data.txt	2	336	80
+101	assets\data\tiles\coin_data.txt	2	352	80
+101	assets\data\tiles\coin_data.txt	2	368	80
+101	assets\data\tiles\coin_data.txt	2	416	48
+101	assets\data\tiles\coin_data.txt	2	432	48
+101	assets\data\tiles\coin_data.txt	2	448	48
+101	assets\data\tiles\coin_data.txt	2	768	80
+101	assets\data\tiles\coin_data.txt	2	784	80
+101	assets\data\tiles\coin_data.txt	2	800	80
+101	assets\data\tiles\coin_data.txt	2	848	48
+101	assets\data\tiles\coin_data.txt	2	864	48
+101	assets\data\tiles\coin_data.txt	2	880	48
+101	assets\data\tiles\coin_data.txt	2	1328	64
+101	assets\data\tiles\coin_data.txt	2	1344	64
+101	assets\data\tiles\coin_data.txt	2	1360	64
+101	assets\data\tiles\coin_data.txt	2	1504	48
+101	assets\data\tiles\coin_data.txt	2	1504	64
+101	assets\data\tiles\coin_data.txt	2	1504	80
+101	assets\data\tiles\coin_data.txt	2	1504	96
+101	assets\data\tiles\coin_data.txt	2	1504	112
+101	assets\data\tiles\coin_data.txt	2	1504	128
+101	assets\data\tiles\coin_data.txt	2	1504	144
+101	assets\data\tiles\coin_data.txt	2	1504	160
+101	assets\data\tiles\coin_data.txt	2	1888	80
+101	assets\data\tiles\coin_data.txt	2	1904	80
+101	assets\data\tiles\coin_data.txt	2	1920	80
 #Question block
-102	960	128
+102	assets\data\tiles\questionblock_data.txt	2	960	128	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2	br
 #Shiny brick
-#1UP
-103	640	64
-103	1232	64
+#1UP													obj_id	amount	data_path						tex_id
+103	assets\data\tiles\shinybrick_data.txt	2	640	64	9	1	assets\data\npc\1upmushroom_data.txt	2
+103	assets\data\tiles\shinybrick_data.txt	2	1232	64	9	1	assets\data\npc\1upmushroom_data.txt	2
 #1UP
 #Coin
-103	1008	128
-103	1536	64
+103	assets\data\tiles\shinybrick_data.txt	2	1008	128	101	11	assets\data\tiles\coin_data.txt	2
+103	assets\data\tiles\shinybrick_data.txt	2	1536	64	101	7	assets\data\tiles\coin_data.txt	2
 #Coin
-103	224	128
-103	240	128
-103	256	128
-103	272	128
-103	384	112
-103	400	112
-103	416	112
-103	432	112
-103	448	112
-103	608	64
-103	624	64
-103	656	64
-103	640	144
-103	656	144
-103	752	96
-103	752	112
-103	752	128
-103	752	144
-103	768	144
-103	784	144
-103	800	144
-103	864	112
-103	864	128
-103	864	144
-103	864	160
-103	880	160
-103	896	160
-103	944	112
-103	944	128
-103	960	176
-103	976	176
-103	992	176
-103	1008	176
-103	1024	128
-103	1040	128
-103	1056	128
-103	1072	128
-103	1152	160
-103	1168	160
-103	1184	160
-103	1200	160
-103	1216	160
-103	1184	80
-103	1200	80
-103	1216	80
-103	1232	80
-103	1264	144
-103	1280	144
-103	1392	80
-103	1408	80
-103	1424	80
-103	1536	80
-103	1536	144
-103	1536	160
-103	1536	176
-103	1552	176
-103	1568	176
-103	1584	176
-103	1728	64
-103	1728	80
-103	1728	96
-103	1776	144
-103	1792	144
-103	1808	144
+103	assets\data\tiles\shinybrick_data.txt	2	224	128
+103	assets\data\tiles\shinybrick_data.txt	2	240	128
+103	assets\data\tiles\shinybrick_data.txt	2	256	128
+103	assets\data\tiles\shinybrick_data.txt	2	272	128
+103	assets\data\tiles\shinybrick_data.txt	2	384	112
+103	assets\data\tiles\shinybrick_data.txt	2	400	112
+103	assets\data\tiles\shinybrick_data.txt	2	416	112
+103	assets\data\tiles\shinybrick_data.txt	2	432	112
+103	assets\data\tiles\shinybrick_data.txt	2	448	112
+103	assets\data\tiles\shinybrick_data.txt	2	608	64
+103	assets\data\tiles\shinybrick_data.txt	2	624	64
+103	assets\data\tiles\shinybrick_data.txt	2	656	64
+103	assets\data\tiles\shinybrick_data.txt	2	640	144
+103	assets\data\tiles\shinybrick_data.txt	2	656	144
+103	assets\data\tiles\shinybrick_data.txt	2	752	96
+103	assets\data\tiles\shinybrick_data.txt	2	752	112
+103	assets\data\tiles\shinybrick_data.txt	2	752	128
+103	assets\data\tiles\shinybrick_data.txt	2	752	144
+103	assets\data\tiles\shinybrick_data.txt	2	768	144
+103	assets\data\tiles\shinybrick_data.txt	2	784	144
+103	assets\data\tiles\shinybrick_data.txt	2	800	144
+103	assets\data\tiles\shinybrick_data.txt	2	864	112
+103	assets\data\tiles\shinybrick_data.txt	2	864	128
+103	assets\data\tiles\shinybrick_data.txt	2	864	144
+103	assets\data\tiles\shinybrick_data.txt	2	864	160
+103	assets\data\tiles\shinybrick_data.txt	2	880	160
+103	assets\data\tiles\shinybrick_data.txt	2	896	160
+103	assets\data\tiles\shinybrick_data.txt	2	944	112
+103	assets\data\tiles\shinybrick_data.txt	2	944	128
+103	assets\data\tiles\shinybrick_data.txt	2	960	176
+103	assets\data\tiles\shinybrick_data.txt	2	976	176
+103	assets\data\tiles\shinybrick_data.txt	2	992	176
+103	assets\data\tiles\shinybrick_data.txt	2	1008	176
+103	assets\data\tiles\shinybrick_data.txt	2	1024	128
+103	assets\data\tiles\shinybrick_data.txt	2	1040	128
+103	assets\data\tiles\shinybrick_data.txt	2	1056	128
+103	assets\data\tiles\shinybrick_data.txt	2	1072	128
+103	assets\data\tiles\shinybrick_data.txt	2	1152	160
+103	assets\data\tiles\shinybrick_data.txt	2	1168	160
+103	assets\data\tiles\shinybrick_data.txt	2	1184	160
+103	assets\data\tiles\shinybrick_data.txt	2	1200	160
+103	assets\data\tiles\shinybrick_data.txt	2	1216	160
+103	assets\data\tiles\shinybrick_data.txt	2	1184	80
+103	assets\data\tiles\shinybrick_data.txt	2	1200	80
+103	assets\data\tiles\shinybrick_data.txt	2	1216	80
+103	assets\data\tiles\shinybrick_data.txt	2	1232	80
+103	assets\data\tiles\shinybrick_data.txt	2	1264	144
+103	assets\data\tiles\shinybrick_data.txt	2	1280	144
+103	assets\data\tiles\shinybrick_data.txt	2	1392	80
+103	assets\data\tiles\shinybrick_data.txt	2	1408	80
+103	assets\data\tiles\shinybrick_data.txt	2	1424	80
+103	assets\data\tiles\shinybrick_data.txt	2	1536	80
+103	assets\data\tiles\shinybrick_data.txt	2	1536	144
+103	assets\data\tiles\shinybrick_data.txt	2	1536	160
+103	assets\data\tiles\shinybrick_data.txt	2	1536	176
+103	assets\data\tiles\shinybrick_data.txt	2	1552	176
+103	assets\data\tiles\shinybrick_data.txt	2	1568	176
+103	assets\data\tiles\shinybrick_data.txt	2	1584	176
+103	assets\data\tiles\shinybrick_data.txt	2	1728	64
+103	assets\data\tiles\shinybrick_data.txt	2	1728	80
+103	assets\data\tiles\shinybrick_data.txt	2	1728	96
+103	assets\data\tiles\shinybrick_data.txt	2	1776	144
+103	assets\data\tiles\shinybrick_data.txt	2	1792	144
+103	assets\data\tiles\shinybrick_data.txt	2	1808	144
 #Bonus item
-104	2448	113
+104	assets\data\tiles\bonusitem_data.txt	5	2448	113
 
 #NPCs
 #Koopa troopa
-3	1072	96
-3	1984	112
+3	assets\data\npc\koopatroopa_data.txt	1	1072	96
+3	assets\data\npc\koopatroopa_data.txt	1	1984	112
 #Para troopa
-4	1872	64
+4	assets\data\npc\parakoopa_data.txt	1	1872	64
 #Hammer bro
-7	2096	160
+7	assets\data\npc\boomerangbro_data.txt	1	2096	160	assets\data\projectiles\boomerang_data.txt	1
 
 #Moving platforms
-109	368	96
-109	593	80
-109	560	128
-109	624	176
-109	752	112
-109	1088	160
-109	1200	96
-109	1376	128
-109	1408	112
-109	1552	80
-109	1744	160
-109	1776	112
-109	1792	192
+109	assets\data\tiles\movingplatform_data.txt	2	368	96
+109	assets\data\tiles\movingplatform_data.txt	2	593	80
+109	assets\data\tiles\movingplatform_data.txt	2	560	128
+109	assets\data\tiles\movingplatform_data.txt	2	624	176
+109	assets\data\tiles\movingplatform_data.txt	2	752	112
+109	assets\data\tiles\movingplatform_data.txt	2	1088	160
+109	assets\data\tiles\movingplatform_data.txt	2	1200	96
+109	assets\data\tiles\movingplatform_data.txt	2	1376	128
+109	assets\data\tiles\movingplatform_data.txt	2	1408	112
+109	assets\data\tiles\movingplatform_data.txt	2	1552	80
+109	assets\data\tiles\movingplatform_data.txt	2	1744	160
+109	assets\data\tiles\movingplatform_data.txt	2	1776	112
+109	assets\data\tiles\movingplatform_data.txt	2	1792	192
 
 #You know at first I wanted each tiles to render their own texture to keep things seperated, 
 #but after a while I realize I could just throw everything into [BACKGROUND] not bother with it at all.
@@ -853,7 +715,6 @@ assets\data\hud\hud_data.txt	4
 715	69	730	84	2512	176	2
 732	69	747	84	2528	176	2
 732	86	747	101	2544	176	2
-
 
 #bonus_square
 650	106	675	131	2443	107	2

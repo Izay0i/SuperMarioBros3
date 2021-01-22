@@ -137,5 +137,13 @@ void Curtain::Render() {
 }
 
 void Curtain::Release() {
+	if (texturePath) {
+		delete texturePath;
+		texturePath = nullptr;
+	}
 
+	if (texture) {
+		texture->Release();
+		texture = nullptr;
+	}
 }

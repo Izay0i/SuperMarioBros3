@@ -11,6 +11,8 @@
 
 #include "Game.h"
 #include "GameObject.h"
+#include "spatial/Grid.h"
+
 #include "Background.h"
 #include "Entity.h"
 #include "Camera.h"
@@ -36,12 +38,15 @@ private:
 		SCENE_FILE_SECTION_BGCOLOR,
 		SCENE_FILE_SECTION_TEXTURES,
 		SCENE_FILE_SECTION_HUD,
+		SCENE_FILE_SECTION_GRID,
 		SCENE_FILE_SECTION_ENTITYDATA,
 		SCENE_FILE_SECTION_WORLDCOORDS,
 		SCENE_FILE_SECTION_TILESDATA,
 		SCENE_FILE_SECTION_TILESPRITES,
 		SCENE_FILE_SECTION_BACKGROUND
 	};
+
+	Grid* grid;
 
 	Mario* marioInstance;
 	HUD* hudInstance;
@@ -79,6 +84,7 @@ private:
 	void ParseBGColor(std::string);
 	void ParseTextures(std::string);
 	void ParseHUD(std::string);
+	void ParseGrid(std::string);
 	void ParseEntityData(std::string);
 	void ParseWorldCoords(std::string);
 	void ParseTilesData(std::string);

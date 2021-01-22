@@ -332,12 +332,6 @@ void Mario::OnKeyDown(int keyCode) {
 			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
 				velocity.y = 0.08f;
 			}
-			else if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() > static_cast<int>(Scene::SceneType::SCENE_MAP)) {
-				if (!IsInPipe()) {
-					//not crouching
-					position.y -= GetBoxHeight();
-				}
-			}
 			break;
 		case DIK_A:
 			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
@@ -352,21 +346,23 @@ void Mario::OnKeyDown(int keyCode) {
 			normal.x = 1;
 			break;
 		case DIK_J:
-			if (hitPoints == 3 && !Device::IsKeyDown(DIK_S)) {
-				if (fireballs.size() < 2) {
-					fireballs.push_back(SpawnFireball());
+			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() > static_cast<int>(Scene::SceneType::SCENE_MAP)) {
+				if (hitPoints == 3 && !Device::IsKeyDown(DIK_S)) {
+					if (fireballs.size() < 2) {
+						fireballs.push_back(SpawnFireball());
 
-					for (Fireball* fireball : fireballs) {
-						SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(fireball);
+						for (Fireball* fireball : fireballs) {
+							SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(fireball);
+						}
 					}
-				}				
-			}
+				}
 
-			//tail attack
-			if (hitPoints == 4 && !IsAttacking()) {
-				StartAttackTimer();
-				velocity.x = 0.0f;
-			}
+				//tail attack
+				if (hitPoints == 4 && !IsAttacking()) {
+					StartAttackTimer();
+					velocity.x = 0.0f;
+				}
+			}	
 			break;
 		case DIK_K:
 			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == static_cast<int>(Scene::SceneType::SCENE_MAP)) {
@@ -406,8 +402,9 @@ void Mario::OnKeyUp(int keyCode) {
 	switch (keyCode) {
 		case DIK_S:
 			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() > static_cast<int>(Scene::SceneType::SCENE_MAP)) {
-				if (!IsInPipe()) {
-					position.y -= GetBoxHeight();
+				if (!IsInPipe() && IsOnGround() && hitPoints > 1) {
+					velocity.y = -0.3f;
+					isOnGround = false;
 				}
 			}
 			break;
