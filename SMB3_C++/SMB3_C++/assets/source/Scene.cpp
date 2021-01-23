@@ -34,6 +34,69 @@ int Scene::GetSceneHeight() const {
 	return sceneHeight;
 }
 
+std::vector<GameObject*> Scene::GetActiveObjects() {
+	/*std::vector<GameObject*> activeObjects = grid->GetActiveObjects();
+
+	for (unsigned int i = 0; i < objects.size(); ++i) {
+		if ((objects.at(i)->GetObjectID() < 201 && objects.at(i)->IsActive()) || objects.at(i)->GetObjectID() >= 201) {
+			if (find(activeObjects.begin(), activeObjects.end(), objects.at(i)) == activeObjects.end()) {
+				activeObjects.push_back(objects.at(i));
+				
+				char debug[100];
+				sprintf_s(debug, "Active object ID: %d\n", activeObjects.at(i)->GetObjectID());
+			}
+		}
+	}
+
+	return activeObjects;*/
+
+	std::vector<GameObject*> activeObjects;
+
+	for (auto object : objects) {
+		if ((object->GetPosition().x + object->GetBoxWidth() >= cameraInstance->GetViewport().left) &&
+			(object->GetPosition().x <= cameraInstance->GetViewport().left + cameraInstance->GetViewport().right) &&
+			(object->GetPosition().y + object->GetBoxHeight() >= cameraInstance->GetViewport().top) &&
+			(object->GetPosition().y <= cameraInstance->GetViewport().top + cameraInstance->GetViewport().bottom))
+		{
+			if (find(activeObjects.begin(), activeObjects.end(), object) == activeObjects.end()) {
+				//OutputDebugStringA("Active\n");
+				activeObjects.push_back(object);
+			}
+		}
+		else {
+			if (find(disabledObjects.begin(), disabledObjects.end(), object) == disabledObjects.end()) {
+				disabledObjects.push_back(object);
+			}
+		}
+	}
+
+	return activeObjects;
+}
+
+std::vector<GameObject*> Scene::GetDisabledObjects() {
+	std::vector<GameObject*> disabledObjects;
+
+	for (auto object : objects) {
+		if ((object->GetPosition().x + object->GetBoxWidth() < cameraInstance->GetViewport().left) ||
+			(object->GetPosition().x > cameraInstance->GetViewport().left + cameraInstance->GetViewport().right) ||
+			(object->GetPosition().y + object->GetBoxHeight() < cameraInstance->GetViewport().top) ||
+			(object->GetPosition().y > cameraInstance->GetViewport().top + cameraInstance->GetViewport().bottom)) 
+		{
+			if (find(disabledObjects.begin(), disabledObjects.end(), object) == disabledObjects.end()) {
+				//OutputDebugStringA("Disabled\n");
+				disabledObjects.push_back(object);
+			}
+		}
+		else {
+			if (find(activeObjects.begin(), activeObjects.end(), object) == activeObjects.end()) {
+				activeObjects.push_back(object);
+			}
+		}
+	}
+
+	return disabledObjects;
+}
+
 DWORD Scene::GetSceneTime() const {
 	return sceneTime;
 }
@@ -137,6 +200,64 @@ void Scene::ParseHUD(std::string line) {
 	hudInstance->ParseData(tokens.at(0), GetTexturePath(texID), GetTextureColorKey(texID));
 }
 
+void Scene::ParseGrid(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 1) {
+		return;
+	}
+
+	std::string gridFilePath = tokens.at(0);
+
+	std::ifstream inputFile;
+	inputFile.open(gridFilePath, std::ios::in);
+
+	if (!inputFile.is_open()) {
+		OutputDebugStringA("[GRID] Failed to open grid file\n");
+		return;
+	}
+
+	SceneSection section = SceneSection::SCENE_FILE_SECTION_UNKNOWN;
+
+	char str[MAX_FILE_LINE];
+	while (inputFile.getline(str, MAX_FILE_LINE)) {
+		std::string line(str);
+
+		if (line.empty() || line.front() == '#') {
+			continue;
+		}
+
+		if (line == "[GRID_SIZE]") {
+			section = SceneSection::SCENE_FILE_SECTION_GRID;
+			continue;
+		}
+
+		if (line == "[ENTITY_DATA]") {
+			section = SceneSection::SCENE_FILE_SECTION_ENTITYDATA;
+			continue;
+		}
+
+		if (line == "[TILES_DATA]") {
+			section = SceneSection::SCENE_FILE_SECTION_TILESDATA;
+			continue;
+		}
+
+		switch (section) {
+			case SceneSection::SCENE_FILE_SECTION_GRID:
+				LoadGrid(line);
+				break;
+			case SceneSection::SCENE_FILE_SECTION_ENTITYDATA:
+				LoadGridEntities(line);
+				break;
+			case SceneSection::SCENE_FILE_SECTION_TILESDATA:
+				LoadGridTiles(line);
+				break;
+		}
+	}
+
+	inputFile.close();
+}
+
 void Scene::ParseEntityData(std::string line) {
 	std::vector<std::string> tokens = Util::split(line);
 
@@ -176,7 +297,7 @@ void Scene::ParseEntityData(std::string line) {
 			}
 		}
 	}
-
+	
 	float posX = std::stof(tokens.at(3));
 	float posY = std::stof(tokens.at(4));
 	D3DXVECTOR3 position = D3DXVECTOR3(posX, posY, 0);
@@ -192,6 +313,10 @@ void Scene::ParseEntityData(std::string line) {
 			marioInstance->SetObjectID(static_cast<int>(objectID));
 			marioInstance->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
 			marioInstance->SetPosition(position);
+			
+			/*if (grid) {
+				grid->InitObjects(marioInstance);
+			}*/
 			break;
 		case Entity::ObjectType::OBJECT_TYPE_GOOMBA:
 			object = new Goomba;
@@ -260,247 +385,10 @@ void Scene::ParseEntityData(std::string line) {
 		dynamic_cast<Entity*>(object)->ParseData(tokens.at(1), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
 		object->SetPosition(position);
 		objects.push_back(object);
-	}
-}
-
-void Scene::ParseWorldCoords(std::string line) {
-	std::vector<std::string> tokens = Util::split(line);
-
-	if (tokens.size() < 3) {
-		return;
-	}
-
-	float posX = std::stof(tokens.at(1));
-	float posY = std::stof(tokens.at(2));
-	D3DXVECTOR3 position(posX, posY, 0);
-
-	Entity::ObjectType objectID = static_cast<Entity::ObjectType>(std::stoi(tokens.at(0)));
-	switch (objectID) {
-		case Entity::ObjectType::OBJECT_TYPE_MARIO:
-			marioInstance->SetPosition(position);
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_GOOMBA:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<Goomba*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_PARAGOOMBA:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<Paragoomba*>(object)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_TROOPA:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<KoopaTroopa*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_PARATROOPA:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<Parakoopa*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_PIPLANT:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<PiranaPlant*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_VENUSTRAP:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<VenusFire*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_BOOMERBRO:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<BoomerBro*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_PORTAL:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<Portal*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return; //dunno why i put the return statement here
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_COIN:
-			for (GameObject* object : objects) {
-				//dumbass way to check if position is not set
-				//but its almost 2am and im too tired to think of another way
-				if (dynamic_cast<Coin*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {					
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<QuestionBlock*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_SHINYBRICK:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<ShinyBrick*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_BONUSITEM:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<BonusItem*>(object)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<SwitchBlock*>(object)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_CACTUS:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<Cactus*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_HELP:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<HelpPopUp*>(object)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_HAMMERBRONODE:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<HammerBro*>(object)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_MOVINGPLATFORM:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<MovingPlatform*>(object) && object->GetPosition() == D3DXVECTOR3(0, 0, 0)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_LOGO:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<Logo*>(object)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_SELECT:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<SelectText*>(object)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
-		case Entity::ObjectType::OBJECT_TYPE_CURTAIN:
-			for (GameObject* object : objects) {
-				if (dynamic_cast<Curtain*>(object)) {
-					int objectID = std::stoi(tokens.at(0));
-					if (object->GetObjectID() == objectID) {
-						object->SetPosition(position);
-					}
-					return;
-				}
-			}
-			break;
+		
+		/*if (grid) {
+			grid->InitObjects(object);
+		}*/
 	}
 }
 
@@ -530,6 +418,10 @@ void Scene::ParseTilesData(std::string line) {
 
 	if (tile) {
 		objects.push_back(tile);
+
+		/*if (grid) {
+			grid->InitObjects(tile);
+		}*/
 	}
 }
 
@@ -595,6 +487,183 @@ void Scene::ParseBackground(std::string line) {
 	bgInstance = Background::GetInstance();
 	bgInstance->LoadTexture(GetTexturePath(texID), GetTextureColorKey(texID));
 	bgInstance->AddImage(bound, pos);
+}
+
+void Scene::LoadGrid(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 2) {
+		return;
+	}
+
+	unsigned int gridWidth = std::stoi(tokens.at(0));
+	unsigned int gridHeight = std::stoi(tokens.at(1));
+
+	grid = new Grid(gridWidth, gridHeight);
+}
+
+void Scene::LoadGridEntities(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 7) {
+		return;
+	}
+
+	std::vector<std::string> extraData;
+
+	if (tokens.size() > 7) {
+		int objID = std::stoi(tokens.at(2));
+
+		if (objID == 100) {
+			for (unsigned int i = 7; i < tokens.size(); ++i) {
+				extraData.push_back(tokens.at(i));
+			}
+		}
+		else {
+			//(variant) | objID | dataPath | texPath
+
+			unsigned int begin = 7;
+			//applies to bricks
+			//objID | amount | dataPath ..
+			if (objID == 103) {
+				extraData.push_back(tokens.at(7));
+				extraData.push_back(tokens.at(8));
+				begin = 9;
+			}
+
+			for (unsigned int i = begin; i < tokens.size(); ++i) {
+				if (IsInteger(tokens.at(i))) {
+					extraData.push_back(GetTexturePath(std::stoi(tokens.at(i))));
+				}
+				else {
+					extraData.push_back(tokens.at(i));
+				}
+			}
+		}
+	}
+
+	int cellX = std::stoi(tokens.at(0));
+	int cellY = std::stoi(tokens.at(1));
+
+	float posX = std::stof(tokens.at(5));
+	float posY = std::stof(tokens.at(6));
+	D3DXVECTOR3 position = D3DXVECTOR3(posX, posY, 0);
+
+	int texID = std::stoi(tokens.at(4));
+
+	GameObject* object = nullptr;
+
+	Entity::ObjectType objectID = static_cast<Entity::ObjectType>(std::stoi(tokens.at(2)));
+	switch (objectID) {
+		case Entity::ObjectType::OBJECT_TYPE_MARIO:
+			marioInstance = Mario::GetInstance();
+			marioInstance->SetObjectID(static_cast<int>(objectID));
+			marioInstance->ParseData(tokens.at(3), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
+			marioInstance->SetPosition(position);
+			grid->InitObjects(marioInstance, cellX, cellY);
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_GOOMBA:
+			object = new Goomba;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_PARAGOOMBA:
+			object = new Paragoomba;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_TROOPA:
+			object = new KoopaTroopa;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_PARATROOPA:
+			object = new Parakoopa;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_PIPLANT:
+			object = new PiranaPlant;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_VENUSTRAP:
+			object = new VenusFire;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_BOOMERBRO:
+			object = new BoomerBro;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_PORTAL:
+			object = new Portal;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_COIN:
+			object = new Coin;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_QUESTIONBLOCK:
+			object = new QuestionBlock;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_SHINYBRICK:
+			object = new ShinyBrick;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_BONUSITEM:
+			object = new BonusItem;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_SWITCHBLOCK:
+			object = new SwitchBlock;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_CACTUS:
+			object = new Cactus;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_HELP:
+			object = new HelpPopUp;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_HAMMERBRONODE:
+			object = new HammerBro;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_MOVINGPLATFORM:
+			object = new MovingPlatform;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_LOGO:
+			object = new Logo;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_SELECT:
+			object = new SelectText;
+			break;
+		case Entity::ObjectType::OBJECT_TYPE_CURTAIN:
+			object = new Curtain;
+			break;
+	}
+
+	if (object) {
+		object->SetObjectID(static_cast<int>(objectID));
+		dynamic_cast<Entity*>(object)->ParseData(tokens.at(3), GetTexturePath(texID), GetTextureColorKey(texID), extraData);
+		object->SetPosition(position);
+		objects.push_back(object);
+		grid->InitObjects(object, cellX, cellY);
+	}
+}
+
+void Scene::LoadGridTiles(std::string line) {
+	std::vector<std::string> tokens = Util::split(line);
+
+	if (tokens.size() < 8) {
+		return;
+	}
+
+	int cellX = std::stoi(tokens.at(0));
+	int cellY = std::stoi(tokens.at(1));
+
+	Tiles* tile = new Tiles;
+	tile->SetObjectID(std::stoi(tokens.at(2)));
+	tile->SetSpritesArrID(std::stoi(tokens.at(7)));
+
+	float posX, posY;
+
+	RECTF hitbox;
+	hitbox.left = posX = std::stof(tokens.at(3));
+	hitbox.top = posY = std::stof(tokens.at(4));
+	hitbox.right = std::stof(tokens.at(5));
+	hitbox.bottom = std::stof(tokens.at(6));
+
+	D3DXVECTOR3 position(posX, posY, 0);
+
+	tile->SetPosition(position);
+	tile->AddHitBox(hitbox);
+
+	if (tile) {
+		objects.push_back(tile);
+		grid->InitObjects(tile, cellX, cellY);
+	}
 }
 
 void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
@@ -666,13 +735,13 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 			continue;
 		}
 
-		if (line == "[ENTITY_DATA]") {
-			section = SceneSection::SCENE_FILE_SECTION_ENTITYDATA;
+		if (line == "[GRID]") {
+			section = SceneSection::SCENE_FILE_SECTION_GRID;
 			continue;
 		}
 
-		if (line == "[WORLD_COORDS]") {
-			section = SceneSection::SCENE_FILE_SECTION_WORLDCOORDS;
+		if (line == "[ENTITY_DATA]") {
+			section = SceneSection::SCENE_FILE_SECTION_ENTITYDATA;
 			continue;
 		}
 
@@ -710,11 +779,11 @@ void Scene::Load(const LPDIRECT3DDEVICE9& device, const LPD3DXSPRITE& handler) {
 			case SceneSection::SCENE_FILE_SECTION_HUD:
 				ParseHUD(line);
 				break;
+			case SceneSection::SCENE_FILE_SECTION_GRID:
+				ParseGrid(line);
+				break;
 			case SceneSection::SCENE_FILE_SECTION_ENTITYDATA:
 				ParseEntityData(line);
-				break;			
-			case SceneSection::SCENE_FILE_SECTION_WORLDCOORDS:
-				ParseWorldCoords(line);
 				break;
 			case SceneSection::SCENE_FILE_SECTION_TILESDATA:
 				ParseTilesData(line);
@@ -752,6 +821,7 @@ void Scene::Unload() {
 		cameraInstance->Release();
 	}
 
+	activeObjects.clear();
 	for (GameObject* object : objects) {
 		if (object) {
 			object->Release();
@@ -891,12 +961,17 @@ void Scene::Update(DWORD delta) {
 		sprintf_s(debug, "[UPDATE] No mario, scene ID: %d\n", sceneID);
 		OutputDebugStringA(debug);
 		return;
-	}
+	}	
 
 	std::vector<GameObject*> collidableObjects;
 	for (GameObject* object : objects) {
 		collidableObjects.push_back(object);
 	}
+
+	/*if (grid) {
+		grid->Update();
+		activeObjects = GetActiveObjects();
+	}*/
 
 	switch (static_cast<SceneType>(sceneID)) {
 		case SceneType::SCENE_INTRO:
@@ -982,7 +1057,7 @@ void Scene::Update(DWORD delta) {
 
 			if (marioInstance->GetCurrentHitPoints() > 0) {
 				for (unsigned int i = 0; i < objects.size(); ++i) {
-					objects.at(i)->Update(delta, &collidableObjects);
+					objects.at(i)->Update(delta, &objects);
 
 					//add score if mario hits the entity
 					if (dynamic_cast<Entity*>(objects.at(i))) {
@@ -1125,21 +1200,7 @@ void Scene::Render() {
 	}
 
 	for (GameObject* object : objects) {
-		if (!dynamic_cast<Entity*>(object)) {
-			object->Render();
-		}
-	}
-
-	for (GameObject* object : objects) {
-		if (dynamic_cast<Entity*>(object)) {
-			object->Render();
-		}
-	}
-	
-	for (GameObject* object : objects) {
-		if (dynamic_cast<PiranaPlant*>(object)) {
-			object->Render();
-		}
+		object->Render();
 	}
 
 	if (marioInstance) {

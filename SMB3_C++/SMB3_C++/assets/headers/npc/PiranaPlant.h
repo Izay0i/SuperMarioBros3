@@ -27,8 +27,8 @@ protected:
 
 	DWORD removeTime = 100;
 	
-	DWORD coolDownStart;
-	DWORD coolDownTime = 2000;
+	DWORD retractStart;
+	DWORD retractTime = 2000;
 
 	D3DXVECTOR3 originalPos;
 
@@ -48,8 +48,8 @@ public:
 
 	virtual void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>()) override;
 
-	virtual void StartCoolDownTimer() { coolDownStart = static_cast<DWORD>(GetTickCount64()); }
-	virtual bool IsOnCoolDown() const { return coolDownStart != 0; }
+	virtual void StartRetractTimer() { retractStart = static_cast<DWORD>(GetTickCount64()); }
+	virtual bool IsRetracting() const { return retractStart != 0; }
 
 	virtual void SetPosition(D3DXVECTOR3 pos) override { position = pos; originalPos = position; }
 

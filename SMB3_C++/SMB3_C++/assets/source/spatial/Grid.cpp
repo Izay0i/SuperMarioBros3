@@ -1,46 +1,51 @@
 #include "../../headers/spatial/Grid.h"
 
-Grid::Grid(unsigned int mapWidth, unsigned int mapHeight) {
+Grid::Grid(int mapWidth, int mapHeight) {
 	xCells = mapWidth / Cell::CELL_WIDTH;
 	yCells = mapHeight / Cell::CELL_HEIGHT;
 
-	rows = mapWidth / Cell::CELL_WIDTH;
-	columns = mapHeight / Cell::CELL_HEIGHT;
+	rows = static_cast<int>(ceil(static_cast<float>(mapWidth) / Cell::CELL_WIDTH));
+	columns = static_cast<int>(ceil(static_cast<float>(mapHeight) / Cell::CELL_WIDTH));
 
-	for (unsigned int y = 0; y < rows; ++y) {
-		std::vector<Cell*> row;
-		for (unsigned int x = 0; x < columns; ++x) {
-			row.push_back(new Cell(x, y));
+	for (int y = 0; y < columns; ++y) {
+		auto column = std::vector<Cell*>();
+		for (int x = 0; x < rows; ++x) {
+			column.push_back(new Cell(x, y));
 		}
-		cells.push_back(row);
+		cells.push_back(column);
 	}
 }
 
 Grid::~Grid() {
-
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < columns; ++j) {
+			delete cells.at(i).at(j);
+		}
+	}
+	cells.clear();
 }
 
 Cell* Grid::GetCell(int x, int y) {
 	if (x < 0) {
 		x = 0;
 	}
-	else if (static_cast<unsigned int>(x) >= xCells) {
-		x = xCells;
+	else if (x >= columns) {
+		x = columns - 1;
 	}
 
 	if (y < 0) {
 		y = 0;
 	}
-	else if (static_cast<unsigned int>(y) >= yCells) {
-		y = yCells;
+	else if (y >= rows) {
+		y = rows - 1;
 	}
 
-	return cells.at(y).at(x);
+	return cells.at(x).at(y);
 }
 
 Cell* Grid::GetCell(float x, float y) {
-	int cX = static_cast<int>(x) / Cell::CELL_WIDTH;
-	int cY = static_cast<int>(y) / Cell::CELL_HEIGHT;
+	int cX = static_cast<int>(x / Cell::CELL_WIDTH);
+	int cY = static_cast<int>(y / Cell::CELL_HEIGHT);
 
 	return GetCell(cX, cY);
 }
@@ -56,7 +61,7 @@ void Grid::InitObjects(GameObject* object) {
 
 void Grid::InitObjects(GameObject* object, int x, int y) {
 	if (object->GetObjectID() < 201) {
-		Cell* cell = cells.at(static_cast<unsigned int>(object->GetPosition().x)).at(static_cast<unsigned int>(object->GetPosition().y));
+		Cell* cell = GetCell(x, y);
 		cell->AddObject(object);
 		object->SetOwnerCell(cell);
 	}
@@ -71,10 +76,8 @@ void Grid::Update() {
 void Grid::UpdateGridObjects() {
 	std::vector<GameObject*> gridObjects = GetActiveObjects();
 
-	auto begin = gridObjects.begin();
-	while (begin != gridObjects.end()) {
-		UpdateObjectGridPosition(*begin);
-		++begin;
+	for (auto object : gridObjects) {
+		UpdateObjectGridPosition(object);
 	}
 }
 
@@ -90,22 +93,22 @@ void Grid::UpdateObjectGridPosition(GameObject* object) {
 
 std::vector<Cell*> Grid::GetActiveCells() {
 	activeCells.clear();
-	unsigned int startX = static_cast<int>(viewPort.left) / Cell::CELL_WIDTH;
-	unsigned int startY = static_cast<int>(viewPort.top) / Cell::CELL_HEIGHT;
-	unsigned int endX = static_cast<int>((viewPort.left + Util::SCREEN_WIDTH)) / Cell::CELL_WIDTH;
-	unsigned int endY = static_cast<int>((viewPort.top + Util::SCREEN_HEIGHT)) / Cell::CELL_HEIGHT;
+	int startX = static_cast<int>(viewPort.left / Cell::CELL_WIDTH);
+	int startY = static_cast<int>(viewPort.top / Cell::CELL_HEIGHT);
+	int endX = static_cast<int>((viewPort.left + Util::SCREEN_WIDTH) / Cell::CELL_WIDTH);
+	int endY = static_cast<int>((viewPort.top + Util::SCREEN_HEIGHT) / Cell::CELL_HEIGHT);
 
-	for (unsigned int i = startX; i <= endX; ++i) {
-		if (i < 0 || i > columns) {
+	for (int i = startY - 1; i <= endY; ++i) {
+		if (i < 0 || i > rows) {
 			continue;
 		}
 
-		for (unsigned int j = startY; j <= endY; ++j) {
-			if (j < 0 || j > rows) {
+		for (int j = startX - 1; j <= endX; ++j) {
+			if (j < 0 || j > columns) {
 				continue;
 			}
 
-			activeCells.push_back(cells.at(j).at(i));
+			activeCells.push_back(cells.at(i).at(j));
 		}
 	}
 
@@ -115,14 +118,9 @@ std::vector<Cell*> Grid::GetActiveCells() {
 std::vector<GameObject*> Grid::GetActiveObjects() {
 	std::vector<GameObject*> objects;
 
-	for (unsigned int i = 0; i < activeCells.size(); ++i) {
-		auto begin = activeCells.at(i)->GetCellObjects().begin();
-		while (begin != activeCells.at(i)->GetCellObjects().end()) {
-			if (dynamic_cast<GameObject*>(*begin)->IsActive()) {
-				objects.push_back(*begin);
-			}
-
-			++begin;
+	for (auto activeCell : activeCells) {
+		for (auto gameObject : activeCell->GetCellObjects()) {
+			objects.push_back(gameObject);
 		}
 	}
 

@@ -1,0 +1,85 @@
+224	152
+0	0	0	assets\data\player\mario_data.txt	0	28	47
+0	0	100	assets\data\tiles\portal_data.txt	1	60	15	11
+0	1	100	assets\data\tiles\portal_data.txt	1	156	47	14
+0	0	100	assets\data\tiles\portal_data.txt	1	28	47	0
+0	0	100	assets\data\tiles\portal_data.txt	1	60	47	0
+0	0	100	assets\data\tiles\portal_data.txt	1	92	15	0
+0	0	100	assets\data\tiles\portal_data.txt	1	124	15	0
+0	1	100	assets\data\tiles\portal_data.txt	1	156	15	0
+0	1	100	assets\data\tiles\portal_data.txt	1	188	15	0
+0	1	100	assets\data\tiles\portal_data.txt	1	188	47	0
+0	0	100	assets\data\tiles\portal_data.txt	1	124	47	0
+0	0	100	assets\data\tiles\portal_data.txt	1	124	79	0
+0	0	100	assets\data\tiles\portal_data.txt	1	92	79	0
+0	0	100	assets\data\tiles\portal_data.txt	1	60	79	0
+0	0	100	assets\data\tiles\portal_data.txt	1	60	111	0
+1	0	100	assets\data\tiles\portal_data.txt	1	60	143	0
+1	0	100	assets\data\tiles\portal_data.txt	1	92	143	0
+1	0	100	assets\data\tiles\portal_data.txt	1	124	143	0
+0	0	100	assets\data\tiles\portal_data.txt	1	124	111	0
+0	0	100	assets\data\tiles\portal_data.txt	1	92	111	0
+0	1	100	assets\data\tiles\portal_data.txt	1	156	111	0
+0	1	100	assets\data\tiles\portal_data.txt	1	188	111	0
+0	0	106	assets\data\map\dancingcactus_data.txt	1	12	16
+0	0	106	assets\data\map\dancingcactus_data.txt	1	28	16
+0	0	106	assets\data\map\dancingcactus_data.txt	1	44	16
+0	0	106	assets\data\map\dancingcactus_data.txt	1	12	32
+0	0	106	assets\data\map\dancingcactus_data.txt	1	28	32
+0	0	106	assets\data\map\dancingcactus_data.txt	1	44	32
+0	0	106	assets\data\map\dancingcactus_data.txt	1	76	32
+0	0	106	assets\data\map\dancingcactus_data.txt	1	92	32
+0	0	106	assets\data\map\dancingcactus_data.txt	1	108	32
+0	0	106	assets\data\map\dancingcactus_data.txt	1	76	48
+0	0	106	assets\data\map\dancingcactus_data.txt	1	92	48
+0	0	106	assets\data\map\dancingcactus_data.txt	1	108	48
+0	0	106	assets\data\map\dancingcactus_data.txt	1	76	64
+0	0	106	assets\data\map\dancingcactus_data.txt	1	92	64
+0	0	106	assets\data\map\dancingcactus_data.txt	1	108	64
+0	1	106	assets\data\map\dancingcactus_data.txt	1	140	32
+0	1	106	assets\data\map\dancingcactus_data.txt	1	156	32
+0	1	106	assets\data\map\dancingcactus_data.txt	1	172	32
+0	0	106	assets\data\map\dancingcactus_data.txt	1	12	64
+0	0	106	assets\data\map\dancingcactus_data.txt	1	28	64
+0	0	106	assets\data\map\dancingcactus_data.txt	1	44	64
+0	0	106	assets\data\map\dancingcactus_data.txt	1	12	80
+0	0	106	assets\data\map\dancingcactus_data.txt	1	28	80
+0	0	106	assets\data\map\dancingcactus_data.txt	1	44	80
+0	0	106	assets\data\map\dancingcactus_data.txt	1	12	96
+0	0	106	assets\data\map\dancingcactus_data.txt	1	92	96
+0	0	106	assets\data\map\dancingcactus_data.txt	1	108	96
+0	0	106	assets\data\map\dancingcactus_data.txt	1	124	96
+0	1	106	assets\data\map\dancingcactus_data.txt	1	140	80
+0	1	106	assets\data\map\dancingcactus_data.txt	1	156	80
+0	1	106	assets\data\map\dancingcactus_data.txt	1	204	16
+0	1	106	assets\data\map\dancingcactus_data.txt	1	204	32
+0	1	106	assets\data\map\dancingcactus_data.txt	1	204	48
+0	1	106	assets\data\map\dancingcactus_data.txt	1	204	64
+0	1	106	assets\data\map\dancingcactus_data.txt	1	140	64
+0	1	106	assets\data\map\dancingcactus_data.txt	1	156	64
+0	1	106	assets\data\map\dancingcactus_data.txt	1	172	64
+0	1	106	assets\data\map\dancingcactus_data.txt	1	188	64
+0	1	106	assets\data\map\dancingcactus_data.txt	1	220	16
+0	1	106	assets\data\map\dancingcactus_data.txt	1	220	32
+0	1	106	assets\data\map\dancingcactus_data.txt	1	220	48
+0	1	106	assets\data\map\dancingcactus_data.txt	1	220	64
+0	1	106	assets\data\map\dancingcactus_data.txt	1	220	80
+0	1	106	assets\data\map\dancingcactus_data.txt	1	220	96
+0	1	106	assets\data\map\dancingcactus_data.txt	1	220	112
+0	1	106	assets\data\map\dancingcactus_data.txt	1	220	128
+1	1	106	assets\data\map\dancingcactus_data.txt	1	220	144
+0	1	107	assets\data\map\helppopup_data.txt	1	204	94
+0	1	108	assets\data\map\hammerbro_data.txt	1	159	112
+0	0	201	12	47	16	16	12
+0	0	201	0	0	60	47	0
+0	1	201	60	0	188	15	1
+0	0	201	76	31	48	48	2
+0	0	201	140	31	48	16	3
+1	0	201	204	15	44	167	4
+0	0	201	12	63	48	119	5
+0	0	201	140	63	64	32	6
+0	0	201	76	95	128	16	7
+0	1	201	60	159	188	23	8
+0	0	201	76	95	16	48	9
+0	0	201	76	127	48	16	10
+0	0	201	140	127	108	32	11

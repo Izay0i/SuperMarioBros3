@@ -1,0 +1,131 @@
+[GRID_SIZE]
+2816	656
+[ENTITY_DATA]
+2	0	0	assets\data\player\mario_data.txt	0	25	384	assets\data\projectiles\fireball_data.txt	0
+0	17	100	assets\data\tiles\portal_data.txt	2	2257	112	2101	468
+3	17	100	assets\data\tiles\portal_data.txt	2	2321	488	2328	386
+2	8	101	assets\data\tiles\coin_data.txt	2	1072	320
+2	8	101	assets\data\tiles\coin_data.txt	2	1104	288
+1	8	101	assets\data\tiles\coin_data.txt	2	1136	256
+1	8	101	assets\data\tiles\coin_data.txt	2	1168	224
+1	9	101	assets\data\tiles\coin_data.txt	2	1200	192
+0	10	101	assets\data\tiles\coin_data.txt	2	1328	80
+0	10	101	assets\data\tiles\coin_data.txt	2	1344	80
+0	10	101	assets\data\tiles\coin_data.txt	2	1360	80
+0	11	101	assets\data\tiles\coin_data.txt	2	1472	112
+0	11	101	assets\data\tiles\coin_data.txt	2	1488	112
+0	11	101	assets\data\tiles\coin_data.txt	2	1536	128
+0	11	101	assets\data\tiles\coin_data.txt	2	1552	128
+0	11	101	assets\data\tiles\coin_data.txt	2	1568	128
+0	12	101	assets\data\tiles\coin_data.txt	2	1584	128
+0	12	101	assets\data\tiles\coin_data.txt	2	1616	112
+0	12	101	assets\data\tiles\coin_data.txt	2	1632	112
+0	12	101	assets\data\tiles\coin_data.txt	2	1648	112
+0	12	101	assets\data\tiles\coin_data.txt	2	1664	112
+1	12	101	assets\data\tiles\coin_data.txt	2	1696	144
+0	13	101	assets\data\tiles\coin_data.txt	2	1728	112
+0	13	101	assets\data\tiles\coin_data.txt	2	1760	128
+0	13	101	assets\data\tiles\coin_data.txt	2	1808	96
+0	13	101	assets\data\tiles\coin_data.txt	2	1840	128
+3	16	101	assets\data\tiles\coin_data.txt	2	2192	488
+3	16	101	assets\data\tiles\coin_data.txt	2	2208	488
+3	16	101	assets\data\tiles\coin_data.txt	2	2176	504
+3	16	101	assets\data\tiles\coin_data.txt	2	2224	504
+3	16	101	assets\data\tiles\coin_data.txt	2	2224	520
+4	16	101	assets\data\tiles\coin_data.txt	2	2192	536
+4	16	101	assets\data\tiles\coin_data.txt	2	2208	536
+4	16	101	assets\data\tiles\coin_data.txt	2	2224	552
+4	16	101	assets\data\tiles\coin_data.txt	2	2176	568
+4	16	101	assets\data\tiles\coin_data.txt	2	2224	568
+4	16	101	assets\data\tiles\coin_data.txt	2	2192	584
+4	16	101	assets\data\tiles\coin_data.txt	2	2208	584
+2	1	102	assets\data\tiles\questionblock_data.txt	2	176	352	assets\data\tiles\coin_data.txt	2
+2	1	102	assets\data\tiles\questionblock_data.txt	2	192	352	assets\data\tiles\coin_data.txt	2
+2	1	102	assets\data\tiles\questionblock_data.txt	2	224	304	assets\data\tiles\coin_data.txt	2
+2	1	102	assets\data\tiles\questionblock_data.txt	2	240	304	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2
+2	3	102	assets\data\tiles\questionblock_data.txt	2	416	320	assets\data\tiles\coin_data.txt	2
+2	4	102	assets\data\tiles\questionblock_data.txt	2	656	384	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2
+2	5	102	assets\data\tiles\questionblock_data.txt	2	704	352	assets\data\tiles\coin_data.txt	2
+2	11	102	assets\data\tiles\questionblock_data.txt	2	1472	368	assets\data\npc\supermushroom_data.txt	2	assets\data\npc\superleaf_data.txt	2
+0	10	103	assets\data\tiles\shinybrick_data.txt	2	1440	128	9	1	assets\data\npc\1upmushroom_data.txt	2
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	1984	368
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	2000	368
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	2016	368
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	2032	368	105	1	assets\data\tiles\switchblock_data.txt	2
+2	14	103	assets\data\tiles\shinybrick_data.txt	2	1968	384
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	1984	384
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	2000	384
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	2016	384
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	2032	384
+2	15	103	assets\data\tiles\shinybrick_data.txt	2	2096	384
+3	14	103	assets\data\tiles\shinybrick_data.txt	2	1952	400
+3	14	103	assets\data\tiles\shinybrick_data.txt	2	1968	400
+3	15	103	assets\data\tiles\shinybrick_data.txt	2	1984	400
+3	15	103	assets\data\tiles\shinybrick_data.txt	2	2000	400
+3	15	103	assets\data\tiles\shinybrick_data.txt	2	2016	400
+3	15	103	assets\data\tiles\shinybrick_data.txt	2	2032	400
+3	15	103	assets\data\tiles\shinybrick_data.txt	2	2048	400
+3	15	103	assets\data\tiles\shinybrick_data.txt	2	2096	400
+3	16	103	assets\data\tiles\shinybrick_data.txt	2	2112	400
+2	20	104	assets\data\tiles\bonusitem_data.txt	5	2688	337
+3	1	1	assets\data\npc\goomba_data.txt	1	224	400
+3	4	1	assets\data\npc\goomba_data.txt	1	528	400
+2	6	1	assets\data\npc\goomba_data.txt	1	832	384
+2	6	1	assets\data\npc\goomba_data.txt	1	880	384
+2	7	2	assets\data\npc\paragoomba_data.txt	1	946	384
+2	4	3	assets\data\npc\koopatroopa_data.txt	1	576	352
+2	11	3	assets\data\npc\koopatroopa_data.txt	1	1472	384	g
+2	15	3	assets\data\npc\koopatroopa_data.txt	1	2096	352
+2	10	4	assets\data\npc\parakoopa_data.txt	1	1328	294	g
+2	10	4	assets\data\npc\parakoopa_data.txt	1	1376	294	g
+2	10	4	assets\data\npc\parakoopa_data.txt	1	1424	294	g
+3	13	5	assets\data\npc\piranaplant_data.txt	1	1800	400
+2	2	6	assets\data\npc\venustrap_data.txt	1	360	384	assets\data\projectiles\fireball_data.txt	0
+2	14	6	assets\data\npc\venustrap_data.txt	1	1864	384	g	assets\data\projectiles\fireball_data.txt	0
+[TILES_DATA]
+0	20	666	-16	448	2768	16	666
+0	4	201	0	416	624	16	0
+0	3	201	624	400	464	32	1
+0	2	201	1152	416	352	16	2
+0	0	201	1536	416	79	16	3
+0	4	201	1665	416	576	16	4
+0	4	201	2257	416	560	16	5
+0	0	202	352	368	32	48	6
+0	0	202	1792	384	32	32	7
+0	0	202	1856	368	32	48	8
+1	0	202	2256	112	32	208	9
+0	0	202	2256	368	32	64	10
+0	0	202	2320	384	32	32	11
+0	0	203	1408	192	64	16	12
+0	1	203	1488	176	208	16	13
+0	0	204	1504	336	32	16	14
+0	0	204	1568	400	47	16	15
+0	0	204	1584	384	31	16	16
+0	0	204	1600	368	16	64	17
+0	0	204	1664	368	16	64	18
+0	0	204	1664	384	33	16	19
+0	0	204	1664	400	49	16	20
+0	0	205	272	336	48	80	21
+0	0	205	240	368	48	48	22
+6	0	205	512	304	64	800	23
+0	0	205	464	336	64	80	24
+0	0	205	400	368	80	48	25
+0	0	205	512	384	96	32	26
+0	0	205	1328	320	112	96	27
+0	0	205	1296	352	112	64	28
+0	0	205	1264	384	112	32	29
+0	0	205	1312	144	64	1	30
+1	0	205	2176	272	48	144	31
+0	0	205	2144	368	48	48	32	
+1	0	206	1968	464	128	192	33
+0	1	206	2128	464	192	16	34
+1	0	206	2352	464	128	192	35
+0	0	206	2096	624	128	32	36
+0	0	206	2224	608	16	16	37
+0	0	206	2240	592	16	16	38
+0	0	206	2256	576	16	16	39
+0	0	206	2272	560	16	16	40
+0	0	206	2288	544	16	16	41
+0	0	206	2304	528	48	16	42
+0	0	207	2096	464	32	32	43
+0	0	207	2320	464	32	32	44

@@ -7,18 +7,16 @@
 class Cell {
 private:
 	std::unordered_set<GameObject*> objects;
-	unsigned int cellX, cellY;
+	int cellX, cellY;
 
 	RECTF rect;
 
 public:
-	const static unsigned int CELL_WIDTH = 132;
-	const static unsigned int CELL_HEIGHT = 132;
+	const static int CELL_WIDTH = Util::SCREEN_WIDTH / 2;
+	const static int CELL_HEIGHT = Util::SCREEN_HEIGHT / 2;
 
-	Cell(unsigned int, unsigned int);
+	Cell(int, int);
 	~Cell();
-
-	bool ContainsObject(RECTF);
 
 	std::unordered_set<GameObject*> GetCellObjects() const { return objects; }
 

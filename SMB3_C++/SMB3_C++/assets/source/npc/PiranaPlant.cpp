@@ -9,7 +9,6 @@ PiranaPlant::PiranaPlant() {
 	//1 biting
 	hitPoints = 2;
 	normal = D3DXVECTOR3(1, 1, 0);
-	StartCoolDownTimer();
 }
 
 void PiranaPlant::LoadTexture() {
@@ -161,34 +160,24 @@ void PiranaPlant::TakeDamage() {
 void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	HandleStates();
 
-	/*char debug[100];
-	sprintf_s(debug, "Posy: %f\n", position.y);
-	OutputDebugStringA(debug);*/
-
-	velocity.y = 0.02f * normal.y;
-	GameObject::Update(delta);
-	position += distance;
-
-	if (IsOnCoolDown()) {
-		//going down
-		if (position.y < (originalPos.y - MAX_Y_OFFSET)) {
-			if (!IsOnCoolDown()) {
-				normal.y = 1.0f;
-				StartCoolDownTimer();
-			}
-		}
-		else if (position.y >= originalPos.y) {
-			position.y = originalPos.y;
-			if (!IsOnCoolDown()) {
-				normal.y = -1.0f;
-				StartCoolDownTimer();
-			}
+	if (IsRetracting()) {
+		if (position.y > (originalPos.y - MAX_Y_OFFSET)) {
+			position.y -= 0.02f * delta;
 		}
 	}
 	
+	if (!IsRetracting() || playerInRange) {
+		if (position.y >= originalPos.y) {
+			position.y = originalPos.y;
+			StartRetractTimer();
+		}
+		else {
+			position.y += 0.02f * delta;
+		}
+	}
 
-	if (coolDownStart != 0 && GetTickCount64() - coolDownStart > coolDownTime) {
-		coolDownStart = 0;
+	if (retractStart != 0 && GetTickCount64() - retractStart > retractTime) {
+		retractStart = 0;
 	}
 
 	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
@@ -199,6 +188,32 @@ void PiranaPlant::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	if (removeStart != 0 && GetTickCount64() - removeStart > removeTime) {
 		hitPoints = -1;
 		removeStart = 0;
+	}
+
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
+	collisionEvents.clear();
+
+	CalcPotentialCollision(objects, collisionEvents);
+
+	D3DXVECTOR2 minTime;
+	D3DXVECTOR2 offSet(0.4f, 0.4f);
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 relativeDistance;
+
+	FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+
+	for (LPCOLLISIONEVENT result : eventResults) {
+		LPCOLLISIONEVENT event = result;
+
+		//mario's fireball
+		if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+			tookDamage = true;
+			StartRemoveTimer();
+		}
+	}
+
+	for (LPCOLLISIONEVENT event : collisionEvents) {
+		delete event;
 	}
 }
 

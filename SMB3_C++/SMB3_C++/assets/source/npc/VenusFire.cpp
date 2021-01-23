@@ -3,7 +3,6 @@
 VenusFire::VenusFire() {
 	scale = D3DXVECTOR2(1, 1);
 	normal = D3DXVECTOR3(1, 1, 0);
-	StartCoolDownTimer();
 }
 
 Fireball* VenusFire::SpawnFireball() {
@@ -32,10 +31,28 @@ void VenusFire::ParseData(std::string dataPath, std::string texturePath, D3DCOLO
 void VenusFire::Update(DWORD delta, std::vector<GameObject*>* objects) {	
 	PiranaPlant::HandleStates();
 
+	if (IsRetracting()) {
+		if (position.y > (originalPos.y - MAX_Y_OFFSET)) {
+			position.y -= 0.02f * delta;
+		}
 
+		if (retractStart != 0 && GetTickCount64() - retractStart == (retractTime * 3 / 4) && !playerInRange) {
+			SceneManager::GetInstance()->GetCurrentScene()->AddObjectToScene(SpawnFireball());
+		}
+	}
+	
+	if (!IsRetracting() || playerInRange) {
+		if (position.y >= originalPos.y) {
+			position.y = originalPos.y;
+			StartRetractTimer();
+		}
+		else {
+			position.y += 0.02f * delta;
+		}
+	}
 
-	if (coolDownStart != 0 && GetTickCount64() - coolDownStart > coolDownTime) {
-		coolDownStart = 0;
+	if (retractStart != 0 && GetTickCount64() - retractStart > retractTime) {
+		retractStart = 0;
 	}
 
 	if (resetScoreStart != 0 && GetTickCount64() - resetScoreStart > resetScoreTime) {
@@ -49,6 +66,32 @@ void VenusFire::Update(DWORD delta, std::vector<GameObject*>* objects) {
 	}
 
 	scale.x = normal.x == 1 ? 1.0f : -1.0f;
+
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
+	collisionEvents.clear();
+
+	CalcPotentialCollision(objects, collisionEvents);
+
+	D3DXVECTOR2 minTime;
+	D3DXVECTOR2 offSet(0.4f, 0.4f);
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 relativeDistance;
+
+	FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+
+	for (LPCOLLISIONEVENT result : eventResults) {
+		LPCOLLISIONEVENT event = result;
+
+		//mario's fireball
+		if (dynamic_cast<Entity*>(event->object) && event->object->GetObjectID() == 99) {
+			tookDamage = true;
+			StartRemoveTimer();
+		}
+	}
+
+	for (LPCOLLISIONEVENT event : collisionEvents) {
+		delete event;
+	}
 }
 
 void VenusFire::Render() {
@@ -57,7 +100,7 @@ void VenusFire::Render() {
 			//up
 			if (normal.y == 1) {
 				if (extraData.at(0) == "g") {
-					if (GetTickCount64() - coolDownStart > (coolDownTime * 3 / 5)) {
+					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
 						sprite.PlayAnimation("LookUpOpenGreen", position, scale);
 					}
 					else {
@@ -65,7 +108,7 @@ void VenusFire::Render() {
 					}
 				}
 				else {
-					if (GetTickCount64() - coolDownStart > (coolDownTime * 3 / 5)) {
+					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
 						sprite.PlayAnimation("LookUpOpenRed", position, scale);
 					}
 					else {
@@ -76,7 +119,7 @@ void VenusFire::Render() {
 			//down
 			else if (normal.y == -1) {
 				if (extraData.at(0) == "g") {
-					if (GetTickCount64() - coolDownStart > (coolDownTime * 3 / 5)) {
+					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
 						sprite.PlayAnimation("LookDownOpenGreen", position, scale);
 					}
 					else {
@@ -84,7 +127,7 @@ void VenusFire::Render() {
 					}
 				}
 				else {
-					if (GetTickCount64() - coolDownStart > (coolDownTime * 3 / 5)) {
+					if (GetTickCount64() - retractStart > (retractTime * 3 / 5)) {
 						sprite.PlayAnimation("LookDownOpenRed", position, scale);
 					}
 					else {

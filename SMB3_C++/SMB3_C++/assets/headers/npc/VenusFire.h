@@ -13,7 +13,7 @@ class Entity;
 class VenusFire : public PiranaPlant {
 private:
 	float MAX_Y_OFFSET = 48.0f;
-	DWORD coolDownTime = 2000;
+	DWORD retractTime = 5000;
 
 public:
 	VenusFire();

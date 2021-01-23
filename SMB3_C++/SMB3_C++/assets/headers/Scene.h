@@ -23,6 +23,7 @@
 #include "NPCList.h"
 #include "TileList.h"
 
+class Grid;
 class Background;
 class Mario;
 class HUD;
@@ -40,7 +41,6 @@ private:
 		SCENE_FILE_SECTION_HUD,
 		SCENE_FILE_SECTION_GRID,
 		SCENE_FILE_SECTION_ENTITYDATA,
-		SCENE_FILE_SECTION_WORLDCOORDS,
 		SCENE_FILE_SECTION_TILESDATA,
 		SCENE_FILE_SECTION_TILESPRITES,
 		SCENE_FILE_SECTION_BACKGROUND
@@ -60,6 +60,8 @@ private:
 
 	std::string filePath;
 	std::vector<GameObject*> objects;
+	std::vector<GameObject*> activeObjects;
+	std::vector<GameObject*> disabledObjects;
 
 	std::unordered_map<unsigned int, std::pair<std::string, D3DCOLOR>> textureFiles;
 
@@ -86,10 +88,13 @@ private:
 	void ParseHUD(std::string);
 	void ParseGrid(std::string);
 	void ParseEntityData(std::string);
-	void ParseWorldCoords(std::string);
 	void ParseTilesData(std::string);
 	void ParseTileSprites(std::string);
 	void ParseBackground(std::string);
+
+	void LoadGrid(std::string);
+	void LoadGridEntities(std::string);
+	void LoadGridTiles(std::string);
 
 	void UpdateCameraPosition(DWORD);
 	void UpdateHUDPosition(DWORD);
@@ -114,6 +119,9 @@ public:
 
 	int GetSceneWidth() const;
 	int GetSceneHeight() const;	
+
+	std::vector<GameObject*> GetActiveObjects();
+	std::vector<GameObject*> GetDisabledObjects();
 
 	DWORD GetSceneTime() const;
 

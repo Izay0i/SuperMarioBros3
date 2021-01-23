@@ -35,9 +35,6 @@
 [HUD]
 assets\data\hud\hud_data.txt	4
 
-#[GRID]
-#assets\data\overworld_1\grid\stage_one_grid.txt
-
 #obj_id	data_path	tex_id	x	y	extra_data
 #extra_data can either be data for projectiles, enemies or sprites variants, etc...
 #default variant is red "r" if not specified
@@ -133,6 +130,22 @@ assets\data\hud\hud_data.txt	4
 #Bonus item
 104	assets\data\tiles\bonusitem_data.txt	5	2688	337
 
+#NPCs
+#Goomba
+1	assets\data\npc\goomba_data.txt	1	224	400
+1	assets\data\npc\goomba_data.txt	1	528	400
+1	assets\data\npc\goomba_data.txt	1	832	384
+1	assets\data\npc\goomba_data.txt	1	880	384
+#Red Paragoomba
+2	assets\data\npc\paragoomba_data.txt	1	946	384
+#Koopa troopa
+3	assets\data\npc\koopatroopa_data.txt	1	576	352
+3	assets\data\npc\koopatroopa_data.txt	1	1472	384	g
+3	assets\data\npc\koopatroopa_data.txt	1	2096	352
+#Para troopa
+4	assets\data\npc\parakoopa_data.txt	1	1328	294	g
+4	assets\data\npc\parakoopa_data.txt	1	1376	294	g
+4	assets\data\npc\parakoopa_data.txt	1	1424	294	g
 #Pirana plant
 5	assets\data\npc\piranaplant_data.txt	1	1800	400
 #Venus fire trap
@@ -232,24 +245,6 @@ assets\data\hud\hud_data.txt	4
 #Black pipe
 207	2096	464	32	32	43
 207	2320	464	32	32	44
-
-[ENTITY_DATA]
-#NPCs
-#Goomba
-1	assets\data\npc\goomba_data.txt	1	224	400
-1	assets\data\npc\goomba_data.txt	1	528	400
-1	assets\data\npc\goomba_data.txt	1	832	384
-1	assets\data\npc\goomba_data.txt	1	880	384
-#Red Paragoomba
-2	assets\data\npc\paragoomba_data.txt	1	946	384
-#Koopa troopa
-3	assets\data\npc\koopatroopa_data.txt	1	576	352
-3	assets\data\npc\koopatroopa_data.txt	1	1472	384	g
-3	assets\data\npc\koopatroopa_data.txt	1	2096	352
-#Para troopa
-4	assets\data\npc\parakoopa_data.txt	1	1328	294	g
-4	assets\data\npc\parakoopa_data.txt	1	1376	294	g
-4	assets\data\npc\parakoopa_data.txt	1	1424	294	g
 
 #obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
 [TILE_SPRITES_ARR]

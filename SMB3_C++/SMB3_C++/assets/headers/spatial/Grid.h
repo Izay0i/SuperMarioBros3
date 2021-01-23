@@ -9,14 +9,14 @@
 class Grid {
 private:
 	RECTF viewPort;
-	unsigned int xCells, yCells;
-	unsigned int rows, columns;
+	int xCells, yCells;
+	int rows, columns;
 
 	std::vector<std::vector<Cell*>> cells;
 	std::vector<Cell*> activeCells;
 
 public:
-	Grid(unsigned int, unsigned int);
+	Grid(int, int);
 	~Grid();
 
 	Cell* GetCell(int, int);
