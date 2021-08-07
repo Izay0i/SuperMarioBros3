@@ -1,0 +1,17 @@
+#Luigi: Give that to me
+#Mario: No way, you got your own
+#Luigi: Well I want yours too
+
+[SETTINGS]
+default	0
+
+[SCENES]
+0	assets\data\start_screen.txt
+1	assets\data\game_over.txt
+
+#World 1
+10	assets\data\overworld_1\map.txt
+11	assets\data\overworld_1\stage_one.txt
+14	assets\data\overworld_1\stage_four.txt
+#Sandbox
+77	assets\data\sandbox.txt
