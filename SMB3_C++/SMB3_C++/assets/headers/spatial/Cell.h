@@ -9,8 +9,6 @@ private:
 	std::unordered_set<GameObject*> objects;
 	int cellX, cellY;
 
-	RECTF rect;
-
 public:
 	const static int CELL_WIDTH = Util::SCREEN_WIDTH / 2;
 	const static int CELL_HEIGHT = Util::SCREEN_HEIGHT / 2;

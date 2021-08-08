@@ -55,7 +55,7 @@ void Grid::InitObjects(GameObject* object) {
 	if (object->GetObjectID() < 201) {
 		Cell* cell = GetCell(object->GetPosition().x, object->GetPosition().y);
 		cell->AddObject(object);
-		object->SetOwnerCell(cell);
+		object->ownerCell = cell;
 	}
 }
 
@@ -63,7 +63,7 @@ void Grid::InitObjects(GameObject* object, int x, int y) {
 	if (object->GetObjectID() < 201) {
 		Cell* cell = GetCell(x, y);
 		cell->AddObject(object);
-		object->SetOwnerCell(cell);
+		object->ownerCell = cell;
 	}
 }
 
@@ -83,11 +83,11 @@ void Grid::UpdateGridObjects() {
 
 void Grid::UpdateObjectGridPosition(GameObject* object) {
 	Cell* newCell = GetCell(object->GetPosition().x, object->GetPosition().y);
-	if (newCell != object->GetOwnerCell()) {
+	if (newCell != object->ownerCell) {
 		//yeah this is big brain time
-		object->GetOwnerCell()->RemoveObject(object);
+		object->ownerCell->RemoveObject(object);
 		newCell->AddObject(object);
-		object->SetOwnerCell(newCell);
+		object->ownerCell = newCell;
 	}
 }
 

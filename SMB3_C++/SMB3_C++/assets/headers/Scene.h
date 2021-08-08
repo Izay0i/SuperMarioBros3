@@ -105,7 +105,8 @@ public:
 		SCENE_OVER = 1,
 		SCENE_MAP = 10,
 		SCENE_STAGEONE = 11,
-		SCENE_STAGEFOUR = 14
+		SCENE_STAGEFOUR = 14,
+		SCENE_SANDBOX = 77
 	};
 
 	Scene(int, std::string);

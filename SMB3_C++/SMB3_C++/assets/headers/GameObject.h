@@ -28,7 +28,7 @@ struct CollisionEvent {
 		object = obj;
 	}
 
-	static bool CompareCollisionEvent(const LPCOLLISIONEVENT& a, LPCOLLISIONEVENT& b) {
+	static bool CompareCollisionEvent(const LPCOLLISIONEVENT& a, const LPCOLLISIONEVENT& b) {
 		return a->time < b->time;
 	}
 };
@@ -40,8 +40,6 @@ protected:
 	int objectID;
 	
 	HitBox hitBox;
-
-	Cell* ownerCell;
 
 	DWORD delta;
 
@@ -60,14 +58,13 @@ protected:
 	static LPD3DXSPRITE spriteHandler;
 	
 public:
+	Cell* ownerCell;
+	
 	GameObject() { normal.x = 1.0f; isActive = true; }
 	virtual ~GameObject() {}
 
 	virtual bool IsActive() const { return isActive; }
 	virtual void SetActiveStatus(bool b) { isActive = b; }
-
-	virtual Cell* GetOwnerCell() const { return ownerCell; }
-	virtual void SetOwnerCell(Cell* cell) { if (cell) { ownerCell = cell; } }
 
 	static void SweptAABB(RECTF, RECTF, D3DXVECTOR3, D3DXVECTOR3&, float&);
 	CollisionEvent* SweptAABBEx(GameObject*);

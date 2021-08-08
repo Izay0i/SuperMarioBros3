@@ -1,0 +1,87 @@
+chết khi time out (done)
+{
+	time <= 0: HP = 0
+}
+
+chết khi rơi khỏi màn { dùng một tile riêng có ID -1(?) test overlap } (done)
+
+nấm mọc từ gạch (done)
+{
+	add to scene
+	Update(dt):
+	while (normalY != -1) --posY
+	then move along X axis 
+}
+
+xu mọc từ gạch (done)
+{
+	add to scene
+	posY = posY - height of Coin - 1 (to not touch the ground)
+	--velocityY then ++ velocityY
+	if (isOnGround) release
+}
+
+HUD (done)
+{
+	mario:	lives, coins(money), items, speed gauge, score
+	scene:	timer
+}
+
+switch block (done)
+{
+	change shiny brick hp
+	times out -> change hp revert back to brick
+	Mario: if brick HP is 4? release
+}
+
+item cuối màn (done)
+{
+	disable flying if any
+	disable jumping if any
+	move right til off-screen
+	show "Stage Cleared" text
+	add item to HUD
+}
+
+stop venus from when moving close to pipe (done)
+
+stage end text (done)
+{
+	use the HUD for this
+}
+
+portal dịch chuyển Mario (done)
+{
+	modify zoom level if applicable
+	width, height
+	destination: Vector2()
+	Update(dt): (input) 
+	//Mainly the S & W key
+	//Maybe a timer to show the animation
+}
+
+score indicator (semi done)
+
+effect bể gạch (semi done)
+{
+	spawn 4 debris
+	*	*
+	*	*
+	add to scene
+	release brick
+}
+
+overworld (semi done)
+
+auto camera (để sau)
+
+animation đá rùa (để sau)
+{
+	if (held) then !held anim Kick
+	if (objID == 2?) anim Kick
+}
+
+start screen (static for now)
+{
+	Update(dt): (input) //K key
+}

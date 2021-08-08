@@ -1,0 +1,33 @@
+#To test uniform grid paritioning
+[MAPSIZE]
+3000	1000
+
+[LIMITS]
+0	0	3000	1000
+
+[BGCOLOR]
+156	252	240
+
+[TEXTURES]
+0	assets\textures\mario.png	68	145	190
+1	assets\textures\enemies.png	68	145	190
+2	assets\textures\stage_tileset.png	224	163	216
+3	assets\textures\items_and_misc_blocks.png	255	255	255
+4	assets\textures\gui_and_font.png	0	224	142
+5	assets\textures\goal_roulette.png	0	183	239
+
+[HUD]
+assets\data\hud\hud_data.txt	4
+
+#obj_id	data_path	tex_id	x	y	extra_data
+[ENTITY_DATA]
+0	assets\data\player\mario_data.txt	0	0	0	assets\data\projectiles\fireball_data.txt	0
+
+#obj_id	world_x	world_y	width	height	sprites_arr_id
+[TILES_DATA]
+
+#obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
+[TILE_SPRITES_ARR]
+
+#left	top	right	bottom	world_x	world_y	tex_id
+[BACKGROUND]

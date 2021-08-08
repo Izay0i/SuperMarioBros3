@@ -847,6 +847,7 @@ void Scene::UpdateCameraPosition(DWORD delta) {
 	D3DXVECTOR3 camPosition = cameraInstance->GetPosition();
 
 	switch (static_cast<SceneType>(sceneID)) {
+		case SceneType::SCENE_SANDBOX:
 		case SceneType::SCENE_STAGEONE:
 			if (!marioInstance->TriggeredStageEnd() && !marioInstance->IsInPipe()) {
 				//set mario's position inside the world
@@ -1161,7 +1162,7 @@ void Scene::Update(DWORD delta) {
 			UpdateHUDPosition(delta);
 
 			//change scene to overworld map
-			if (marioInstance->TriggeredStageEnd() || marioInstance->GetCurrentHitPoints() == 0) {
+			if (marioInstance->TriggeredStageEnd() || marioInstance->GetCurrentHitPoints() == 0 || GetSceneTime() == 0) {
 				if (!IsTranstionStarting()) {
 					if (marioInstance->TriggeredStageEnd()) {
 						marioInstance->GetSceneRemainingTime(sceneTime);
@@ -1175,6 +1176,33 @@ void Scene::Update(DWORD delta) {
 					SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_MAP));
 				}
 			}
+			break;
+	}
+
+	switch (static_cast<SceneType>(sceneID)) {
+		case SceneType::SCENE_SANDBOX:
+			marioInstance->Update(delta, &collidableObjects);
+
+			if (hudInstance) {
+				hudInstance->Update(
+					delta,
+					marioInstance->GetLivesLeft(),
+					marioInstance->GetCoinsCollected(),
+					marioInstance->GetBonusItems(),
+					marioInstance->GetAcceleration(),
+					marioInstance->GetAccelThreshold(),
+					marioInstance->GetCurrentScore(),
+					sceneTime,
+					marioInstance->IsFlying(),
+					marioInstance->IsRunningKeyPressed(),
+					marioInstance->TriggeredStageEnd()
+				);
+
+				UpdateHUDPosition(delta);
+			}
+
+			UpdateCameraPosition(delta);
+			UpdateHUDPosition(delta);
 			break;
 	}
 }

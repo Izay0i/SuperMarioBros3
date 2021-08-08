@@ -28,7 +28,7 @@ protected:
 	DWORD removeTime = 100;
 	
 	DWORD retractStart;
-	DWORD retractTime = 2000;
+	DWORD retractTime = 3000;
 
 	D3DXVECTOR3 originalPos;
 
