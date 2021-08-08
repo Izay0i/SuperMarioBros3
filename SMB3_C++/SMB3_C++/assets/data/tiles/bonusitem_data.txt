@@ -1,0 +1,31 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#Rotate
+Rotate	258	350	273	365	3	100
+Rotate	277	350	293	365
+Rotate	298	350	313	365
+
+#Mushroom
+Mushroom	257	373	272	388	3	100
+Mushroom	316	375	331	390
+Mushroom	405	374	420	389
+
+#Flower
+Flower	277	374	292	389	3	100
+Flower	329	375	344	390
+Flower	405	374	420	389
+
+#Star
+Star	297	373	312	388	3	100
+Star	344	374	359	389
+Star	405	374	420	389
+
+#Spark
+Spark	370	375	384	389	2	100
+Spark	389	375	403	389
+
+#left	top	right	bottom
+[HITBOXES]
+0	0	16	16
+0	0	0	0

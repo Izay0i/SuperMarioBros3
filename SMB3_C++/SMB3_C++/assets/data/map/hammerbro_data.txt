@@ -1,0 +1,9 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#Walk
+Walk	103	17	118	31	2	100
+Walk	120	17	135	31
+
+[HITBOXES]
+0	0	0	0

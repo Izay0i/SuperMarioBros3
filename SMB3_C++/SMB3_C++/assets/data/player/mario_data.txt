@@ -1,0 +1,217 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#==EFFECTS==
+#Used with tail
+Spark	397	19	412	34	2	100
+Spark	379	19	394	34
+
+#==SMALL==
+#Idle
+Idle	1	16	16	31	1	0
+#Run
+Run	1	16	16	31	2	50
+Run	19	16	34	31
+#Skid
+Skid	109	16	124	31	1	0
+#Jump
+Jump	37	16	52	31	1	0
+#Front
+Front	127	16	142	31	1	0
+#Hold idle
+HoldIdle	145	16	160	31	1	0
+#Hold run
+HoldRun	145	16	160	31	2	50
+HoldRun	163	16	178	31
+#Hold jump
+HoldJump	163	16	178	31	1	0
+#Kick
+Kick	181	16	196	31	1	0
+#Slide
+Slide	199	16	214	31	1	0
+#Swim
+Swim	217	16	232	31	4	50
+Swim	235	16	250	31
+Swim	253	16	268	31
+Swim	271	16	286	31
+#Climb
+Climb	289	16	304	31	1	0
+#Die
+Die	307	16	322	31	1	0
+#Take off
+TakeOff	55	16	70	31	2	25
+TakeOff	73	16	88	31
+#Fly
+Fly	91	16	106	31	1	0
+#GUI
+GUI	1	881	16	896	2	10
+GUI	1	915	16	930
+
+#==BIG==
+#Idle
+BigIdle	1	92	16	119	1	0
+#Run
+BigRun	1	92	16	119	3	50
+BigRun	19	92	34	119
+BigRun	37	92	52	119
+#Crouch
+BigCrouch	55	92	70	119	1	0
+#Jump
+BigJump	73	92	88	119	1	0
+#Fall
+BigFall	37	92	52	119	1	0
+#Skid
+BigSkid	195	92	210	119	1	0
+#Front
+BigFront	213	92	228	119	1	0
+#Back
+BigBack	231	92	246	119	1	0
+#Hold idle
+BigHoldIdle	249	92	264	119	1	0
+#Hold run
+BigHoldRun	249	92	264	119	2	50
+BigHoldRun	267	92	282	119
+#Hold jump
+BigHoldJump	285	92	300	119	1	0
+#Kick
+BigKick	303	92	326	119	1	0
+#Slide
+BigSlide	329	92	344	119	1	0
+#Swim
+BigSwim	347	92	370	119	4	50
+BigSwim	373	92	396	119
+BigSwim	399	92	422	119
+BigSwim	425	92	448	119
+#Climb
+BigClimb	451	92	466	119	1	0
+#Take off
+BigTakeOff	91	92	114	119	2	25
+BigTakeOff	117	92	140	119
+#Take off jump
+BigTakeOffJump	143	92	166	119	1	0
+#Fly
+BigFly	169	92	192	119	1	0
+#GUI
+BigGUI	91	873	106	896	1	0
+
+#==FIRE==
+#Idle
+FireIdle	1	264	16	291	1	0
+#Run
+FireRun	1	264	16	291	3	50
+FireRun	19	264	34	291
+FireRun	37	264	52	291
+#Crouch
+FireCrouch	55	264	70	291	1	0
+#Jump
+FireJump	73	264	88	291	1	0
+#Fall
+FireFall	37	264	52	291	1	0
+#Skid
+FireSkid	195	264	210	291	1	0
+#Front
+FireFront	213	264	228	291	1	0
+#Back
+FireBack	231	264	246	291	1	0
+#Hold idle
+FireHoldIdle	249	264	264	291	1	0
+#Hold run
+FireHoldRun	249	264	264	291	2	50
+FireHoldRun	267	264	282	291
+#Hold jump
+FireHoldJump	285	264	300	291	1	0
+#Kick
+FireKick	303	264	326	291	1	0
+#Slide
+FireSlide	329	264	344	291	1	0
+#Swim
+FireSwim	347	264	370	291	4	50
+FireSwim	373	264	396	291
+FireSwim	399	264	422	291
+FireSwim	425	264	448	291
+#Climb
+FireClimb	451	264	466	291	1	0
+#Shoot
+FireShoot	209	298	224	325	2	50
+FireShoot	227	298	242	325
+#Take off
+FireTakeOff	91	264	114	291	2	25
+FireTakeOff	117	264	140	291
+#Take off jump
+FireTakeOffJump	143	264	166	291	1	0
+#Fly
+FireFly	169	264	192	291	1	0
+#GUI
+FireGUI	127	873	142	896	1	0
+
+#==RACOON==
+#Idle
+RacIdle	1	350	24	377	1	0
+#Run
+RacRun	1	350	24	377	3	50
+RacRun	27	350	50	377
+RacRun	53	350	76	377
+#Crouch
+RacCrouch	79	350	102	377	1	0
+#Jump
+RacJump	105	350	128	377	1	0
+#Skid
+RacSkid	339	348	354	377	1	0
+#Front
+RacFront	357	350	372	377	1	0
+#Back
+RacBack	401	350	416	377	1	0
+#Hold idle
+RacHoldIdle	1	384	24	411	1	0
+#Hold run
+RacHoldRun	1	384	24	411	2	50
+RacHoldRun	27	384	50	411
+#Hold jump
+RacHoldJump	53	384	76	411	1	0
+#Kick
+RacKick	79	384	102	411	1	0
+#Slide
+RacSlide	105	384	120	411	1	0
+#Swim
+RacSwim	123	384	146	411	4	50
+RacSwim	149	384	172	411
+RacSwim	175	384	198	411
+RacSwim	201	384	224	411
+#Climb
+RacClimb	227	384	242	411	1	0
+#Spin
+RacSpin	401	350	416	377	2	50
+RacSpin	375	350	398	377
+#Fall
+RacFall	131	350	154	377	1	0
+#Slow Fall
+RacSlowFall	131	350	154	377	2	50
+RacSlowFall	157	350	180	377
+#Take off
+RacTakeOff	183	350	206	377	2	25
+RacTakeOff	209	350	232	377
+#Take off jump
+RacTakeOffJump	235	350	258	377	1	0
+#Fly
+RacFly	313	350	336	377	1	0
+#Fly boost
+RacFlyBoost	261	350	284	377	3	50
+RacFlyBoost	287	350	310	377
+RacFlyBoost	313	350	336	377
+#GUI
+RacGUI	145	873	160	896	1	0
+
+#left	top	right	bottom
+[HITBOXES]
+#Small
+0	0	15	16
+#Big
+0	0	16	28
+
+#hitpoints(or form)	lives	coins	score	items
+#items_id:
+#8: mushroom
+#11: flower
+#12: star
+[SETTINGS]
+4	3	0	0

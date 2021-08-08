@@ -1,0 +1,70 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#Score
+#100
+100	440	242	452	251	1	0
+
+#200
+200	454	242	467	251	1	0
+
+#400
+400	469	242	482	251	1	0
+
+#800
+800	484	242	497	251	1	0
+
+#1000
+1000	499	242	515	251	1	0
+
+#2000
+2000	517	242	534	251	1	0
+
+#4000
+4000	536	242	553	251	1	0
+
+#8000
+8000	555	242	572	251	1	0
+
+#1UP
+1UP	574	242	591	251	1	0
+
+#Red variant
+#Walk
+WalkRed	96	51	111	76	2	100
+WalkRed	112	51	127	76
+#Spin
+SpinRed	128	48	143	63	4	25
+SpinRed	144	48	159	63
+SpinRed	160	48	175	63
+SpinRed	176	48	191	63
+#Retract
+RetractRed	128	48	143	63	1	0
+#Out
+OutRed	128	48	143	63	2	50
+OutRed	128	64	143	79
+#Fly
+FlyRed	320	2	335	28	2	100
+FlyRed	336	3	351	29
+
+#Green variant
+#Walk
+WalkGreen	0	51	15	76	2	100
+WalkGreen	16	51	31	76
+#Spin
+SpinGreen	32	48	47	63	4	25
+SpinGreen	48	48	63	63
+SpinGreen	64	48	79	63
+SpinGreen	80	48	95	63
+#Retract
+RetractGreen	32	48	47	63	1	0
+#Out
+OutGreen	32	48	47	63	2	50
+OutGreen	32	64	47	79
+#Fly
+FlyGreen	288	2	303	28	2	100
+FlyGreen	304	3	319	29
+
+[HITBOXES]
+0	0	15	26
+0	0	15	15

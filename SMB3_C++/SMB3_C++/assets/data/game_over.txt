@@ -1,0 +1,15 @@
+#Snake can you hear me?
+#Snake? Snake!? SNAAAAAAAKE!!
+
+#tex_id	file_path	r	g	b
+[TEXTURES]
+0	assets\textures\dante.jpg	255	0	255
+1	assets\textures\mario.png	68	145	190
+
+[ENTITY_DATA]
+#Mario
+0	assets\data\player\mario_data.txt	0	999	999
+
+#left	top	right	bottom	world_x	world_y	tex_id
+[BACKGROUND]
+0	0	263	263	0	0	0

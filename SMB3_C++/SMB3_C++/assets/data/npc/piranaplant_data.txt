@@ -1,0 +1,42 @@
+#string_id	left	top	right	bottom	frames	speed
+#any consecutive string_id that matches prev string_id will add bounds to it
+[SPRITES]
+#Score
+#100
+100	440	242	452	251	1	0
+
+#200
+200	454	242	467	251	1	0
+
+#400
+400	469	242	482	251	1	0
+
+#800
+800	484	242	497	251	1	0
+
+#1000
+1000	499	242	515	251	1	0
+
+#2000
+2000	517	242	534	251	1	0
+
+#4000
+4000	536	242	553	251	1	0
+
+#8000
+8000	555	242	572	251	1	0
+
+#1UP
+1UP	574	242	591	251	1	0
+
+#Bite
+Bite	0	144	15	175	2	100
+Bite	16	144	31	175
+#Die
+Die	192	0	207	15	4	100
+Die	208	0	223	15
+Die	224	0	239	15
+Die	240	0	255	15
+
+[HITBOXES]
+0	0	16	32

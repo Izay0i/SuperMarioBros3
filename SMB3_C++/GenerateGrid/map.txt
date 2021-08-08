@@ -1,0 +1,122 @@
+#width	height	of the map
+[MAPSIZE]
+224	152
+
+#r	g	b
+[BGCOLOR]
+248	236	160
+
+#tex_id	file_path	r	g	b
+[TEXTURES]
+0	assets\textures\mario.png	68	145	190
+1	assets\textures\overworld_1_tileset.png	248	236	160
+2	assets\textures\gui_and_font.png	0	224	142
+
+[HUD]
+assets\data\hud\hud_data.txt	2
+
+#obj_id	data_path	tex_id	x	y	extra_data
+[ENTITY_DATA]
+#Mario
+0	assets\data\player\mario_data.txt	0	28	47
+
+#Portal												scene_id
+100	assets\data\tiles\portal_data.txt	1	60	15	11
+100	assets\data\tiles\portal_data.txt	1	156	47	14
+100	assets\data\tiles\portal_data.txt	1	28	47	0
+100	assets\data\tiles\portal_data.txt	1	60	47	0
+100	assets\data\tiles\portal_data.txt	1	92	15	0
+100	assets\data\tiles\portal_data.txt	1	124	15	0
+100	assets\data\tiles\portal_data.txt	1	156	15	0
+100	assets\data\tiles\portal_data.txt	1	188	15	0
+100	assets\data\tiles\portal_data.txt	1	188	47	0
+100	assets\data\tiles\portal_data.txt	1	124	47	0
+100	assets\data\tiles\portal_data.txt	1	124	79	0
+100	assets\data\tiles\portal_data.txt	1	92	79	0
+100	assets\data\tiles\portal_data.txt	1	60	79	0
+100	assets\data\tiles\portal_data.txt	1	60	111	0
+100	assets\data\tiles\portal_data.txt	1	60	143	0
+100	assets\data\tiles\portal_data.txt	1	92	143	0
+100	assets\data\tiles\portal_data.txt	1	124	143	0
+100	assets\data\tiles\portal_data.txt	1	124	111	0
+100	assets\data\tiles\portal_data.txt	1	92	111	0
+100	assets\data\tiles\portal_data.txt	1	156	111	0
+100	assets\data\tiles\portal_data.txt	1	188	111	0
+
+#Dancing cactus
+106	assets\data\map\dancingcactus_data.txt	1	12	16
+106	assets\data\map\dancingcactus_data.txt	1	28	16
+106	assets\data\map\dancingcactus_data.txt	1	44	16
+106	assets\data\map\dancingcactus_data.txt	1	12	32
+106	assets\data\map\dancingcactus_data.txt	1	28	32
+106	assets\data\map\dancingcactus_data.txt	1	44	32
+106	assets\data\map\dancingcactus_data.txt	1	76	32
+106	assets\data\map\dancingcactus_data.txt	1	92	32
+106	assets\data\map\dancingcactus_data.txt	1	108	32
+106	assets\data\map\dancingcactus_data.txt	1	76	48
+106	assets\data\map\dancingcactus_data.txt	1	92	48
+106	assets\data\map\dancingcactus_data.txt	1	108	48
+106	assets\data\map\dancingcactus_data.txt	1	76	64
+106	assets\data\map\dancingcactus_data.txt	1	92	64
+106	assets\data\map\dancingcactus_data.txt	1	108	64
+106	assets\data\map\dancingcactus_data.txt	1	140	32
+106	assets\data\map\dancingcactus_data.txt	1	156	32
+106	assets\data\map\dancingcactus_data.txt	1	172	32
+106	assets\data\map\dancingcactus_data.txt	1	12	64
+106	assets\data\map\dancingcactus_data.txt	1	28	64
+106	assets\data\map\dancingcactus_data.txt	1	44	64
+106	assets\data\map\dancingcactus_data.txt	1	12	80
+106	assets\data\map\dancingcactus_data.txt	1	28	80
+106	assets\data\map\dancingcactus_data.txt	1	44	80
+106	assets\data\map\dancingcactus_data.txt	1	12	96
+106	assets\data\map\dancingcactus_data.txt	1	92	96
+106	assets\data\map\dancingcactus_data.txt	1	108	96
+106	assets\data\map\dancingcactus_data.txt	1	124	96
+106	assets\data\map\dancingcactus_data.txt	1	140	80
+106	assets\data\map\dancingcactus_data.txt	1	156	80
+106	assets\data\map\dancingcactus_data.txt	1	204	16
+106	assets\data\map\dancingcactus_data.txt	1	204	32
+106	assets\data\map\dancingcactus_data.txt	1	204	48
+106	assets\data\map\dancingcactus_data.txt	1	204	64
+106	assets\data\map\dancingcactus_data.txt	1	140	64
+106	assets\data\map\dancingcactus_data.txt	1	156	64
+106	assets\data\map\dancingcactus_data.txt	1	172	64
+106	assets\data\map\dancingcactus_data.txt	1	188	64
+106	assets\data\map\dancingcactus_data.txt	1	220	16
+106	assets\data\map\dancingcactus_data.txt	1	220	32
+106	assets\data\map\dancingcactus_data.txt	1	220	48
+106	assets\data\map\dancingcactus_data.txt	1	220	64
+106	assets\data\map\dancingcactus_data.txt	1	220	80
+106	assets\data\map\dancingcactus_data.txt	1	220	96
+106	assets\data\map\dancingcactus_data.txt	1	220	112
+106	assets\data\map\dancingcactus_data.txt	1	220	128
+106	assets\data\map\dancingcactus_data.txt	1	220	144
+#Help pop-up
+107	assets\data\map\helppopup_data.txt	1	204	94
+#Hammer bro
+108	assets\data\map\hammerbro_data.txt	1	159	112
+
+#from top to bottom, left to right
+#obj_id	world_x	world_y	width	height	sprites_arr_id
+[TILES_DATA]
+201	12	47	16	16	12
+201	0	0	60	47	0
+201	60	0	188	15	1
+201	76	31	48	48	2
+201	140	31	48	16	3
+201	204	15	44	167	4
+201	12	63	48	119	5
+201	140	63	64	32	6
+201	76	95	128	16	7
+201	60	159	188	23	8
+201	76	95	16	48	9
+201	76	127	48	16	10
+201	140	127	108	32	11
+
+#obj_id	sprites_arr_id	left	top	right	bottom	world_x	world_y	tex_id
+[TILE_SPRITES_ARR]
+
+#left	top	right	bottom	world_x	world_y	tex_id
+[BACKGROUND]
+#Big ass background
+3	128	253	309	0	0	1
