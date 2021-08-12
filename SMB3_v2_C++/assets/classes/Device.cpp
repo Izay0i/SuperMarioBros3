@@ -13,7 +13,6 @@ Device* Device::GetInstance() {
 	if (_deviceInstance == nullptr) {
 		_deviceInstance = new Device;
 	}
-
 	return _deviceInstance;
 }
 

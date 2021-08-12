@@ -1,0 +1,10 @@
+[SPRITES]
+Boomerang	65	67	81	83	4	50
+Boomerang	82	67	98	83
+Boomerang	99	67	115	83
+Boomerang	116	67	132	83
+[/]
+
+[HITBOXES]
+0	0	16	16
+[/]

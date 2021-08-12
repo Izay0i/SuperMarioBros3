@@ -1,0 +1,22 @@
+[BGCOLOR]
+156	252	240
+[/]
+
+[TEXTURES]
+0	assets\textures\tileset.png	224	163	216
+1	assets\textures\map.png	224	163	216
+2	assets\textures\player.png	224	163	216
+3	assets\textures\hud.png	224	163	216
+4	assets\textures\enemies.png	224	163	216
+5	assets\textures\items.png	224	163	216
+6	assets\textures\particles.png	224	163	216
+7	assets\textures\titlescreen.png	224	163	216
+[/]
+
+[BACKGROUND]
+#Nframes	texID
+3	0
+187	17	203	33	50	50
+187	17	203	33	100	100
+187	17	203	33	200	200
+[/]

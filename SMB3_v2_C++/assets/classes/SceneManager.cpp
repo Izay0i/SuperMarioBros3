@@ -10,7 +10,6 @@ SceneManager* SceneManager::GetInstance() {
 	if (_managerInstance == nullptr) {
 		_managerInstance = new SceneManager;
 	}
-
 	return _managerInstance;
 }
 
@@ -37,7 +36,7 @@ void SceneManager::ChangeScene(int sceneID) {
 }
 
 void SceneManager::Release() {
-	for (auto scene : _scenes) {
+	for (auto& scene : _scenes) {
 		scene.second->Release();
 		delete scene.second;
 	}

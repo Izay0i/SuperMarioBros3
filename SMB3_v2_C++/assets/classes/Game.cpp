@@ -41,10 +41,13 @@ void Game::_Render() {
 	if (GlobalUtil::directDevice->BeginScene() == D3D_OK) {
 		GlobalUtil::directDevice->ColorFill(_backBuffer, nullptr, _managerInstance->GetCurrentScene()->GetBGColor());
 		GlobalUtil::spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
+
 		_managerInstance->GetCurrentScene()->Render();
+		
 		GlobalUtil::spriteHandler->End();
 		GlobalUtil::directDevice->EndScene();
 	}
+	GlobalUtil::directDevice->Present(nullptr, nullptr, nullptr, nullptr);
 }
 
 Game::Game() {
@@ -201,6 +204,11 @@ void Game::LoadSettings(std::string filePath) {
 			continue;
 		}
 
+		if (line == "[/]") {
+			section = _GameFileSection::GAMEFILE_SECTION_UNKNOWN;
+			continue;
+		}
+
 		if (line == "[SETTINGS]") {
 			section = _GameFileSection::GAMEFILE_SECTION_SETTINGS;
 			continue;
@@ -242,12 +250,7 @@ void Game::GameRun() {
 		}
 		else {
 			DWORD now = static_cast<DWORD>(GetTickCount64());
-
 			DWORD deltaTime = now - frameStart;
-
-			/*char debug[100];
-			sprintf_s(debug, "Delta: %lu\n", deltaTime);
-			OutputDebugStringA(debug);*/
 
 			if (deltaTime >= ticksPerFrame) {
 				frameStart = now;

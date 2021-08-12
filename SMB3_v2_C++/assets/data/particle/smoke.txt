@@ -1,0 +1,6 @@
+[SPRITES]
+Smoke	36	21	52	37	4	50
+Smoke	54	21	70	37
+Smoke	72	21	88	37
+Smoke	90	21	106	37
+[/]

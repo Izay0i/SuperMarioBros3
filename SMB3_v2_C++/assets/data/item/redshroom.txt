@@ -1,0 +1,7 @@
+[SPRITES]
+RedShroom	34	0	50	16	1	0
+[/]
+
+[HITBOXES]
+0	0	16	16
+[/]

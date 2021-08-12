@@ -1,0 +1,15 @@
+[SPRITES]
+YellowDie	34	0	50	16	1	0
+
+YellowWalk	0	0	16	16	2	50
+YelowWalk	17	0	33	16
+
+RedDie	102	0	118	16	1	0
+
+RedWalk	68	0	84	16	2	50
+RedWalk	85	0	101	16
+[/]
+
+[HITBOXES]
+0	0	16	16
+[/]

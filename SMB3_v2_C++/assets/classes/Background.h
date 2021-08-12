@@ -2,23 +2,20 @@
 
 #include "GlobalUtil.h"
 #include "GameObject.h"
+#include "Camera.h"
 #include "Sprite.h"
 
 class Background : public GameObject {
 private:
-	static Background* _backgroundInstance;
-
-	static LPDIRECT3DTEXTURE9 _backgroundTexture;
-
-	std::vector<std::pair<RECT, D3DXVECTOR2>> _sprites;
-
-	Background();
-	~Background();
+	std::vector<D3DXVECTOR2> _positions;
+	
+	Sprite* _backgroundSprite;
 
 public:
-	static Background* GetInstance();
+	//Texture, total frames
+	Background(const LPDIRECT3DTEXTURE9&, unsigned int);
+	~Background();
 
-	void LoadTexture(std::string, D3DCOLOR);
 	void AddSprite(RECT, D3DXVECTOR2);
 
 	void Render() override;

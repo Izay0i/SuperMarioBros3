@@ -1,0 +1,6 @@
+[SPRITES]
+Cactus	0	183	16	199	4	50
+Cactus	17	183	33	199
+Cactus	34	183	50	199
+Cactus	51	183	67	199	
+[/]

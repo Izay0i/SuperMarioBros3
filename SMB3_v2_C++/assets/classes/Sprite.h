@@ -18,11 +18,13 @@ private:
 	DWORD _lastFrameTime;
 
 	LPDIRECT3DTEXTURE9 _spriteTexture;
-	D3DCOLOR _colorKey;
 
 public:
-	//Sprite texture, sprite bound, total frames, animation speed, color key
-	Sprite(LPDIRECT3DTEXTURE9&, RECT, unsigned int, int, D3DCOLOR);
+	//Background
+	Sprite(const LPDIRECT3DTEXTURE9&, unsigned int);
+
+	//Sprite texture, sprite bound, total frames, animation speed
+	Sprite(const LPDIRECT3DTEXTURE9&, RECT, unsigned int, int);
 	~Sprite();
 
 	void AddSpriteBound(RECT);

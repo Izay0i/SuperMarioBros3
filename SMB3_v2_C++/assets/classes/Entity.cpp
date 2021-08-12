@@ -1,5 +1,21 @@
 #include "Entity.h"
 
+void Entity::_ParseHitboxes(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
+
+	if (tokens.size() < 4) {
+		return;
+	}
+
+	RECTF hitbox;
+	hitbox.left = std::stof(tokens.at(0));
+	hitbox.top = std::stof(tokens.at(1));
+	hitbox.right = std::stof(tokens.at(2));
+	hitbox.bottom = std::stof(tokens.at(4));
+
+	_hitbox.AddHitbox(hitbox);
+}
+
 Entity::Entity() {
 	_health = 1;
 	_score = 100;
@@ -18,26 +34,9 @@ int Entity::GetHealth() const {
 	return _health;
 }
 
-void Entity::ParseHitboxes(std::string line) {
-	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
-
-	if (tokens.size() < 4) {
-		return;
-	}
-
-	RECTF hitbox;
-	hitbox.left = std::stof(tokens.at(0));
-	hitbox.top = std::stof(tokens.at(1));
-	hitbox.right = std::stof(tokens.at(2));
-	hitbox.bottom = std::stof(tokens.at(4));
-	
-	_hitbox.AddHitbox(hitbox);
-}
-
 void Entity::ParseData(
 	std::string dataPath, 
-	std::string texturePath, 
-	D3DCOLOR colorKey, 
+	const LPDIRECT3DTEXTURE9& texture,  
 	std::vector<std::string> extraData) 
 {
 	std::ifstream readFile;
@@ -48,14 +47,9 @@ void Entity::ParseData(
 		return;
 	}
 
-	if (extraData.size() > 0) {
+	if (!extraData.empty()) {
 		_extraData = extraData;
 	}
-
-	_texturePath = GlobalUtil::ToLPCWSTR(texturePath);
-	_colorKey = colorKey;
-
-	LoadTexture();
 
 	_DataFileSection dataFileSection = _DataFileSection::DATAFILE_SECTION_UNKNOWN;
 	char str[GlobalUtil::MAX_FILE_LINE];
@@ -63,6 +57,11 @@ void Entity::ParseData(
 		std::string line(str);
 
 		if (line.empty() || line.front() == '#') {
+			continue;
+		}
+
+		if (line == "[/]") {
+			dataFileSection = _DataFileSection::DATAFILE_SECTION_UNKNOWN;
 			continue;
 		}
 
@@ -78,10 +77,10 @@ void Entity::ParseData(
 
 		switch (dataFileSection) {
 			case _DataFileSection::DATAFILE_SECTION_SPRITES:
-				ParseSprites(line);
+				_ParseSprites(line);
 				break;
 			case _DataFileSection::DATAFILE_SECTION_HITBOXES:
-				ParseHitboxes(line);
+				_ParseHitboxes(line);
 				break;
 		}
 	}

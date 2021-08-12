@@ -1,0 +1,11 @@
+[SPRITES]
+GreenChomp	146	0	162	32	2	50
+GreenChomp	163	0	179	32
+
+RedChomp	146	33	162	65	2	50
+RedChomp	163	33	179	65
+[/]
+
+[HITBOXES]
+0	0	16	32
+[/]

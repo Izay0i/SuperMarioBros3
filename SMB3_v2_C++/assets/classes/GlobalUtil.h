@@ -18,8 +18,8 @@ namespace GlobalUtil {
 	const static int MAX_FILE_LINE = 5000;
 
 	//Mainly used in the Game and Sprite class
-	static LPDIRECT3DDEVICE9 directDevice;
-	static LPD3DXSPRITE spriteHandler;
+	extern LPDIRECT3DDEVICE9 directDevice;
+	extern LPD3DXSPRITE spriteHandler;
 
 	static std::vector<std::string> SplitStr(std::string line, std::string delimeter = "\t") {
 		std::vector<std::string> tokens;

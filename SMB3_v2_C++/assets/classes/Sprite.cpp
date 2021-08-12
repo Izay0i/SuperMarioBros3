@@ -1,11 +1,18 @@
 #include "Sprite.h"
 
-Sprite::Sprite(LPDIRECT3DTEXTURE9& spriteTexture, RECT spriteBound, unsigned int totalFrames, int animationSpeed, D3DCOLOR colorKey) {
+Sprite::Sprite(const LPDIRECT3DTEXTURE9& spriteTexture, unsigned int totalFrames) {
+	_currentFrame = -1;
+	_spriteTexture = spriteTexture;
+	_totalFrames = totalFrames;
+	_animationSpeed = 0;
+	_cameraInstance = Camera::GetInstance();
+}
+
+Sprite::Sprite(const LPDIRECT3DTEXTURE9& spriteTexture, RECT spriteBound, unsigned int totalFrames, int animationSpeed) {
 	_currentFrame = -1;
 	_spriteTexture = spriteTexture;
 	_bounds.emplace_back(spriteBound);
 	_animationSpeed = animationSpeed;
-	_colorKey = colorKey;
 	_cameraInstance = Camera::GetInstance();
 }
 

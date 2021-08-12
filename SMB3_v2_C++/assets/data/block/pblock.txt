@@ -1,0 +1,11 @@
+[SPRITES]
+Blank	180	34	196	50	1	0
+
+PBlock	129	34	145	50	3	50
+PBlock	146	34	162	50
+PBlock	163	34	179	50
+[/]
+
+[HITBOXES]
+0	0	16	16
+[/]

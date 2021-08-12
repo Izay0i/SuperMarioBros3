@@ -25,6 +25,9 @@ protected:
 
 	AnimatedSprite _animatedSprite;
 
+	virtual void _ParseSprites(std::string) = 0;
+	virtual void _ParseHitboxes(std::string);
+
 public:
 	Entity();
 	virtual ~Entity();
@@ -32,12 +35,8 @@ public:
 	virtual void SetHealth(int);
 	virtual int GetHealth() const;
 
-	virtual void LoadTexture() = 0;
-
-	virtual void ParseSprites(std::string) = 0;
-	virtual void ParseHitboxes(std::string);
-	//Entity data  file path, texture file path, color key, extra data/properties
-	virtual void ParseData(std::string, std::string, D3DCOLOR, std::vector<std::string> = std::vector<std::string>());
+	//Entity data  file path, texture, extra data/properties
+	virtual void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>());
 
 	virtual void HandleStates() = 0;
 };

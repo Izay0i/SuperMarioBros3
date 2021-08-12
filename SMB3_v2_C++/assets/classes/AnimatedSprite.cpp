@@ -12,7 +12,7 @@ void AnimatedSprite::_AddSpriteBound(std::string animationName, RECT spriteBound
 	_sprites[animationName]->AddSpriteBound(spriteBound);
 }
 
-void AnimatedSprite::ParseSprites(std::string line, LPDIRECT3DTEXTURE9& spriteTexture, D3DCOLOR colorKey) {
+void AnimatedSprite::ParseSprites(std::string line, const LPDIRECT3DTEXTURE9& spriteTexture) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
 	if (tokens.size() < 5) {
@@ -31,7 +31,7 @@ void AnimatedSprite::ParseSprites(std::string line, LPDIRECT3DTEXTURE9& spriteTe
 		_sprites.insert(
 			std::make_pair(
 				tokens.at(0), 
-				new Sprite(spriteTexture, spriteBound, totalFrames, animationSpeed, colorKey)
+				new Sprite(spriteTexture, spriteBound, totalFrames, animationSpeed)
 			)
 		);
 	}
@@ -52,7 +52,7 @@ void AnimatedSprite::PlaySpriteAnimation(std::string animationName, D3DXVECTOR2 
 }
 
 void AnimatedSprite::Release() {
-	for (auto sprite : _sprites) {
+	for (auto& sprite : _sprites) {
 		sprite.second->Release();
 		delete sprite.second;
 	}

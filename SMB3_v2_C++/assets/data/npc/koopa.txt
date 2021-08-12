@@ -1,0 +1,29 @@
+[SPRITES]
+GreenShellIdle	34	17	50	33	1	0
+
+GreenShellWake	34	17	50	33	2	25
+GreenShellWake	51	17	67	33
+
+GreenShellSpin	0	50	16	66	3	50
+GreenShellSpin	17	50	33	66
+GreenShellSpin	34	50	50	66
+
+GreenWalk	0	17	16	46	2	50
+GreenWalk	17	17	33	47
+
+RedShellIdle	102	17	118	33	1	0
+
+RedShellWake	102	17	118	33	2	25
+RedShellWake	119	17	135	33
+
+RedShellSpin	68	50	84	66	3	50
+RedShellSpin	85	50	101	66
+RedShellSpin	102	50	118	66
+
+RedWalk	68	17	84	46	2	50
+RedWalk	85	17	101	47
+[/]
+
+[HITBOXES]
+0	0	16	24
+[/]

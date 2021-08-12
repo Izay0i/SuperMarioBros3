@@ -1,0 +1,13 @@
+[SPRITES]
+PFireball	108	21	116	37	4	50
+PFireball	118	21	126	37
+PFireball	128	21	136	37
+PFireball	138	21	146	37
+
+VFireball	137	17	145	33	2	50
+VFireball	137	34	145	50
+[/]
+
+[HITBOXES]
+0	0	8	8
+[/]

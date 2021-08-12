@@ -1,0 +1,156 @@
+[SPRITES]
+#SMALL
+Idle	0	0	16	16	1	0
+
+Run	0	0	16	16	2	50
+Run	18	0	34	16
+
+Jump	36	0	52	16	1	0
+
+SuperRun	54	0	70	16	2	50
+SuperRun	72	0	88	16
+
+SuperJump	90	0	106	16	1	0
+
+Skid	108	0	124	16	1	0
+
+Front	126	0	142	16	1	0
+
+HoldIdle	144	0	160	16	1	0
+
+HoldRun	144	0	160	16	2	50
+HoldRun	162	0	178	16
+
+Kick	180	0	196	16	1	0
+
+Slide	198	0	214	16	1	0
+
+Die	216	0	232	161	1	0
+
+#BIG
+BigIdle	0	17	16	49	1	0
+
+BigRun	0	17	16	49	2	50
+BigRun	18	17	34	49
+
+BigJump	72	17	88	49	1	0
+
+BigFall	36	17	52	49	1	0
+
+BigCrouch	54	17	70	49	1	0
+
+BigSuperRun	90	17	114	49	2	50
+BigSuperRun	116	17	140	49
+
+BigSuperJump	142	17	166	49	1	0
+
+BigSuperFall	168	17	192	49	1	0
+
+BigSkid	194	17	210	49	1	0
+
+BigFront	212	17	228	49	1	0
+
+BigHoldIdle	230	17	246	49	1	0
+
+BigHoldRun	230	17	246	49	1	0
+BigHoldRun	248	17	264	49
+
+BigHoldJump	266	17	282	49	1	0
+
+BigKick	284	17	308	49	1	0
+
+BigSlide	310	17	326	49	1	0
+
+BigIntroImpact	328	17	352	41	1	0
+
+BigIntroLookUp	354	17	370	49	1	0
+
+#Fire
+FireIdle	0	50	16	82	1	0
+
+FireRun	0	50	16	82	2	50
+FireRun	18	50	34	82
+
+FireJump	72	50	88	82	1	0
+
+FireFall	36	50	52	82	1	0
+
+FireCrouch	54	50	70	82	1	0
+
+FireSuperRun	90	50	114	82	2	50
+FireSuperRun	116	17	140	82
+
+FireSuperJump	142	50	166	82	1	0
+
+FireSuperFall	168	17	192	80	1	0
+
+FireSkid	194	50	210	82	1	0
+
+FireFront	212	50	228	82	1	0
+
+FireHoldIdle	230	50	246	82	1	0
+
+FireHoldRun	230	50	246	82	2	50
+FireHoldRun	248	50	264	82
+
+FireHoldJump	266	50	282	82	1	0
+
+FireKick	284	50	308	82	1	0
+
+FireSlide	310	50	326	82	1	0
+
+#RACCOON
+RacIdle	0	83	24	115	1	0
+
+RacRun	0	83	24	115	2	50
+RacRun	26	83	50	115
+
+RacJump	104	83	128	115	1	0
+
+RacFall	52	83	76	115	1	0
+
+RacCrouch	78	83	102	115	1	0
+
+RacWagFall	130	83	154	115	2	50
+RacWagFall	156	83	180	155
+
+RacSuperRun	182	83	206	115	2	50
+RacSuperRun	208	83	232	115
+
+RacSuperJump	234	83	258	115	1	0
+
+RacSuperFall	260	83	284	115	1	0
+
+RacWagSuperFall	260	83	284	115	3	50
+RacWagSuperFall	286	83	310	115
+RacWagSuperFall	312	83	336	115
+
+RacSkid	338	83	354	115	1	0
+
+RacFront	356	83	372	115	1	0
+
+RacWag	374	83	398	115	2	50
+RacWag	400	83	416	115
+
+RacHoldIdle	0	116	24	148	1	0
+
+RacHoldRun	0	116	24	148	1	0
+RacHoldRun	26	116	50	148
+
+RacHoldJump	52	116	76	148	1	0
+
+RacKick	78	116	102	148	1	0
+
+RacSlide	104	116	120	148	1	0
+
+#MAP
+MapSmall	122	132	138	148	1	0
+MapBig	140	124	156	148	1	0
+MapFire	158	124	174	148	1	0
+MapRac	176	124	192	148	1	0
+[/]
+
+[HITBOXES]
+0	0	16	16
+0	0	32	16
+[/]
