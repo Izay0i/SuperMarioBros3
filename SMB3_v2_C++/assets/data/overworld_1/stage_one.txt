@@ -1,3 +1,16 @@
+[SCENESIZE]
+2816	656
+[/]
+
+[SCENETIME]
+300
+[/]
+
+[CAMERABOUNDS]
+8	0	2816	465
+1968	464	2479	689
+[/]
+
 [BGCOLOR]
 156	252	240
 [/]
@@ -10,7 +23,125 @@
 4	assets\textures\enemies.png	224	163	216
 5	assets\textures\items.png	224	163	216
 6	assets\textures\particles.png	224	163	216
-7	assets\textures\titlescreen.png	224	163	216
+7	assets\textures\projectiles.png	224	163	216
+[/]
+
+#OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
+[ENTITYDATA]
+#Player								OBJ_ID	FILE_PATH				texID
+0	assets\data\player\mario.txt	2	125	100	107	assets\data\projectile\fireball.txt	7
+
+#NPC
+#Goomba
+100	assets\data\npc\goomba.txt	4	224	400	yellow
+100	assets\data\npc\goomba.txt	4	528	400	yellow
+100	assets\data\npc\goomba.txt	4	832	384	yellow
+100	assets\data\npc\goomba.txt	4	880	384	yellow
+#Paragoomba
+101	assets\data\npc\goomba.txt	4	946	384	888	assets\data\auxiliary\wing.txt	5	red
+
+#Koopa
+102	assets\data\npc\koopa.txt	4	576	352	red
+102	assets\data\npc\koopa.txt	4	1472	384	green
+102	assets\data\npc\koopa.txt	4	2096	352	red
+#Parakoopa
+103	assets\data\npc\koopa.txt	4	1328	294	888	assets\data\auxiliary\wing.txt	5	green
+103	assets\data\npc\koopa.txt	4	1376	294	888	assets\data\auxiliary\wing.txt	5	green
+103	assets\data\npc\koopa.txt	4	1424	294	888	assets\data\auxiliary\wing.txt	5	green
+
+#Pirana plant
+104	assets\data\npc\piranaplant.txt	4	1800	400	green
+#Venus plant
+105	assets\data\npc\venusplant.txt	4	360	384	108	assets\data\projectile\fireball.txt	7	red
+105	assets\data\npc\venusplant.txt	4	1864	384	108	assets\data\projectile\fireball.txt	7	green
+
+#Portal								#destination
+198	assets\data\npc\portal.txt	0	2257	112	2101	468
+198	assets\data\npc\portal.txt	0	2321	488	2328	386
+
+#Item
+#Coin
+205	assets\data\item\coin.txt	5	1072	320
+205	assets\data\item\coin.txt	5	1104	288
+205	assets\data\item\coin.txt	5	1136	256
+205	assets\data\item\coin.txt	5	1168	224
+205	assets\data\item\coin.txt	5	1200	192
+205	assets\data\item\coin.txt	5	1328	80
+205	assets\data\item\coin.txt	5	1344	80
+205	assets\data\item\coin.txt	5	1360	80
+205	assets\data\item\coin.txt	5	1472	112
+205	assets\data\item\coin.txt	5	1488	112
+205	assets\data\item\coin.txt	5	1536	128
+205	assets\data\item\coin.txt	5	1552	128
+205	assets\data\item\coin.txt	5	1568	128
+205	assets\data\item\coin.txt	5	1584	128
+205	assets\data\item\coin.txt	5	1616	112
+205	assets\data\item\coin.txt	5	1632	112
+205	assets\data\item\coin.txt	5	1648	112
+205	assets\data\item\coin.txt	5	1664	112
+205	assets\data\item\coin.txt	5	1696	144
+205	assets\data\item\coin.txt	5	1728	112
+205	assets\data\item\coin.txt	5	1760	128
+205	assets\data\item\coin.txt	5	1808	96
+205	assets\data\item\coin.txt	5	1840	128
+#Underground
+205	assets\data\item\coin.txt	5	2192	488
+205	assets\data\item\coin.txt	5	2208	488
+205	assets\data\item\coin.txt	5	2176	504
+205	assets\data\item\coin.txt	5	2224	504
+205	assets\data\item\coin.txt	5	2224	520
+205	assets\data\item\coin.txt	5	2192	536
+205	assets\data\item\coin.txt	5	2208	536
+205	assets\data\item\coin.txt	5	2224	552
+205	assets\data\item\coin.txt	5	2176	568
+205	assets\data\item\coin.txt	5	2224	568
+205	assets\data\item\coin.txt	5	2192	584
+205	assets\data\item\coin.txt	5	2208	584
+
+#Bonus item
+206	assets\data\item\bonusitem.txt	5	2688	337
+
+#Animated block
+#Question block
+300	assets\data\block\questionblock.txt	0	176	352	204	assets\data\item\coin.txt	5
+300	assets\data\block\questionblock.txt	0	192	352	204	assets\data\item\coin.txt	5
+300	assets\data\block\questionblock.txt	0	224	304	204	assets\data\item\coin.txt	5
+300	assets\data\block\questionblock.txt	0	240	304	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+300	assets\data\block\questionblock.txt	0	416	320	204	assets\data\item\coin.txt	5
+300	assets\data\block\questionblock.txt	0	656	384	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+300	assets\data\block\questionblock.txt	0	704	352	204	assets\data\item\coin.txt	5
+300	assets\data\block\questionblock.txt	0	1472	368	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+
+#Shiny brick															quantity
+301	assets\data\block\brickblock.txt	0	1440	128	201	assets\data\item\greenshroom.txt	5	1
+301	assets\data\block\brickblock.txt	0	2032	368	302	assets\data\block\pblock.txt	0	1
+
+301	assets\data\block\brickblock.txt	0	1984	368
+301	aassets\data\block\brickblock.txt	0	2000	368
+301	assets\data\block\brickblock.txt	0	2016	368
+301	assets\data\block\brickblock.txt	0	1968	384
+301	assets\data\block\brickblock.txt	0	1984	384
+301	assets\data\block\brickblock.txt	0	2000	384
+301	assets\data\block\brickblock.txt	0	2016	384
+301	assets\data\block\brickblock.txt	0	2032	384
+301	assets\data\block\brickblock.txt	0	2096	384
+301	assets\data\block\brickblock.txt	0	1952	400
+301	assets\data\block\brickblock.txt	0	1968	400
+301	assets\data\block\brickblock.txt	0	1984	400
+301	assets\data\block\brickblock.txt	0	2000	400
+301	assets\data\block\brickblock.txt	0	2016	400
+301	assets\data\block\brickblock.txt	0	2032	400
+301	assets\data\block\brickblock.txt	0	2048	400
+301	assets\data\block\brickblock.txt	0	2096	400
+301	assets\data\block\brickblock.txt	0	2112	400
+[/]
+
+[TILEDATA]
+
+[/]
+
+[HUD]
+assets\data\hud\hud.txt	3
 [/]
 
 [BACKGROUND]

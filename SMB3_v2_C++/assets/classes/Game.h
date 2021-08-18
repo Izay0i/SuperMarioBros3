@@ -2,13 +2,10 @@
 
 #include "GlobalUtil.h"
 #include "Device.h"
-#include "SceneManager.h"
 
 #include <string>
 #include <fstream>
 #include <vector>
-
-#include <dinput.h>
 
 class Game {
 private:
@@ -38,6 +35,7 @@ private:
 	LPDIRECT3DSURFACE9 _backBuffer;
 
 	static LRESULT CALLBACK _WinProc(HWND, UINT, WPARAM, LPARAM);
+	static void _ResizeWindow(int, RECT&);
 
 	Game();
 	~Game();

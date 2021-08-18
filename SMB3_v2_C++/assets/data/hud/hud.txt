@@ -1,4 +1,6 @@
 [SPRITES]
+BlackBG	0	0	264	113	1	0
+
 Panel	0	114	264	144	1	0
 
 CardShroom	0	145	24	173	1	0

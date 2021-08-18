@@ -1,7 +1,7 @@
 #include "Background.h"
 
 Background::Background(const LPDIRECT3DTEXTURE9& backgroundTexture, unsigned int totalFrames) {
-	_backgroundSprite = new Sprite(backgroundTexture, totalFrames);
+	_backgroundSprite = new Sprite(backgroundTexture, { -1, -1, -1, -1 }, totalFrames, 0);
 }
 
 Background::~Background() {}

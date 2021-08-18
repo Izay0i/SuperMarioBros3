@@ -64,7 +64,6 @@ bool Device::InitKeyboard(HWND hWND) {
 
 void Device::ProcessKeyboardInputs() {
 	HRESULT hResult;
-
 	hResult = _keyboard->GetDeviceState(sizeof(_keyStates), _keyStates);
 
 	if (FAILED(hResult)) {
@@ -80,8 +79,6 @@ void Device::ProcessKeyboardInputs() {
 		}
 	}
 
-	_managerInstance->GetCurrentScene()->HandleStates(reinterpret_cast<BYTE*>(&_keyStates));
-
 	DWORD elements = _KEYBOARD_BUFFER_SIZE;
 
 	hResult = _keyboard->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), keyEvents, &elements, 0);
@@ -93,6 +90,8 @@ void Device::ProcessKeyboardInputs() {
 	for (DWORD i = 0; i < elements; ++i) {
 		int keyCode = keyEvents[i].dwOfs;
 		int keyState = keyEvents[i].dwData;
+
+		_managerInstance->GetCurrentScene()->HandleStates(keyCode, (keyState & 0x80) > 0);
 
 		if ((keyState & 0x80) > 0) {
 			_managerInstance->GetCurrentScene()->OnKeyDown(keyCode);

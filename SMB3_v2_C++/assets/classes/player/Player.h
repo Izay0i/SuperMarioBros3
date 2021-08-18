@@ -1,12 +1,14 @@
 #pragma once
 
-#include "../Device.h"
 #include "../Entity.h"
+#include "StateMachine.h"
 
 #include <list>
 #include <fstream>
 
-class Mario : public Entity {
+class StateMachine;
+
+class Player : public Entity {
 private:
 	static LPDIRECT3DTEXTURE9 _playerTexture;
 
@@ -29,7 +31,9 @@ private:
 	float _gravity;
 	float _acceleration;
 
-	//StateMachine* _stateMachine;
+	bool _isOnGround;
+
+	StateMachine* _stateMachine;
 
 	Entity* _heldEntity;
 	Entity* _touchedEntity;
@@ -39,12 +43,15 @@ private:
 	void _ParseSprites(std::string) override;
 
 public:
-	Mario();
-	~Mario();
+	Player();
+	~Player();
 
 	RECTF GetBoundingBox(int = 0) const override;
+	Entity* GetHeldEntity() const;
 
-	void HandleStates() override;
+	bool IsOnGround() const;
+
+	void HandleStates(int, bool) override;
 	void OnKeyUp(int);
 	void OnKeyDown(int);
 
@@ -52,6 +59,8 @@ public:
 
 	void MoveLeft();
 	void MoveRight();
+	void SkidLeft();
+	void SkidRight();
 	void Jump();
 	void Crouch();
 	void HoldEntity();

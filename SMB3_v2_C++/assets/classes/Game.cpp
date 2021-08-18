@@ -4,18 +4,131 @@ Game* Game::_gameInstance = nullptr;
 
 LRESULT Game::_WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	case WM_CHAR:
-		switch (wParam) {
-		case VK_ESCAPE:
+		case WM_SIZING:
+			_ResizeWindow(static_cast<int>(wParam), *reinterpret_cast<LPRECT>(lParam));
+			break;
+		case WM_GETMINMAXINFO:
+			{
+				MINMAXINFO* info = reinterpret_cast<MINMAXINFO*>(lParam);
+				info->ptMinTrackSize.y = 
+					((info->ptMinTrackSize.x - GlobalUtil::WINDOW_ADJUST_X) * 
+					GlobalUtil::ASPECT_RATIO_Y) / GlobalUtil::ASPECT_RATIO_X + GlobalUtil::WINDOW_ADJUST_Y;
+			}
+			break;
+		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;
-		}
+		case WM_CHAR:
+			switch (wParam) {
+				case VK_ESCAPE:
+					PostQuitMessage(0);
+					break;
+			}
 	}
 
 	return DefWindowProc(hWND, message, wParam, lParam);
+}
+
+//http://playtechs.blogspot.com/2007/10/forcing-window-to-maintain-particular.html
+void Game::_ResizeWindow(int edge, RECT& rect) {
+	int size_x_desired = (rect.right - rect.left) - GlobalUtil::WINDOW_ADJUST_X;
+	int size_y_desired = (rect.bottom - rect.top) - GlobalUtil::WINDOW_ADJUST_Y;
+
+	switch (edge)
+	{
+	case WMSZ_BOTTOM:
+	case WMSZ_TOP:
+	{
+		int size_x = GlobalUtil::WINDOW_ADJUST_X + (size_y_desired * GlobalUtil::ASPECT_RATIO_X) / GlobalUtil::ASPECT_RATIO_Y;
+		rect.left = (rect.left + rect.right) / 2 - size_x / 2;
+		rect.right = rect.left + size_x;
+	}
+	break;
+	case WMSZ_BOTTOMLEFT:
+	{
+		int size_x, size_y;
+
+		if (size_x_desired * GlobalUtil::ASPECT_RATIO_Y > size_y_desired * GlobalUtil::ASPECT_RATIO_X)
+		{
+			size_x = rect.right - rect.left;
+			size_y = GlobalUtil::WINDOW_ADJUST_Y + ((size_x - GlobalUtil::WINDOW_ADJUST_X) * GlobalUtil::ASPECT_RATIO_Y) / GlobalUtil::ASPECT_RATIO_X;
+		}
+		else
+		{
+			size_y = rect.bottom - rect.top;
+			size_x = GlobalUtil::WINDOW_ADJUST_X + ((size_y - GlobalUtil::WINDOW_ADJUST_Y) * GlobalUtil::ASPECT_RATIO_X) / GlobalUtil::ASPECT_RATIO_Y;
+		}
+
+		rect.left = rect.right - size_x;
+		rect.bottom = rect.top + size_y;
+	}
+	break;
+	case WMSZ_BOTTOMRIGHT:
+	{
+		int size_x, size_y;
+
+		if (size_x_desired * GlobalUtil::ASPECT_RATIO_Y > size_y_desired * GlobalUtil::ASPECT_RATIO_X)
+		{
+			size_x = rect.right - rect.left;
+			size_y = GlobalUtil::WINDOW_ADJUST_Y + ((size_x - GlobalUtil::WINDOW_ADJUST_X) * GlobalUtil::ASPECT_RATIO_Y) / GlobalUtil::ASPECT_RATIO_X;
+		}
+		else
+		{
+			size_y = rect.bottom - rect.top;
+			size_x = GlobalUtil::WINDOW_ADJUST_X + ((size_y - GlobalUtil::WINDOW_ADJUST_Y) * GlobalUtil::ASPECT_RATIO_X) / GlobalUtil::ASPECT_RATIO_Y;
+		}
+
+		rect.right = rect.left + size_x;
+		rect.bottom = rect.top + size_y;
+	}
+	break;
+	case WMSZ_LEFT:
+	case WMSZ_RIGHT:
+	{
+		int size_y = GlobalUtil::WINDOW_ADJUST_Y + (size_x_desired * GlobalUtil::ASPECT_RATIO_Y) / GlobalUtil::ASPECT_RATIO_X;
+		rect.top = (rect.top + rect.bottom) / 2 - size_y / 2;
+		rect.bottom = rect.top + size_y;
+	}
+	break;
+	case WMSZ_TOPLEFT:
+	{
+		int size_x, size_y;
+
+		if (size_x_desired * GlobalUtil::ASPECT_RATIO_Y > size_y_desired * GlobalUtil::ASPECT_RATIO_X)
+		{
+			size_x = rect.right - rect.left;
+			size_y = GlobalUtil::WINDOW_ADJUST_Y + ((size_x - GlobalUtil::WINDOW_ADJUST_X) * GlobalUtil::ASPECT_RATIO_Y) / GlobalUtil::ASPECT_RATIO_X;
+		}
+		else
+		{
+			size_y = rect.bottom - rect.top;
+			size_x = GlobalUtil::WINDOW_ADJUST_X + ((size_y - GlobalUtil::WINDOW_ADJUST_Y) * GlobalUtil::ASPECT_RATIO_X) / GlobalUtil::ASPECT_RATIO_Y;
+		}
+
+		rect.left = rect.right - size_x;
+		rect.top = rect.bottom - size_y;
+	}
+	break;
+	case WMSZ_TOPRIGHT:
+	{
+		int size_x, size_y;
+
+		if (size_x_desired * GlobalUtil::ASPECT_RATIO_Y > size_y_desired * GlobalUtil::ASPECT_RATIO_X)
+		{
+			size_x = rect.right - rect.left;
+			size_y = GlobalUtil::WINDOW_ADJUST_Y + ((size_x - GlobalUtil::WINDOW_ADJUST_X) * GlobalUtil::ASPECT_RATIO_Y) / GlobalUtil::ASPECT_RATIO_X;
+		}
+		else
+		{
+			size_y = rect.bottom - rect.top;
+			size_x = GlobalUtil::WINDOW_ADJUST_X + ((size_y - GlobalUtil::WINDOW_ADJUST_Y) * GlobalUtil::ASPECT_RATIO_X) / GlobalUtil::ASPECT_RATIO_Y;
+		}
+
+		rect.right = rect.left + size_x;
+		rect.top = rect.bottom - size_y;
+	}
+	break;
+	}
 }
 
 void Game::_ParseSettings(std::string line) {
@@ -104,7 +217,7 @@ HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int he
 	wndClass.lpszMenuName = nullptr;
 	wndClass.lpszClassName = _CLASS_NAME;
 
-	RegisterClassEx(&wndClass);
+	RegisterClassEx(&wndClass);	
 
 	HWND hWND = CreateWindow(
 		_CLASS_NAME,

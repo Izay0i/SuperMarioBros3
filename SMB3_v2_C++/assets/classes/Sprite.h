@@ -20,9 +20,6 @@ private:
 	LPDIRECT3DTEXTURE9 _spriteTexture;
 
 public:
-	//Background
-	Sprite(const LPDIRECT3DTEXTURE9&, unsigned int);
-
 	//Sprite texture, sprite bound, total frames, animation speed
 	Sprite(const LPDIRECT3DTEXTURE9&, RECT, unsigned int, int);
 	~Sprite();

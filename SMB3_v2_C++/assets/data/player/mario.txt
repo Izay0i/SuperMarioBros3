@@ -7,7 +7,7 @@ Run	18	0	34	16
 
 Jump	36	0	52	16	1	0
 
-SuperRun	54	0	70	16	2	50
+SuperRun	54	0	70	16	2	25
 SuperRun	72	0	88	16
 
 SuperJump	90	0	106	16	1	0
@@ -25,7 +25,7 @@ Kick	180	0	196	16	1	0
 
 Slide	198	0	214	16	1	0
 
-Die	216	0	232	161	1	0
+Die	216	0	232	16	1	0
 
 #BIG
 BigIdle	0	17	16	49	1	0
@@ -39,7 +39,7 @@ BigFall	36	17	52	49	1	0
 
 BigCrouch	54	17	70	49	1	0
 
-BigSuperRun	90	17	114	49	2	50
+BigSuperRun	90	17	114	49	2	25
 BigSuperRun	116	17	140	49
 
 BigSuperJump	142	17	166	49	1	0
@@ -77,12 +77,12 @@ FireFall	36	50	52	82	1	0
 
 FireCrouch	54	50	70	82	1	0
 
-FireSuperRun	90	50	114	82	2	50
-FireSuperRun	116	17	140	82
+FireSuperRun	90	50	114	82	2	25
+FireSuperRun	116	50	140	82
 
 FireSuperJump	142	50	166	82	1	0
 
-FireSuperFall	168	17	192	80	1	0
+FireSuperFall	168	50	192	82	1	0
 
 FireSkid	194	50	210	82	1	0
 
@@ -99,6 +99,9 @@ FireKick	284	50	308	82	1	0
 
 FireSlide	310	50	326	82	1	0
 
+FireThrow	328	50	344	82	2	50
+FireThrow	346	50	362	82
+
 #RACCOON
 RacIdle	0	83	24	115	1	0
 
@@ -112,9 +115,9 @@ RacFall	52	83	76	115	1	0
 RacCrouch	78	83	102	115	1	0
 
 RacWagFall	130	83	154	115	2	50
-RacWagFall	156	83	180	155
+RacWagFall	156	83	180	115
 
-RacSuperRun	182	83	206	115	2	50
+RacSuperRun	182	83	206	115	2	25
 RacSuperRun	208	83	232	115
 
 RacSuperJump	234	83	258	115	1	0
@@ -129,7 +132,7 @@ RacSkid	338	83	354	115	1	0
 
 RacFront	356	83	372	115	1	0
 
-RacWag	374	83	398	115	2	50
+RacWag	374	83	398	115	2	100
 RacWag	400	83	416	115
 
 RacHoldIdle	0	116	24	148	1	0
@@ -144,10 +147,40 @@ RacKick	78	116	102	148	1	0
 RacSlide	104	116	120	148	1	0
 
 #MAP
-MapSmall	122	132	138	148	1	0
+MapSmall	122	124	138	148	1	0
 MapBig	140	124	156	148	1	0
 MapFire	158	124	174	148	1	0
 MapRac	176	124	192	148	1	0
+
+#TRANSFORMATION
+GrowUp	372	17	388	49	11	200
+GrowUp	390	17	406	49
+GrowUp	372	17	388	49
+GrowUp	390	17	406	49
+GrowUp	372	17	388	49
+GrowUp	390	17	406	49
+GrowUp	372	17	388	49
+GrowUp	0	17	16	49
+GrowUp	372	17	388	49
+GrowUp	0	17	16	49
+GrowUp	372	17	388	49
+
+ShrinkDown	372	17	388	49	11	200
+ShrinkDown	0	17	16	49
+ShrinkDown	372	17	388	49
+ShrinkDown	0	17	16	49
+ShrinkDown	372	17	388	49
+ShrinkDown	390	17	406	49
+ShrinkDown	372	17	388	49
+ShrinkDown	390	17	406	49
+ShrinkDown	372	17	388	49
+ShrinkDown	390	17	406	49
+ShrinkDown	372	17	388	49
+
+SmokePuff	234	0	250	16	4	100
+SmokePuff	252	0	268	16
+SmokePuff	270	0	286	16
+SmokePuff	288	0	304	16
 [/]
 
 [HITBOXES]

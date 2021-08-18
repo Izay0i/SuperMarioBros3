@@ -2,13 +2,24 @@
 
 #include "../Entity.h"
 
-#include <list>
+#include <unordered_set>
 
 class Cell {
 private:
-	std::list<Entity*> _entities;
+	D3DXVECTOR2 _cellPosition;
+	std::unordered_set<Entity*> _entities;
 
 public:
-	void MoveEntity(const Entity*&, D3DXVECTOR2);
-	void RemoveEntity();
+	const static unsigned int CELL_WIDTH = static_cast<int>(GlobalUtil::SCREEN_WIDTH / 2);
+	const static unsigned int CELL_HEIGHT = static_cast<int>(GlobalUtil::SCREEN_HEIGHT / 2);
+
+	Cell(D3DXVECTOR2);
+	~Cell();
+
+	std::unordered_set<Entity*> GetEntitiesInCell() const;
+
+	void AddEntity(Entity*);
+	void RemoveEntity(Entity*);
+
+	void Release();
 };

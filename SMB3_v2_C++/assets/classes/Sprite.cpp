@@ -1,19 +1,19 @@
 #include "Sprite.h"
 
-Sprite::Sprite(const LPDIRECT3DTEXTURE9& spriteTexture, unsigned int totalFrames) {
-	_currentFrame = -1;
-	_spriteTexture = spriteTexture;
-	_totalFrames = totalFrames;
-	_animationSpeed = 0;
-	_cameraInstance = Camera::GetInstance();
-}
-
 Sprite::Sprite(const LPDIRECT3DTEXTURE9& spriteTexture, RECT spriteBound, unsigned int totalFrames, int animationSpeed) {
 	_currentFrame = -1;
 	_spriteTexture = spriteTexture;
-	_bounds.emplace_back(spriteBound);
+	_totalFrames = totalFrames;
 	_animationSpeed = animationSpeed;
 	_cameraInstance = Camera::GetInstance();
+
+	if (spriteBound.left != -1 && 
+		spriteBound.top != -1 && 
+		spriteBound.right != -1 && 
+		spriteBound.bottom != -1) 
+	{
+		_bounds.emplace_back(spriteBound);
+	}
 }
 
 Sprite::~Sprite() {}
@@ -51,6 +51,11 @@ void Sprite::DrawSprite(D3DXVECTOR2 position, D3DXVECTOR2 scale, unsigned int al
 
 	D3DXMATRIX matrix;
 	D3DXVECTOR2 drawCenter = D3DXVECTOR2(8.0f, 8.0f);
+
+	/*if (_spriteTexture == nullptr) {
+		OutputDebugStringA("[SPRITE] Texture is nullptr\n");
+		return;
+	}*/
 
 	//Voodoo magic
 	D3DXMatrixTransformation2D(&matrix, &drawCenter, 0.0f, &scale, nullptr, 0.0f, &spritePosition);

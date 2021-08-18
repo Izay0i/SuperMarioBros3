@@ -8,7 +8,7 @@ BigJump	266	116	282	148	1	0
 
 BigFall	230	116	246	148	1	0
 
-BigCrouch	248	124	264	148	1	0
+BigCrouch	248	116	264	148	1	0
 
 BigHoldIdle	284	116	300	148	1	0
 

@@ -11,13 +11,18 @@ void Entity::_ParseHitboxes(std::string line) {
 	hitbox.left = std::stof(tokens.at(0));
 	hitbox.top = std::stof(tokens.at(1));
 	hitbox.right = std::stof(tokens.at(2));
-	hitbox.bottom = std::stof(tokens.at(4));
+	hitbox.bottom = std::stof(tokens.at(3));
 
 	_hitbox.AddHitbox(hitbox);
 }
 
+bool Entity::CompareRenderPriority(const Entity*& a, const Entity*& b) {
+	return a->_renderPriority < b->_renderPriority;
+}
+
 Entity::Entity() {
 	_health = 1;
+	_renderPriority = std::numeric_limits<unsigned int>::max();
 	_score = 100;
 	_scoreMultiplier = 1;
 }
@@ -32,6 +37,10 @@ void Entity::SetHealth(int health) {
 
 int Entity::GetHealth() const {
 	return _health;
+}
+
+AnimatedSprite Entity::GetAnimatedSprite() const {
+	return _animatedSprite;
 }
 
 void Entity::ParseData(

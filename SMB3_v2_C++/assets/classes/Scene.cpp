@@ -104,12 +104,75 @@ void Scene::_ParseTextures(std::string line) {
 	_textureMap.insert(std::make_pair(textureID, texture));
 }
 
-void Scene::_ParseEntityData(std::string) {
+void Scene::_ParseEntityData(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
+
+	if (tokens.size() < 5) {
+		return;
+	}
+
+	std::vector<std::string> extraData;
+	if (tokens.size() > 5) {
+		for (unsigned int i = 5; i < tokens.size(); ++i) {
+			extraData.emplace_back(tokens.at(i));
+		}
+	}
+
+	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(
+		std::stoul(
+			tokens.at(0)
+		)
+	);
+
+	float x = std::stof(tokens.at(3));
+	float y = std::stof(tokens.at(4));
+	D3DXVECTOR2 position = D3DXVECTOR2(x, y);
+
+	unsigned int textureID = std::stoul(tokens.at(2));
+
+	Entity* entity = nullptr;
+	switch (objectType) {
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MARIO:
+			_mario = new Player;
+			_mario->SetOjectType(objectType);
+			_mario->ParseData(tokens.at(1), _textureMap[textureID], extraData);
+			_mario->SetPosition(position);
+
+			_entities.emplace_back(_mario);
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LUIGI:
+			_luigi = new Player;
+			_luigi->SetOjectType(objectType);
+			_luigi->ParseData(tokens.at(1), _textureMap[textureID], extraData);
+			_luigi->SetPosition(position);
+
+			_entities.emplace_back(_luigi);
+			break;
+	}
+
+	if (entity != nullptr) {
+		entity->SetOjectType(objectType);
+		entity->ParseData(tokens.at(1), _textureMap[textureID], extraData);
+		entity->SetPosition(position);
+		
+		_entities.emplace_back(entity);
+	}
+}
+
+void Scene::_ParseTileData(std::string line) {
 
 }
 
-void Scene::_ParseTileData(std::string) {
+void Scene::_ParseHUD(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
+	if (tokens.size() < 2) {
+		return;
+	}
+
+	unsigned int textureID = std::stoul(tokens.at(1));
+	_hud = new HUD(_mario);
+	_hud->ParseData(tokens.at(0), _textureMap[textureID]);
 }
 
 void Scene::_ParseBackground(std::string line) {
@@ -142,7 +205,7 @@ void Scene::_ParseBackground(std::string line) {
 Scene::Scene(int sceneID, std::string path) {
 	_sceneID = sceneID;
 	_filePath = path;
-	_toMapTime = 5000;
+	_toSceneTime = 5000;
 }
 
 Scene::~Scene() {}
@@ -151,21 +214,27 @@ D3DCOLOR Scene::GetBGColor() const {
 	return _backgroundColor;
 }
 
-void Scene::HandleStates(BYTE* states) {
-
+void Scene::HandleStates(int keyCode, bool isKeyDown) {
+	if (_mario != nullptr) {
+		_mario->HandleStates(keyCode, isKeyDown);
+	}
 }
 
 void Scene::OnKeyUp(int keyCode) {
-
+	if (_mario != nullptr) {
+		_mario->OnKeyUp(keyCode);
+	}
 }
 
 void Scene::OnKeyDown(int keyCode) {
-
+	if (_mario != nullptr) {
+		_mario->OnKeyDown(keyCode);
+	}
 }
 
 void Scene::LoadScene() {
 	char debug[100];
-	sprintf_s(debug, "[SCENE] Loading scene ID: %d\n", _sceneID);
+	sprintf_s(debug, "[SCENE] Loading scene with ID: %d\n", _sceneID);
 	OutputDebugStringA(debug);
 
 	std::ifstream readFile;
@@ -177,6 +246,10 @@ void Scene::LoadScene() {
 	}
 
 	//Load objects here, cause the Scene won't be calling destructor before the game ends
+	_mario = nullptr;
+	_luigi = nullptr;
+
+	_hud = nullptr;
 	_background = nullptr;
 	_cameraInstance = Camera::GetInstance();
 	//
@@ -196,6 +269,21 @@ void Scene::LoadScene() {
 			continue;
 		}
 
+		if (line == "[SCENESIZE]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_SCENESIZE;
+			continue;
+		}
+
+		if (line == "[SCENETIME]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_SCENETIME;
+			continue;
+		}
+
+		if (line == "[CAMERABOUNDS]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_CAMERABOUNDS;
+			continue;
+		}
+
 		if (line == "[BGCOLOR]") {
 			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_BGCOLOR;
 			continue;
@@ -206,17 +294,50 @@ void Scene::LoadScene() {
 			continue;
 		}
 
+		if (line == "[ENTITYDATA]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_ENTITYDATA;
+			continue;
+		}
+
+		if (line == "[TILEDATA]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_TILEDATA;
+			continue;
+		}
+
+		if (line == "[HUD]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_HUD;
+			continue;
+		}
+
 		if (line == "[BACKGROUND]") {
 			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_BACKGROUND;
 			continue;
 		}
 
 		switch (sceneFileSection) {
+			case _SceneFileSection::SCENEFILE_SECTION_SCENESIZE:
+				_ParseSceneSize(line);
+				break;
+			case _SceneFileSection::SCENEFILE_SECTION_SCENETIME:
+				_ParseSceneTime(line);
+				break;
+			case _SceneFileSection::SCENEFILE_SECTION_CAMERABOUNDS:
+				_ParseCameraBounds(line);
+				break;
 			case _SceneFileSection::SCENEFILE_SECTION_BGCOLOR:
 				_ParseBackgroundColor(line);
 				break;
 			case _SceneFileSection::SCENEFILE_SECTION_TEXTURES:
 				_ParseTextures(line);
+				break;
+			case _SceneFileSection::SCENEFILE_SECTION_ENTITYDATA:
+				_ParseEntityData(line);
+				break;
+			case _SceneFileSection::SCENEFILE_SECTION_TILEDATA:
+				_ParseTileData(line);
+				break;
+			case _SceneFileSection::SCENEFILE_SECTION_HUD:
+				_ParseHUD(line);
 				break;
 			case _SceneFileSection::SCENEFILE_SECTION_BACKGROUND:
 				_ParseBackground(line);
@@ -225,19 +346,48 @@ void Scene::LoadScene() {
 	}
 
 	readFile.close();
+
+	sprintf_s(debug, "[SCENE] Loaded scene with ID: %d\n", _sceneID);
+	OutputDebugStringA(debug);
 }
 
 void Scene::Update(DWORD deltaTime) {
+	if (_mario == nullptr && _luigi == nullptr) {
+		char debug[100];
+		sprintf_s(debug, "[SCENE] No player loaded in, scene ID: %d\n", _sceneID);
+		OutputDebugStringA(debug);
+		return;
+	}
 
+	/*if (_hud != nullptr) {
+		_hud->Update(999);
+	}*/
 }
 
 void Scene::Render() {
 	if (_background != nullptr) {
 		_background->Render();
 	}
+
+	for (const auto& entity : _entities) {
+		entity->Render();
+	}
+
+	/*if (_hud != nullptr) {
+		_hud->Render();
+	}*/
 }
 
 void Scene::Release() {
+	char debug[100];
+	sprintf_s(debug, "[SCENE] Unloading scene with ID: %d\n", _sceneID);
+	OutputDebugStringA(debug);
+
+	if (_hud != nullptr) {
+		_hud->Release();
+		delete _hud;
+	}
+
 	if (_background != nullptr) {
 		_background->Release();
 		delete _background;
@@ -247,17 +397,14 @@ void Scene::Release() {
 		_cameraInstance->Release();
 	}
 	
-	for (auto& activeEntity : _activeEntities) {
-		activeEntity->Release();
-		delete activeEntity;
+	for (auto& entity : _entities) {
+		entity->Release();
+		delete entity;
 	}
-	_activeEntities.clear();
-
-	for (auto& inactiveEntity : _inactiveEntities) {
-		inactiveEntity->Release();
-		delete inactiveEntity;
-	}
-	_inactiveEntities.clear();
+	_entities.clear();
 	
 	_textureMap.clear();
+
+	sprintf_s(debug, "[SCENE] Unloaded scene with ID: %d\n", _sceneID);
+	OutputDebugStringA(debug);
 }

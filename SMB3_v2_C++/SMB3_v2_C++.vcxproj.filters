@@ -60,7 +60,13 @@
     <ClCompile Include="assets\classes\GlobalUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="assets\classes\player\Mario.cpp">
+    <ClCompile Include="assets\classes\player\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\player\StateMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\player\HUD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,8 +113,17 @@
     <ClInclude Include="assets\classes\Background.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="assets\classes\player\Mario.h">
+    <ClInclude Include="assets\classes\player\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="assets\classes\player\StateMachine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\player\HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

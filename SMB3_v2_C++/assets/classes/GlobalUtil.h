@@ -1,5 +1,7 @@
 #pragma once
 
+#define DIRECTINPUT_VERSION 0x0800
+
 #include <vector>
 #include <string>
 #include <codecvt>
@@ -7,66 +9,48 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#include <dinput.h>
+
 #include <Windows.h>
 
-#define DIRECTINPUT_VERSION 0x0800
-
 namespace GlobalUtil {
-	const static unsigned int SCREEN_WIDTH = 263;
-	const static unsigned int SCREEN_HEIGHT = 263;
+	enum class KeyInput {
+		KEY_INPUT_1 = DIK_1,
+		KEY_INPUT_2 = DIK_2,
+		KEY_INPUT_3 = DIK_3,
+		KEY_INPUT_4 = DIK_4,
+		KEY_INPUT_LEFT = DIK_A,
+		KEY_INPUT_RIGHT = DIK_D,
+		KEY_INPUT_UP = DIK_W,
+		KEY_INPUT_DOWN = DIK_S,
+		KEY_INPUT_SELECT = DIK_U,
+		KEY_INPUT_START = DIK_I,
+		KEY_INPUT_B = DIK_J,
+		KEY_INPUT_A = DIK_K
+	};
+
+	const unsigned int SCREEN_WIDTH = 256;
+	const unsigned int SCREEN_HEIGHT = 240;
+	//NES aspect ratio
+	const unsigned int ASPECT_RATIO_X = 8;
+	const unsigned int ASPECT_RATIO_Y = 7;
 	//Used in all entity classes
-	const static int MAX_FILE_LINE = 5000;
+	const int MAX_FILE_LINE = 5000;
+
+	extern unsigned int WINDOW_ADJUST_X, WINDOW_ADJUST_Y;
 
 	//Mainly used in the Game and Sprite class
 	extern LPDIRECT3DDEVICE9 directDevice;
 	extern LPD3DXSPRITE spriteHandler;
 
-	static std::vector<std::string> SplitStr(std::string line, std::string delimeter = "\t") {
-		std::vector<std::string> tokens;
-		size_t last = 0, next = 0;
+	extern std::vector<std::string> SplitStr(std::string, std::string = "\t");
 
-		while ((next = line.find(delimeter, last)) != std::string::npos) {
-			tokens.push_back(line.substr(last, next - last));
-			last = next + 1;
-		}
+	extern std::vector<unsigned int> SplitDigit(unsigned int);
 
-		tokens.push_back(line.substr(last));
-
-		return tokens;
-	}
-
-	static std::vector<unsigned int> SplitDigit(unsigned int number) {
-		std::vector<unsigned int> digits;
-
-		while (number > 0) {
-			unsigned int digit = number % 10;
-			number /= 10;
-			digits.insert(digits.begin(), digit);
-		}
-
-		return digits;
-	}
-
-	static LPCWSTR ToLPCWSTR(std::string str) {
-		const char* s = str.c_str();
-
-		size_t newSize = strlen(s) + 1;
-		wchar_t* wCString = new wchar_t[newSize];
-
-		size_t convertedChars = 0;
-		mbstowcs_s(&convertedChars, wCString, newSize, s, _TRUNCATE);
-		std::wstring* wStr = new std::wstring(wCString);
-
-		return wStr->c_str();
-	}
+	extern LPCWSTR ToLPCWSTR(std::string);
 
 	//https://stackoverflow.com/questions/26570721/how-to-know-if-wstring-can-be-safely-no-data-loss-converted-to-string
-	static std::string ToStr(std::wstring& wStr) {
-		typedef std::codecvt_utf8<wchar_t> convertTypeX;
-		std::wstring_convert<convertTypeX, wchar_t> converterX;
-
-		return converterX.to_bytes(wStr);
-	}
+	extern std::string ToStr(std::wstring&);
 }
 
 typedef struct RectFloat {

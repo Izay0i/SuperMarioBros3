@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AnimatedSprite" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAAAAAABAAAABARAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>assets\classes\AnimatedSprite.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Background" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAgAAAAAAQAAAABAgABAAAgA=</HashCode>
+      <FileName>assets\classes\Background.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQiAiBAAAAAAAAAQAAAAAEABAAQAAAAAiAAABIAIAA=</HashCode>
+      <FileName>assets\classes\Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Entity" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBAhAAAAAAEAAgECAABAAAAAACAgAAAAAAAACiAgACA=</HashCode>
+      <FileName>assets\classes\Entity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgIAAAEAAAgAAoSAAIAAwAAADoiAAAEIgAAAEACAAAQ=</HashCode>
+      <FileName>assets\classes\Game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameObject" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQCAADEACKAAEQSAsAAACAgAAIAAkgEJDIAohICICA=</HashCode>
+      <FileName>assets\classes\GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Device" Collapsed="true">
+    <Position X="14.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIAAAAEAAQAAAgAAAAEBQAAABAAAAAAAkAAASBAAAAA=</HashCode>
+      <FileName>assets\classes\Device.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Hitbox" Collapsed="true">
+    <Position X="14.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAQAAAAAAAAACAAAAAAAgAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>assets\classes\Hitbox.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player" Collapsed="true">
+    <Position X="5.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARgAAAACiCAAMmAABABgBAiAQIAACAowBAAAREAAlA=</HashCode>
+      <FileName>assets\classes\player\Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene" Collapsed="true">
+    <Position X="11" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AjQioCgAAACAAABiwAQCiAAAQAIQCAAmABAAARBAIEA=</HashCode>
+      <FileName>assets\classes\Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneManager" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgABAAAEAgAAAAAAAABAAAAAAAgAAAEBAAAgQ=</HashCode>
+      <FileName>assets\classes\SceneManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cell" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAABAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>assets\classes\spatial\Cell.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grid" Collapsed="true">
+    <Position X="12.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAABAAAAAABAAgAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>assets\classes\spatial\Grid.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sprite" Collapsed="true">
+    <Position X="14.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAIAAAAAAAAAAgABQAEARABAAARAAAAI=</HashCode>
+      <FileName>assets\classes\Sprite.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateMachine" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAIAAAAAEAAgEAAAACDAAAAAAAAAAABAAABAABAA=</HashCode>
+      <FileName>assets\classes\player\StateMachine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="CollisionEvent" Collapsed="true">
+    <Position X="8.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEABAAAAAAAABAAAAAAAACgAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>assets\classes\GameObject.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="RectFloat" Collapsed="true">
+    <Position X="4.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAgAAAAIAAAAAIAAAAAAgAA=</HashCode>
+      <FileName>assets\classes\GlobalUtil.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="LPCOLLISIONEVENT" Collapsed="true">
+    <Position X="8.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>assets\classes\GameObject.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="RECTF" Collapsed="true">
+    <Position X="4.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>assets\classes\GlobalUtil.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
