@@ -1,7 +1,7 @@
 #include "GlobalUtil.h"
 
 namespace GlobalUtil {
-	unsigned int WINDOW_ADJUST_X = 0, WINDOW_ADJUST_Y = 0;
+	unsigned int windowAdjustX = 0, windowAdjustY = 0;
 
 	LPDIRECT3DDEVICE9 directDevice = nullptr;
 	LPD3DXSPRITE spriteHandler = nullptr;

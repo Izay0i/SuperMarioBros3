@@ -1,31 +1,32 @@
 #pragma once
 
-#include "Cell.h"
+#include "../Entity.h"
 
 #include <vector>
 
+struct Cell {
+	std::vector<Entity*> entities;
+};
+
 class Grid {
 private:
-	unsigned int _rows, _columns;
+	const static unsigned int CELL_WIDTH = static_cast<int>(GlobalUtil::SCREEN_WIDTH / 2);
+	const static unsigned int CELL_HEIGHT = static_cast<int>(GlobalUtil::SCREEN_HEIGHT / 2);
+	
+	unsigned int _xCells, _yCells;
 
-	std::vector<std::vector<Cell*>> _cells;
-	std::vector<Cell*> _activeCells;
+	std::vector<std::vector<Cell>> _cells;
 
 public:
 	Grid(unsigned int, unsigned int);
 	~Grid();
 
-	Cell* GetCell(D3DXVECTOR2) const;
+	Cell* GetCell(D3DXVECTOR2);
 
-	std::vector<Cell*> GetActiveCellsInViewport();
-	std::vector<Entity*> GetActiveEntities();
+	void AddEntity(Entity*);
+	void AddEntity(Entity*, Cell*);
 
-	void InitEntities(Entity*);
-	void InitEntities(Entity*, D3DXVECTOR2);
-
-	void Update();
-	void UpdateCells();
-	void UpdateEntitiesPositionInGrid(Entity*);
+	void RemoveEntityFromCell(Entity*);
 
 	void Release();
 };

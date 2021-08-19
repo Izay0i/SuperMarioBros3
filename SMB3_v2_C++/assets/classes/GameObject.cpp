@@ -202,15 +202,13 @@ CollisionEvent* GameObject::SweptAABBEx(GameObject*& object) {
 
 	movingObject = this->GetBoundingBox();
 	SweptAABB(movingObject, staticObject, relativeDistance, normal, time);
-
-	if (object->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM) {
-		normal.x = 0.0f;
-	}
-
+	
 	return new CollisionEvent(object, normal, relativeDistance, time);
 }
 
-void GameObject::CalcPotentialCollision(std::vector<GameObject*>*& collidableObjects, std::vector<LPCOLLISIONEVENT>& collisionEvents) {
+
+
+void GameObject::CalcPotentialCollision(std::vector<GameObject*>* collidableObjects, std::vector<LPCOLLISIONEVENT>& collisionEvents) {
 	for (unsigned int i = 0; i < collidableObjects->size(); ++i) {
 		LPCOLLISIONEVENT event = SweptAABBEx(collidableObjects->at(i));
 		if (event->time >= 0.0f && event->time <= 1.0f) {

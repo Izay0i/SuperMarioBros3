@@ -45,6 +45,8 @@ void AnimatedSprite::PlaySpriteAnimation(std::string animationName, D3DXVECTOR2 
 		char debugStr[100];
 		sprintf_s(debugStr, "[ANIMATED SPRITE] Animation named %s does not exist\n", animationName.c_str());
 		OutputDebugStringW(GlobalUtil::ToLPCWSTR(debugStr));
+
+		Sleep(5000);
 		return;
 	}
 

@@ -64,8 +64,10 @@ public:
 	void Jump();
 	void Crouch();
 	void HoldEntity();
+	
+	void HandleCollisionEventResults(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
 
-	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
+	void Update(DWORD, std::vector<Entity*>* = nullptr) override;
 	void Render() override;
 
 	void Release() override;

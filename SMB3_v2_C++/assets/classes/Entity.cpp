@@ -25,6 +25,9 @@ Entity::Entity() {
 	_renderPriority = std::numeric_limits<unsigned int>::max();
 	_score = 100;
 	_scoreMultiplier = 1;
+
+	cellIndex = std::numeric_limits<unsigned int>::max();
+	ownerCell = nullptr;
 }
 
 Entity::~Entity() {}
@@ -95,4 +98,79 @@ void Entity::ParseData(
 	}
 
 	readFile.close();
+}
+
+void Entity::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities) {
+	GameObject::Update(deltaTime);
+
+	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
+	if (_health > 0) {
+		CalcPotentialCollision(collidableEntities, collisionEvents);
+	}
+
+	if (collisionEvents.empty()) {
+		_position += _distance;
+	}
+	else {
+		D3DXVECTOR2 minTime;
+		D3DXVECTOR2 offset(0.4f, 0.4f);
+		D3DXVECTOR2 normal;
+		D3DXVECTOR2 relativeDistance;
+
+		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
+		for (LPCOLLISIONEVENT result : eventResults) {
+			HandleCollisionEventResults(result, minTime, offset, normal, relativeDistance);
+		}
+
+		if (normal.x != 0.0f) {
+			_velocity.x = 0.0f;
+		}
+
+		if (normal.y != 0.0f) {
+			_velocity.y = 0.0f;
+		}
+
+		_position.x += _distance.x * minTime.x + normal.x * offset.x;
+		_position.y += _distance.y * minTime.y + normal.y * offset.y;
+	}
+
+	for (LPCOLLISIONEVENT event : collisionEvents) {
+		delete event;
+	}
+}
+
+CollisionEvent* Entity::SweptAABBEx(Entity*& entity) {
+	RECTF movingEntity;
+	RECTF staticEntity;
+	D3DXVECTOR2 normal;
+	float time;
+
+	staticEntity = entity->GetBoundingBox();
+	D3DXVECTOR2 staticVeloctity = entity->GetVelocity();
+	D3DXVECTOR2 staticDistance = staticVeloctity * static_cast<float>(_deltaTime);
+	D3DXVECTOR2 relativeDistance = _distance - staticDistance;
+
+	movingEntity = this->GetBoundingBox();
+	SweptAABB(movingEntity, staticEntity, relativeDistance, normal, time);
+
+	if (entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM) {
+		normal.x = 0.0f;
+	}
+
+	return new CollisionEvent(entity, normal, relativeDistance, time);
+}
+
+void Entity::CalcPotentialCollision(std::vector<Entity*>* collidableEntities, std::vector<LPCOLLISIONEVENT>& collisionEvents) {
+	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
+		LPCOLLISIONEVENT event = SweptAABBEx(collidableEntities->at(i));
+		if (event->time >= 0.0f && event->time <= 1.0f) {
+			collisionEvents.push_back(event);
+		}
+		else {
+			delete event;
+			event = nullptr;
+		}
+	}
+
+	std::sort(collisionEvents.begin(), collisionEvents.end(), CollisionEvent::CompareCollisionEvent);
 }

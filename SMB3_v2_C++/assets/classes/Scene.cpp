@@ -163,6 +163,16 @@ void Scene::_ParseTileData(std::string line) {
 
 }
 
+void Scene::_ParseGrid(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
+
+	if (tokens.empty()) {
+		return;
+	}
+
+	_grid = new Grid(_sceneWidth, _sceneHeight);
+}
+
 void Scene::_ParseHUD(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
@@ -251,6 +261,7 @@ void Scene::LoadScene() {
 
 	_hud = nullptr;
 	_background = nullptr;
+	_grid = nullptr;
 	_cameraInstance = Camera::GetInstance();
 	//
 
@@ -304,6 +315,11 @@ void Scene::LoadScene() {
 			continue;
 		}
 
+		if (line == "[GRID]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_GRID;
+			continue;
+		}
+
 		if (line == "[HUD]") {
 			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_HUD;
 			continue;
@@ -336,6 +352,9 @@ void Scene::LoadScene() {
 			case _SceneFileSection::SCENEFILE_SECTION_TILEDATA:
 				_ParseTileData(line);
 				break;
+			case _SceneFileSection::SCENEFILE_SECTION_GRID:
+				_ParseGrid(line);
+				break;
 			case _SceneFileSection::SCENEFILE_SECTION_HUD:
 				_ParseHUD(line);
 				break;
@@ -356,11 +375,34 @@ void Scene::Update(DWORD deltaTime) {
 		char debug[100];
 		sprintf_s(debug, "[SCENE] No player loaded in, scene ID: %d\n", _sceneID);
 		OutputDebugStringA(debug);
+
+		Sleep(5000);
 		return;
 	}
 
+	std::vector<Entity*> collidableEntities;
+	//If there's no grid, do the traditional collision checking
+	if (_grid == nullptr) {
+		for (auto* collidableEntity : collidableEntities) {
+			collidableEntities.emplace_back(collidableEntity);
+		}
+	}
+
+	for (unsigned int i = 0; i < _entities.size(); ++i) {
+		Entity* entity = _entities.at(i);
+		entity->Update(deltaTime, &collidableEntities);
+
+		if (_grid != nullptr) {
+			Cell* newCell = _grid->GetCell(entity->GetPosition());
+			if (newCell != entity->ownerCell) {
+				_grid->RemoveEntityFromCell(entity);
+				_grid->AddEntity(entity, newCell);
+			}
+		}
+	}
+
 	/*if (_hud != nullptr) {
-		_hud->Update(999);
+		_hud->Update(_sceneTime);
 	}*/
 }
 
@@ -391,6 +433,11 @@ void Scene::Release() {
 	if (_background != nullptr) {
 		_background->Release();
 		delete _background;
+	}
+
+	if (_grid != nullptr) {
+		_grid->Release();
+		delete _grid;
 	}
 
 	if (_cameraInstance != nullptr) {

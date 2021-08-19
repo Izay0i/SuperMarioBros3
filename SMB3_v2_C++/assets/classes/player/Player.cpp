@@ -176,14 +176,38 @@ void Player::HoldEntity() {
 
 }
 
-void Player::Update(DWORD delta, std::vector<GameObject*>* objects) {
+void Player::HandleCollisionEventResults(
+	LPCOLLISIONEVENT result, 
+	D3DXVECTOR2& minTime, 
+	D3DXVECTOR2& offset, 
+	D3DXVECTOR2& normal, 
+	D3DXVECTOR2& relativeDistance) 
+{
+	Entity* eventEntity = result->entity;
+	D3DXVECTOR2 eventNormal = result->normal;
+
+	if (eventEntity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TILE) {
+
+	}
+
+	if (eventEntity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM) {
+		/*
+		MovingPlatform* movingPlatform = eventEntity;
+		if (event->normal.y == -1.0f) {
+			movingPlatform->TakeDamage();
+		}
+		*/
+	}
+}
+
+void Player::Update(DWORD deltaTime, std::vector<Entity*>* entities) {
 	if (_isOnGround == true) {
 		_gravity = 0.0025f;
 	}
 	
-	_stateMachine->Update(delta);
+	_stateMachine->Update(deltaTime);
 
-	GameObject::Update(delta, objects);
+	Entity::Update(deltaTime);
 }
 
 void Player::Render() {

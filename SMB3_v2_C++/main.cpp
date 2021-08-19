@@ -8,8 +8,8 @@ int __stdcall WinMain(
 {
 	RECT rect = { 0, 0, GlobalUtil::SCREEN_WIDTH, GlobalUtil::SCREEN_HEIGHT };
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
-	GlobalUtil::WINDOW_ADJUST_X = (rect.right - rect.left) - GlobalUtil::SCREEN_WIDTH;
-	GlobalUtil::WINDOW_ADJUST_Y = (rect.bottom - rect.top) - GlobalUtil::SCREEN_HEIGHT;
+	GlobalUtil::windowAdjustX = (rect.right - rect.left) - GlobalUtil::SCREEN_WIDTH;
+	GlobalUtil::windowAdjustY = (rect.bottom - rect.top) - GlobalUtil::SCREEN_HEIGHT;
 
 	Game* gameInstance = Game::GetInstance();
 

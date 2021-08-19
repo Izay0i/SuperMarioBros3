@@ -155,7 +155,6 @@
     <ClCompile Include="assets\classes\player\Player.cpp" />
     <ClCompile Include="assets\classes\player\StateMachine.cpp" />
     <ClCompile Include="assets\classes\Scene.cpp" />
-    <ClCompile Include="assets\classes\spatial\Cell.cpp" />
     <ClCompile Include="assets\classes\spatial\Grid.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="assets\classes\SceneManager.cpp" />
@@ -176,7 +175,6 @@
     <ClInclude Include="assets\classes\player\StateMachine.h" />
     <ClInclude Include="assets\classes\Scene.h" />
     <ClInclude Include="assets\classes\SceneManager.h" />
-    <ClInclude Include="assets\classes\spatial\Cell.h" />
     <ClInclude Include="assets\classes\spatial\Grid.h" />
     <ClInclude Include="assets\classes\Sprite.h" />
   </ItemGroup>

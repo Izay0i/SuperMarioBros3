@@ -25,6 +25,7 @@ private:
 		SCENEFILE_SECTION_TEXTURES,
 		SCENEFILE_SECTION_ENTITYDATA,
 		SCENEFILE_SECTION_TILEDATA,
+		SCENEFILE_SECTION_GRID,
 		SCENEFILE_SECTION_HUD,
 		SCENEFILE_SECTION_BACKGROUND
 	};
@@ -51,6 +52,8 @@ private:
 	Player* _mario;
 	Player* _luigi;
 
+	Grid* _grid;
+
 	//Load textures and pass them to the game objects in the scene
 	LPDIRECT3DTEXTURE9 _LoadTexture(LPDIRECT3DTEXTURE9, LPCWSTR, D3DCOLOR);
 
@@ -61,6 +64,7 @@ private:
 	void _ParseTextures(std::string);
 	void _ParseEntityData(std::string);
 	void _ParseTileData(std::string);
+	void _ParseGrid(std::string);
 	void _ParseHUD(std::string);
 	void _ParseBackground(std::string);
 

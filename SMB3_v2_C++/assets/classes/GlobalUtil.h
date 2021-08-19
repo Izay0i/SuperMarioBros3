@@ -37,8 +37,7 @@ namespace GlobalUtil {
 	//Used in all entity classes
 	const int MAX_FILE_LINE = 5000;
 
-	extern unsigned int WINDOW_ADJUST_X, WINDOW_ADJUST_Y;
-
+	extern unsigned int windowAdjustX, windowAdjustY;
 	//Mainly used in the Game and Sprite class
 	extern LPDIRECT3DDEVICE9 directDevice;
 	extern LPD3DXSPRITE spriteHandler;

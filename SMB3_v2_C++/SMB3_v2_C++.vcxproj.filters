@@ -39,9 +39,6 @@
     <ClCompile Include="assets\classes\spatial\Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="assets\classes\spatial\Cell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="assets\classes\AnimatedSprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -93,9 +90,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\spatial\Grid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assets\classes\spatial\Cell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\AnimatedSprite.h">

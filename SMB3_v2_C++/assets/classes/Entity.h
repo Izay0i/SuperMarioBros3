@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "AnimatedSprite.h"
 
+struct Cell;
 class Entity : public GameObject {
 protected:
 	enum class _DataFileSection {
@@ -31,6 +32,9 @@ protected:
 	virtual void _ParseHitboxes(std::string);
 
 public:
+	unsigned int cellIndex;
+	Cell* ownerCell;
+
 	static bool CompareRenderPriority(const Entity*&, const Entity*&);
 
 	Entity();
@@ -45,4 +49,11 @@ public:
 	virtual void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>());
 
 	virtual void HandleStates(int, bool) = 0;
+	//Event results, min time, offset, normal, relative distance
+	virtual void HandleCollisionEventResults(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) = 0;
+
+	virtual void Update(DWORD, std::vector<Entity*>* = nullptr);
+
+	CollisionEvent* SweptAABBEx(Entity*&);
+	void CalcPotentialCollision(std::vector<Entity*>*, std::vector<LPCOLLISIONEVENT>&);
 };

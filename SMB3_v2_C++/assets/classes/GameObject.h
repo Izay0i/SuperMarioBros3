@@ -10,17 +10,26 @@
 #include <d3dx9.h>
 
 class GameObject;
+class Entity;
 
 struct CollisionEvent;
 typedef CollisionEvent* LPCOLLISIONEVENT;
 struct CollisionEvent {
 	GameObject* gameOject;
+	Entity* entity;
 	D3DXVECTOR2 normal;
 	D3DXVECTOR2 distance;
 	float time;
 
 	CollisionEvent(GameObject*& obj, D3DXVECTOR2 norm, D3DXVECTOR2 dist, float t) {
 		gameOject = obj;
+		normal = norm;
+		distance = dist;
+		time = t;
+	}
+
+	CollisionEvent(Entity*& ent, D3DXVECTOR2 norm, D3DXVECTOR2 dist, float t) {
+		entity = ent;
 		normal = norm;
 		distance = dist;
 		time = t;
@@ -131,7 +140,7 @@ public:
 	CollisionEvent* SweptAABBEx(GameObject*&);
 
 	//Calculate potential collision between objects
-	void CalcPotentialCollision(std::vector<GameObject*>*&, std::vector<LPCOLLISIONEVENT>&);
+	void CalcPotentialCollision(std::vector<GameObject*>*, std::vector<LPCOLLISIONEVENT>&);
 	//Filter the collision between objects based on the shortest time
 	void FilterCollision(const std::vector<LPCOLLISIONEVENT>&, std::vector<LPCOLLISIONEVENT>&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&);
 

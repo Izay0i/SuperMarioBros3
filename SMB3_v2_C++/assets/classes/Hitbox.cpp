@@ -13,6 +13,5 @@ float Hitbox::GetBoxHeight(int index) const {
 }
 
 void Hitbox::AddHitbox(RECTF hitbox) {
-	//_hitboxes.push_back(hitbox);
 	_hitboxes.emplace_back(hitbox);
 }
