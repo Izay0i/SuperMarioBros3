@@ -29,7 +29,7 @@
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
 [ENTITYDATA]
 #Player								OBJ_ID	FILE_PATH				texID
-0	assets\data\player\mario.txt	2	125	100	107	assets\data\projectile\fireball.txt	7
+0	assets\data\player\mario.txt	2	125	50	107	assets\data\projectile\fireball.txt	7
 
 #NPC
 #Goomba
@@ -136,8 +136,20 @@
 301	assets\data\block\brickblock.txt	0	2112	400
 [/]
 
+#objID	x	y	width	height
 [TILEDATA]
-
+#Plank 1
+777	0	416	624	16
+#Plank 2
+777	624	400	464	32
+#Plank 3
+777	1152	416	352	16
+#Plank 4
+777	1536	416	80	16
+#Plank 5
+777	1664	416	576	16
+#Plank 6
+777	2256	416	560	16
 [/]
 
 [GRID]

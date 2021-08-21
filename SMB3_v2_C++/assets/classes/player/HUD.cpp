@@ -172,6 +172,8 @@ void HUD::ParseData(
 
 void HUD::HandleStates(int, bool) {}
 
+void HUD::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
+
 void HUD::Update(DWORD sceneTime, std::vector<GameObject*>* collidableObjects) {
 	_ParseLives();
 	_ParseCoins();
@@ -245,4 +247,5 @@ void HUD::Render() {
 void HUD::Release() {
 	_player = nullptr;
 	_animatedSprite.Release();
+	_hudTexture = nullptr;
 }

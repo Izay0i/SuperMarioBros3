@@ -17,7 +17,7 @@ private:
 
 	const unsigned int _DEFAULT_LIVES = 3;
 	const unsigned int _MAX_LIVES = 99;
-	const unsigned int _MAX_COINs = 99;
+	const unsigned int _MAX_COINS = 99;
 	const unsigned int _MAX_SCORE = 9999999;
 
 	const float _MAX_GRAVITY = 0.0005f;
@@ -31,7 +31,11 @@ private:
 	float _gravity;
 	float _acceleration;
 
+	bool _isInMap;
 	bool _isOnGround;
+	bool _isCrouching;
+	bool _isHolding;
+	bool _isNextToShell;
 
 	StateMachine* _stateMachine;
 
@@ -39,6 +43,15 @@ private:
 	Entity* _touchedEntity;
 
 	//std::list<Fireball*> _fireballs;
+
+	DWORD _flyStart;
+	DWORD _flyTime;
+
+	DWORD _inPipeStart;
+	DWORD _inPipeTime;
+
+	DWORD _attackStart;
+	DWORD _attackTime;
 
 	void _ParseSprites(std::string) override;
 
@@ -59,15 +72,18 @@ public:
 
 	void MoveLeft();
 	void MoveRight();
+	void MoveFriction();
 	void SkidLeft();
 	void SkidRight();
 	void Jump();
-	void Crouch();
-	void HoldEntity();
+	void RunFly();
+	void Fall();
+	//Raccoon
+	void SlowFall();
 	
-	void HandleCollisionEventResults(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
+	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
 
-	void Update(DWORD, std::vector<Entity*>* = nullptr) override;
+	void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr) override;
 	void Render() override;
 
 	void Release() override;

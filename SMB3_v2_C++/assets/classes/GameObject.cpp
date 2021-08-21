@@ -1,6 +1,7 @@
 #include "GameObject.h"
 
 GameObject::GameObject() {
+	_isActive = true;
 	_normal = D3DXVECTOR2(1.0f, 1.0f);
 	_scale = D3DXVECTOR2(1.0f, 1.0f);
 }
@@ -108,7 +109,7 @@ void GameObject::SweptAABB(
 	time = -1.0f;
 	normal = D3DXVECTOR2(0, 0);
 
-	//broad phase test
+	//Broad phase test
 	RECTF box;
 	box.left = distance.x > 0 ? movingObject.left : movingObject.left + distance.x;
 	box.top = distance.y > 0 ? movingObject.top : movingObject.top + distance.y;
@@ -206,13 +207,15 @@ CollisionEvent* GameObject::SweptAABBEx(GameObject*& object) {
 	return new CollisionEvent(object, normal, relativeDistance, time);
 }
 
-
-
 void GameObject::CalcPotentialCollision(std::vector<GameObject*>* collidableObjects, std::vector<LPCOLLISIONEVENT>& collisionEvents) {
+	if (collidableObjects == nullptr) {
+		return;
+	}
+	
 	for (unsigned int i = 0; i < collidableObjects->size(); ++i) {
 		LPCOLLISIONEVENT event = SweptAABBEx(collidableObjects->at(i));
 		if (event->time >= 0.0f && event->time <= 1.0f) {
-			collisionEvents.push_back(event);
+			collisionEvents.emplace_back(event);
 		}
 		else {
 			delete event;
@@ -256,11 +259,11 @@ void GameObject::FilterCollision(
 	}
 
 	if (minIndX >= 0) {
-		eventsResult.push_back(collisionEvents.at(minIndX));
+		eventsResult.emplace_back(collisionEvents.at(minIndX));
 	}
 
 	if (minIndY >= 0) {
-		eventsResult.push_back(collisionEvents.at(minIndY));
+		eventsResult.emplace_back(collisionEvents.at(minIndY));
 	}
 }
 

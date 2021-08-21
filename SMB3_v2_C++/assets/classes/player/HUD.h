@@ -13,13 +13,12 @@ private:
 
 	std::string _animationName;
 
-	std::vector<std::string> 
-		_lives, 
-		_coins, 
-		_items, 
-		_speedGauge, 
-		_score, 
-		_timeLeft;
+	std::vector<std::string> _lives;
+	std::vector<std::string> _coins;
+	std::vector<std::string> _items;
+	std::vector<std::string> _speedGauge;
+	std::vector<std::string> _score;
+	std::vector<std::string> _timeLeft;
 
 	Player* _player;
 
@@ -40,6 +39,7 @@ public:
 	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
 	
 	void HandleStates(int, bool) override;
+	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
 
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;

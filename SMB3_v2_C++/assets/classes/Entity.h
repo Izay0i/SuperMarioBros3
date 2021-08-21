@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "AnimatedSprite.h"
 
+class Grid;
 struct Cell;
 class Entity : public GameObject {
 protected:
@@ -32,10 +33,10 @@ protected:
 	virtual void _ParseHitboxes(std::string);
 
 public:
-	unsigned int cellIndex;
+	unsigned int cellVectorIndex;
 	Cell* ownerCell;
 
-	static bool CompareRenderPriority(const Entity*&, const Entity*&);
+	static bool CompareRenderPriority(Entity*&, Entity*&);
 
 	Entity();
 	virtual ~Entity();
@@ -50,9 +51,9 @@ public:
 
 	virtual void HandleStates(int, bool) = 0;
 	//Event results, min time, offset, normal, relative distance
-	virtual void HandleCollisionEventResults(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) = 0;
-
-	virtual void Update(DWORD, std::vector<Entity*>* = nullptr);
+	virtual void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) = 0;
+	//Delta time, collidable entities, collidable tiles, grid
+	virtual void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr);
 
 	CollisionEvent* SweptAABBEx(Entity*&);
 	void CalcPotentialCollision(std::vector<Entity*>*, std::vector<LPCOLLISIONEVENT>&);

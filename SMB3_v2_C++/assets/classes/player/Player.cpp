@@ -20,6 +20,10 @@ Player::Player() {
 
 	_heldEntity = nullptr;
 	_touchedEntity = nullptr;
+
+	_flyTime = 6000;
+	_inPipeTime = 4000;
+	_attackTime = 126;
 }
 
 Player::~Player() {}
@@ -40,44 +44,19 @@ void Player::HandleStates(int keyCode, bool isKeyDown) {
 	_stateMachine->HandleStates(keyCode, isKeyDown);
 
 	GlobalUtil::KeyInput keyInput = static_cast<GlobalUtil::KeyInput>(keyCode);
-	if (isKeyDown) {
-		switch (keyInput) {
-			case GlobalUtil::KeyInput::KEY_INPUT_1:
-				
-				break;
-		}
-	}
-	else {
-		switch (keyInput) {
-			case GlobalUtil::KeyInput::KEY_INPUT_2:
-				
-				break;
-		}
-	}
+	
 }
 
 void Player::OnKeyUp(int keyCode) {
 	GlobalUtil::KeyInput keyInput = static_cast<GlobalUtil::KeyInput>(keyCode);
 	switch (keyInput) {
-		case GlobalUtil::KeyInput::KEY_INPUT_LEFT:
-		case GlobalUtil::KeyInput::KEY_INPUT_RIGHT:
-			//Slippery feel when the player stops
-			if (_acceleration <= 0.5f) {
-				_velocity.x = 0.0f;
-				_acceleration = 0.5f;
-			}
-
-			if (_acceleration > 0.5f) {
-				_acceleration -= 0.06f;
-			}
-			break;
 		case GlobalUtil::KeyInput::KEY_INPUT_DOWN:
-
-			break;
-		case GlobalUtil::KeyInput::KEY_INPUT_A:
-			if (_gravity < 0.0025f) {
-				_gravity += 0.0005f;
+			/*
+			if (_isOnGround && !IsInPipe() && _health > 1) {
+				_isOnGround = false;
+				_velocity.y = -0.3f;
 			}
+			*/
 			break;
 	}
 }
@@ -97,21 +76,6 @@ void Player::OnKeyDown(int keyCode) {
 		case GlobalUtil::KeyInput::KEY_INPUT_4:
 			_health = 4;
 			break;
-
-		case GlobalUtil::KeyInput::KEY_INPUT_LEFT:
-			MoveLeft();
-			SkidLeft();
-			break;
-		case GlobalUtil::KeyInput::KEY_INPUT_RIGHT:
-			MoveRight();
-			SkidRight();
-			break;
-		case GlobalUtil::KeyInput::KEY_INPUT_B:
-
-			break;
-		case GlobalUtil::KeyInput::KEY_INPUT_A:
-			Jump();
-			break;
 	}
 }
 
@@ -128,13 +92,26 @@ void Player::ParseData(
 }
 
 void Player::MoveLeft() {
+	_normal.x = -1.0f;
 	_scale = D3DXVECTOR2(1.0f, 1.0f);
 	_velocity.x = -_runSpeed * _acceleration;
 }
 
 void Player::MoveRight() {
+	_normal.x = 1.0f;
 	_scale = D3DXVECTOR2(-1.0f, 1.0f);
 	_velocity.x = _runSpeed * _acceleration;
+}
+
+void Player::MoveFriction() {
+	//Slippery feel when the player stops
+	if (_acceleration <= 0.5f) {
+		_velocity.x = 0.0f;
+		_acceleration = 0.5f;
+	}
+	else if (_acceleration > 0.5f) {
+		_acceleration -= 0.06f;
+	}
 }
 
 void Player::SkidLeft() {
@@ -168,15 +145,33 @@ void Player::Jump() {
 	}
 }
 
-void Player::Crouch() {
-	
+void Player::RunFly() {
+	if (_health == 4) {
+		if (_acceleration >= _ACCEL_THRESHOLD /*|| IsFlying()*/) {
+			/*
+			if (_isOnGround && !IsFlying()) {
+				_isOnGround = false;
+				StartFlyTimer();
+			}
+			*/
+			_velocity.y = -_jumpSpeed * 0.8f;
+		}
+	}
 }
 
-void Player::HoldEntity() {
-
+void Player::Fall() {
+	if (_gravity < 0.0025f) {
+		_gravity += 0.0005f;
+	}
 }
 
-void Player::HandleCollisionEventResults(
+void Player::SlowFall() {
+	if (_health == 4 && !_isOnGround) {
+		_velocity.y *= 0.2f;
+	}
+}
+
+void Player::HandleCollisionResult(
 	LPCOLLISIONEVENT result, 
 	D3DXVECTOR2& minTime, 
 	D3DXVECTOR2& offset, 
@@ -200,17 +195,63 @@ void Player::HandleCollisionEventResults(
 	}
 }
 
-void Player::Update(DWORD deltaTime, std::vector<Entity*>* entities) {
+void Player::Update(
+	DWORD deltaTime, 
+	std::vector<Entity*>* collidableEntities, 
+	std::vector<Entity*>* collidableTiles, 
+	Grid* grid) 
+{
 	if (_isOnGround == true) {
 		_gravity = 0.0025f;
 	}
 	
 	_stateMachine->Update(deltaTime);
+	
+	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 
-	Entity::Update(deltaTime);
+	if (_heldEntity != nullptr) {
+		if (_heldEntity->GetHealth() == 0 || _heldEntity->GetHealth() == 3) {
+			//_isHolding = false;
+
+			if (_heldEntity->GetHealth() == 3) {
+				_heldEntity->SetPosition(
+					{ 
+					_position.x + 17.0f * _normal.x, 
+					_position.y - 14.0f 
+					}
+				);
+			}
+
+			//_heldEntity->isBeingHeld = false;
+			_heldEntity = nullptr;
+			return;
+		}
+
+		/*
+		if (_isHolding) {
+			D3DXVECTOR2 offset;
+			offset.x = IsInPipe() ? 0.0f : 10.0f;
+			offset.y = _health == 1 ? 11.0f : 2.0f;
+
+			_heldEntity->SetPosition({ _position.x + offset.x * normal.x, _position.y - offset.y });
+		}
+		else {
+			_isNextToShell = true;
+
+			_heldEntity->TakeDamage();
+			_heldEntity->SetNormal({ -normal.x, 0.0f });
+			_heldEntity->isBeingHeld = false;
+			_heldEntity = nullptr;
+		}
+		*/
+	}
 }
 
 void Player::Render() {
+	if (!_isActive) {
+		return;
+	}
+
 	_stateMachine->Render();
 }
 
@@ -229,4 +270,5 @@ void Player::Release() {
 	}
 
 	_animatedSprite.Release();
+	_playerTexture = nullptr;
 }

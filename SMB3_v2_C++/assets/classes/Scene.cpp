@@ -148,6 +148,57 @@ void Scene::_ParseEntityData(std::string line) {
 
 			_entities.emplace_back(_luigi);
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PORTAL:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_CACTUS:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_HELPTEXT:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_HAMMERBRO:
+
+			break;
 	}
 
 	if (entity != nullptr) {
@@ -160,17 +211,37 @@ void Scene::_ParseEntityData(std::string line) {
 }
 
 void Scene::_ParseTileData(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
+	if (tokens.size() < 5) {
+		return;
+	}
+
+	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(tokens.at(0)));
+
+	float x = std::stof(tokens.at(1));
+	float y = std::stof(tokens.at(2));
+	D3DXVECTOR2 position = D3DXVECTOR2(x, y);
+
+	RECTF hitbox;
+	hitbox.left = 0;
+	hitbox.top = 0;
+	hitbox.right = std::stof(tokens.at(3));
+	hitbox.bottom = std::stof(tokens.at(4));
+	
+	Tile* tile = new Tile;
+	tile->SetOjectType(objectType);
+	tile->SetPosition(position);
+	tile->AddHitbox(hitbox);
+	
+	_tiles.emplace_back(tile);
 }
 
 void Scene::_ParseGrid(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
-	if (tokens.empty()) {
-		return;
-	}
-
 	_grid = new Grid(_sceneWidth, _sceneHeight);
+	_grid->ParseData(line, _entities);
 }
 
 void Scene::_ParseHUD(std::string line) {
@@ -239,6 +310,13 @@ void Scene::OnKeyUp(int keyCode) {
 void Scene::OnKeyDown(int keyCode) {
 	if (_mario != nullptr) {
 		_mario->OnKeyDown(keyCode);
+	}
+}
+
+void Scene::AddEntityToScene(Entity* entity) {
+	_entities.emplace_back(entity);
+	if (_grid != nullptr) {
+		_grid->AddEntity(entity);
 	}
 }
 
@@ -366,6 +444,9 @@ void Scene::LoadScene() {
 
 	readFile.close();
 
+	const unsigned int ENTITIES_TO_RESERVE = _entities.size() * 2;
+	_entities.reserve(ENTITIES_TO_RESERVE);
+
 	sprintf_s(debug, "[SCENE] Loaded scene with ID: %d\n", _sceneID);
 	OutputDebugStringA(debug);
 }
@@ -379,18 +460,10 @@ void Scene::Update(DWORD deltaTime) {
 		Sleep(5000);
 		return;
 	}
-
-	std::vector<Entity*> collidableEntities;
-	//If there's no grid, do the traditional collision checking
-	if (_grid == nullptr) {
-		for (auto* collidableEntity : collidableEntities) {
-			collidableEntities.emplace_back(collidableEntity);
-		}
-	}
-
+	
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		Entity* entity = _entities.at(i);
-		entity->Update(deltaTime, &collidableEntities);
+		entity->Update(deltaTime, &_entities, &_tiles, _grid);
 
 		if (_grid != nullptr) {
 			Cell* newCell = _grid->GetCell(entity->GetPosition());
@@ -410,8 +483,12 @@ void Scene::Render() {
 	if (_background != nullptr) {
 		_background->Render();
 	}
-
-	for (const auto& entity : _entities) {
+	
+	//Copies the base container and sort itself based on render priority
+	//Avoid sorting the base container 'cause it will invalidate the cellVectorIndex
+	std::vector<Entity*> renderEntities = _entities;
+	std::sort(renderEntities.begin(), renderEntities.end(), Entity::CompareRenderPriority);
+	for (const auto& entity : renderEntities) {
 		entity->Render();
 	}
 
@@ -450,6 +527,15 @@ void Scene::Release() {
 	}
 	_entities.clear();
 	
+	for (auto& tile : _tiles) {
+		tile->Release();
+		delete tile;
+	}
+	_tiles.clear();
+
+	for (const auto& texture : _textureMap) {
+		texture.second->Release();
+	}
 	_textureMap.clear();
 
 	sprintf_s(debug, "[SCENE] Unloaded scene with ID: %d\n", _sceneID);

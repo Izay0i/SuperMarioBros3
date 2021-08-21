@@ -1,3 +1,4 @@
+#include "spatial/Grid.h"
 #include "Entity.h"
 
 void Entity::_ParseHitboxes(std::string line) {
@@ -16,7 +17,7 @@ void Entity::_ParseHitboxes(std::string line) {
 	_hitbox.AddHitbox(hitbox);
 }
 
-bool Entity::CompareRenderPriority(const Entity*& a, const Entity*& b) {
+bool Entity::CompareRenderPriority(Entity*& a, Entity*& b) {
 	return a->_renderPriority < b->_renderPriority;
 }
 
@@ -25,8 +26,8 @@ Entity::Entity() {
 	_renderPriority = std::numeric_limits<unsigned int>::max();
 	_score = 100;
 	_scoreMultiplier = 1;
-
-	cellIndex = std::numeric_limits<unsigned int>::max();
+	
+	cellVectorIndex = std::numeric_limits<unsigned int>::max();
 	ownerCell = nullptr;
 }
 
@@ -100,12 +101,66 @@ void Entity::ParseData(
 	readFile.close();
 }
 
-void Entity::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities) {
+void Entity::Update(
+	DWORD deltaTime, 
+	std::vector<Entity*>* collidableEntities, 
+	std::vector<Entity*>* collidableTiles, 
+	Grid* grid) 
+{
+	if (!_isActive) {
+		return;
+	}
+	
 	GameObject::Update(deltaTime);
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	if (_health > 0) {
-		CalcPotentialCollision(collidableEntities, collisionEvents);
+		if (grid != nullptr) {
+			//Edge case: what if the entity's bounding box is larger than the grid cell size? i.e: tile->_hitbox > grid->_cellsize
+			//Use another collection (collidableTiles) and calculate the collisions
+			//Since tiles themselves are static, as in, they don't update and render every tick, performance wise it's negligible
+			CalcPotentialCollision(collidableTiles, collisionEvents);
+			
+			//Check collisions from the residing cell
+			CalcPotentialCollision(&ownerCell->entities, collisionEvents);
+
+			//Check collisions from neighboring cells
+			// cell	cell
+			// cell	entity
+			// cell
+			//Left
+			if (ownerCell->indexX > 0) {
+				CalcPotentialCollision(
+					&grid->GetCell(ownerCell->indexX - 1, ownerCell->indexY)->entities, 
+					collisionEvents
+				);
+				//Top left
+				if (ownerCell->indexY > 0) {
+					CalcPotentialCollision(
+						&grid->GetCell(ownerCell->indexX - 1, ownerCell->indexY - 1)->entities,
+						collisionEvents
+					);
+				}
+				//Bottom left
+				if (ownerCell->indexY < grid->_yCells - 1) {
+					CalcPotentialCollision(
+						&grid->GetCell(ownerCell->indexX - 1, ownerCell->indexY + 1)->entities, 
+						collisionEvents
+					);
+				}
+			}
+			//Top
+			if (ownerCell->indexY > 0) {
+				CalcPotentialCollision(
+					&grid->GetCell(ownerCell->indexX, ownerCell->indexY - 1)->entities, 
+					collisionEvents
+				);				
+			}
+		}
+		else {
+			CalcPotentialCollision(collidableEntities, collisionEvents);
+			CalcPotentialCollision(collidableTiles, collisionEvents);
+		}
 	}
 
 	if (collisionEvents.empty()) {
@@ -119,7 +174,7 @@ void Entity::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities) {
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 		for (LPCOLLISIONEVENT result : eventResults) {
-			HandleCollisionEventResults(result, minTime, offset, normal, relativeDistance);
+			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
 		}
 
 		if (normal.x != 0.0f) {
@@ -161,10 +216,14 @@ CollisionEvent* Entity::SweptAABBEx(Entity*& entity) {
 }
 
 void Entity::CalcPotentialCollision(std::vector<Entity*>* collidableEntities, std::vector<LPCOLLISIONEVENT>& collisionEvents) {
+	if (collidableEntities == nullptr) {
+		return;
+	}
+	
 	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
 		LPCOLLISIONEVENT event = SweptAABBEx(collidableEntities->at(i));
 		if (event->time >= 0.0f && event->time <= 1.0f) {
-			collisionEvents.push_back(event);
+			collisionEvents.emplace_back(event);
 		}
 		else {
 			delete event;

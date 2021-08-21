@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "player/Player.h"
 #include "player/HUD.h"
+#include "Tile.h"
 
 #include <vector>
 #include <string>
@@ -35,6 +36,7 @@ private:
 
 	std::string _filePath;
 	std::vector<Entity*> _entities;
+	std::vector<Entity*> _tiles;
 	
 	std::unordered_map<unsigned int, LPDIRECT3DTEXTURE9> _textureMap;
 
@@ -84,6 +86,8 @@ public:
 	void HandleStates(int, bool);
 	void OnKeyUp(int);
 	void OnKeyDown(int);
+
+	void AddEntityToScene(Entity*);
 
 	void LoadScene();
 

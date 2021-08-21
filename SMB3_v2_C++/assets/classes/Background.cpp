@@ -19,9 +19,5 @@ void Background::Render() {
 
 void Background::Release() {
 	_positions.clear();
-
-	if (_backgroundSprite != nullptr) {
-		_backgroundSprite->Release();
-		delete _backgroundSprite;
-	}
+	_backgroundSprite = nullptr;
 }

@@ -156,6 +156,7 @@
     <ClCompile Include="assets\classes\player\StateMachine.cpp" />
     <ClCompile Include="assets\classes\Scene.cpp" />
     <ClCompile Include="assets\classes\spatial\Grid.cpp" />
+    <ClCompile Include="assets\classes\Tile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="assets\classes\SceneManager.cpp" />
     <ClCompile Include="assets\classes\Sprite.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="assets\classes\SceneManager.h" />
     <ClInclude Include="assets\classes\spatial\Grid.h" />
     <ClInclude Include="assets\classes\Sprite.h" />
+    <ClInclude Include="assets\classes\Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -28,7 +28,6 @@ public:
 	//Sprite position, scale, alpha
 	void DrawSprite(D3DXVECTOR2, D3DXVECTOR2, unsigned int);
 	
-	//Should be the first to call when releasing resources
 	void Release();
 };
 

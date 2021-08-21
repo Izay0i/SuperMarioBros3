@@ -71,8 +71,5 @@ void Sprite::DrawSprite(D3DXVECTOR2 position, D3DXVECTOR2 scale, unsigned int al
 
 void Sprite::Release() {
 	_bounds.clear();
-
-	if (_spriteTexture != nullptr) {
-		_spriteTexture->Release();
-	}
+	_spriteTexture = nullptr;
 }
