@@ -10,6 +10,9 @@ class StateMachine;
 
 class Player : public Entity {
 private:
+	friend class StateMachine;
+	friend class HUD;
+
 	static LPDIRECT3DTEXTURE9 _playerTexture;
 
 	//Used only when the player is in the map scene

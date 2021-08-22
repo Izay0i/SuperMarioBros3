@@ -44,8 +44,6 @@ public:
 	virtual void SetHealth(int);
 	virtual int GetHealth() const;
 
-	virtual AnimatedSprite GetAnimatedSprite() const;
-
 	//Entity data  file path, texture, extra data/properties
 	virtual void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>());
 

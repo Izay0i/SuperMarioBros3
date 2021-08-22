@@ -461,6 +461,7 @@ void Scene::Update(DWORD deltaTime) {
 		return;
 	}
 	
+	std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		Entity* entity = _entities.at(i);
 		entity->Update(deltaTime, &_entities, &_tiles, _grid);
@@ -471,6 +472,18 @@ void Scene::Update(DWORD deltaTime) {
 				_grid->RemoveEntityFromCell(entity);
 				_grid->AddEntity(entity, newCell);
 			}
+		}
+
+		if (entity->GetHealth() == -1) {
+			if (_grid != nullptr) {
+				_grid->RemoveEntityFromCell(entity);
+			}
+			
+			entity->Release();
+			delete entity;
+			entity = nullptr;
+
+			_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
 		}
 	}
 
@@ -483,12 +496,8 @@ void Scene::Render() {
 	if (_background != nullptr) {
 		_background->Render();
 	}
-	
-	//Copies the base container and sort itself based on render priority
-	//Avoid sorting the base container 'cause it will invalidate the cellVectorIndex
-	std::vector<Entity*> renderEntities = _entities;
-	std::sort(renderEntities.begin(), renderEntities.end(), Entity::CompareRenderPriority);
-	for (const auto& entity : renderEntities) {
+
+	for (const auto& entity : _entities) {
 		entity->Render();
 	}
 

@@ -43,10 +43,6 @@ int Entity::GetHealth() const {
 	return _health;
 }
 
-AnimatedSprite Entity::GetAnimatedSprite() const {
-	return _animatedSprite;
-}
-
 void Entity::ParseData(
 	std::string dataPath, 
 	const LPDIRECT3DTEXTURE9& texture,  
@@ -125,6 +121,7 @@ void Entity::Update(
 			CalcPotentialCollision(&ownerCell->entities, collisionEvents);
 
 			//Check collisions from neighboring cells
+			//Only need half of the neighboring cells to avoid double checking
 			// cell	cell
 			// cell	entity
 			// cell

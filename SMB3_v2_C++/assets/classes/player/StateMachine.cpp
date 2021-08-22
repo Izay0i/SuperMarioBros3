@@ -1,7 +1,7 @@
 #include "StateMachine.h"
 
 void StateMachine::_HandleForms() {
-	switch (_player->GetHealth()) {
+	switch (_player->_health) {
 		case 1:
 			_form = _Form::SMALL;
 			break;
@@ -20,33 +20,33 @@ void StateMachine::_HandleForms() {
 void StateMachine::_OnEntry() {
 	switch (_currentHealth) {
 		case 1:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("GrowUp", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("GrowUp", _player->_position);
 			break;
 		case 2:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("SmokePuff", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("SmokePuff", _player->_position);
 			break;
 		case 3:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("SmokePuff", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("SmokePuff", _player->_position);
 			break;
 		case 4:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("SmokePuff", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("SmokePuff", _player->_position);
 			break;
 	}
 }
 
 void StateMachine::_OnExit() {
-	switch (_player->GetHealth()) {
+	switch (_player->_health) {
 		case 1:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("ShrinkDown", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("ShrinkDown", _player->_position);
 			break;
 		case 2:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("SmokePuff", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("SmokePuff", _player->_position);
 			break;
 		case 3:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("SmokePuff", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("SmokePuff", _player->_position);
 			break;
 		case 4:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("SmokePuff", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("SmokePuff", _player->_position);
 			break;
 	}
 }
@@ -54,7 +54,7 @@ void StateMachine::_OnExit() {
 StateMachine::StateMachine(Player* player) {
 	_scaleX = 1.0f;
 	_alpha = 255;
-	_currentHealth = player->GetHealth();
+	_currentHealth = player->_health;
 	_player = player;
 
 	_HandleForms();
@@ -63,15 +63,15 @@ StateMachine::StateMachine(Player* player) {
 StateMachine::~StateMachine() {}
 
 void StateMachine::HandleStates(int keyCode, bool isKeyDown) {	
-	if (_currentHealth != _player->GetHealth()) {
-		if (_currentHealth < _player->GetHealth()) {
+	if (_currentHealth != _player->_health) {
+		if (_currentHealth < _player->_health) {
 			_OnEntry();
 		}
-		else if (_currentHealth > _player->GetHealth()) {
+		else if (_currentHealth > _player->_health) {
 			_OnExit();
 		}
 		
-		_currentHealth = _player->GetHealth();
+		_currentHealth = _player->_health;
 		_HandleForms();
 	}	
 
@@ -81,16 +81,16 @@ void StateMachine::HandleStates(int keyCode, bool isKeyDown) {
 			
 			break;
 		case _State::IDLE:
-			if (_player->GetVelocity().x != 0.0f && _player->IsOnGround()) {
+			if (_player->_velocity.x != 0.0f && _player->_isOnGround) {
 				_state = _State::RUN;
 			}
-			else if (_player->GetVelocity().y < 0.0f) {
+			else if (_player->_velocity.y < 0.0f) {
 				_state = _State::JUMP;
 			}
-			else if (_player->GetVelocity().y > 0.0f && !_player->IsOnGround()) {
+			else if (_player->_velocity.y > 0.0f && !_player->_isOnGround) {
 				_state = _State::FALL;
 			}
-			else if (_player->GetHeldEntity() == nullptr) {
+			else if (_player->_heldEntity == nullptr) {
 				if (isKeyDown) {
 					if (keyInput == GlobalUtil::KeyInput::KEY_INPUT_DOWN) {
 						_state = _State::CROUCH;
@@ -107,18 +107,18 @@ void StateMachine::HandleStates(int keyCode, bool isKeyDown) {
 			}
 			break;
 		case _State::RUN:
-			if (_player->GetVelocity().x == 0.0f) {
+			if (_player->_velocity.x == 0.0f) {
 				_state = _State::IDLE;
 			}
-			else if (_player->GetVelocity().y < 0.0f) {
+			else if (_player->_velocity.y < 0.0f) {
 				_state = _State::JUMP;
 			}
-			else if (_player->GetVelocity().y > 0.0f && !_player->IsOnGround()) {
+			else if (_player->_velocity.y > 0.0f && !_player->_isOnGround) {
 				_state = _State::FALL;
 			}
 			break;
 		case _State::JUMP:
-			if (_player->GetVelocity().y > 0.0f) {
+			if (_player->_velocity.y > 0.0f) {
 				_state = _State::FALL;
 			}
 			/*
@@ -128,7 +128,7 @@ void StateMachine::HandleStates(int keyCode, bool isKeyDown) {
 			*/
 			break;
 		case _State::FALL:
-			if (_player->IsOnGround()) {
+			if (_player->_isOnGround) {
 				_state = _State::IDLE;
 			}
 			/*
@@ -138,7 +138,7 @@ void StateMachine::HandleStates(int keyCode, bool isKeyDown) {
 			*/
 			break;
 		case _State::CROUCH:
-			if (_player->GetVelocity().x != 0.0f || 
+			if (_player->_velocity.x != 0.0f || 
 				(!isKeyDown && keyInput == GlobalUtil::KeyInput::KEY_INPUT_DOWN)
 				) 
 			{
@@ -146,14 +146,14 @@ void StateMachine::HandleStates(int keyCode, bool isKeyDown) {
 			}
 			break;
 		case _State::THROW:
-			if (_player->GetVelocity().x != 0.0f || 
+			if (_player->_velocity.x != 0.0f || 
 				(!isKeyDown && keyInput == GlobalUtil::KeyInput::KEY_INPUT_B)) 
 			{
 				_state = _State::IDLE;
 			}
 			break;
 		case _State::WAG:
-			if (_player->GetVelocity().x != 0.0f || 
+			if (_player->_velocity.x != 0.0f || 
 				(!isKeyDown && keyInput == GlobalUtil::KeyInput::KEY_INPUT_B)) 
 			{
 				_state = _State::IDLE;
@@ -169,8 +169,8 @@ void StateMachine::Update(DWORD delta) {
 }
 
 void StateMachine::Render() {
-	if (_player->GetHealth() == 0) {
-		_player->GetAnimatedSprite().PlaySpriteAnimation("Die", _player->GetPosition());
+	if (_player->_health == 0) {
+		_player->_animatedSprite.PlaySpriteAnimation("Die", _player->_position);
 		return;
 	}
 
@@ -178,32 +178,32 @@ void StateMachine::Render() {
 		case _State::MAP:
 			switch (_form) {
 				case _Form::SMALL:
-					_player->GetAnimatedSprite().PlaySpriteAnimation("MapSmall", _player->GetPosition());
+					_player->_animatedSprite.PlaySpriteAnimation("MapSmall", _player->_position);
 					break;
 				case _Form::BIG:
-					_player->GetAnimatedSprite().PlaySpriteAnimation("MapBig", _player->GetPosition());
+					_player->_animatedSprite.PlaySpriteAnimation("MapBig", _player->_position);
 					break;
 				case _Form::FIRE:
-					_player->GetAnimatedSprite().PlaySpriteAnimation("MapFire", _player->GetPosition());
+					_player->_animatedSprite.PlaySpriteAnimation("MapFire", _player->_position);
 					break;
 				case _Form::RACCOON:
-					_player->GetAnimatedSprite().PlaySpriteAnimation("MapRac", _player->GetPosition());
+					_player->_animatedSprite.PlaySpriteAnimation("MapRac", _player->_position);
 					break;
 			}
 			break;
 		case _State::IDLE:
 			switch (_form) {
 				case _Form::SMALL:
-					_player->GetAnimatedSprite().PlaySpriteAnimation("Idle", _player->GetPosition());
+					_player->_animatedSprite.PlaySpriteAnimation("Idle", _player->_position);
 					break;
 				case _Form::BIG:
-
+					_player->_animatedSprite.PlaySpriteAnimation("BigIdle", _player->_position);
 					break;
 				case _Form::FIRE:
-
+					_player->_animatedSprite.PlaySpriteAnimation("FireIdle", _player->_position);
 					break;
 				case _Form::RACCOON:
-
+					_player->_animatedSprite.PlaySpriteAnimation("RacIdle", _player->_position);
 					break;
 			}
 			break;
@@ -258,12 +258,12 @@ void StateMachine::Render() {
 		case _State::CROUCH:
 			/*
 			if (_player->IsAttacking()) {
-				_player->GetAnimatedSprite().PlaySpriteAnimation("RacWag", _player->GetPosition(), D3DXVECTOR2(_player->GetNormal().x, 1.0f));
+				_player->_animatedSprite.PlaySpriteAnimation("RacWag", _player->_position, D3DXVECTOR2(_player->_normal.x, 1.0f));
 			}
 			*/
 			break;
 		case _State::THROW:
-			_player->GetAnimatedSprite().PlaySpriteAnimation("FireThrow", _player->GetPosition());
+			_player->_animatedSprite.PlaySpriteAnimation("FireThrow", _player->_position);
 			break;
 		case _State::WAG:
 

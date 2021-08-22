@@ -90,16 +90,9 @@ void Grid::AddEntity(Entity* entity, Cell* newCell) {
 
 void Grid::RemoveEntityFromCell(Entity* entity) {
 	std::vector<Entity*>& entities = entity->ownerCell->entities;
+	//Smort
+	entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
 
-	//Vector swap, does not preserve the order of the elements
-	entities.at(entity->cellVectorIndex) = entities.back();
-	entities.pop_back();
-
-	//Update vector index
-	if (entity->cellVectorIndex < entities.size()) {
-		entities.at(entity->cellVectorIndex)->cellVectorIndex = entity->cellVectorIndex;
-	}
-	
 	entity->cellVectorIndex = std::numeric_limits<unsigned int>::max();
 	entity->ownerCell = nullptr;
 }
@@ -128,13 +121,5 @@ void Grid::ParseData(std::string filePath, std::vector<Entity*>& entities) {
 }
 
 void Grid::Release() {
-	for (unsigned int x = _xCells; x < _xCells; ++x) {
-		for (unsigned int y = _yCells; y < _yCells; ++y) {
-			auto& entities = _cells.at(x).at(y).entities;
-			for (auto& entity : entities) {
-				entities.pop_back();
-			}
-		}
-	}
 	_cells.clear();
 }

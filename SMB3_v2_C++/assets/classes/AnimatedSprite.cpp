@@ -1,15 +1,7 @@
 #include "AnimatedSprite.h"
 
-Sprite* AnimatedSprite::_GetAnimation(std::string animationName) {
-	return _sprites[animationName];
-}
-
 bool AnimatedSprite::_HasAnimation(std::string animationName) const {
 	return _sprites.find(animationName) != _sprites.end();
-}
-
-void AnimatedSprite::_AddSpriteBound(std::string animationName, RECT spriteBound) {
-	_sprites[animationName]->AddSpriteBound(spriteBound);
 }
 
 void AnimatedSprite::ParseSprites(std::string line, const LPDIRECT3DTEXTURE9& spriteTexture) {
