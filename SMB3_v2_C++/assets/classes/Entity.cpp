@@ -28,7 +28,6 @@ Entity::Entity() {
 	_scoreMultiplier = 1;
 	_removeTime = 2000;
 
-	cellVectorIndex = std::numeric_limits<unsigned int>::max();
 	ownerCell = nullptr;
 }
 
@@ -115,6 +114,7 @@ void Entity::Update(
 	}
 	
 	GameObject::Update(deltaTime);
+	_velocity.y += _gravity * _deltaTime;
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	if (_health > 0) {

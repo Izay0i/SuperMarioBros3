@@ -34,11 +34,8 @@ private:
 	const float _MAX_ACCEL = 2.2f;
 	const float _MIN_ACCEL = 1.1f;
 	const float _ACCEL_THRESHOLD = 1.86f;
-
-	float _runSpeed;
-	float _jumpSpeed;
+	
 	float _bounceSpeed;
-	float _gravity;
 	float _acceleration;
 
 	unsigned int _lives;

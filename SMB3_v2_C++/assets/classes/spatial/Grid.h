@@ -16,16 +16,23 @@ class Grid {
 private:
 	friend class Entity;
 	
+	enum class _GridFileSection {
+		GRIDFILE_SECTION_UNKNOWN,
+		GRIDFILE_SECTION_GRIDCELLS,
+		GRIDFILE_SECTION_POSITIONS
+	};
+
 	const unsigned int _MAX_ENTITIES_PER_CELL = 20;
 
 	unsigned int _xCells, _yCells;
 
 	std::vector<std::vector<Cell>> _cells;
 
-	void _ParseCellPositions(std::string, std::vector<Entity*>&);
+	void _ParseGridCells(std::string);
+	void _ParsePositions(std::string, std::vector<Entity*>&);
 
 public:
-	Grid(unsigned int, unsigned int);
+	Grid();
 	~Grid();
 
 	Cell* GetCell(unsigned int, unsigned int);

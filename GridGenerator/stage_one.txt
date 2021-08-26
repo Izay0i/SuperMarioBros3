@@ -237,7 +237,7 @@
 [/]
 
 [GRID]
-assets\data\overworld_1\grid_stage_one.txt
+
 [/]
 
 [HUD]

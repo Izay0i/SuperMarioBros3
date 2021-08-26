@@ -274,7 +274,7 @@ void Scene::_ParseTileData(std::string line) {
 void Scene::_ParseGrid(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
-	_grid = new Grid(_sceneWidth, _sceneHeight);
+	_grid = new Grid;
 	_grid->ParseData(line, _entities);
 }
 
@@ -603,7 +603,7 @@ void Scene::Render() {
 	}
 
 	if (_hud != nullptr) {
-		_hud->Render();
+		//_hud->Render();
 	}
 }
 

@@ -39,13 +39,13 @@ Player::Player() {
 	_playerState = new IdleState(this);
 
 	_tail = new Tail(this);
-	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
+	//SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
 }
 
 Player::~Player() {}
 
 RECTF Player::GetBoundingBox(int index) const {
-	return GameObject::GetBoundingBox(index);
+	return GameObject::GetBoundingBox(_health >= 2);
 }
 
 Entity* Player::GetHeldEntity() const {
@@ -77,8 +77,7 @@ void Player::HandleStates() {
 		_gravity = 0.0025f;
 	}
 	
-	//variable jump height by manupilating gravity
-	//good enough	
+	//Variable jump height	
 	if (Device::IsKeyDown(DIK_K)) {
 		if (_gravity > _MAX_GRAVITY) {
 			_gravity -= 0.0005f;
@@ -141,6 +140,11 @@ void Player::HandleStates() {
 		}
 	}
 
+	//Float a bit longer when flying
+	if (_acceleration >= _ACCEL_THRESHOLD) {
+		_gravity = 0.0013f;
+	}
+
 	PlayerState* currentState = _playerState->HandleStates();
 	if (currentState != nullptr) {
 		delete _playerState;
@@ -197,7 +201,8 @@ void Player::OnKeyDown(int keyCode) {
 			}
 			break;
 		case DIK_K:
-
+			SlowFall();
+			Jump();
 			break;
 	}
 }
@@ -227,14 +232,6 @@ void Player::Jump() {
 	if (_isOnGround) {
 		_velocity.y = -_jumpSpeed;
 		_isOnGround = false;
-	}
-	
-	//Variable jump height
-	if (_gravity > _MAX_GRAVITY) {
-		_gravity -= 0.0005f;
-	}
-	else if (_gravity <= _MAX_GRAVITY) {
-		_gravity = _MAX_GRAVITY;
 	}
 }
 
@@ -267,7 +264,7 @@ void Player::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventNormal.x == -1.0f) {
+	if (eventNormal.y == -1.0f) {
 		_isOnGround = true;
 	}
 
@@ -287,9 +284,35 @@ void Player::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {	
+	//To show the whole kicking animation
+	if (_isNextToShell && GetTickCount64() % 500 == 0) {
+		_isNextToShell = false;
+	}
+
+	//--------------------------------------
+	//TIMERS
+	//--------------------------------------
+	if (_flyStart != 0 && (GetTickCount64() - _flyStart > _flyTime || _health != 4)) {
+		_flyStart = 0;
+	}
+
+	if (_inPipeStart != 0 && GetTickCount64() - _inPipeStart > _inPipeTime) {
+		_inPipeStart = 0;
+	}
+
+	if (_attackStart != 0 && GetTickCount64() - _attackStart > _attackTime) {
+		_attackStart = 0;
+	}
+	//--------------------------------------
+	//TIMERS
+	//--------------------------------------
+
+	if (_triggeredStageEnd) {
+		MoveRight();
+	}
+
 	_playerState->Update(deltaTime);
 	_tail->Update(deltaTime);
-
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 
 	if (_heldEntity != nullptr) {

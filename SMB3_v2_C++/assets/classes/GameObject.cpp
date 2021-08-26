@@ -28,7 +28,7 @@ GameObject::GameObjectType GameObject::GetObjectType() const
 }
 
 RECTF GameObject::GetBoundingBox(int index) const {
-	RECTF bound = _hitbox.GetBoundingBox(index);
+	RECTF bound;
 	bound.left = _position.x;
 	bound.top = _position.y;
 	bound.right = _position.x + _hitbox.GetBoxWidth(index);

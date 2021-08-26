@@ -1,6 +1,26 @@
 #include "Grid.h"
 
-void Grid::_ParseCellPositions(std::string line, std::vector<Entity*>& entities) {
+void Grid::_ParseGridCells(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
+
+	if (tokens.size() < 2) {
+		return;
+	}
+
+	_xCells = std::stoul(tokens.at(0));
+	_yCells = std::stoul(tokens.at(1));
+
+	_cells.resize(_xCells, std::vector<Cell>(_yCells));
+	for (unsigned int x = 0; x < _xCells; ++x) {
+		for (unsigned int y = 0; y < _yCells; ++y) {
+			_cells.at(x).at(y).indexX = x;
+			_cells.at(x).at(y).indexY = y;
+			_cells.at(x).at(y).entities.reserve(_MAX_ENTITIES_PER_CELL);
+		}
+	}
+}
+
+void Grid::_ParsePositions(std::string line, std::vector<Entity*>& entities) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
 	if (tokens.size() < 3) {
@@ -13,37 +33,15 @@ void Grid::_ParseCellPositions(std::string line, std::vector<Entity*>& entities)
 	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(tokens.at(2)));
 
 	for (auto& entity : entities) {
-		if (entity->ownerCell != nullptr) {
-			return;
-		}
-
-		if (entity->GetObjectType() == objectType) {
+		if (entity->GetObjectType() == objectType && entity->ownerCell == nullptr) {
 			Cell* newCell = GetCell(cellX, cellY);
-			if (newCell != entity->ownerCell) {
-				RemoveEntityFromCell(entity);
-				AddEntity(entity, newCell);
-			}
-
+			AddEntity(entity, newCell);
 			return;
 		}
 	}
 }
 
-Grid::Grid(unsigned int sceneWidth, unsigned int sceneHeight) {
-	//Do float division and then ceil the value to get an extra row and column offscreen
-	//Then cast it to unsigned int to truncate the decimals
-	_xCells = static_cast<unsigned int>(ceil((static_cast<float>(sceneWidth) / Cell::CELL_WIDTH)));
-	_yCells = static_cast<unsigned int>(ceil((static_cast<float>(sceneHeight) / Cell::CELL_HEIGHT)));
-
-	_cells.resize(_xCells, std::vector<Cell>(_yCells));
-	for (unsigned int x = 0; x < _xCells; ++x) {
-		for (unsigned int y = 0; y < _yCells; ++y) {
-			_cells.at(x).at(y).indexX = x;
-			_cells.at(x).at(y).indexY = y;
-			_cells.at(x).at(y).entities.reserve(_MAX_ENTITIES_PER_CELL);
-		}
-	}
-}
+Grid::Grid() {}
 
 Grid::~Grid() {}
 
@@ -75,32 +73,17 @@ void Grid::AddEntity(Entity* entity) {
 	Cell* newCell = GetCell(entity->GetPosition());
 	newCell->entities.emplace_back(entity);
 	entity->ownerCell = newCell;
-	//entity->cellVectorIndex = newCell->entities.size() - 1;
 }
 
 void Grid::AddEntity(Entity* entity, Cell* newCell) {
 	newCell->entities.emplace_back(entity);
 	entity->ownerCell = newCell;
-	//entity->cellVectorIndex = newCell->entities.size() - 1;
 }
 
 void Grid::RemoveEntityFromCell(Entity* entity) {
 	std::vector<Entity*>& entities = entity->ownerCell->entities;
 	entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
-
-	/*
-	//Vector swap, does not preserve the order of the elements
-	entities.at(entity->cellVectorIndex) = entities.back();
-	entities.pop_back();
-
-	//Update vector index
-	if (entity->cellVectorIndex < entities.size()) {
-		entities.at(entity->cellVectorIndex)->cellVectorIndex = entity->cellVectorIndex;
-	}
-	*/
-
 	entity->ownerCell = nullptr;
-	//entity->cellVectorIndex = std::numeric_limits<unsigned int>::max();
 }
 
 void Grid::ParseData(std::string filePath, std::vector<Entity*>& entities) {
@@ -112,6 +95,8 @@ void Grid::ParseData(std::string filePath, std::vector<Entity*>& entities) {
 		return;
 	}
 	
+	_GridFileSection gridFileSection = _GridFileSection::GRIDFILE_SECTION_UNKNOWN;
+
 	char str[GlobalUtil::MAX_FILE_LINE];
 	while (readFile.getline(str, GlobalUtil::MAX_FILE_LINE)) {
 		std::string line(str);
@@ -120,7 +105,29 @@ void Grid::ParseData(std::string filePath, std::vector<Entity*>& entities) {
 			continue;
 		}
 
-		_ParseCellPositions(line, entities);
+		if (line == "[/]") {
+			gridFileSection = _GridFileSection::GRIDFILE_SECTION_UNKNOWN;
+			continue;
+		}
+
+		if (line == "[GRIDCELLS]") {
+			gridFileSection = _GridFileSection::GRIDFILE_SECTION_GRIDCELLS;
+			continue;
+		}
+
+		if (line == "[POSITIONS]") {
+			gridFileSection = _GridFileSection::GRIDFILE_SECTION_POSITIONS;
+			continue;
+		}
+
+		switch (gridFileSection) {
+			case _GridFileSection::GRIDFILE_SECTION_GRIDCELLS:
+				_ParseGridCells(line);
+				break;
+			case _GridFileSection::GRIDFILE_SECTION_POSITIONS:
+				_ParsePositions(line, entities);
+				break;
+		}
 	}
 
 	readFile.close();

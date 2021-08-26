@@ -20,7 +20,7 @@ namespace GlobalUtil {
 	const unsigned int ASPECT_RATIO_X = 8;
 	const unsigned int ASPECT_RATIO_Y = 7;
 	//Used in all entity classes
-	const int MAX_FILE_LINE = 5000;
+	const unsigned int MAX_FILE_LINE = 5000;
 
 	extern unsigned int windowAdjustX, windowAdjustY;
 	//Mainly used in the Game and Sprite class

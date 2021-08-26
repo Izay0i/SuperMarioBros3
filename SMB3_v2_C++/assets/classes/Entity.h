@@ -16,6 +16,10 @@ protected:
 
 	std::vector<std::string> _extraData;
 
+	float _runSpeed;
+	float _jumpSpeed;
+	float _gravity;
+
 	bool _isOnGround;
 	bool _isHeld;
 	bool _tookDamage;
@@ -38,7 +42,6 @@ protected:
 
 public:
 	bool isBeingHeld;
-	unsigned int cellVectorIndex;
 	Cell* ownerCell;
 
 	static bool CompareRenderPriority(Entity*&, Entity*&);
