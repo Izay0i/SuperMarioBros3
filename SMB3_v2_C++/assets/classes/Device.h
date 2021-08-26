@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GlobalUtil.h"
 #include "SceneManager.h"
 
 #include <d3d9.h>

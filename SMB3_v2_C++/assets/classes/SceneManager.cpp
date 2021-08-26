@@ -1,3 +1,4 @@
+#include "GlobalUtil.h"
 #include "SceneManager.h"
 
 SceneManager* SceneManager::_managerInstance = nullptr;
@@ -26,7 +27,7 @@ void SceneManager::ParseScenes(std::string line) {
 
 	int sceneID = std::stoi(tokens.at(0));
 	std::string scenePath = tokens.at(1);
-	_scenes.insert(std::make_pair(sceneID, new Scene(sceneID, scenePath)));
+	_scenes.insert(std::make_pair(sceneID, new Scene(static_cast<Scene::SceneType>(sceneID), scenePath)));
 }
 
 void SceneManager::ChangeScene(int sceneID) {

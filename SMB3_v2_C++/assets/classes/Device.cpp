@@ -1,3 +1,4 @@
+#include "GlobalUtil.h"
 #include "Device.h"
 
 Device* Device::_deviceInstance = nullptr;
@@ -79,6 +80,8 @@ void Device::ProcessKeyboardInputs() {
 		}
 	}
 
+	_managerInstance->GetCurrentScene()->HandleStates();
+
 	DWORD elements = _KEYBOARD_BUFFER_SIZE;
 
 	hResult = _keyboard->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), keyEvents, &elements, 0);
@@ -90,8 +93,6 @@ void Device::ProcessKeyboardInputs() {
 	for (DWORD i = 0; i < elements; ++i) {
 		int keyCode = keyEvents[i].dwOfs;
 		int keyState = keyEvents[i].dwData;
-
-		_managerInstance->GetCurrentScene()->HandleStates(keyCode, (keyState & 0x80) > 0);
 
 		if ((keyState & 0x80) > 0) {
 			_managerInstance->GetCurrentScene()->OnKeyDown(keyCode);

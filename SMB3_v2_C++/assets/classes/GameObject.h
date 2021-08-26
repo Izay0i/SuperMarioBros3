@@ -112,6 +112,9 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
+	void SetActive(bool);
+	bool IsActive() const;
+
 	void SetOjectType(GameObjectType);
 	GameObjectType GetObjectType() const;
 

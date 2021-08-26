@@ -1,14 +1,13 @@
 #pragma once
 
-#include "GlobalUtil.h"
 #include "spatial/Grid.h"
-#include "GameObject.h"
 #include "Camera.h"
 #include "Background.h"
 #include "Entity.h"
+#include "Tile.h"
+
 #include "player/Player.h"
 #include "player/HUD.h"
-#include "Tile.h"
 
 #include <vector>
 #include <string>
@@ -16,6 +15,14 @@
 #include <unordered_map>
 
 class Scene {
+public:
+	enum class SceneType {
+		SCENE_TYPE_INTRO = 0,
+		SCENE_TYPE_MAP = 10,
+		SCENE_TYPE_STAGE_ONE = 11,
+		SCENE_TYPE_STAGE_FOUR = 14
+	};
+
 private:
 	enum class _SceneFileSection {
 		SCENEFILE_SECTION_UNKNOWN,
@@ -31,7 +38,10 @@ private:
 		SCENEFILE_SECTION_BACKGROUND
 	};
 
-	int _sceneID;
+	//Reserves
+	const unsigned int _MAX_ENTITIES_IN_SCENE = 125;
+
+	SceneType _sceneID;
 	unsigned int _sceneWidth, _sceneHeight;
 
 	std::string _filePath;
@@ -56,6 +66,10 @@ private:
 
 	Grid* _grid;
 
+	bool _IsEntityInViewport(Entity*, RECTF) const;
+	//IB: in bound
+	bool _IsEntityAliveOrIB(Entity*) const;
+
 	//Load textures and pass them to the game objects in the scene
 	LPDIRECT3DTEXTURE9 _LoadTexture(LPDIRECT3DTEXTURE9, LPCWSTR, D3DCOLOR);
 
@@ -71,25 +85,20 @@ private:
 	void _ParseBackground(std::string);
 
 public:
-	enum class SceneType {
-		SCENE_TYPE_INTRO = 0,
-		SCENE_TYPE_MAP = 10,
-		SCENE_TYPE_STAGE_ONE = 11,
-		SCENE_TYPE_STAGE_FOUR = 14
-	};
-
-	Scene(int, std::string);
+	Scene(SceneType, std::string);
 	~Scene();
 
 	D3DCOLOR GetBGColor() const;
 
-	void HandleStates(int, bool);
+	void HandleStates();
 	void OnKeyUp(int);
 	void OnKeyDown(int);
 
 	void AddEntityToScene(Entity*);
 
 	void LoadScene();
+	
+	void UpdateCameraPosition();
 
 	void Update(DWORD);
 	void Render();

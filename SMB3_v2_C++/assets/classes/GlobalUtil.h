@@ -14,23 +14,8 @@
 #include <Windows.h>
 
 namespace GlobalUtil {
-	enum class KeyInput {
-		KEY_INPUT_1 = DIK_1,
-		KEY_INPUT_2 = DIK_2,
-		KEY_INPUT_3 = DIK_3,
-		KEY_INPUT_4 = DIK_4,
-		KEY_INPUT_LEFT = DIK_A,
-		KEY_INPUT_RIGHT = DIK_D,
-		KEY_INPUT_UP = DIK_W,
-		KEY_INPUT_DOWN = DIK_S,
-		KEY_INPUT_SELECT = DIK_U,
-		KEY_INPUT_START = DIK_I,
-		KEY_INPUT_B = DIK_J,
-		KEY_INPUT_A = DIK_K
-	};
-
-	const unsigned int SCREEN_WIDTH = 256;
-	const unsigned int SCREEN_HEIGHT = 240;
+	const unsigned int SCREEN_WIDTH = 270;
+	const unsigned int SCREEN_HEIGHT = 264;
 	//NES aspect ratio
 	const unsigned int ASPECT_RATIO_X = 8;
 	const unsigned int ASPECT_RATIO_Y = 7;

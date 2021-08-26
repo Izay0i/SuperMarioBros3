@@ -1,0 +1,119 @@
+#include "../../Device.h"
+#include "PlayerState.h"
+#include "IdleState.h"
+#include "RunState.h"
+#include "JumpState.h"
+#include "FallState.h"
+
+RunState::RunState(Player* player) {
+	if (_player == nullptr) {
+		_player = player;
+	}
+}
+
+PlayerState* RunState::HandleStates() {
+	if (_player->_velocity.x == 0.0f) {
+		return new IdleState(_player);
+	}
+	else if (_player->_velocity.y < 0.0f) {
+		return new JumpState(_player);
+	}
+	else if (_player->_velocity.y > 0.0f && !_player->_isOnGround) {
+		return new FallState(_player);
+	}
+
+	return nullptr;
+}
+
+void RunState::Render() {
+	switch (_form) {
+		case _Form::SMALL:
+			if (_player->IsInPipe()) {
+				_player->_animatedSprite.PlaySpriteAnimation("Front", _player->_position);
+			}
+			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_isOnGround && _player->_heldEntity == nullptr) {
+				_player->_animatedSprite.PlaySpriteAnimation("SuperRun", _player->_position, _player->_scale);
+			}
+			else if (_player->_isNextToShell) {
+				_player->_animatedSprite.PlaySpriteAnimation("Kick", _player->_position, _player->_scale);
+			}
+			else if (_player->_heldEntity != nullptr) {
+				_player->_animatedSprite.PlaySpriteAnimation("HoldRun", _player->_position, _player->_scale);
+			}
+			else {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+					_player->_animatedSprite.PlaySpriteAnimation("Skid", _player->_position, _player->_scale);
+				}
+				else {
+					_player->_animatedSprite.PlaySpriteAnimation("Run", _player->_position, _player->_scale);
+				}
+			}
+			break;
+		case _Form::BIG:
+			if (_player->IsInPipe()) {
+				_player->_animatedSprite.PlaySpriteAnimation("BigFront", _player->_position);
+			}
+			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_isOnGround && _player->_heldEntity == nullptr) {
+				_player->_animatedSprite.PlaySpriteAnimation("BigSuperRun", _player->_position, _player->_scale);
+			}
+			else if (_player->_isNextToShell) {
+				_player->_animatedSprite.PlaySpriteAnimation("BigKick", _player->_position, _player->_scale);
+			}
+			else if (_player->_heldEntity != nullptr) {
+				_player->_animatedSprite.PlaySpriteAnimation("BigHoldRun", _player->_position, _player->_scale);
+			}
+			else {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+					_player->_animatedSprite.PlaySpriteAnimation("BigSkid", _player->_position, _player->_scale);
+				}
+				else {
+					_player->_animatedSprite.PlaySpriteAnimation("BigRun", _player->_position, _player->_scale);
+				}
+			}
+			break;
+		case _Form::FIRE:
+			if (_player->IsInPipe()) {
+				_player->_animatedSprite.PlaySpriteAnimation("FireFront", _player->_position);
+			}
+			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_isOnGround && _player->_heldEntity == nullptr) {
+				_player->_animatedSprite.PlaySpriteAnimation("FireSuperRun", _player->_position, _player->_scale);
+			}
+			else if (_player->_isNextToShell) {
+				_player->_animatedSprite.PlaySpriteAnimation("FireKick", _player->_position, _player->_scale);
+			}
+			else if (_player->_heldEntity != nullptr) {
+				_player->_animatedSprite.PlaySpriteAnimation("FireHoldRun", _player->_position, _player->_scale);
+			}
+			else {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+					_player->_animatedSprite.PlaySpriteAnimation("FireSkid", _player->_position, _player->_scale);
+				}
+				else {
+					_player->_animatedSprite.PlaySpriteAnimation("FireRun", _player->_position, _player->_scale);
+				}
+			}
+			break;
+		case _Form::RACCOON:
+			if (_player->IsInPipe()) {
+				_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
+			}
+			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_isOnGround && _player->_heldEntity == nullptr) {
+				_player->_animatedSprite.PlaySpriteAnimation("RacSuperRun", _player->_position, _player->_scale);
+			}
+			else if (_player->_isNextToShell) {
+				_player->_animatedSprite.PlaySpriteAnimation("RacKick", _player->_position, _player->_scale);
+			}
+			else if (_player->_heldEntity != nullptr) {
+				_player->_animatedSprite.PlaySpriteAnimation("RacHoldRun", _player->_position, _player->_scale);
+			}
+			else {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+					_player->_animatedSprite.PlaySpriteAnimation("RacSkid", _player->_position, _player->_scale);
+				}
+				else {
+					_player->_animatedSprite.PlaySpriteAnimation("RacRun", _player->_position, _player->_scale);
+				}
+			}
+			break;
+	}
+}

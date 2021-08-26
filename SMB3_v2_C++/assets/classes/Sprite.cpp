@@ -1,3 +1,4 @@
+#include "GlobalUtil.h"
 #include "Sprite.h"
 
 Sprite::Sprite(const LPDIRECT3DTEXTURE9& spriteTexture, RECT spriteBound, unsigned int totalFrames, int animationSpeed) {
@@ -7,10 +8,10 @@ Sprite::Sprite(const LPDIRECT3DTEXTURE9& spriteTexture, RECT spriteBound, unsign
 	_animationSpeed = animationSpeed;
 	_cameraInstance = Camera::GetInstance();
 
-	if (spriteBound.left != -1 && 
-		spriteBound.top != -1 && 
-		spriteBound.right != -1 && 
-		spriteBound.bottom != -1) 
+	if (spriteBound.left >= 0 && 
+		spriteBound.top >= 0 && 
+		spriteBound.right >= 0 && 
+		spriteBound.bottom >= 0) 
 	{
 		_bounds.emplace_back(spriteBound);
 	}

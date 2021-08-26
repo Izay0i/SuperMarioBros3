@@ -1,3 +1,4 @@
+#include "GlobalUtil.h"
 #include "Camera.h"
 
 Camera* Camera::_cameraInstance = nullptr;
@@ -31,10 +32,10 @@ unsigned int Camera::GetCameraHeight() const {
 
 RECTF Camera::GetViewport() const {
 	RECTF viewPort;
-	viewPort.left = _position.x - GlobalUtil::SCREEN_WIDTH;
-	viewPort.top = _position.y - GlobalUtil::SCREEN_HEIGHT;
-	viewPort.right = _position.x + GlobalUtil::SCREEN_WIDTH;
-	viewPort.bottom = _position.y + GlobalUtil::SCREEN_HEIGHT;
+	viewPort.left = _position.x - GlobalUtil::SCREEN_WIDTH * 0.2f;
+	viewPort.top = _position.y - GlobalUtil::SCREEN_HEIGHT * 0.2f;
+	viewPort.right = _position.x + GlobalUtil::SCREEN_WIDTH * 1.2f;
+	viewPort.bottom = _position.y + GlobalUtil::SCREEN_HEIGHT * 1.2f;
 	return viewPort;
 }
 

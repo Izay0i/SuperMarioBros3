@@ -2,7 +2,7 @@
 #SMALL
 Idle	0	0	16	16	1	0
 
-Run	0	0	16	16	2	50
+Run	0	0	16	16	2	100
 Run	18	0	34	16
 
 Jump	36	0	52	16	1	0
@@ -21,6 +21,8 @@ HoldIdle	144	0	160	16	1	0
 HoldRun	144	0	160	16	2	50
 HoldRun	162	0	178	16
 
+HoldJump	162	0	178	16	1	0
+
 Kick	180	0	196	16	1	0
 
 Slide	198	0	214	16	1	0
@@ -30,7 +32,7 @@ Die	216	0	232	16	1	0
 #BIG
 BigIdle	0	17	16	49	1	0
 
-BigRun	0	17	16	49	2	50
+BigRun	0	17	16	49	2	100
 BigRun	18	17	34	49
 
 BigJump	72	17	88	49	1	0
@@ -68,7 +70,7 @@ BigIntroLookUp	354	17	370	49	1	0
 #Fire
 FireIdle	0	50	16	82	1	0
 
-FireRun	0	50	16	82	2	50
+FireRun	0	50	16	82	2	100
 FireRun	18	50	34	82
 
 FireJump	72	50	88	82	1	0
@@ -99,13 +101,13 @@ FireKick	284	50	308	82	1	0
 
 FireSlide	310	50	326	82	1	0
 
-FireThrow	328	50	344	82	2	50
+FireThrow	328	50	344	82	2	100
 FireThrow	346	50	362	82
 
 #RACCOON
 RacIdle	0	83	24	115	1	0
 
-RacRun	0	83	24	115	2	50
+RacRun	0	83	24	115	2	100
 RacRun	26	83	50	115
 
 RacJump	104	83	128	115	1	0
@@ -114,7 +116,7 @@ RacFall	52	83	76	115	1	0
 
 RacCrouch	78	83	102	115	1	0
 
-RacWagFall	130	83	154	115	2	50
+RacWagFall	130	83	154	115	2	75
 RacWagFall	156	83	180	115
 
 RacSuperRun	182	83	206	115	2	25
@@ -124,7 +126,7 @@ RacSuperJump	234	83	258	115	1	0
 
 RacSuperFall	260	83	284	115	1	0
 
-RacWagSuperFall	260	83	284	115	3	50
+RacWagSuperFall	260	83	284	115	3	75
 RacWagSuperFall	286	83	310	115
 RacWagSuperFall	312	83	336	115
 

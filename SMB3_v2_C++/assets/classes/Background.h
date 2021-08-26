@@ -1,8 +1,6 @@
 #pragma once
 
-#include "GlobalUtil.h"
 #include "GameObject.h"
-#include "Camera.h"
 #include "Sprite.h"
 
 class Background : public GameObject {

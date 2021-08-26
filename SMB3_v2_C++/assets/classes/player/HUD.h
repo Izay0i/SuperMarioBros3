@@ -38,9 +38,10 @@ public:
 
 	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
 	
-	void HandleStates(int, bool) override;
+	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
 
+	//Scene time
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;
 

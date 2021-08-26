@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GlobalUtil.h"
 #include "Scene.h"
 
 #include <unordered_map>

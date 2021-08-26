@@ -13,6 +13,7 @@ private:
 
 public:
 	void ParseSprites(std::string, const LPDIRECT3DTEXTURE9&);
+	//Animation name, position, scale, alpha
 	void PlaySpriteAnimation(std::string, D3DXVECTOR2, D3DXVECTOR2 = D3DXVECTOR2(1.0f, 1.0f), unsigned int = 255);
 
 	void Release();

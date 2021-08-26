@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GlobalUtil.h"
 #include "GameObject.h"
 
 class Camera : public GameObject {

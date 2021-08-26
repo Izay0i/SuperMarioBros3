@@ -26,7 +26,8 @@ Entity::Entity() {
 	_renderPriority = std::numeric_limits<unsigned int>::max();
 	_score = 100;
 	_scoreMultiplier = 1;
-	
+	_removeTime = 2000;
+
 	cellVectorIndex = std::numeric_limits<unsigned int>::max();
 	ownerCell = nullptr;
 }
@@ -95,6 +96,12 @@ void Entity::ParseData(
 	}
 
 	readFile.close();
+}
+
+void Entity::TakeDamage() {
+	if (_health > -1) {
+		--_health;
+	}
 }
 
 void Entity::Update(

@@ -1,4 +1,13 @@
+#include "../Device.h"
+#include "../SceneManager.h"
 #include "Player.h"
+#include "state/IdleState.h"
+#include "state/RunState.h"
+#include "state/JumpState.h"
+#include "state/FallState.h"
+#include "state/CrouchState.h"
+#include "state/ThrowState.h"
+#include "state/WagState.h"
 
 LPDIRECT3DTEXTURE9 Player::_playerTexture = nullptr;
 
@@ -16,7 +25,9 @@ Player::Player() {
 	_gravity = 0.0025f;
 	_acceleration = 0.5f;
 
-	_stateMachine = nullptr;
+	_lives = 3;
+	_coins = 0;
+	_score = 0;
 
 	_heldEntity = nullptr;
 	_touchedEntity = nullptr;
@@ -24,6 +35,11 @@ Player::Player() {
 	_flyTime = 6000;
 	_inPipeTime = 4000;
 	_attackTime = 126;
+
+	_playerState = new IdleState(this);
+
+	_tail = new Tail(this);
+	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
 }
 
 Player::~Player() {}
@@ -36,45 +52,152 @@ Entity* Player::GetHeldEntity() const {
 	return _heldEntity;
 }
 
-bool Player::IsOnGround() const {
-	return _isOnGround;
+bool Player::TriggeredStageEnd() const {
+	return _triggeredStageEnd;
 }
 
-void Player::HandleStates(int keyCode, bool isKeyDown) {
-	_stateMachine->HandleStates(keyCode, isKeyDown);
+bool Player::WentIntoPipe() const {
+	return _wentIntoPipe;
+}
 
-	GlobalUtil::KeyInput keyInput = static_cast<GlobalUtil::KeyInput>(keyCode);
+bool Player::IsFlying() const {
+	return _flyStart != 0;
+}
+
+bool Player::IsInPipe() const {
+	return _inPipeStart != 0;
+}
+
+bool Player::IsAttacking() const {
+	return _attackStart != 0;
+}
+
+void Player::HandleStates() {
+	if (_isOnGround) {
+		_gravity = 0.0025f;
+	}
 	
+	//variable jump height by manupilating gravity
+	//good enough	
+	if (Device::IsKeyDown(DIK_K)) {
+		if (_gravity > _MAX_GRAVITY) {
+			_gravity -= 0.0005f;
+		}
+		else if (_gravity <= _MAX_GRAVITY) {
+			_gravity = _MAX_GRAVITY;
+		}
+	}
+	else {
+		if (_gravity < 0.0025f) {
+			_gravity += 0.0005f;
+		}
+	}
+
+	//Skid
+	if (_acceleration < _ACCEL_THRESHOLD && _velocity.x != 0.0f) {
+		if (_normal.x == -1) {
+			if (Device::IsKeyDown(DIK_D)) {
+				_acceleration = 0.0499f;
+			}
+		}
+		else if (_normal.x == 1) {
+			if (Device::IsKeyDown(DIK_A)) {
+				_acceleration = 0.0499f;
+			}
+		}
+	}
+
+	if (Device::IsKeyDown(DIK_A)) {
+		MoveLeft();
+	}
+	else if (Device::IsKeyDown(DIK_D)) {
+		MoveRight();
+	}
+	else {
+		//Slippery feel when the player stops
+		if (_acceleration <= 0.5f) {
+			_velocity.x = 0.0f;
+			_acceleration = 0.5f;
+		}
+		else if (_acceleration > 0.5f) {
+			_acceleration -= 0.06f;
+		}
+	}
+
+	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
+		//GOTTA GO FAAAST
+		if (Device::IsKeyDown(DIK_J) && !IsFlying()) {
+			if (_acceleration < _MAX_ACCEL) {
+				_acceleration += 0.03f;
+			}
+		}
+		else {
+			if (_acceleration < _MIN_ACCEL) {
+				_acceleration += 0.03f;
+			}
+			else if (_acceleration > _MIN_ACCEL) {
+				_acceleration -= 0.02f;
+			}
+		}
+	}
+
+	PlayerState* currentState = _playerState->HandleStates();
+	if (currentState != nullptr) {
+		delete _playerState;
+		_playerState = currentState;
+	}
 }
 
 void Player::OnKeyUp(int keyCode) {
-	GlobalUtil::KeyInput keyInput = static_cast<GlobalUtil::KeyInput>(keyCode);
-	switch (keyInput) {
-		case GlobalUtil::KeyInput::KEY_INPUT_DOWN:
-			/*
+	switch (keyCode) {
+		case DIK_S:
+			_isCrouching = false;
+			
 			if (_isOnGround && !IsInPipe() && _health > 1) {
 				_isOnGround = false;
 				_velocity.y = -0.3f;
 			}
-			*/
+			break;
+		case DIK_J:
+			_isHolding = false;
 			break;
 	}
 }
 
 void Player::OnKeyDown(int keyCode) {
-	GlobalUtil::KeyInput keyInput = static_cast<GlobalUtil::KeyInput>(keyCode);
-	switch (keyInput) {
-		case GlobalUtil::KeyInput::KEY_INPUT_1:
+	switch (keyCode) {
+		case DIK_1:
 			_health = 1;
 			break;
-		case GlobalUtil::KeyInput::KEY_INPUT_2:
+		case DIK_2:
 			_health = 2;
 			break;
-		case GlobalUtil::KeyInput::KEY_INPUT_3:
+		case DIK_3:
 			_health = 3;
 			break;
-		case GlobalUtil::KeyInput::KEY_INPUT_4:
+		case DIK_4:
 			_health = 4;
+			break;
+
+		case DIK_A:
+			_normal.x = -1.0f;
+			break;
+		case DIK_D:
+			_normal.x = 1.0f;
+			break;
+		case DIK_S:
+			_isCrouching = true;
+			break;
+		case DIK_J:
+			_isHolding = true;
+			//Tail attack
+			if (_health == 4 && !IsAttacking()) {
+				//StartAttackTimer();
+				_velocity.x = 0.0f;
+			}
+			break;
+		case DIK_K:
+
 			break;
 	}
 }
@@ -87,47 +210,17 @@ void Player::ParseData(
 	if (_playerTexture == nullptr) {
 		_playerTexture = texture;
 	}
-	_stateMachine = new StateMachine(this);
 	Entity::ParseData(dataPath, texture, extraData);
 }
 
 void Player::MoveLeft() {
-	_normal.x = -1.0f;
 	_scale = D3DXVECTOR2(1.0f, 1.0f);
 	_velocity.x = -_runSpeed * _acceleration;
 }
 
 void Player::MoveRight() {
-	_normal.x = 1.0f;
 	_scale = D3DXVECTOR2(-1.0f, 1.0f);
 	_velocity.x = _runSpeed * _acceleration;
-}
-
-void Player::MoveFriction() {
-	//Slippery feel when the player stops
-	if (_acceleration <= 0.5f) {
-		_velocity.x = 0.0f;
-		_acceleration = 0.5f;
-	}
-	else if (_acceleration > 0.5f) {
-		_acceleration -= 0.06f;
-	}
-}
-
-void Player::SkidLeft() {
-	if (_acceleration < _ACCEL_THRESHOLD && _velocity.x != 0.0f) {
-		if (_normal.x == 1.0f) {
-			_acceleration = 0.0499f;
-		}
-	}
-}
-
-void Player::SkidRight() {
-	if (_acceleration < _ACCEL_THRESHOLD && _velocity.x != 0.0f) {
-		if (_normal.x == -1.0f) {
-			_acceleration = 0.0499f;
-		}
-	}
 }
 
 void Player::Jump() {
@@ -147,21 +240,14 @@ void Player::Jump() {
 
 void Player::RunFly() {
 	if (_health == 4) {
-		if (_acceleration >= _ACCEL_THRESHOLD /*|| IsFlying()*/) {
-			/*
+		if (_acceleration >= _ACCEL_THRESHOLD || IsFlying()) {
 			if (_isOnGround && !IsFlying()) {
 				_isOnGround = false;
-				StartFlyTimer();
+				//StartFlyTimer();
 			}
-			*/
+			
 			_velocity.y = -_jumpSpeed * 0.8f;
 		}
-	}
-}
-
-void Player::Fall() {
-	if (_gravity < 0.0025f) {
-		_gravity += 0.0005f;
 	}
 }
 
@@ -181,8 +267,8 @@ void Player::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventEntity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TILE) {
-
+	if (eventNormal.x == -1.0f) {
+		_isOnGround = true;
 	}
 
 	if (eventEntity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM) {
@@ -200,18 +286,15 @@ void Player::Update(
 	std::vector<Entity*>* collidableEntities, 
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
-{
-	if (_isOnGround == true) {
-		_gravity = 0.0025f;
-	}
-	
-	_stateMachine->Update(deltaTime);
-	
+{	
+	_playerState->Update(deltaTime);
+	_tail->Update(deltaTime);
+
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 
 	if (_heldEntity != nullptr) {
 		if (_heldEntity->GetHealth() == 0 || _heldEntity->GetHealth() == 3) {
-			//_isHolding = false;
+			_isHolding = false;
 
 			if (_heldEntity->GetHealth() == 3) {
 				_heldEntity->SetPosition(
@@ -222,28 +305,26 @@ void Player::Update(
 				);
 			}
 
-			//_heldEntity->isBeingHeld = false;
+			_heldEntity->isBeingHeld = false;
 			_heldEntity = nullptr;
 			return;
 		}
-
-		/*
+	
 		if (_isHolding) {
 			D3DXVECTOR2 offset;
 			offset.x = IsInPipe() ? 0.0f : 10.0f;
 			offset.y = _health == 1 ? 11.0f : 2.0f;
 
-			_heldEntity->SetPosition({ _position.x + offset.x * normal.x, _position.y - offset.y });
+			_heldEntity->SetPosition({ _position.x + offset.x * _normal.x, _position.y - offset.y });
 		}
 		else {
 			_isNextToShell = true;
 
 			_heldEntity->TakeDamage();
-			_heldEntity->SetNormal({ -normal.x, 0.0f });
+			_heldEntity->SetNormal({ -_normal.x, 0.0f });
 			_heldEntity->isBeingHeld = false;
 			_heldEntity = nullptr;
 		}
-		*/
 	}
 }
 
@@ -252,7 +333,7 @@ void Player::Render() {
 		return;
 	}
 
-	_stateMachine->Render();
+	_playerState->Render();
 }
 
 void Player::Release() {
@@ -264,9 +345,14 @@ void Player::Release() {
 	_fireballs.clear();
 	*/
 
-	if (_stateMachine != nullptr) {
-		_stateMachine->Release();
-		delete _stateMachine;
+	if (_playerState != nullptr) {
+		_playerState->Release();
+		delete _playerState;
+	}
+
+	if (_tail != nullptr) {
+		_tail->Release();
+		delete _tail;
 	}
 
 	_animatedSprite.Release();

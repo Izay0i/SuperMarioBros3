@@ -1,11 +1,11 @@
+#include "../Camera.h"
 #include "HUD.h"
 
 LPDIRECT3DTEXTURE9 HUD::_hudTexture = nullptr;
 
 void HUD::_ParseLives() {
 	_lives.clear();
-	std::vector<unsigned int> digits = GlobalUtil::SplitDigit(10);
-	//std::vector<unsigned int> digits = GlobalUtil::SplitDigit(_player->GetLives());
+	std::vector<unsigned int> digits = GlobalUtil::SplitDigit(_player->_lives);
 
 	for (const auto& digit : digits) {
 		_lives.emplace_back(std::to_string(digit));
@@ -20,8 +20,7 @@ void HUD::_ParseLives() {
 
 void HUD::_ParseCoins() {
 	_coins.clear();
-	std::vector<unsigned int> digits = GlobalUtil::SplitDigit(78);
-	//std::vector<unsigned int> digits = GlobalUtil::SplitDigit(_player->GetCoins());
+	std::vector<unsigned int> digits = GlobalUtil::SplitDigit(_player->_coins);
 
 	for (const auto& digit : digits) {
 		_coins.emplace_back(std::to_string(digit));
@@ -35,15 +34,12 @@ void HUD::_ParseCoins() {
 }
 
 void HUD::_ParseItems() {
-	/*
-	std::vector<GameObject::GameObjectType> playerItems = _player->GetItems();
+	std::list<GameObject::GameObjectType> playerItems = _player->_bonusItems;
 	if (playerItems.empty()) {
 		return;
 	}
-	*/
-
-	_items.clear();
-	/*
+	
+	_items.clear();	
 	for (const auto& item : playerItems) {
 		switch (item) {
 			case GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
@@ -57,49 +53,48 @@ void HUD::_ParseItems() {
 				break;
 		}
 	}
-	*/
+	
 }
 
 void HUD::_ParseSpeedGauge() {
 	_speedGauge.clear();
 
-	/*
-	if (keyPressed || isFlying) {
-		if (currentAccel >= 1.5f / maxAccel || isFlying) {
+	float currentAcceleration = _player->_acceleration;
+	float maxAcceleration = _player->_ACCEL_THRESHOLD;
+	if (_player->_isHolding || _player->IsFlying()) {
+		if (currentAcceleration >= 1.5f / maxAcceleration || _player->IsFlying()) {
 			_speedGauge.emplace_back("Arrow");
 		}
 
-		if (currentAccel >= 1.75f / maxAccel || isFlying) {
+		if (currentAcceleration >= 1.75f / maxAcceleration || _player->IsFlying()) {
 			_speedGauge.emplace_back("Arrow");
 		}
 
-		if (currentAccel >= 2.0f / maxAccel || isFlying) {
+		if (currentAcceleration >= 2.0f / maxAcceleration || _player->IsFlying()) {
 			_speedGauge.emplace_back("Arrow");
 		}
 
-		if (currentAccel >= 2.5f / maxAccel || isFlying) {
+		if (currentAcceleration >= 2.5f / maxAcceleration || _player->IsFlying()) {
 			_speedGauge.emplace_back("Arrow");
 		}
 
-		if (currentAccel >= 3.0f / maxAccel || isFlying) {
+		if (currentAcceleration >= 3.0f / maxAcceleration || _player->IsFlying()) {
 			_speedGauge.emplace_back("Arrow");
 		}
 
-		if (currentAccel >= 3.5f / maxAccel || isFlying) {
+		if (currentAcceleration >= 3.5f / maxAcceleration || _player->IsFlying()) {
 			_speedGauge.emplace_back("Arrow");
 		}
 
-		if (currentAccel >= 4.0f / maxAccel || isFlying) {
+		if (currentAcceleration >= 4.0f / maxAcceleration || _player->IsFlying()) {
 			_speedGauge.emplace_back("PButton");
 		}
 	}
-	*/
 }
 
 void HUD::_ParseScore() {
 	_score.clear();
-	std::vector<unsigned int> digits = GlobalUtil::SplitDigit(700);
-	//std::vector<unsigned int> digits = GlobalUtil::SplitDigit(_player->GetScore());
+	std::vector<unsigned int> digits = GlobalUtil::SplitDigit(_player->_score);
 
 	for (const auto& digit : digits) {
 		_score.emplace_back(std::to_string(digit));
@@ -128,8 +123,7 @@ void HUD::_ParseTimeLeft(DWORD sceneTime) {
 }
 
 void HUD::_ParseSceneEnd() {
-	/*
-	std::vector<GameObject::GameObjectType> playerItems = _player->GetItems();
+	std::list<GameObject::GameObjectType> playerItems = _player->_bonusItems;
 	if (playerItems.empty()) {
 		return;
 	}
@@ -146,7 +140,6 @@ void HUD::_ParseSceneEnd() {
 			_animationName = "CardStar";
 			break;
 	}
-	*/
 }
 
 void HUD::_ParseSprites(std::string line) {
@@ -155,6 +148,7 @@ void HUD::_ParseSprites(std::string line) {
 
 HUD::HUD(Player* player) {
 	_player = player;
+	_animationName = "NoItem";
 }
 
 HUD::~HUD() {}
@@ -170,11 +164,11 @@ void HUD::ParseData(
 	Entity::ParseData(dataPath, texture, extraData);
 }
 
-void HUD::HandleStates(int, bool) {}
+void HUD::HandleStates() {}
 
 void HUD::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
-void HUD::Update(DWORD sceneTime, std::vector<GameObject*>* collidableObjects) {
+void HUD::Update(DWORD sceneTime, std::vector<GameObject*>*) {
 	_ParseLives();
 	_ParseCoins();
 	_ParseItems();
@@ -182,16 +176,21 @@ void HUD::Update(DWORD sceneTime, std::vector<GameObject*>* collidableObjects) {
 	_ParseScore();
 	_ParseTimeLeft(sceneTime);
 	_ParseSceneEnd();
+
+	D3DXVECTOR2 hudPosition;
+	hudPosition.x = Camera::GetInstance()->GetPosition().x;
+	hudPosition.y = Camera::GetInstance()->GetPosition().y + _player->_isInMap ? 185.0f : 160.0f;
+	_position = hudPosition;
 }
 
 void HUD::Render() {
-	_animatedSprite.PlaySpriteAnimation("BlackBG", D3DXVECTOR2(_position.x - 6.0f, _position.y - 3.0f));
+	_animatedSprite.PlaySpriteAnimation("BlackBG", D3DXVECTOR2(_position.x, _position.y - 3.0f));
 	_animatedSprite.PlaySpriteAnimation("Panel", _position);
 
 	//Lives
 	for (unsigned int i = 0; i < _lives.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_lives.at(i), D3DXVECTOR2(
-			_position.x + 30.0f + (8.0f * i),
+			_position.x + 40.0f + (8.0f * i),
 			_position.y + 16.0f
 		));
 	}
@@ -199,7 +198,7 @@ void HUD::Render() {
 	//Coins
 	for (unsigned int i = 0; i < _coins.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_coins.at(i), D3DXVECTOR2(
-			_position.x + 133.0f + (8.0f * i),
+			_position.x + 144.0f + (8.0f * i),
 			_position.y + 8.0f
 		));
 	}
@@ -207,23 +206,23 @@ void HUD::Render() {
 	//Items
 	for (unsigned int i = 0; i < _items.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_items.at(i), D3DXVECTOR2(
-			_position.x + 161.0f + (24.0f * i),
-			_position.y
+			_position.x + 172.0f + (24.0f * i),
+			_position.y + 1.0f
 		));
 	}
 
 	//Speed gauge
 	for (unsigned int i = 0; i < _speedGauge.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_speedGauge.at(i), D3DXVECTOR2(
-			_position.x + 53.0f + (8.0f * i),
-			_position.y + 16.0f
+			_position.x + 64.0f + (8.0f * i),
+			_position.y + 8.0f
 		));
 	}
 
 	//Score
 	for (unsigned int i = 0; i < _score.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_score.at(i), D3DXVECTOR2(
-			_position.x + 53.0f + (8.0f * i),
+			_position.x + 64.0f + (8.0f * i),
 			_position.y + 16.0f
 		));
 	}
@@ -231,17 +230,15 @@ void HUD::Render() {
 	//Time left
 	for (unsigned int i = 0; i < _timeLeft.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_timeLeft.at(i), D3DXVECTOR2(
-			_position.x + 125.0f + (8.0f * i),
+			_position.x + 136.0f + (8.0f * i),
 			_position.y + 16.0f
 		));
 	}
 
-	/*
-	if (_player->TriggeredStageEnd()) {
-		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x + 60.0f, position.y - 170.0f));
-		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 183.0f, _position.y - 155.0f));
+	if (_player->_triggeredStageEnd) {
+		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x + 70.0f, _position.y - 170.0f));
+		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 193.0f, _position.y - 154.0f));
 	}
-	*/
 }
 
 void HUD::Release() {

@@ -1,3 +1,4 @@
+#include "GlobalUtil.h"
 #include "Game.h"
 
 Game* Game::_gameInstance = nullptr;

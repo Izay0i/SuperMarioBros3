@@ -1,28 +1,35 @@
 #pragma once
 
 #include "../Entity.h"
-#include "StateMachine.h"
+#include "state/PlayerState.h"
+#include "Tail.h"
 
 #include <list>
 #include <fstream>
 
-class StateMachine;
-
+class PlayerState;
 class Player : public Entity {
 private:
-	friend class StateMachine;
+	friend class PlayerState;
+	friend class IdleState;
+	friend class RunState;
+	friend class JumpState;
+	friend class FallState;
+	friend class CrouchState;
+	friend class ThrowState;
+	friend class WagState;
 	friend class HUD;
+	friend class Tail;
 
 	static LPDIRECT3DTEXTURE9 _playerTexture;
-
-	//Used only when the player is in the map scene
-	const float _MAX_TRAVEL_DISTANCE = 31.0f;
 
 	const unsigned int _DEFAULT_LIVES = 3;
 	const unsigned int _MAX_LIVES = 99;
 	const unsigned int _MAX_COINS = 99;
 	const unsigned int _MAX_SCORE = 9999999;
 
+	//Used only when the player is in the map scene
+	const float _MAX_TRAVEL_DISTANCE = 31.0f;
 	const float _MAX_GRAVITY = 0.0005f;
 	const float _MAX_ACCEL = 2.2f;
 	const float _MIN_ACCEL = 1.1f;
@@ -34,17 +41,26 @@ private:
 	float _gravity;
 	float _acceleration;
 
+	unsigned int _lives;
+	unsigned int _coins;
+	unsigned int _score;
+
+	bool _triggeredStageEnd;
+	bool _wentIntoPipe;
 	bool _isInMap;
-	bool _isOnGround;
 	bool _isCrouching;
+	//Can be interpreted as holding an entity or pressing the K key
 	bool _isHolding;
 	bool _isNextToShell;
-
-	StateMachine* _stateMachine;
 
 	Entity* _heldEntity;
 	Entity* _touchedEntity;
 
+	PlayerState* _playerState;
+
+	Tail* _tail;
+
+	std::list<GameObject::GameObjectType> _bonusItems;
 	//std::list<Fireball*> _fireballs;
 
 	DWORD _flyStart;
@@ -64,10 +80,14 @@ public:
 
 	RECTF GetBoundingBox(int = 0) const override;
 	Entity* GetHeldEntity() const;
+	
+	bool TriggeredStageEnd() const;
+	bool WentIntoPipe() const;
+	bool IsFlying() const;
+	bool IsInPipe() const;
+	bool IsAttacking() const;
 
-	bool IsOnGround() const;
-
-	void HandleStates(int, bool) override;
+	void HandleStates() override;
 	void OnKeyUp(int);
 	void OnKeyDown(int);
 
@@ -75,12 +95,8 @@ public:
 
 	void MoveLeft();
 	void MoveRight();
-	void MoveFriction();
-	void SkidLeft();
-	void SkidRight();
 	void Jump();
 	void RunFly();
-	void Fall();
 	//Raccoon
 	void SlowFall();
 	

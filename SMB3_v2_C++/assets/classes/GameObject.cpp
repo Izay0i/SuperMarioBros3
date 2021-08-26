@@ -8,6 +8,16 @@ GameObject::GameObject() {
 
 GameObject::~GameObject() {}
 
+void GameObject::SetActive(bool active) {
+	if (_isActive != active) {
+		_isActive = active;
+	}
+}
+
+bool GameObject::IsActive() const {
+	return _isActive;
+}
+
 void GameObject::SetOjectType(GameObjectType objectType) {
 	_objectType = objectType;
 }

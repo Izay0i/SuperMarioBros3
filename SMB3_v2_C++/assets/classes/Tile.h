@@ -7,7 +7,7 @@ private:
 public:
 	void AddHitbox(RECTF);
 
-	void HandleStates(int, bool) override;
+	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
 	void Release() override;
 };

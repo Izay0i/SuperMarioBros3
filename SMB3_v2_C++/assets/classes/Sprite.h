@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GlobalUtil.h"
 #include "Camera.h"
 
 #include <string>

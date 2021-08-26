@@ -29,10 +29,15 @@ protected:
 
 	AnimatedSprite _animatedSprite;
 
+	DWORD _removeStart;
+	//Default is 2s
+	DWORD _removeTime;
+
 	virtual void _ParseSprites(std::string) = 0;
 	virtual void _ParseHitboxes(std::string);
 
 public:
+	bool isBeingHeld;
 	unsigned int cellVectorIndex;
 	Cell* ownerCell;
 
@@ -47,7 +52,9 @@ public:
 	//Entity data  file path, texture, extra data/properties
 	virtual void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>());
 
-	virtual void HandleStates(int, bool) = 0;
+	virtual void TakeDamage();
+
+	virtual void HandleStates() = 0;
 	//Event results, min time, offset, normal, relative distance
 	virtual void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) = 0;
 	//Delta time, collidable entities, collidable tiles, grid

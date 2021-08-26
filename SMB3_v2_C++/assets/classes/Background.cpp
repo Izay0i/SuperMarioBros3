@@ -1,3 +1,4 @@
+#include "GlobalUtil.h"
 #include "Background.h"
 
 Background::Background(const LPDIRECT3DTEXTURE9& backgroundTexture, unsigned int totalFrames) {

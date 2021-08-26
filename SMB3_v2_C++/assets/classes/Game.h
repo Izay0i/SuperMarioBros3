@@ -1,6 +1,5 @@
 #pragma once
 
-#include "GlobalUtil.h"
 #include "Device.h"
 
 #include <string>
