@@ -18,8 +18,8 @@ private:
 	friend class CrouchState;
 	friend class ThrowState;
 	friend class WagState;
-	friend class HUD;
 	friend class Tail;
+	friend class HUD;
 
 	static LPDIRECT3DTEXTURE9 _playerTexture;
 
@@ -83,6 +83,10 @@ public:
 	bool IsFlying() const;
 	bool IsInPipe() const;
 	bool IsAttacking() const;
+
+	void StartFlyTimer();
+	void StartInPipeTimer();
+	void StartAttackTimer();
 
 	void HandleStates() override;
 	void OnKeyUp(int);

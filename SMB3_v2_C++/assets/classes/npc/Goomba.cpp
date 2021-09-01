@@ -17,8 +17,8 @@ void Goomba::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*)
 {
 }
 
-void Goomba::Render()
-{
+void Goomba::Render() {
+	
 }
 
 void Goomba::Release()

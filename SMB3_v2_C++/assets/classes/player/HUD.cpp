@@ -179,18 +179,18 @@ void HUD::Update(DWORD sceneTime, std::vector<GameObject*>*) {
 
 	D3DXVECTOR2 hudPosition;
 	hudPosition.x = Camera::GetInstance()->GetPosition().x;
-	hudPosition.y = Camera::GetInstance()->GetPosition().y + _player->_isInMap ? 185.0f : 160.0f;
+	hudPosition.y = Camera::GetInstance()->GetPosition().y + 155.0f;
 	_position = hudPosition;
 }
 
 void HUD::Render() {
-	_animatedSprite.PlaySpriteAnimation("BlackBG", D3DXVECTOR2(_position.x, _position.y - 3.0f));
+	_animatedSprite.PlaySpriteAnimation("BlackBG", _position);
 	_animatedSprite.PlaySpriteAnimation("Panel", _position);
 
 	//Lives
 	for (unsigned int i = 0; i < _lives.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_lives.at(i), D3DXVECTOR2(
-			_position.x + 40.0f + (8.0f * i),
+			_position.x + 30.0f + (8.0f * i),
 			_position.y + 16.0f
 		));
 	}
@@ -198,7 +198,7 @@ void HUD::Render() {
 	//Coins
 	for (unsigned int i = 0; i < _coins.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_coins.at(i), D3DXVECTOR2(
-			_position.x + 144.0f + (8.0f * i),
+			_position.x + 134.0f + (8.0f * i),
 			_position.y + 8.0f
 		));
 	}
@@ -206,7 +206,7 @@ void HUD::Render() {
 	//Items
 	for (unsigned int i = 0; i < _items.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_items.at(i), D3DXVECTOR2(
-			_position.x + 172.0f + (24.0f * i),
+			_position.x + 162.0f + (24.0f * i),
 			_position.y + 1.0f
 		));
 	}
@@ -214,7 +214,7 @@ void HUD::Render() {
 	//Speed gauge
 	for (unsigned int i = 0; i < _speedGauge.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_speedGauge.at(i), D3DXVECTOR2(
-			_position.x + 64.0f + (8.0f * i),
+			_position.x + 54.0f + (8.0f * i),
 			_position.y + 8.0f
 		));
 	}
@@ -222,7 +222,7 @@ void HUD::Render() {
 	//Score
 	for (unsigned int i = 0; i < _score.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_score.at(i), D3DXVECTOR2(
-			_position.x + 64.0f + (8.0f * i),
+			_position.x + 54.0f + (8.0f * i),
 			_position.y + 16.0f
 		));
 	}
@@ -230,14 +230,14 @@ void HUD::Render() {
 	//Time left
 	for (unsigned int i = 0; i < _timeLeft.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_timeLeft.at(i), D3DXVECTOR2(
-			_position.x + 136.0f + (8.0f * i),
+			_position.x + 126.0f + (8.0f * i),
 			_position.y + 16.0f
 		));
 	}
 
 	if (_player->_triggeredStageEnd) {
-		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x + 70.0f, _position.y - 170.0f));
-		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 193.0f, _position.y - 154.0f));
+		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x + 60.0f, _position.y - 170.0f));
+		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 183.0f, _position.y - 154.0f));
 	}
 }
 

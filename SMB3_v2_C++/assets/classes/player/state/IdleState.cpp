@@ -25,7 +25,7 @@ PlayerState* IdleState::HandleStates() {
 		return new FallState(_player);
 	}
 	else if (_player->_heldEntity == nullptr) {
-		if (Device::IsKeyDown(DIK_S)) {
+		if (_player->_isCrouching) {
 			return new CrouchState(_player);
 		}
 		else if (Device::IsKeyDown(DIK_J) && _form == _Form::FIRE) {

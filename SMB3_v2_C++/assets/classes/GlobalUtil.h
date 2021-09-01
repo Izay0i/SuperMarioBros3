@@ -14,8 +14,8 @@
 #include <Windows.h>
 
 namespace GlobalUtil {
-	const unsigned int SCREEN_WIDTH = 270;
-	const unsigned int SCREEN_HEIGHT = 264;
+	const unsigned int SCREEN_WIDTH = 256;
+	const unsigned int SCREEN_HEIGHT = 224;
 	//NES aspect ratio
 	const unsigned int ASPECT_RATIO_X = 8;
 	const unsigned int ASPECT_RATIO_Y = 7;

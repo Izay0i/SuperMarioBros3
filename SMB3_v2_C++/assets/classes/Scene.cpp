@@ -1,4 +1,5 @@
 #include "GlobalUtil.h"
+#include "Game.h"
 #include "Scene.h"
 #include "NPCList.h"
 
@@ -152,11 +153,7 @@ void Scene::_ParseEntityData(std::string line) {
 		}
 	}
 
-	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(
-		std::stoul(
-			tokens.at(0)
-		)
-	);
+	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(tokens.at(0)));
 
 	float x = std::stof(tokens.at(3));
 	float y = std::stof(tokens.at(4));
@@ -183,55 +180,55 @@ void Scene::_ParseEntityData(std::string line) {
 			_entities.emplace_back(_luigi);
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
-			entity = new Goomba;
+			//entity = new Goomba;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
-
+			//entity = new Paragoomba;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_KOOPA:
-
+			//entity = new Koopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
-
+			//entity = new Parakoopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
-
+			//entity = new PiranaPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
-
+			//entity = new VenusPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
-
+			//entity = new BoomerBro;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PORTAL:
-
+			//entity = new Portal;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
-
+			//entity = new MovingPlatform;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
-
+			//entity = new Coin;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
-
+			//entity = new BonusItem;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
-
+			//entity = new QuestionBlock;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
-
+			//entity = new ShinyBrick;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
-
+			//entity = new PBlock;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_CACTUS:
-
+			//entity = new Cactus;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_HELPTEXT:
-
+			//entity = new HelpText;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_HAMMERBRO:
-
+			//entity = new HammerBro;
 			break;
 	}
 
@@ -272,8 +269,6 @@ void Scene::_ParseTileData(std::string line) {
 }
 
 void Scene::_ParseGrid(std::string line) {
-	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
-
 	_grid = new Grid;
 	_grid->ParseData(line, _entities);
 }
@@ -293,10 +288,9 @@ void Scene::_ParseHUD(std::string line) {
 void Scene::_ParseBackground(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
-	if (tokens.size() == 2) {
-		unsigned int totalFrames = std::stoul(tokens.at(0));
-		unsigned int textureID = std::stoul(tokens.at(1));
-		_background = new Background(_textureMap[textureID], totalFrames);
+	if (tokens.size() == 1) {
+		unsigned int textureID = std::stoul(tokens.at(0));
+		_background = new Background(_textureMap[textureID]);
 		return;
 	}
 
@@ -346,6 +340,13 @@ void Scene::AddEntityToScene(Entity* entity) {
 	if (_grid != nullptr) {
 		_grid->AddEntity(entity);
 	}
+}
+
+void Scene::RemoveEntityFromScene(Entity* entity) {
+	if (_grid != nullptr) {
+		_grid->RemoveEntityFromCell(entity);
+	}
+	_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
 }
 
 void Scene::LoadScene() {
@@ -484,56 +485,42 @@ void Scene::UpdateCameraPosition() {
 	RECTF cameraBound = _cameraInstance->GetCameraBound(index);
 	D3DXVECTOR2 cameraPosition = _cameraInstance->GetPosition();
 
-	if (_mario->GetPosition().x < cameraPosition.x) {
-		_mario->SetPosition({ cameraPosition.x, _mario->GetPosition().y });
-	}
-	else if (_mario->GetPosition().x + _mario->GetBoxWidth() > _sceneWidth) {
-		_mario->SetPosition({ _sceneWidth - _mario->GetBoxWidth(), _mario->GetPosition().y });
+	if (!_mario->TriggeredStageEnd() && !_mario->IsInPipe()) {
+		if (_mario->GetPosition().x < cameraPosition.x) {
+			_mario->SetPosition({ cameraPosition.x, _mario->GetPosition().y });
+		}
+		else if (_mario->GetPosition().x + _mario->GetBoxWidth() > _sceneWidth) {
+			_mario->SetPosition({ _sceneWidth - _mario->GetBoxWidth(), _mario->GetPosition().y });
+		}
 	}
 
-	switch (_sceneID) {
-		case SceneType::SCENE_TYPE_STAGE_ONE:
-			cameraPosition = _mario->GetPosition();
-			//Bounds checking
-			cameraPosition.x -= GlobalUtil::SCREEN_WIDTH / 2.5f;
-			if (cameraPosition.x < cameraBound.left) {
-				cameraPosition.x = cameraBound.left;
-			}
-			else if (cameraPosition.x + GlobalUtil::SCREEN_WIDTH > cameraBound.right) {
-				cameraPosition.x = cameraBound.right - GlobalUtil::SCREEN_WIDTH;
-			}
+	cameraPosition = _mario->GetPosition();
+	cameraPosition.x -= Game::GetInstance()->GetWindowWidth() / 2.25f;
+	if (cameraPosition.x < cameraBound.left) {
+		cameraPosition.x = cameraBound.left;
+	}
+	else if (cameraPosition.x + Game::GetInstance()->GetWindowWidth() > cameraBound.right) {
+		cameraPosition.x = cameraBound.right - Game::GetInstance()->GetWindowWidth();
+	}
 
-			cameraPosition.y -= GlobalUtil::SCREEN_HEIGHT / 2.5f;
-			if (cameraPosition.y < cameraBound.top) {
-				cameraPosition.y = cameraBound.top;
-			}
-			else if (cameraPosition.y + GlobalUtil::SCREEN_HEIGHT > cameraBound.bottom) {
-				cameraPosition.y = cameraBound.bottom - GlobalUtil::SCREEN_HEIGHT;
-			}
-			break;
-		case SceneType::SCENE_TYPE_STAGE_FOUR:
-			
-			break;
+	cameraPosition.y -= Game::GetInstance()->GetWindowHeight() / 2.25f;
+	if (cameraPosition.y < cameraBound.top) {
+		cameraPosition.y = cameraBound.top;
+	}
+	else if (cameraPosition.y + Game::GetInstance()->GetWindowHeight() > cameraBound.bottom) {
+		cameraPosition.y = cameraBound.bottom - Game::GetInstance()->GetWindowHeight();
 	}
 
 	_cameraInstance->SetPosition(cameraPosition);
-	/*char debug[100];
-	sprintf_s(debug, "Camera position: %f %f\n", _cameraInstance->GetPosition().x, _cameraInstance->GetPosition().y);
-	OutputDebugStringA(debug);
-	RECTF viewport = _cameraInstance->GetViewport();
-	sprintf_s(debug, "Viewport: %f %f %f %f\n", viewport.left, viewport.top, viewport.right, viewport.bottom);
-	OutputDebugStringA(debug);*/
 }
 
 void Scene::Update(DWORD deltaTime) {
-	/*if (_mario == nullptr && _luigi == nullptr) {
+	if (_mario == nullptr && _luigi == nullptr) {
 		char debug[100];
 		sprintf_s(debug, "[SCENE] No player loaded in, scene ID: %d\n", _sceneID);
 		OutputDebugStringA(debug);
-
-		Sleep(5000);
 		return;
-	}*/
+	}
 	
 	std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
 	switch (_sceneID) {
@@ -546,11 +533,10 @@ void Scene::Update(DWORD deltaTime) {
 		case SceneType::SCENE_TYPE_STAGE_ONE:
 		case SceneType::SCENE_TYPE_STAGE_FOUR:
 			if (_mario->GetHealth() > 0 && !_mario->TriggeredStageEnd()) {
-				/*
-				if (GetTickCount64() % 1000 == 0 && _sceneTime > 0) {
+				if (_sceneTime > 0 && GetTickCount64() % 1000 == 0) {
 					--_sceneTime;
 				}
-				*/
+				
 			}
 
 			if (_mario->GetHealth() > 0) {
@@ -603,7 +589,7 @@ void Scene::Render() {
 	}
 
 	if (_hud != nullptr) {
-		//_hud->Render();
+		_hud->Render();
 	}
 }
 

@@ -25,6 +25,8 @@ Player::Player() {
 	_gravity = 0.0025f;
 	_acceleration = 0.5f;
 
+	_health = 4;
+
 	_lives = 3;
 	_coins = 0;
 	_score = 0;
@@ -34,18 +36,17 @@ Player::Player() {
 
 	_flyTime = 6000;
 	_inPipeTime = 4000;
-	_attackTime = 126;
+	_attackTime = 300;
 
 	_playerState = new IdleState(this);
-
 	_tail = new Tail(this);
-	//SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
+	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
 }
 
 Player::~Player() {}
 
 RECTF Player::GetBoundingBox(int index) const {
-	return GameObject::GetBoundingBox(_health >= 2);
+	return GameObject::GetBoundingBox(_health >= 2 && !_isInMap && !_isCrouching);
 }
 
 Entity* Player::GetHeldEntity() const {
@@ -70,6 +71,18 @@ bool Player::IsInPipe() const {
 
 bool Player::IsAttacking() const {
 	return _attackStart != 0;
+}
+
+void Player::StartFlyTimer() {
+	_flyStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::StartInPipeTimer() {
+	_inPipeStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::StartAttackTimer() {
+	_attackStart = static_cast<DWORD>(GetTickCount64());
 }
 
 void Player::HandleStates() {
@@ -155,11 +168,10 @@ void Player::HandleStates() {
 void Player::OnKeyUp(int keyCode) {
 	switch (keyCode) {
 		case DIK_S:
-			_isCrouching = false;
-			
-			if (_isOnGround && !IsInPipe() && _health > 1) {
+			if (_health > 1 && _isCrouching && _isOnGround && !IsInPipe()) {
+				_isCrouching = false;
 				_isOnGround = false;
-				_velocity.y = -0.3f;
+				_position.y -= _hitbox.GetBoxHeight(1);
 			}
 			break;
 		case DIK_J:
@@ -190,18 +202,20 @@ void Player::OnKeyDown(int keyCode) {
 			_normal.x = 1.0f;
 			break;
 		case DIK_S:
-			_isCrouching = true;
+			if (_isOnGround) {
+				_isCrouching = true;
+			}
 			break;
 		case DIK_J:
 			_isHolding = true;
 			//Tail attack
-			if (_health == 4 && !IsAttacking()) {
-				//StartAttackTimer();
-				_velocity.x = 0.0f;
+			if (_health == 4 && _isOnGround && !IsAttacking()) {
+				StartAttackTimer();
 			}
 			break;
 		case DIK_K:
 			SlowFall();
+			RunFly();
 			Jump();
 			break;
 	}
@@ -240,7 +254,7 @@ void Player::RunFly() {
 		if (_acceleration >= _ACCEL_THRESHOLD || IsFlying()) {
 			if (_isOnGround && !IsFlying()) {
 				_isOnGround = false;
-				//StartFlyTimer();
+				StartFlyTimer();
 			}
 			
 			_velocity.y = -_jumpSpeed * 0.8f;
@@ -264,11 +278,15 @@ void Player::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
+	if (eventEntity == nullptr) {
+		return;
+	}
+
 	if (eventNormal.y == -1.0f) {
 		_isOnGround = true;
 	}
 
-	if (eventEntity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM) {
+	if (eventEntity->GetObjectType() == GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM) {
 		/*
 		MovingPlatform* movingPlatform = eventEntity;
 		if (event->normal.y == -1.0f) {
@@ -289,23 +307,27 @@ void Player::Update(
 		_isNextToShell = false;
 	}
 
-	//--------------------------------------
+	if (_isCrouching || IsAttacking()) {
+		_velocity.x = 0.0f;
+	}
+
+	//----------------------------------------------------------------------------
 	//TIMERS
-	//--------------------------------------
-	if (_flyStart != 0 && (GetTickCount64() - _flyStart > _flyTime || _health != 4)) {
+	//----------------------------------------------------------------------------
+	if (_health != 4 || (IsFlying() && GetTickCount64() - _flyStart > _flyTime)) {
 		_flyStart = 0;
 	}
 
-	if (_inPipeStart != 0 && GetTickCount64() - _inPipeStart > _inPipeTime) {
+	if (IsInPipe() && GetTickCount64() - _inPipeStart > _inPipeTime) {
 		_inPipeStart = 0;
 	}
 
-	if (_attackStart != 0 && GetTickCount64() - _attackStart > _attackTime) {
+	if (IsAttacking() && GetTickCount64() - _attackStart > _attackTime) {
 		_attackStart = 0;
 	}
-	//--------------------------------------
+	//----------------------------------------------------------------------------
 	//TIMERS
-	//--------------------------------------
+	//----------------------------------------------------------------------------
 
 	if (_triggeredStageEnd) {
 		MoveRight();

@@ -39,7 +39,7 @@ private:
 	};
 
 	//Reserves
-	const unsigned int _MAX_ENTITIES_IN_SCENE = 125;
+	const unsigned int _MAX_ENTITIES_IN_SCENE = 200;
 
 	SceneType _sceneID;
 	unsigned int _sceneWidth, _sceneHeight;
@@ -95,6 +95,7 @@ public:
 	void OnKeyDown(int);
 
 	void AddEntityToScene(Entity*);
+	void RemoveEntityFromScene(Entity*);
 
 	void LoadScene();
 	

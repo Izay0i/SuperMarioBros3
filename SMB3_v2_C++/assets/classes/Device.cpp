@@ -33,12 +33,14 @@ bool Device::InitKeyboard(HWND hWND) {
 	);
 
 	if (hResult != DI_OK) {
+		MessageBoxA(hWND, "Failed to create input", "Error", MB_ICONERROR);
 		return false;
 	}
 
 	hResult = _directInput->CreateDevice(GUID_SysKeyboard, &_keyboard, nullptr);
 
 	if (hResult != DI_OK) {
+		MessageBoxA(hWND, "Failed to create device in Device class", "Error", MB_ICONERROR);
 		return false;
 	}
 
@@ -57,6 +59,7 @@ bool Device::InitKeyboard(HWND hWND) {
 	hResult = _keyboard->Acquire();
 
 	if (hResult != DI_OK) {
+		MessageBoxA(hWND, "Failed to acquire keyboard", "Error", MB_ICONERROR);
 		return false;
 	}
 

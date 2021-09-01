@@ -5,8 +5,8 @@
 #include <vector>
 
 struct Cell {
-	const static unsigned int CELL_WIDTH = static_cast<int>(GlobalUtil::SCREEN_WIDTH / 2);
-	const static unsigned int CELL_HEIGHT = static_cast<int>(GlobalUtil::SCREEN_HEIGHT / 2);
+	const static unsigned int CELL_WIDTH = static_cast<unsigned int>(GlobalUtil::SCREEN_WIDTH / 2);
+	const static unsigned int CELL_HEIGHT = static_cast<unsigned int>(GlobalUtil::SCREEN_HEIGHT / 2);
 
 	unsigned int indexX, indexY;
 	std::vector<Entity*> entities;

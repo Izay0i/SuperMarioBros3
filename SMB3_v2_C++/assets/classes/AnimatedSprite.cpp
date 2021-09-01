@@ -34,11 +34,9 @@ void AnimatedSprite::ParseSprites(std::string line, const LPDIRECT3DTEXTURE9& sp
 
 void AnimatedSprite::PlaySpriteAnimation(std::string animationName, D3DXVECTOR2 position, D3DXVECTOR2 scale, unsigned int alpha) {
 	if (!_HasAnimation(animationName)) {
-		char debugStr[100];
-		sprintf_s(debugStr, "[ANIMATED SPRITE] Animation named %s does not exist\n", animationName.c_str());
-		OutputDebugStringW(GlobalUtil::ToLPCWSTR(debugStr));
-
-		Sleep(5000);
+		char debug[100];
+		sprintf_s(debug, "[ANIMATED SPRITE] Animation named %s does not exist\n", animationName.c_str());
+		OutputDebugStringA(debug);
 		return;
 	}
 

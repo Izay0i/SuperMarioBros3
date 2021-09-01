@@ -60,6 +60,7 @@ public:
 		GAMEOBJECT_TYPE_VFIREBALL = 108,
 		GAMEOBJECT_TYPE_BOOMERANG = 109,
 		//Special entities
+		GAMEOBJECT_TYPE_TAIL = 197,
 		GAMEOBJECT_TYPE_PORTAL = 198,
 		GAMEOBJECT_TYPE_MOVINGPLATFORM = 199,
 		//Items
@@ -112,6 +113,7 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
+	//Is this Java?
 	void SetActive(bool);
 	bool IsActive() const;
 

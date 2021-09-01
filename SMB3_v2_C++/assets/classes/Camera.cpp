@@ -31,12 +31,12 @@ unsigned int Camera::GetCameraHeight() const {
 }
 
 RECTF Camera::GetViewport() const {
-	RECTF viewPort;
-	viewPort.left = _position.x - GlobalUtil::SCREEN_WIDTH * 0.2f;
-	viewPort.top = _position.y - GlobalUtil::SCREEN_HEIGHT * 0.2f;
-	viewPort.right = _position.x + GlobalUtil::SCREEN_WIDTH * 1.2f;
-	viewPort.bottom = _position.y + GlobalUtil::SCREEN_HEIGHT * 1.2f;
-	return viewPort;
+	RECTF viewport;
+	viewport.left = _position.x - GlobalUtil::SCREEN_WIDTH * 0.2f;
+	viewport.top = _position.y - GlobalUtil::SCREEN_HEIGHT * 0.2f;
+	viewport.right = _position.x + GlobalUtil::SCREEN_WIDTH * 1.2f;
+	viewport.bottom = _position.y + GlobalUtil::SCREEN_HEIGHT * 1.2f;
+	return viewport;
 }
 
 RECTF Camera::GetCameraBound(int index) const {

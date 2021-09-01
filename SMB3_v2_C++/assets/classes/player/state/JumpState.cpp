@@ -83,7 +83,7 @@ void JumpState::Render() {
 					_player->_animatedSprite.PlaySpriteAnimation("RacSuperJump", _player->_position, _player->_scale);
 				}
 				else if (_player->IsFlying() && Device::IsKeyDown(DIK_K)) {
-					_player->_animatedSprite.PlaySpriteAnimation("RagWagSuperFall", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("RacWagSuperFall", _player->_position, _player->_scale);
 				}
 				else {
 					_player->_animatedSprite.PlaySpriteAnimation("RacJump", _player->_position, _player->_scale);

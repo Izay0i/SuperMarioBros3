@@ -1,10 +1,51 @@
 #include "GlobalUtil.h"
 #include "Game.h"
 
+HWND Game::_hWND = nullptr;
+HWND Game::_contentHWND = nullptr;
+
 Game* Game::_gameInstance = nullptr;
 
 LRESULT Game::_WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
+		//https://stackoverflow.com/questions/28968012/win32-add-black-borders-to-fullscreen-window
+		//You have no idea how long it took just to find this
+		case WM_SIZE:
+			{
+				const SIZE ar = { GlobalUtil::SCREEN_WIDTH, GlobalUtil::SCREEN_HEIGHT };
+				//Query new client area size
+				int clientWidth = LOWORD(lParam);
+				int clientHeight = HIWORD(lParam);
+				//Calculate new content size
+				int contentWidth = MulDiv(clientHeight, ar.cx, ar.cy);
+				int contentHeight = MulDiv(clientWidth, ar.cy, ar.cx);
+
+				//Adjust dimensions to fit inside client area
+				if (contentWidth > clientWidth) {
+					contentWidth = clientWidth;
+					contentHeight = MulDiv(contentWidth, ar.cy, ar.cx);
+				}
+				else {
+					contentHeight = clientHeight;
+					contentWidth = MulDiv(contentHeight, ar.cx, ar.cy);
+				}
+
+				//Calculate offsets to center content
+				int offsetX = (clientWidth - contentWidth) / 2;
+				int offsetY = (clientHeight - contentHeight) / 2;
+
+				//Adjust content window position
+				SetWindowPos(
+					_contentHWND, 
+					nullptr, 
+					offsetX, 
+					offsetY, 
+					contentWidth, 
+					contentHeight, 
+					SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOZORDER
+				);
+			}
+			break;
 		case WM_SIZING:
 			_ResizeWindow(static_cast<int>(wParam), *reinterpret_cast<LPRECT>(lParam));
 			break;
@@ -27,6 +68,10 @@ LRESULT Game::_WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 			}
 	}
 
+	return DefWindowProc(hWND, message, wParam, lParam);
+}
+
+LRESULT Game::_WinProcContent(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 	return DefWindowProc(hWND, message, wParam, lParam);
 }
 
@@ -131,6 +176,39 @@ void Game::_ResizeWindow(int edge, RECT& rect) {
 	}
 }
 
+void Game::_CreateContentWindow(HINSTANCE hInstance) {
+	WNDCLASSEX wndClass{ };
+	wndClass.cbSize = sizeof(WNDCLASSEX);
+	wndClass.style = CS_HREDRAW | CS_VREDRAW;
+	wndClass.hInstance = hInstance;
+	wndClass.lpfnWndProc = reinterpret_cast<WNDPROC>(_WinProcContent);
+	wndClass.hIcon = reinterpret_cast<HICON>(LoadImage(hInstance, _GAME_ICON, IMAGE_ICON, 0, 0, LR_LOADFROMFILE));
+	wndClass.hIconSm = reinterpret_cast<HICON>(LoadImage(hInstance, _GAME_ICON, IMAGE_ICON, 0, 0, LR_LOADFROMFILE));
+	wndClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wndClass.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+	wndClass.lpszClassName = L"Content_Class";
+	RegisterClassEx(&wndClass);
+
+	_contentHWND = CreateWindow(
+		L"Content_Class",
+		nullptr,
+		WS_CHILD | WS_VISIBLE,
+		0,
+		0,
+		0,
+		0,
+		_hWND,
+		nullptr,
+		hInstance,
+		nullptr
+	);
+
+	if (_contentHWND == nullptr) {
+		OutputDebugStringA("[GAME] _contentHWND was nullptr\n");
+		return;
+	}
+}
+
 void Game::_ParseSettings(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
@@ -160,7 +238,7 @@ void Game::_Render() {
 		GlobalUtil::spriteHandler->End();
 		GlobalUtil::directDevice->EndScene();
 	}
-	GlobalUtil::directDevice->Present(nullptr, nullptr, nullptr, nullptr);
+	GlobalUtil::directDevice->Present(nullptr, nullptr, _contentHWND, nullptr);
 }
 
 Game::Game() {
@@ -198,8 +276,15 @@ Game* Game::GetInstance() {
 	if (_gameInstance == nullptr) {
 		_gameInstance = new Game;
 	}
-
 	return _gameInstance;
+}
+
+unsigned int Game::GetWindowWidth() const {
+	return _windowWidth;
+}
+
+unsigned int Game::GetWindowHeight() const {
+	return _windowHeight;
 }
 
 HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int height) {
@@ -213,16 +298,15 @@ HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int he
 	wndClass.hIcon = reinterpret_cast<HICON>(LoadImage(hInstance, _GAME_ICON, IMAGE_ICON, 0, 0, LR_LOADFROMFILE));
 	wndClass.hIconSm = reinterpret_cast<HICON>(LoadImage(hInstance, _GAME_ICON, IMAGE_ICON, 0, 0, LR_LOADFROMFILE));
 	wndClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wndClass.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+	wndClass.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
 	wndClass.lpszMenuName = nullptr;
 	wndClass.lpszClassName = _CLASS_NAME;
-
 	RegisterClassEx(&wndClass);	
 
-	HWND hWND = CreateWindow(
+	_hWND = CreateWindow(
 		_CLASS_NAME,
 		_GAME_TITLE,
-		WS_OVERLAPPEDWINDOW,
+		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
 		width,
@@ -233,14 +317,17 @@ HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int he
 		nullptr
 	);
 
-	if (hWND == nullptr) {
+	if (_hWND == nullptr) {
+		OutputDebugStringA("[GAME] _hWND was nullptr\n");
 		return FALSE;
 	}
 
-	ShowWindow(hWND, nCmdShow);
-	UpdateWindow(hWND);
+	_CreateContentWindow(hInstance);
 
-	return hWND;
+	ShowWindow(_hWND, nCmdShow);
+	UpdateWindow(_hWND);
+
+	return _hWND;
 }
 
 bool Game::InitGame(HWND hWND)
@@ -249,33 +336,33 @@ bool Game::InitGame(HWND hWND)
 
 	_direct3D = Direct3DCreate9(D3D_SDK_VERSION);
 
-	this->_hWND = hWND;
-
 	D3DPRESENT_PARAMETERS directParams;
-
 	ZeroMemory(&directParams, sizeof(directParams));
-
 	directParams.Windowed = true;
 	directParams.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	directParams.BackBufferFormat = D3DFMT_A8R8G8B8;
 	directParams.BackBufferCount = 1;
 
 	RECT window;
-	GetClientRect(this->_hWND, &window);
+	GetClientRect(hWND, &window);
 
 	directParams.BackBufferWidth = window.right + 1;
 	directParams.BackBufferHeight = window.bottom + 1;
 
+	_windowWidth = window.right + 1;
+	_windowHeight = window.bottom + 1;
+
 	_direct3D->CreateDevice(
 		D3DADAPTER_DEFAULT,
 		D3DDEVTYPE_HAL,
-		this->_hWND,
+		hWND,
 		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 		&directParams,
 		&GlobalUtil::directDevice
 	);
 
 	if (GlobalUtil::directDevice == nullptr) {
+		MessageBoxA(hWND, "Failed to create device in Game class", "Error", MB_ICONERROR);
 		return false;
 	}
 
@@ -283,7 +370,7 @@ bool Game::InitGame(HWND hWND)
 
 	HRESULT hResult = D3DXCreateSprite(GlobalUtil::directDevice, &GlobalUtil::spriteHandler);
 	if (hResult != D3D_OK) {
-		OutputDebugStringA("[GAME] Failed to create sprite handler\n");
+		MessageBoxA(hWND, "Failed to create sprite handler", "Error", MB_ICONERROR);
 		return false;
 	}
 
@@ -333,12 +420,12 @@ void Game::LoadSettings(std::string filePath) {
 		}
 
 		switch (section) {
-		case _GameFileSection::GAMEFILE_SECTION_SETTINGS:
-			_ParseSettings(line);
-			break;
-		case _GameFileSection::GAMEFILE_SECTION_SCENES:
-			_managerInstance->ParseScenes(line);
-			break;
+			case _GameFileSection::GAMEFILE_SECTION_SETTINGS:
+				_ParseSettings(line);
+				break;
+			case _GameFileSection::GAMEFILE_SECTION_SCENES:
+				_managerInstance->ParseScenes(line);
+				break;
 		}
 	}
 

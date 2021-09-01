@@ -33,7 +33,7 @@ void Grid::_ParsePositions(std::string line, std::vector<Entity*>& entities) {
 	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(tokens.at(2)));
 
 	for (auto& entity : entities) {
-		if (entity->GetObjectType() == objectType && entity->ownerCell == nullptr) {
+		if (entity->ownerCell == nullptr && entity->GetObjectType() == objectType) {
 			Cell* newCell = GetCell(cellX, cellY);
 			AddEntity(entity, newCell);
 			return;

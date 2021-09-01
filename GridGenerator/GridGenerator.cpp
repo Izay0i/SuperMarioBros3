@@ -1,15 +1,17 @@
+#include <Windows.h>
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 
-const unsigned int SCREEN_WIDTH = 270;
-const unsigned int SCREEN_HEIGHT = 264;
+const unsigned int SCREEN_WIDTH = 256;
+const unsigned int SCREEN_HEIGHT = 224;
 
-const unsigned int CELL_WIDTH = static_cast<int>(SCREEN_WIDTH / 2);
-const unsigned int CELL_HEIGHT = static_cast<int>(SCREEN_HEIGHT / 2);
+const unsigned int CELL_WIDTH = static_cast<unsigned int>(SCREEN_WIDTH / 2);
+const unsigned int CELL_HEIGHT = static_cast<unsigned int>(SCREEN_HEIGHT / 2);
 
-const int MAX_FILE_LINE = 5000;
+const unsigned int MAX_FILE_LINE = 5000;
 
 bool writtenTagOnce = false;
 unsigned int xCells = 0, yCells = 0;
@@ -48,9 +50,9 @@ void ParseSceneSize(std::ofstream& outFile, std::string line) {
     xCells = static_cast<unsigned int>(ceil((static_cast<float>(sceneWidth) / CELL_WIDTH)));
     yCells = static_cast<unsigned int>(ceil((static_cast<float>(sceneHeight) / CELL_HEIGHT)));
 
-    //Be sure to use std::endl to flush the buffer
-    outFile << "[GRIDCELLS]" << std::endl;
-    outFile << xCells << '\t' << yCells << std::endl;
+    //Be sure to use std::flush or std::endl to flush the buffer
+    outFile << "[GRIDCELLS]\n";
+    outFile << xCells << '\t' << yCells << '\n';
     outFile << "[/]\n" << std::endl;
 }
 
@@ -87,8 +89,11 @@ void ParseEntityData(std::ofstream& outFile, std::string line) {
     if (!writtenTagOnce) {
         writtenTagOnce = true;
         
-        outFile << "#Cell_X" << '\t' << "Cell_Y" << '\t' << "objID" << std::endl;
-        outFile << "[POSITIONS]" << std::endl;
+        outFile << "#Cell_X" << '\t' << "Cell_Y" << '\t' << "objID\n";
+        outFile << "[POSITIONS]\n";
+        //Once the player is constructed
+        //The tail will also be emplaced in _entities
+        outFile << "0\t0\t197\n";
     }
 
     outFile << cellPosX << '\t' << cellPosY << '\t' << objectID << std::endl;
@@ -142,12 +147,27 @@ int main() {
         }
     }
 
-    //Closing tag
-    outputFile << "[/]" << std::endl;
+    //Add closing tag
+    outputFile << "[/]" << std::flush;
 
     readFile.close();
 
     std::cout << xCells << '\t' << yCells << std::endl;
+
+    /*unsigned int width = 80;
+    unsigned int height = 96;
+    unsigned int offset = 16;
+    unsigned int starting_x = 2496;
+    unsigned int starting_y = 320;
+    char format[] = "197\t51\t213\t67\t%u\t%u\n";
+    char debug[100];
+
+    for (unsigned int i = 0; i < width; i += offset) {
+        for (unsigned int j = 0; j < height; j += offset) {
+            sprintf_s(debug, format, starting_x + i, starting_y + j);
+            OutputDebugStringA(debug);
+        }
+    }*/
 
     return 0;
 }

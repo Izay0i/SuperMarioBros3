@@ -10,7 +10,7 @@ CrouchState::CrouchState(Player* player) {
 }
 
 PlayerState* CrouchState::HandleStates() {
-	if (_player->_velocity.x != 0.0f || !Device::IsKeyDown(DIK_S)) {
+	if (!_player->_isCrouching) {
 		return new IdleState(_player);
 	}
 
@@ -32,7 +32,7 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("BigFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("BigCrouch", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigCrouch", { _player->_position.x, _player->_position.y - 16.0f }, _player->_scale);
 			}
 			break;
 		case _Form::FIRE:
@@ -40,7 +40,7 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("FireFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("FireCrouch", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireCrouch", { _player->_position.x, _player->_position.y - 16.0f }, _player->_scale);
 			}
 			break;
 		case _Form::RACCOON:
@@ -48,7 +48,7 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("RacCrouch", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacCrouch", { _player->_position.x, _player->_position.y - 16.0f }, _player->_scale);
 			}
 			break;
 	}

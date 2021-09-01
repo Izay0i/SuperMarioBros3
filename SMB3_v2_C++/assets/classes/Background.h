@@ -1,17 +1,15 @@
 #pragma once
 
 #include "GameObject.h"
-#include "Sprite.h"
 
 class Background : public GameObject {
 private:
-	std::vector<D3DXVECTOR2> _positions;
-	
-	Sprite* _backgroundSprite;
+	static LPDIRECT3DTEXTURE9 _backgroundTexture;
+
+	std::vector<std::pair<RECT, D3DXVECTOR2>> _sprites;
 
 public:
-	//Texture, total frames
-	Background(const LPDIRECT3DTEXTURE9&, unsigned int);
+	Background(const LPDIRECT3DTEXTURE9&);
 	~Background();
 
 	void AddSprite(RECT, D3DXVECTOR2);

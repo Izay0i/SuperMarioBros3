@@ -20,24 +20,30 @@ private:
 
 	const static unsigned int _FRAME_RATE = 60;
 
+	static HWND _hWND;
+	static HWND _contentHWND;
+
 	static Game* _gameInstance;
 
+	static LRESULT CALLBACK _WinProc(HWND, UINT, WPARAM, LPARAM);
+	static LRESULT CALLBACK _WinProcContent(HWND, UINT, WPARAM, LPARAM);
+
+	static void _ResizeWindow(int, RECT&);
+
+	unsigned int _windowWidth, _windowHeight;
 	int _defaultSceneID;
 	bool _isRunning;
 
 	Device* _deviceInstance;
 	SceneManager* _managerInstance;
 
-	HWND _hWND;
-	
 	LPDIRECT3D9 _direct3D;
 	LPDIRECT3DSURFACE9 _backBuffer;
 
-	static LRESULT CALLBACK _WinProc(HWND, UINT, WPARAM, LPARAM);
-	static void _ResizeWindow(int, RECT&);
-
 	Game();
 	~Game();
+
+	void _CreateContentWindow(HINSTANCE);
 
 	void _ParseSettings(std::string);
 	void _Update(DWORD);
@@ -45,6 +51,9 @@ private:
 
 public:
 	static Game* GetInstance();
+
+	unsigned int GetWindowWidth() const;
+	unsigned int GetWindowHeight() const;
 
 	HWND CreateGameWindow(HINSTANCE, int, int, int);
 

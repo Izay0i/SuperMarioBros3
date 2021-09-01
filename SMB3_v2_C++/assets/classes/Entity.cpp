@@ -109,7 +109,7 @@ void Entity::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	if (!_isActive) {
+	if (!_isActive && _objectType >= GameObjectType::GAMEOBJECT_TYPE_GOOMBA) {
 		return;
 	}
 	
@@ -162,8 +162,8 @@ void Entity::Update(
 			}
 		}
 		else {
-			CalcPotentialCollision(collidableEntities, collisionEvents);
 			CalcPotentialCollision(collidableTiles, collisionEvents);
+			CalcPotentialCollision(collidableEntities, collisionEvents);
 		}
 	}
 

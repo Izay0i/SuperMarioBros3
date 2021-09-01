@@ -10,7 +10,7 @@ WagState::WagState(Player* player) {
 }
 
 PlayerState* WagState::HandleStates() {
-	if (_player->_velocity.x != 0.0f || !Device::IsKeyDown(DIK_K)) {
+	if (!_player->IsAttacking()) {
 		return new IdleState(_player);
 	}
 

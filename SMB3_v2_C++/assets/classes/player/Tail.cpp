@@ -5,7 +5,8 @@ void Tail::_ParseSprites(std::string) {}
 
 Tail::Tail(Player* player) {
 	_player = player;
-	_hitbox.AddHitbox({ 0, 0, 0, 0 });
+	_objectType = GameObjectType::GAMEOBJECT_TYPE_TAIL;
+	_hitbox.AddHitbox({ 0, 0, _TAIL_WIDTH, _TAIL_HEIGHT });
 }
 
 Tail::~Tail() {}
@@ -14,7 +15,7 @@ void Tail::HandleStates() {}
 
 void Tail::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
-void Tail::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {
+void Tail::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {	
 	if (_player->IsAttacking()) {
 		_hitbox.SetBoxWidth(_TAIL_WIDTH);
 		_hitbox.SetBoxHeight(_TAIL_HEIGHT);

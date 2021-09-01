@@ -2,7 +2,7 @@
 YellowDie	34	0	50	16	1	0
 
 YellowWalk	0	0	16	16	2	50
-YelowWalk	17	0	33	16
+YellowWalk	17	0	33	16
 
 RedDie	102	0	118	16	1	0
 
