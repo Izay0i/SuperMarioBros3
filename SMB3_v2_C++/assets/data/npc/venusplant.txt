@@ -1,23 +1,23 @@
 [SPRITES]
-GreenOpenDown	180	0	196	32	1	0
+GreenOpenDown	136	0	152	32	1	0
 
-GreenOpenUp	214	0	230	32	1	0
+GreenOpenUp	170	0	186	32	1	0
 
-GreenChompDown	180	0	196	32	2	50
-GreenChompDown	197	0	213	32
+GreenChompDown	136	0	152	32	2	100
+GreenChompDown	153	0	169	32
 
-GreenChompUp	214	0	230	32	2	50
-GreenChompUp	231	0	247	32
+GreenChompUp	170	0	186	32	2	100
+GreenChompUp	187	0	203	32
 
-RedOpenDown	180	33	196	65	1	0
+RedOpenDown	136	33	152	65	1	0
 
-RedOpenUp	214	33	230	65	1	0
+RedOpenUp	170	33	186	65	1	0
 
-RedChompDown	180	33	196	65	2	50
-RedChompDown	197	33	213	65
+RedChompDown	136	33	152	65	2	100
+RedChompDown	153	33	169	65
 
-RedChompUp	214	0	230	32	2	50
-RedChompUp	231	0	247	65
+RedChompUp	170	33	186	65	2	100
+RedChompUp	187	33	203	65
 [/]
 
 [HITBOXES]

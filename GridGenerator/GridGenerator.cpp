@@ -91,9 +91,6 @@ void ParseEntityData(std::ofstream& outFile, std::string line) {
         
         outFile << "#Cell_X" << '\t' << "Cell_Y" << '\t' << "objID\n";
         outFile << "[POSITIONS]\n";
-        //Once the player is constructed
-        //The tail will also be emplaced in _entities
-        outFile << "0\t0\t197\n";
     }
 
     outFile << cellPosX << '\t' << cellPosY << '\t' << objectID << std::endl;

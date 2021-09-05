@@ -18,6 +18,10 @@ private:
 	const WCHAR* _GAME_TITLE = L"Izay0i - Super Mario Bros 3";
 	const WCHAR* _GAME_ICON = L"assets/smb3.ico";
 
+	//NES aspect ratio
+	const static unsigned int _ASPECT_RATIO_X = 8;
+	const static unsigned int _ASPECT_RATIO_Y = 7;
+
 	const static unsigned int _FRAME_RATE = 60;
 
 	static HWND _hWND;

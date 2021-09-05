@@ -11,6 +11,7 @@
 IdleState::IdleState(Player* player) {
 	if (_player == nullptr) {
 		_player = player;
+		_currentHealth = _player->_health;
 	}
 }
 

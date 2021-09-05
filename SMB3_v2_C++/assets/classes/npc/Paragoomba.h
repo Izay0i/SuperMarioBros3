@@ -1,15 +1,20 @@
 #pragma once
 
-class Paragoomba : public Entity {
+class Paragoomba : public Goomba {
 private:
-	void _ParseSprites(std::string) override;
+	unsigned int _jumpCount;
+
+	DWORD _walkStart;
+	DWORD _walkTime;
+
+	void _HandleJumping();
 
 public:
-	void HandleStates() override;
-	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
+	Paragoomba();
+	~Paragoomba();
+
+	bool IsWalking() const;
+	void StartWalkTimer();
 
 	void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr) override;
-	void Render() override;
-
-	void Release() override;
 };

@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "NPCList.h"
 
-bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {
+bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {	
 	float entityWidth = entity->GetPosition().x + entity->GetBoxWidth();
 	float entityHeight = entity->GetPosition().y + entity->GetBoxHeight();
 	if (entityWidth >= viewport.left && 
@@ -17,17 +17,19 @@ bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {
 	return false;
 }
 
-bool Scene::_IsEntityAliveOrIB(Entity* entity) const {
-	if (entity->GetHealth() > -1) {
-		return true;
-	}
+bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
+	return true;
 	
+	if (entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL) {
+		return  true;
+	}
+
 	float entityWidth = entity->GetPosition().x + entity->GetBoxWidth();
 	float entityHeight = entity->GetPosition().y + entity->GetBoxHeight();
-	if (entityWidth >= 0 && 
+	if (entity->GetHealth() > -1 && (entityWidth >= 0 && 
 		entityHeight >= 0 && 
 		entityWidth <= _sceneWidth && 
-		entityHeight <= _sceneHeight) 
+		entityHeight <= _sceneHeight)) 
 	{
 		return true;
 	}
@@ -192,7 +194,7 @@ void Scene::_ParseEntityData(std::string line) {
 			//entity = new Parakoopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
-			//entity = new PiranaPlant;
+			entity = new PiranaPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 			//entity = new VenusPlant;
@@ -363,8 +365,9 @@ void Scene::LoadScene() {
 	}
 
 	//Load objects here, cause the Scene won't be calling destructor before the game ends
-	_entities.reserve(_MAX_ENTITIES_IN_SCENE);
-	_tiles.reserve(_MAX_ENTITIES_IN_SCENE);
+	const unsigned int MAX_ENTITIES_PER_SCENE = 200;
+	_entities.reserve(MAX_ENTITIES_PER_SCENE);
+	_tiles.reserve(MAX_ENTITIES_PER_SCENE);
 
 	_mario = nullptr;
 	_luigi = nullptr;
@@ -536,11 +539,13 @@ void Scene::Update(DWORD deltaTime) {
 				if (_sceneTime > 0 && GetTickCount64() % 1000 == 0) {
 					--_sceneTime;
 				}
-				
 			}
 
 			if (_mario->GetHealth() > 0) {
-				for (auto& entity : _entities) {
+				//Range-based loop, for_each, iterators will all be invalidated if an element is removed or inserted
+				//And the container has to do a reallocation
+				for (unsigned int i = 0; i < _entities.size(); ++i) {
+					Entity* entity = _entities.at(i);
 					entity->SetActive(_IsEntityInViewport(entity, _cameraInstance->GetViewport()));
 					entity->Update(deltaTime, &_entities, &_tiles, _grid);
 
@@ -552,14 +557,11 @@ void Scene::Update(DWORD deltaTime) {
 						}
 					}
 
-					if (!_IsEntityAliveOrIB(entity)) {
+					if (!_IsEntityAliveAndIB(entity)) {
 						if (_grid != nullptr) {
 							_grid->RemoveEntityFromCell(entity);
 						}
-
-						entity->Release();
 						delete entity;
-						entity = nullptr;
 
 						_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
 					}
@@ -584,8 +586,8 @@ void Scene::Render() {
 		_background->Render();
 	}
 
-	for (const auto& entity : _entities) {
-		entity->Render();
+	for (unsigned int i = 0; i < _entities.size(); ++i) {
+		_entities.at(i)->Render();
 	}
 
 	if (_hud != nullptr) {

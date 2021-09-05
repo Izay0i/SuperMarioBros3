@@ -18,7 +18,7 @@ Front	126	0	142	16	1	0
 
 HoldIdle	144	0	160	16	1	0
 
-HoldRun	144	0	160	16	2	50
+HoldRun	144	0	160	16	2	100
 HoldRun	162	0	178	16
 
 HoldJump	162	0	178	16	1	0
@@ -54,7 +54,7 @@ BigFront	212	17	228	49	1	0
 
 BigHoldIdle	230	17	246	49	1	0
 
-BigHoldRun	230	17	246	49	1	0
+BigHoldRun	230	17	246	49	2	100
 BigHoldRun	248	17	264	49
 
 BigHoldJump	266	17	282	49	1	0
@@ -92,7 +92,7 @@ FireFront	212	50	228	82	1	0
 
 FireHoldIdle	230	50	246	82	1	0
 
-FireHoldRun	230	50	246	82	2	50
+FireHoldRun	230	50	246	82	2	100
 FireHoldRun	248	50	264	82
 
 FireHoldJump	266	50	282	82	1	0
@@ -139,7 +139,7 @@ RacWag	400	83	416	115
 
 RacHoldIdle	0	116	24	148	1	0
 
-RacHoldRun	0	116	24	148	1	0
+RacHoldRun	0	116	24	148	2	100
 RacHoldRun	26	116	50	148
 
 RacHoldJump	52	116	76	148	1	0

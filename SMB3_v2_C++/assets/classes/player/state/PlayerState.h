@@ -18,9 +18,14 @@ protected:
 		I_AM_THE_STORM_THAT_IS_APPROACHING
 	};
 
+	static Player* _player;
+
+	int _currentHealth;
+
 	_Form _form;
 
-	static Player* _player;
+	void _OnEntry();
+	void _OnExit();
 
 public:
 	virtual ~PlayerState();

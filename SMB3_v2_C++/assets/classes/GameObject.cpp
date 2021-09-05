@@ -200,42 +200,6 @@ void GameObject::SweptAABB(
 	}
 }
 
-CollisionEvent* GameObject::SweptAABBEx(GameObject*& object) {
-	RECTF movingObject;
-	RECTF staticObject;
-	D3DXVECTOR2 normal;
-	float time;
-
-	staticObject = object->GetBoundingBox();
-	D3DXVECTOR2 staticVeloctity = object->GetVelocity();
-	D3DXVECTOR2 staticDistance = staticVeloctity * static_cast<float>(_deltaTime);
-	D3DXVECTOR2 relativeDistance = _distance - staticDistance;
-
-	movingObject = this->GetBoundingBox();
-	SweptAABB(movingObject, staticObject, relativeDistance, normal, time);
-	
-	return new CollisionEvent(object, normal, relativeDistance, time);
-}
-
-void GameObject::CalcPotentialCollision(std::vector<GameObject*>* collidableObjects, std::vector<LPCOLLISIONEVENT>& collisionEvents) {
-	if (collidableObjects == nullptr) {
-		return;
-	}
-	
-	for (unsigned int i = 0; i < collidableObjects->size(); ++i) {
-		LPCOLLISIONEVENT event = SweptAABBEx(collidableObjects->at(i));
-		if (event->time >= 0.0f && event->time <= 1.0f) {
-			collisionEvents.emplace_back(event);
-		}
-		else {
-			delete event;
-			event = nullptr;
-		}
-	}
-
-	std::sort(collisionEvents.begin(), collisionEvents.end(), CollisionEvent::CompareCollisionEvent);
-}
-
 void GameObject::FilterCollision(
 	const std::vector<LPCOLLISIONEVENT>& collisionEvents, 
 	std::vector<LPCOLLISIONEVENT>& eventsResult, 

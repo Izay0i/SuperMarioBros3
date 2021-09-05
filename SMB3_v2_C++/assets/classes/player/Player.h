@@ -4,7 +4,6 @@
 #include "state/PlayerState.h"
 #include "Tail.h"
 
-#include <list>
 #include <fstream>
 
 class PlayerState;
@@ -34,9 +33,6 @@ private:
 	const float _MAX_ACCEL = 2.2f;
 	const float _MIN_ACCEL = 1.1f;
 	const float _ACCEL_THRESHOLD = 1.86f;
-	
-	float _bounceSpeed;
-	float _acceleration;
 
 	unsigned int _lives;
 	unsigned int _coins;
@@ -57,8 +53,8 @@ private:
 
 	Tail* _tail;
 
-	std::list<GameObject::GameObjectType> _bonusItems;
-	//std::list<Fireball*> _fireballs;
+	std::vector<GameObject::GameObjectType> _bonusItems;
+	//std::vector<Fireball*> _fireballs;
 
 	DWORD _flyStart;
 	DWORD _flyTime;
@@ -68,6 +64,9 @@ private:
 
 	DWORD _attackStart;
 	DWORD _attackTime;
+
+	DWORD _invulnerableStart;
+	DWORD _invulnerableTime;
 
 	void _ParseSprites(std::string) override;
 
@@ -83,16 +82,20 @@ public:
 	bool IsFlying() const;
 	bool IsInPipe() const;
 	bool IsAttacking() const;
+	bool IsInvulnerable() const;
 
 	void StartFlyTimer();
 	void StartInPipeTimer();
 	void StartAttackTimer();
+	void StartInvulnerableTimer();
 
 	void HandleStates() override;
 	void OnKeyUp(int);
 	void OnKeyDown(int);
 
 	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
+
+	void TakeDamage() override;
 
 	void MoveLeft();
 	void MoveRight();

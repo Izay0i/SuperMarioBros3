@@ -9,13 +9,15 @@ void Grid::_ParseGridCells(std::string line) {
 
 	_xCells = std::stoul(tokens.at(0));
 	_yCells = std::stoul(tokens.at(1));
-
+	
 	_cells.resize(_xCells, std::vector<Cell>(_yCells));
+
+	const unsigned int MAX_ENTITIES_PER_CELL = 20;
 	for (unsigned int x = 0; x < _xCells; ++x) {
 		for (unsigned int y = 0; y < _yCells; ++y) {
 			_cells.at(x).at(y).indexX = x;
 			_cells.at(x).at(y).indexY = y;
-			_cells.at(x).at(y).entities.reserve(_MAX_ENTITIES_PER_CELL);
+			_cells.at(x).at(y).entities.reserve(MAX_ENTITIES_PER_CELL);
 		}
 	}
 }

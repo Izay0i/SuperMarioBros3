@@ -18,6 +18,8 @@ PlayerState* CrouchState::HandleStates() {
 }
 
 void CrouchState::Render() {
+	PlayerState::Render();
+
 	switch (_form) {
 		case _Form::SMALL:
 			if (_player->IsInPipe()) {

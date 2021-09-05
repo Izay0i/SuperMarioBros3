@@ -34,7 +34,7 @@ void HUD::_ParseCoins() {
 }
 
 void HUD::_ParseItems() {
-	std::list<GameObject::GameObjectType> playerItems = _player->_bonusItems;
+	std::vector<GameObject::GameObjectType> playerItems = _player->_bonusItems;
 	if (playerItems.empty()) {
 		return;
 	}
@@ -123,7 +123,7 @@ void HUD::_ParseTimeLeft(DWORD sceneTime) {
 }
 
 void HUD::_ParseSceneEnd() {
-	std::list<GameObject::GameObjectType> playerItems = _player->_bonusItems;
+	std::vector<GameObject::GameObjectType> playerItems = _player->_bonusItems;
 	if (playerItems.empty()) {
 		return;
 	}

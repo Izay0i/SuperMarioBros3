@@ -38,9 +38,6 @@ private:
 		SCENEFILE_SECTION_BACKGROUND
 	};
 
-	//Reserves
-	const unsigned int _MAX_ENTITIES_IN_SCENE = 200;
-
 	SceneType _sceneID;
 	unsigned int _sceneWidth, _sceneHeight;
 
@@ -67,8 +64,8 @@ private:
 	Grid* _grid;
 
 	bool _IsEntityInViewport(Entity*, RECTF) const;
-	//IB: in bound
-	bool _IsEntityAliveOrIB(Entity*) const;
+	//IB: inside of bound/scene
+	bool _IsEntityAliveAndIB(Entity*) const;
 
 	//Load textures and pass them to the game objects in the scene
 	LPDIRECT3DTEXTURE9 _LoadTexture(LPDIRECT3DTEXTURE9, LPCWSTR, D3DCOLOR);

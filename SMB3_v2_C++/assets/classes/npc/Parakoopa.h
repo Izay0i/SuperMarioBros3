@@ -1,15 +1,14 @@
 #pragma once
 
-class Parakoopa : public Entity {
+class Parakoopa : public Koopa {
 private:
-	void _ParseSprites(std::string) override;
+	D3DXVECTOR2 _originalPos;
 
 public:
-	void HandleStates() override;
-	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
+	Parakoopa();
+	~Parakoopa();
+
+	void SetPosition(D3DXVECTOR2) override;
 
 	void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr) override;
-	void Render() override;
-
-	void Release() override;
 };

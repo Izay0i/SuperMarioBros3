@@ -34,6 +34,8 @@ PlayerState* RunState::HandleStates() {
 }
 
 void RunState::Render() {
+	PlayerState::Render();
+
 	switch (_form) {
 		case _Form::SMALL:
 			if (_player->IsInPipe()) {

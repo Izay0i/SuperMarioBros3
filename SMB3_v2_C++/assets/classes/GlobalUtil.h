@@ -16,9 +16,6 @@
 namespace GlobalUtil {
 	const unsigned int SCREEN_WIDTH = 256;
 	const unsigned int SCREEN_HEIGHT = 224;
-	//NES aspect ratio
-	const unsigned int ASPECT_RATIO_X = 8;
-	const unsigned int ASPECT_RATIO_Y = 7;
 	//Used in all entity classes
 	const unsigned int MAX_FILE_LINE = 5000;
 

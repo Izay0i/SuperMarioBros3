@@ -29,8 +29,9 @@
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
 [ENTITYDATA]
 #Player								OBJ_ID	FILE_PATH				texID
-0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
+#0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	2192	544
+0	assets\data\player\mario.txt	2	1776	368
 
 #NPC
 #Goomba
@@ -39,16 +40,16 @@
 100	assets\data\npc\goomba.txt	4	832	384	yellow
 100	assets\data\npc\goomba.txt	4	880	384	yellow
 #Paragoomba
-101	assets\data\npc\goomba.txt	4	946	384	888	assets\data\auxiliary\wing.txt	5	red
+101	assets\data\npc\goomba.txt	4	946	384	red
 
 #Koopa
 102	assets\data\npc\koopa.txt	4	576	352	red
 102	assets\data\npc\koopa.txt	4	1472	384	green
 102	assets\data\npc\koopa.txt	4	2096	352	red
 #Parakoopa
-103	assets\data\npc\koopa.txt	4	1328	294	888	assets\data\auxiliary\wing.txt	5	green
-103	assets\data\npc\koopa.txt	4	1376	294	888	assets\data\auxiliary\wing.txt	5	green
-103	assets\data\npc\koopa.txt	4	1424	294	888	assets\data\auxiliary\wing.txt	5	green
+103	assets\data\npc\koopa.txt	4	1328	294	green
+103	assets\data\npc\koopa.txt	4	1376	294	green
+103	assets\data\npc\koopa.txt	4	1424	294	green
 
 #Pirana plant
 104	assets\data\npc\piranaplant.txt	4	1800	400	green
@@ -919,7 +920,6 @@ assets\data\hud\hud.txt	3
 197	34	213	50	2080	608
 197	34	213	50	2080	624
 197	34	213	50	2080	640
-
 #Blue block 192x16
 197	34	213	50	2128	464
 197	34	213	50	2144	464
@@ -933,7 +933,6 @@ assets\data\hud\hud.txt	3
 197	34	213	50	2272	464
 197	34	213	50	2288	464
 197	34	213	50	2304	464
-
 #Blue block 128x32
 197	34	213	50	2096	624
 197	34	213	50	2096	640
@@ -951,25 +950,21 @@ assets\data\hud\hud.txt	3
 197	34	213	50	2192	640
 197	34	213	50	2208	624
 197	34	213	50	2208	640
-
 #Blue block 16x48
 197	34	213	50	2224	608
 197	34	213	50	2224	624
 197	34	213	50	2224	640
-
 #Blue block 16x64
 197	34	213	50	2240	592
 197	34	213	50	2240	608
 197	34	213	50	2240	624
 197	34	213	50	2240	640
-
 #Blue block 16x80
 197	34	213	50	2256	576
 197	34	213	50	2256	592
 197	34	213	50	2256	608
 197	34	213	50	2256	624
 197	34	213	50	2256	640
-
 #Blue block 16x96
 197	34	213	50	2272	560
 197	34	213	50	2272	576
@@ -977,7 +972,6 @@ assets\data\hud\hud.txt	3
 197	34	213	50	2272	608
 197	34	213	50	2272	624
 197	34	213	50	2272	640
-
 #Blue block 16x112
 197	34	213	50	2288	544
 197	34	213	50	2288	560
@@ -986,7 +980,6 @@ assets\data\hud\hud.txt	3
 197	34	213	50	2288	608
 197	34	213	50	2288	624
 197	34	213	50	2288	640
-
 #Blue block 48x128
 197	34	213	50	2304	528
 197	34	213	50	2304	544
@@ -1012,7 +1005,6 @@ assets\data\hud\hud.txt	3
 197	34	213	50	2336	608
 197	34	213	50	2336	624
 197	34	213	50	2336	640
-
 #Blue block 128x192
 197	34	213	50	2352	464
 197	34	213	50	2352	480

@@ -22,8 +22,6 @@ private:
 		GRIDFILE_SECTION_POSITIONS
 	};
 
-	const unsigned int _MAX_ENTITIES_PER_CELL = 20;
-
 	unsigned int _xCells, _yCells;
 
 	std::vector<std::vector<Cell>> _cells;

@@ -18,11 +18,12 @@ protected:
 
 	float _runSpeed;
 	float _jumpSpeed;
+	float _bounceSpeed;
 	float _gravity;
+	float _acceleration;
 
 	bool _isOnGround;
 	bool _isHeld;
-	bool _tookDamage;
 
 	//-1: set to inactive
 	int _health;
@@ -41,6 +42,7 @@ protected:
 	virtual void _ParseHitboxes(std::string);
 
 public:
+	bool tookDamage;
 	bool isBeingHeld;
 	Cell* ownerCell;
 
@@ -48,6 +50,9 @@ public:
 
 	Entity();
 	virtual ~Entity();
+
+	bool IsRemoved() const;
+	void StartRemoveTimer();
 
 	virtual void SetHealth(int);
 	virtual int GetHealth() const;
@@ -63,6 +68,8 @@ public:
 	//Delta time, collidable entities, collidable tiles, grid
 	virtual void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr);
 
+	//An extension of the SweptAABB method
 	CollisionEvent* SweptAABBEx(Entity*&);
+	//Calculate potential collision between entities
 	void CalcPotentialCollision(std::vector<Entity*>*, std::vector<LPCOLLISIONEVENT>&);
 };

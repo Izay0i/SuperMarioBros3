@@ -2,12 +2,7 @@
 #include "../SceneManager.h"
 #include "Player.h"
 #include "state/IdleState.h"
-#include "state/RunState.h"
-#include "state/JumpState.h"
-#include "state/FallState.h"
-#include "state/CrouchState.h"
-#include "state/ThrowState.h"
-#include "state/WagState.h"
+#include "../NPCList.h"
 
 LPDIRECT3DTEXTURE9 Player::_playerTexture = nullptr;
 
@@ -37,10 +32,10 @@ Player::Player() {
 	_flyTime = 6000;
 	_inPipeTime = 4000;
 	_attackTime = 300;
+	_invulnerableTime = 3000;
 
 	_playerState = new IdleState(this);
 	_tail = new Tail(this);
-	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
 }
 
 Player::~Player() {}
@@ -73,6 +68,10 @@ bool Player::IsAttacking() const {
 	return _attackStart != 0;
 }
 
+bool Player::IsInvulnerable() const {
+	return _invulnerableStart != 0;
+}
+
 void Player::StartFlyTimer() {
 	_flyStart = static_cast<DWORD>(GetTickCount64());
 }
@@ -83,6 +82,10 @@ void Player::StartInPipeTimer() {
 
 void Player::StartAttackTimer() {
 	_attackStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::StartInvulnerableTimer() {
+	_invulnerableStart = static_cast<DWORD>(GetTickCount64());
 }
 
 void Player::HandleStates() {
@@ -168,8 +171,9 @@ void Player::HandleStates() {
 void Player::OnKeyUp(int keyCode) {
 	switch (keyCode) {
 		case DIK_S:
-			if (_health > 1 && _isCrouching && _isOnGround && !IsInPipe()) {
-				_isCrouching = false;
+			_isCrouching = false;
+
+			if (_health > 1 && _isOnGround && !IsInPipe()) {
 				_isOnGround = false;
 				_position.y -= _hitbox.GetBoxHeight(1);
 			}
@@ -202,15 +206,14 @@ void Player::OnKeyDown(int keyCode) {
 			_normal.x = 1.0f;
 			break;
 		case DIK_S:
-			if (_isOnGround) {
-				_isCrouching = true;
-			}
+			_isCrouching = true;
 			break;
 		case DIK_J:
 			_isHolding = true;
 			//Tail attack
 			if (_health == 4 && _isOnGround && !IsAttacking()) {
 				StartAttackTimer();
+				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
 			}
 			break;
 		case DIK_K:
@@ -230,6 +233,19 @@ void Player::ParseData(
 		_playerTexture = texture;
 	}
 	Entity::ParseData(dataPath, texture, extraData);
+}
+
+void Player::TakeDamage() {
+	if (!IsInvulnerable()) {
+		StartInvulnerableTimer();
+
+		if (_health > 2) {
+			_health = 2;
+		}
+		else {
+			--_health;
+		}
+	}
 }
 
 void Player::MoveLeft() {
@@ -286,13 +302,139 @@ void Player::HandleCollisionResult(
 		_isOnGround = true;
 	}
 
-	if (eventEntity->GetObjectType() == GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM) {
-		/*
-		MovingPlatform* movingPlatform = eventEntity;
-		if (event->normal.y == -1.0f) {
-			movingPlatform->TakeDamage();
-		}
-		*/
+	switch (eventEntity->GetObjectType()) {
+	//----------------------------------------------------------------------------
+	//NPCs
+	//----------------------------------------------------------------------------
+		case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
+			{
+				Goomba* goomba = dynamic_cast<Goomba*>(eventEntity);
+				if (eventNormal.y == -1.0f) {
+					if (goomba->GetHealth() > 0) {
+						goomba->TakeDamage();
+						_velocity.y = -_bounceSpeed;
+					}
+				}
+				else if (eventNormal.y == 1.0f || eventNormal.x != 0.0f) {
+					if (goomba->GetHealth() > 0) {
+						TakeDamage();
+						_velocity.y = -_bounceSpeed;
+					}
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+			{
+				Koopa* koopa = dynamic_cast<Koopa*>(eventEntity);
+				if (eventNormal.y == -1.0f) {
+					if (koopa->GetHealth() > 0) {
+						_velocity.y = -_bounceSpeed;
+					}
+
+					if (koopa->GetHealth() != 1) {
+						koopa->TakeDamage();
+					}
+					else {
+						koopa->SetHealth(2);
+					}
+				}
+				else if (eventNormal.y == 1.0f) {
+					if (koopa->GetHealth() > 1 && koopa->GetHealth() != 2) {
+						TakeDamage();
+						_velocity.y = -_bounceSpeed;
+					}
+					else if (koopa->GetHealth() == 2) {
+						koopa->TakeDamage();
+					}
+				}
+				else if (eventNormal.x != 0.0f) {
+					if (koopa->GetHealth() == 2) {
+						if (_isHolding) {
+							if (_heldEntity == nullptr) {
+								_heldEntity = koopa;
+								koopa->isBeingHeld = true;
+							}
+						}
+						else {
+							_isNextToShell = true;
+							koopa->TakeDamage();
+							koopa->SetNormal({ -_normal.x, koopa->GetNormal().y });
+						}
+					}
+					else {
+						TakeDamage();
+						_velocity.y = -_bounceSpeed;
+					}
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
+			{
+				PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(eventEntity);
+				if (piranaPlant->GetHealth() > 0) {
+					TakeDamage();
+					_velocity.y = -_bounceSpeed;
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
+			{
+				BoomerBro* boomerBro = dynamic_cast<BoomerBro*>(eventEntity);
+				if (eventNormal.y == -1.0f) {
+					if (boomerBro->GetHealth() > 0) {
+						boomerBro->TakeDamage();
+						_velocity.y = -_bounceSpeed;
+					}
+				}
+				else if (eventNormal.y == 1.0f || eventNormal.x != 0.0f) {
+					if (boomerBro->GetHealth() > 0) {
+						TakeDamage();
+						_velocity.y = -_bounceSpeed;
+					}
+				}
+			}
+			break;
+	//----------------------------------------------------------------------------
+	//NPCs
+	//----------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------
+	//PROJECTILES
+	//----------------------------------------------------------------------------
+		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
+		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+			{
+				
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:
+			{
+				
+			}
+			break;
+	//----------------------------------------------------------------------------
+	//PROJECTILES
+	//----------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------
+	//SPECIAL ENTITIES
+	//----------------------------------------------------------------------------
+		case GameObjectType::GAMEOBJECT_TYPE_PORTAL:
+			{
+				
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
+			{
+				
+			}
+			break;
+	//----------------------------------------------------------------------------
+	//SPECIAL ENTITIES
+	//----------------------------------------------------------------------------
 	}
 }
 
@@ -323,7 +465,12 @@ void Player::Update(
 	}
 
 	if (IsAttacking() && GetTickCount64() - _attackStart > _attackTime) {
+		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(_tail);
 		_attackStart = 0;
+	}
+
+	if (IsInvulnerable() && GetTickCount64() - _invulnerableStart > _invulnerableTime) {
+		_invulnerableStart = 0;
 	}
 	//----------------------------------------------------------------------------
 	//TIMERS

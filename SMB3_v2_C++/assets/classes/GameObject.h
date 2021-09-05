@@ -141,11 +141,6 @@ public:
 
 	//Moving object, static object, distance of moving object, normal, time
 	void SweptAABB(RECTF, RECTF, D3DXVECTOR2, D3DXVECTOR2&, float&);
-	//An extension of the SweptAABB method
-	CollisionEvent* SweptAABBEx(GameObject*&);
-
-	//Calculate potential collision between objects
-	void CalcPotentialCollision(std::vector<GameObject*>*, std::vector<LPCOLLISIONEVENT>&);
 	//Filter the collision between objects based on the shortest time
 	void FilterCollision(const std::vector<LPCOLLISIONEVENT>&, std::vector<LPCOLLISIONEVENT>&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&);
 

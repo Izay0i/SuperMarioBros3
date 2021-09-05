@@ -18,7 +18,7 @@ void Entity::_ParseHitboxes(std::string line) {
 }
 
 bool Entity::CompareRenderPriority(Entity*& a, Entity*& b) {
-	return a->_renderPriority < b->_renderPriority;
+	return a->_renderPriority > b->_renderPriority;
 }
 
 Entity::Entity() {
@@ -26,12 +26,20 @@ Entity::Entity() {
 	_renderPriority = std::numeric_limits<unsigned int>::max();
 	_score = 100;
 	_scoreMultiplier = 1;
-	_removeTime = 2000;
+	_removeTime = 800;
 
 	ownerCell = nullptr;
 }
 
 Entity::~Entity() {}
+
+bool Entity::IsRemoved() const {
+	return _removeStart != 0;
+}
+
+void Entity::StartRemoveTimer() {
+	_removeStart = static_cast<DWORD>(GetTickCount64());
+}
 
 void Entity::SetHealth(int health) {
 	if (health > -2) {
@@ -98,8 +106,9 @@ void Entity::ParseData(
 }
 
 void Entity::TakeDamage() {
-	if (_health > -1) {
+	if (_health > 0) {
 		--_health;
+		tookDamage = true;
 	}
 }
 
@@ -177,16 +186,17 @@ void Entity::Update(
 		D3DXVECTOR2 relativeDistance;
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
-		for (LPCOLLISIONEVENT result : eventResults) {
-			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
-		}
-
+		
 		if (normal.x != 0.0f) {
 			_velocity.x = 0.0f;
 		}
 
 		if (normal.y != 0.0f) {
 			_velocity.y = 0.0f;
+		}
+
+		for (LPCOLLISIONEVENT result : eventResults) {
+			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
 		}
 
 		_position.x += _distance.x * minTime.x + normal.x * offset.x;
