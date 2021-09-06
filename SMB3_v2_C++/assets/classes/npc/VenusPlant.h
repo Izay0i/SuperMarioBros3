@@ -1,15 +1,12 @@
 #pragma once
 
-class VenusPlant : public Entity {
-private:
-	void _ParseSprites(std::string) override;
-
+class VenusPlant : public PiranaPlant {
 public:
-	void HandleStates() override;
-	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
+	VenusPlant();
+	~VenusPlant();
+
+	//Fireball* SpawnFireball();
 
 	void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr) override;
 	void Render() override;
-
-	void Release() override;
 };

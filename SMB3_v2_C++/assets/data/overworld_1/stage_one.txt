@@ -54,8 +54,8 @@
 #Pirana plant
 104	assets\data\npc\piranaplant.txt	4	1800	400	green
 #Venus plant
-105	assets\data\npc\venusplant.txt	4	360	384	108	assets\data\projectile\fireball.txt	7	red
-105	assets\data\npc\venusplant.txt	4	1864	384	108	assets\data\projectile\fireball.txt	7	green
+105	assets\data\npc\venusplant.txt	4	360	375	red	108	assets\data\projectile\fireball.txt	7
+105	assets\data\npc\venusplant.txt	4	1864	384	green	108	assets\data\projectile\fireball.txt	7
 
 #Portal								#destination
 198	assets\data\npc\portal.txt	0	2257	112	2101	468

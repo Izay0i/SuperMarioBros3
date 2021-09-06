@@ -13,7 +13,7 @@ PiranaPlant::PiranaPlant() {
 	_gravity = 0.0f;
 
 	_variant = "green";
-	_coolDownStart = 3000;
+	_coolDownTime = 500;
 	_state = _State::BITE;
 }
 
@@ -35,10 +35,10 @@ void PiranaPlant::SetPosition(D3DXVECTOR2 position) {
 	_position = position;
 	_originalPos = position;
 	//Boundary/proximity of the plant to detect the player
-	_boundary.left = _originalPos.x - _hitbox.GetBoxWidth() * 0.5f;
-	_boundary.top = _originalPos.y - _hitbox.GetBoxHeight() * 0.5f;
-	_boundary.right = _originalPos.x + _hitbox.GetBoxWidth() * 3.0f;
-	_boundary.bottom = _originalPos.y + _hitbox.GetBoxHeight() * 3.0f;
+	_boundary.left = _originalPos.x - _hitbox.GetBoxWidth() * 1.5f;
+	_boundary.top = _originalPos.y - _hitbox.GetBoxHeight() * 4.0f;
+	_boundary.right = _originalPos.x + _hitbox.GetBoxWidth() * 2.0f;
+	_boundary.bottom = _originalPos.y + _hitbox.GetBoxHeight() * 4.0f;
 }
 
 void PiranaPlant::ParseData(std::string dataPath, const LPDIRECT3DTEXTURE9& texture, std::vector<std::string> extraData) {
@@ -47,7 +47,7 @@ void PiranaPlant::ParseData(std::string dataPath, const LPDIRECT3DTEXTURE9& text
 	}
 	Entity::ParseData(dataPath, texture, extraData);
 
-	if (_extraData.size() == 1) {
+	if (!_extraData.empty()) {
 		_variant = _extraData.front();
 	}
 }
@@ -110,17 +110,30 @@ void PiranaPlant::Update(
 	std::vector<Entity*>* collidableTiles,
 	Grid* grid)
 {
-	_velocity.y = _runSpeed * _normal.y;
-
-	const float MAX_Y_OFFSET = 38.0f;
-	const float MIN_Y_OFFSET = 32.0f;
-	if (_position.y > _originalPos.y + MIN_Y_OFFSET) {
-		_normal.y = -1.0f;
-	}
-	else if (_position.y < _originalPos.y + MAX_Y_OFFSET) {
-		_normal.y = 1.0f;
+	if (_isPlayerInRange) {
+		if (_position.y >= _originalPos.y) {
+			StartCoolDownTimer();
+		}
 	}
 
+	if (!IsOnCoolDown()) {
+		_position.y += _runSpeed * _normal.y * _deltaTime;
+
+		if (_position.y < _originalPos.y - _MAX_Y_OFFSET) {
+			StartCoolDownTimer();
+			_position.y = _originalPos.y - _MAX_Y_OFFSET;
+			_normal.y = 1.0f;
+		}
+		else if (_position.y > _originalPos.y) {
+			StartCoolDownTimer();
+			_position.y = _originalPos.y;
+			_normal.y = -1.0f;
+		}
+	}
+
+	if (IsOnCoolDown() && GetTickCount64() - _coolDownStart > _coolDownTime) {
+		_coolDownStart = 0;
+	}
 
 	HandleStates();
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);

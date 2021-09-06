@@ -65,7 +65,7 @@ LPDIRECT3DTEXTURE9 Scene::_LoadTexture(LPDIRECT3DTEXTURE9 texture, LPCWSTR fileP
 	);
 
 	if (hResult != D3D_OK) {
-		OutputDebugStringA("[SCENE] Failed to create background sprite from file\n");
+		OutputDebugStringA("[SCENE] Failed to create texture from file\n");
 		return nullptr;
 	}
 
@@ -197,7 +197,7 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new PiranaPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
-			//entity = new VenusPlant;
+			entity = new VenusPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
 			//entity = new BoomerBro;
@@ -320,6 +320,14 @@ Scene::Scene(SceneType sceneID, std::string path) {
 }
 
 Scene::~Scene() {}
+
+unsigned int Scene::GetSceneWidth() const {
+	return _sceneWidth;
+}
+
+unsigned int Scene::GetSceneHeight() const {
+	return _sceneHeight;
+}
 
 D3DCOLOR Scene::GetBGColor() const {
 	return _backgroundColor;
@@ -542,12 +550,55 @@ void Scene::Update(DWORD deltaTime) {
 			}
 
 			if (_mario->GetHealth() > 0) {
-				//Range-based loop, for_each, iterators will all be invalidated if an element is removed or inserted
+				//Range-based loop, for_each, iterators will all be invalidated if an element is either removed or inserted
 				//And the container has to do a reallocation
 				for (unsigned int i = 0; i < _entities.size(); ++i) {
 					Entity* entity = _entities.at(i);
 					entity->SetActive(_IsEntityInViewport(entity, _cameraInstance->GetViewport()));
 					entity->Update(deltaTime, &_entities, &_tiles, _grid);
+
+					//Global events
+					switch (entity->GetObjectType()) {
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
+
+							break;
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+
+							break;
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
+							{
+								PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(entity);
+								piranaPlant->ComparePlayerPosToSelf(_mario->GetPosition());
+								//Mario is on the right side
+								if (piranaPlant->GetPosition().x - _mario->GetPosition().x < 0) {
+									piranaPlant->SetScale({ -1.0f, piranaPlant->GetScale().y });
+								}
+								else {
+									piranaPlant->SetScale({ 1.0f, piranaPlant->GetScale().y });
+								}
+
+								//Mario is below
+								if (piranaPlant->GetPosition().y - _mario->GetPosition().y < 0) {
+									piranaPlant->SetNormal({ -1.0f, piranaPlant->GetNormal().y });
+								}
+								else {
+									piranaPlant->SetNormal({ 1.0f, piranaPlant->GetNormal().y });
+								}
+							}
+							break;
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+
+							break;
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+
+							break;
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
+
+							break;
+					}
+					//
 
 					if (_grid != nullptr) {
 						Cell* newCell = _grid->GetCell(entity->GetPosition());

@@ -85,6 +85,9 @@ public:
 	Scene(SceneType, std::string);
 	~Scene();
 
+	unsigned int GetSceneWidth() const;
+	unsigned int GetSceneHeight() const;
+
 	D3DCOLOR GetBGColor() const;
 
 	void HandleStates();

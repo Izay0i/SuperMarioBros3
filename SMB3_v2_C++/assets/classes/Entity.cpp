@@ -1,3 +1,4 @@
+#include "SceneManager.h"
 #include "spatial/Grid.h"
 #include "Entity.h"
 
@@ -118,6 +119,10 @@ void Entity::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
+	if (_position.y > SceneManager::GetInstance()->GetCurrentScene()->GetSceneHeight()) {
+		//_health = 0;
+	}
+
 	if (!_isActive && _objectType >= GameObjectType::GAMEOBJECT_TYPE_GOOMBA) {
 		return;
 	}

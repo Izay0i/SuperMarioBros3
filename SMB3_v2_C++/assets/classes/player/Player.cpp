@@ -443,7 +443,7 @@ void Player::Update(
 	std::vector<Entity*>* collidableEntities, 
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
-{	
+{
 	//To show the whole kicking animation
 	if (_isNextToShell && GetTickCount64() % 500 == 0) {
 		_isNextToShell = false;

@@ -1,11 +1,13 @@
 #pragma once
 
 class PiranaPlant : public Entity {
-private:
+protected:
 	enum class _State {
 		BITE,
 		DIE
 	};
+
+	const float _MAX_Y_OFFSET = 38.0f;
 
 	static LPDIRECT3DTEXTURE9 _piranaTexture;
 

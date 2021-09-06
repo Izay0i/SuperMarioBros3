@@ -6,6 +6,9 @@ HWND Game::_contentHWND = nullptr;
 
 Game* Game::_gameInstance = nullptr;
 
+unsigned int Game::windowAdjustX = 0;
+unsigned int Game::windowAdjustY = 0;
+
 LRESULT Game::_WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {
 		//https://stackoverflow.com/questions/28968012/win32-add-black-borders-to-fullscreen-window
@@ -53,8 +56,8 @@ LRESULT Game::_WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 			{
 				MINMAXINFO* info = reinterpret_cast<MINMAXINFO*>(lParam);
 				info->ptMinTrackSize.y = 
-					((info->ptMinTrackSize.x - GlobalUtil::windowAdjustX) *
-					_ASPECT_RATIO_Y) / _ASPECT_RATIO_X + GlobalUtil::windowAdjustY;
+					((info->ptMinTrackSize.x - Game::windowAdjustX) *
+					_ASPECT_RATIO_Y) / _ASPECT_RATIO_X + Game::windowAdjustY;
 			}
 			break;
 		case WM_DESTROY:
@@ -77,14 +80,14 @@ LRESULT Game::_WinProcContent(HWND hWND, UINT message, WPARAM wParam, LPARAM lPa
 
 //http://playtechs.blogspot.com/2007/10/forcing-window-to-maintain-particular.html
 void Game::_ResizeWindow(int edge, RECT& rect) {
-	int size_x_desired = (rect.right - rect.left) - GlobalUtil::windowAdjustX;
-	int size_y_desired = (rect.bottom - rect.top) - GlobalUtil::windowAdjustY;
+	int size_x_desired = (rect.right - rect.left) - windowAdjustX;
+	int size_y_desired = (rect.bottom - rect.top) - windowAdjustY;
 
 	switch (edge) {
 		case WMSZ_BOTTOM:
 		case WMSZ_TOP:
 			{
-				int size_x = GlobalUtil::windowAdjustX + (size_y_desired * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
+				int size_x = windowAdjustX + (size_y_desired * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
 				rect.left = (rect.left + rect.right) / 2 - size_x / 2;
 				rect.right = rect.left + size_x;
 			}
@@ -96,12 +99,12 @@ void Game::_ResizeWindow(int edge, RECT& rect) {
 				if (size_x_desired * _ASPECT_RATIO_Y > size_y_desired * _ASPECT_RATIO_X)
 				{
 					size_x = rect.right - rect.left;
-					size_y = GlobalUtil::windowAdjustY + ((size_x - GlobalUtil::windowAdjustX) * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
+					size_y = windowAdjustY + ((size_x - windowAdjustX) * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
 				}
 				else
 				{
 					size_y = rect.bottom - rect.top;
-					size_x = GlobalUtil::windowAdjustX + ((size_y - GlobalUtil::windowAdjustY) * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
+					size_x = windowAdjustX + ((size_y - windowAdjustY) * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
 				}
 
 				rect.left = rect.right - size_x;
@@ -115,12 +118,12 @@ void Game::_ResizeWindow(int edge, RECT& rect) {
 				if (size_x_desired * _ASPECT_RATIO_Y > size_y_desired * _ASPECT_RATIO_X)
 				{
 					size_x = rect.right - rect.left;
-					size_y = GlobalUtil::windowAdjustY + ((size_x - GlobalUtil::windowAdjustX) * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
+					size_y = windowAdjustY + ((size_x - windowAdjustX) * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
 				}
 				else
 				{
 					size_y = rect.bottom - rect.top;
-					size_x = GlobalUtil::windowAdjustX + ((size_y - GlobalUtil::windowAdjustY) * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
+					size_x = windowAdjustX + ((size_y - windowAdjustY) * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
 				}
 
 				rect.right = rect.left + size_x;
@@ -130,7 +133,7 @@ void Game::_ResizeWindow(int edge, RECT& rect) {
 		case WMSZ_LEFT:
 		case WMSZ_RIGHT:
 			{
-				int size_y = GlobalUtil::windowAdjustY + (size_x_desired * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
+				int size_y = windowAdjustY + (size_x_desired * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
 				rect.top = (rect.top + rect.bottom) / 2 - size_y / 2;
 				rect.bottom = rect.top + size_y;
 			}
@@ -142,12 +145,12 @@ void Game::_ResizeWindow(int edge, RECT& rect) {
 				if (size_x_desired * _ASPECT_RATIO_Y > size_y_desired * _ASPECT_RATIO_X)
 				{
 					size_x = rect.right - rect.left;
-					size_y = GlobalUtil::windowAdjustY + ((size_x - GlobalUtil::windowAdjustX) * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
+					size_y = windowAdjustY + ((size_x - windowAdjustX) * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
 				}
 				else
 				{
 					size_y = rect.bottom - rect.top;
-					size_x = GlobalUtil::windowAdjustX + ((size_y - GlobalUtil::windowAdjustY) * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
+					size_x = windowAdjustX + ((size_y - windowAdjustY) * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
 				}
 
 				rect.left = rect.right - size_x;
@@ -161,12 +164,12 @@ void Game::_ResizeWindow(int edge, RECT& rect) {
 				if (size_x_desired * _ASPECT_RATIO_Y > size_y_desired * _ASPECT_RATIO_X)
 				{
 					size_x = rect.right - rect.left;
-					size_y = GlobalUtil::windowAdjustY + ((size_x - GlobalUtil::windowAdjustX) * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
+					size_y = windowAdjustY + ((size_x - windowAdjustX) * _ASPECT_RATIO_Y) / _ASPECT_RATIO_X;
 				}
 				else
 				{
 					size_y = rect.bottom - rect.top;
-					size_x = GlobalUtil::windowAdjustX + ((size_y - GlobalUtil::windowAdjustY) * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
+					size_x = windowAdjustX + ((size_y - windowAdjustY) * _ASPECT_RATIO_X) / _ASPECT_RATIO_Y;
 				}
 
 				rect.right = rect.left + size_x;
@@ -232,7 +235,7 @@ void Game::_Render() {
 	if (GlobalUtil::directDevice->BeginScene() == D3D_OK) {
 		GlobalUtil::directDevice->ColorFill(_backBuffer, nullptr, _managerInstance->GetCurrentScene()->GetBGColor());
 		GlobalUtil::spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-
+		
 		_managerInstance->GetCurrentScene()->Render();
 		
 		GlobalUtil::spriteHandler->End();

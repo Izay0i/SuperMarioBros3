@@ -54,6 +54,10 @@ private:
 	void _Render();
 
 public:
+	//Only changes on resize
+	static unsigned int windowAdjustX;
+	static unsigned int windowAdjustY;
+
 	static Game* GetInstance();
 
 	unsigned int GetWindowWidth() const;
