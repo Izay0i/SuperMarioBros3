@@ -108,11 +108,6 @@ void Goomba::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	if (IsRemoved() && GetTickCount64() - _removeStart > _removeTime) {
-		_health = -1;
-		_removeStart = 0;
-	}
-
 	HandleStates();
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 }

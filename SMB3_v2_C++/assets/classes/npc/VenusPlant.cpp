@@ -2,6 +2,7 @@
 #include "../Entity.h"
 #include "PiranaPlant.h"
 #include "VenusPlant.h"
+#include "../projectile/Fireball.h"
 
 VenusPlant::VenusPlant() {
 	_coolDownTime = 2000;
@@ -9,15 +10,29 @@ VenusPlant::VenusPlant() {
 
 VenusPlant::~VenusPlant() {}
 
+Fireball* VenusPlant::SpawnFireball() {
+	//This is madness
+	Fireball* fireball = dynamic_cast<Fireball*>(
+		SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
+			_extraData.at(1), 
+			_extraData.at(2), 
+			_extraData.at(3)
+		)
+	);
+	fireball->SetNormal({ -_normal.x, _normal.y });
+	fireball->SetPosition({ _position.x + _normal.x, _position.y + 10.0f });
+	return fireball;
+}
+
 void VenusPlant::Update(
 	DWORD deltaTime, 
 	std::vector<Entity*>* collidableEntities, 
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	if (_position.y < _originalPos.y - _MAX_Y_OFFSET) {
-		if (IsOnCoolDown() && GetTickCount64() - _coolDownStart > _coolDownTime * 0.75f) {
-			//SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnFireball());
+	if (_position.y <= _originalPos.y - _MAX_Y_OFFSET) {
+		if (IsOnCoolDown() && GetTickCount64() - _coolDownStart == _coolDownTime * 0.75f) {
+			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnFireball());
 		}
 	}
 

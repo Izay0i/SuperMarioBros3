@@ -12,8 +12,6 @@ protected:
 
 	static LPDIRECT3DTEXTURE9 _koopaTexture;
 
-	std::string _variant;
-
 	_State _state;
 
 	DWORD _retractStart;

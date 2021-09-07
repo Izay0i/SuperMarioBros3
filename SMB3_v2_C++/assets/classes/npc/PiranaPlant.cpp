@@ -80,6 +80,10 @@ void PiranaPlant::HandleStates() {
 			_state = _State::BITE;
 			break;
 	}
+
+	if (_health == 0 && !IsRemoved()) {
+		StartRemoveTimer();
+	}
 }
 
 void PiranaPlant::HandleCollisionResult(
@@ -97,6 +101,9 @@ void PiranaPlant::HandleCollisionResult(
 	}
 
 	switch (eventEntity->GetObjectType()) {
+		case GameObjectType::GAMEOBJECT_TYPE_MARIO:
+			eventEntity->TakeDamage();
+			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
 			TakeDamage();
@@ -134,7 +141,8 @@ void PiranaPlant::Update(
 	if (IsOnCoolDown() && GetTickCount64() - _coolDownStart > _coolDownTime) {
 		_coolDownStart = 0;
 	}
-
+	
+	_position.x = _originalPos.x;
 	HandleStates();
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 }

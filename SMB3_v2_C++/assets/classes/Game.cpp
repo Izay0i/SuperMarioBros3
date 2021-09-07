@@ -345,6 +345,9 @@ bool Game::InitGame(HWND hWND)
 	directParams.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	directParams.BackBufferFormat = D3DFMT_A8R8G8B8;
 	directParams.BackBufferCount = 1;
+	directParams.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	directParams.MultiSampleType = D3DMULTISAMPLE_NONE;
+	directParams.MultiSampleQuality = 0;
 
 	RECT window;
 	GetClientRect(hWND, &window);
@@ -462,6 +465,11 @@ void Game::GameRun() {
 
 				_Update(deltaTime);
 				_Render();
+
+				Sleep(0);
+			}
+			else {
+				//Sleep(ticksPerFrame - deltaTime);
 			}
 		}
 	}

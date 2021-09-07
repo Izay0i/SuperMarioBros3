@@ -169,6 +169,8 @@
     <ClCompile Include="assets\classes\player\state\ThrowState.cpp" />
     <ClCompile Include="assets\classes\player\state\WagState.cpp" />
     <ClCompile Include="assets\classes\player\Tail.cpp" />
+    <ClCompile Include="assets\classes\projectile\Boomerang.cpp" />
+    <ClCompile Include="assets\classes\projectile\Fireball.cpp" />
     <ClCompile Include="assets\classes\Scene.cpp" />
     <ClCompile Include="assets\classes\spatial\Grid.cpp" />
     <ClCompile Include="assets\classes\Tile.cpp" />
@@ -205,6 +207,8 @@
     <ClInclude Include="assets\classes\player\state\ThrowState.h" />
     <ClInclude Include="assets\classes\player\state\WagState.h" />
     <ClInclude Include="assets\classes\player\Tail.h" />
+    <ClInclude Include="assets\classes\projectile\Boomerang.h" />
+    <ClInclude Include="assets\classes\projectile\Fireball.h" />
     <ClInclude Include="assets\classes\Scene.h" />
     <ClInclude Include="assets\classes\SceneManager.h" />
     <ClInclude Include="assets\classes\spatial\Grid.h" />

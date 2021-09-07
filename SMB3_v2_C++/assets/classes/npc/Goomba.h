@@ -10,7 +10,6 @@ protected:
 
 	static LPDIRECT3DTEXTURE9 _goombaTexture;
 
-	std::string _variant;
 	std::string _animationName;
 
 	_State _state;

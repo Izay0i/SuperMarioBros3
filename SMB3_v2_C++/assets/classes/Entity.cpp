@@ -123,6 +123,11 @@ void Entity::Update(
 		//_health = 0;
 	}
 
+	if (IsRemoved() && GetTickCount64() - _removeStart > _removeTime) {
+		_health = -1;
+		_removeStart = 0;
+	}
+
 	if (!_isActive && _objectType >= GameObjectType::GAMEOBJECT_TYPE_GOOMBA) {
 		return;
 	}
