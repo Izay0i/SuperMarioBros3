@@ -115,27 +115,27 @@
 300	assets\data\block\questionblock.txt	0	1472	368	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
 
 #Shiny brick															quantity
-301	assets\data\block\brickblock.txt	0	1440	128	201	assets\data\item\greenshroom.txt	5	1
-301	assets\data\block\brickblock.txt	0	2032	368	302	assets\data\block\pblock.txt	0	1
+301	assets\data\block\brickblock.txt	0	1440	128	888	assets\data\particle\brick.txt	4	201	assets\data\item\greenshroom.txt	5	1
+301	assets\data\block\brickblock.txt	0	2032	368	888	assets\data\particle\brick.txt	4	302	assets\data\block\pblock.txt	0	1
 
-301	assets\data\block\brickblock.txt	0	1984	368
-301	assets\data\block\brickblock.txt	0	2000	368
-301	assets\data\block\brickblock.txt	0	2016	368
-301	assets\data\block\brickblock.txt	0	1968	384
-301	assets\data\block\brickblock.txt	0	1984	384
-301	assets\data\block\brickblock.txt	0	2000	384
-301	assets\data\block\brickblock.txt	0	2016	384
-301	assets\data\block\brickblock.txt	0	2032	384
-301	assets\data\block\brickblock.txt	0	2096	384
-301	assets\data\block\brickblock.txt	0	1952	400
-301	assets\data\block\brickblock.txt	0	1968	400
-301	assets\data\block\brickblock.txt	0	1984	400
-301	assets\data\block\brickblock.txt	0	2000	400
-301	assets\data\block\brickblock.txt	0	2016	400
-301	assets\data\block\brickblock.txt	0	2032	400
-301	assets\data\block\brickblock.txt	0	2048	400
-301	assets\data\block\brickblock.txt	0	2096	400
-301	assets\data\block\brickblock.txt	0	2112	400
+301	assets\data\block\brickblock.txt	0	1984	368	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2000	368	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2016	368	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	1968	384	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	1984	384	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2000	384	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2016	384	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2032	384	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2096	384	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	1952	400	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	1968	400	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	1984	400	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2000	400	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2016	400	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2032	400	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2048	400	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2096	400	888	assets\data\particle\brick.txt	4
+301	assets\data\block\brickblock.txt	0	2112	400	888	assets\data\particle\brick.txt	4
 [/]
 
 #objID	x	y	width	height

@@ -96,6 +96,11 @@ public:
 
 	void AddEntityToScene(Entity*);
 	void RemoveEntityFromScene(Entity*);
+	//NPCs/Blocks -> spawn items/particles -> added to the scene -> deleted if lifetime is 0
+	//Else
+	//Be sure to keep track of who's the owner
+	//Object ID, data path, texture ID
+	Entity* CreateEntityFromData(std::string, std::string, std::string);
 
 	void LoadScene();
 	

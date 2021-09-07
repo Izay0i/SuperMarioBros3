@@ -374,7 +374,7 @@ void Player::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 			{
 				PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(eventEntity);
-				if (piranaPlant->GetHealth() > 0) {
+				if (piranaPlant->GetHealth() >= 0) {
 					TakeDamage();
 					_velocity.y = -_bounceSpeed;
 				}
@@ -404,16 +404,11 @@ void Player::HandleCollisionResult(
 	//----------------------------------------------------------------------------
 	//PROJECTILES
 	//----------------------------------------------------------------------------
-		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
-			{
-				
-			}
-			break;
 		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:
-			{
-				
-			}
+			TakeDamage();
+			minTime = { 1.0f, 1.0f };
+			offset = normal = relativeDistance = { 0, 0 };
 			break;
 	//----------------------------------------------------------------------------
 	//PROJECTILES

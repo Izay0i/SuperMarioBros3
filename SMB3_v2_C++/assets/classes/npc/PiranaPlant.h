@@ -14,7 +14,6 @@ protected:
 	_State _state;
 
 	bool _isPlayerInRange;
-	std::string _variant;
 
 	RECTF _boundary;
 

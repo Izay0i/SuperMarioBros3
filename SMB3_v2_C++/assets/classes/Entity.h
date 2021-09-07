@@ -32,6 +32,8 @@ protected:
 	unsigned int _renderPriority;
 	unsigned int _score, _scoreMultiplier;
 
+	std::string _variant;
+
 	AnimatedSprite _animatedSprite;
 
 	DWORD _removeStart;

@@ -1,6 +1,7 @@
 #include "../SceneManager.h"
 #include "../Entity.h"
 #include "BoomerBro.h"
+#include "../projectile/Boomerang.h"
 
 LPDIRECT3DTEXTURE9 BoomerBro::_boomerTexture = nullptr;
 
@@ -37,6 +38,19 @@ void BoomerBro::StartAttackTimer() {
 	_attackStart = static_cast<DWORD>(GetTickCount64());
 }
 
+Boomerang* BoomerBro::SpawnBoomerang() {
+	Boomerang* boomerang = dynamic_cast<Boomerang*>(
+		SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
+			_extraData.at(0),
+			_extraData.at(1),
+			_extraData.at(2)
+		)
+	);
+	boomerang->SetNormal({ _normal.x, 0 });
+	boomerang->SetPosition({ _position.x + 5.0f, _position.y + 10.0f });
+	return boomerang;
+}
+
 void BoomerBro::ParseData(
 	std::string dataPath, 
 	const LPDIRECT3DTEXTURE9& texture, 
@@ -71,6 +85,10 @@ void BoomerBro::HandleStates() {
 		case _State::DIE:
 			_velocity.x = 0.0f;
 			_scale.y = -1.0f;
+
+			if (_health == 0 && !IsRemoved()) {
+				StartRemoveTimer();
+			}
 			break;
 	}
 }
@@ -101,7 +119,7 @@ void BoomerBro::Update(
 	}
 
 	if (!IsAttacking()) {
-		//SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnBoomerang());
+		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnBoomerang());
 		StartAttackTimer();
 	}
 

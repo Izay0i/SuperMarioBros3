@@ -182,16 +182,16 @@ void Scene::_ParseEntityData(std::string line) {
 			_entities.emplace_back(_luigi);
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
-			//entity = new Goomba;
+			entity = new Goomba;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
-			//entity = new Paragoomba;
+			entity = new Paragoomba;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_KOOPA:
-			//entity = new Koopa;
+			entity = new Koopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
-			//entity = new Parakoopa;
+			entity = new Parakoopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
 			entity = new PiranaPlant;
@@ -200,7 +200,7 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new VenusPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
-			//entity = new BoomerBro;
+			entity = new BoomerBro;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PORTAL:
 			//entity = new Portal;
@@ -357,6 +357,47 @@ void Scene::RemoveEntityFromScene(Entity* entity) {
 		_grid->RemoveEntityFromCell(entity);
 	}
 	_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
+}
+
+Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, std::string textureID) {
+	Entity* entity = nullptr;
+
+	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(objectID));
+	unsigned int texID = std::stoul(textureID);
+
+	switch (objectType) {
+		//Projectiles
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+			entity = new Fireball;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:
+			entity = new Boomerang;
+			break;
+		//Items
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LEAF:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_FLOWER:
+
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_STAR:
+
+			break;
+		//Particles
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARTICLE:
+
+			break;
+	}
+
+	entity->SetOjectType(objectType);
+	entity->ParseData(dataPath, _textureMap[texID]);
+
+	return entity;
 }
 
 void Scene::LoadScene() {
@@ -572,7 +613,7 @@ void Scene::Update(DWORD deltaTime) {
 								PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(entity);
 								piranaPlant->ComparePlayerPosToSelf(_mario->GetPosition());
 								//Mario is on the right side
-								if (piranaPlant->GetPosition().x - _mario->GetPosition().x < 0) {
+								if (piranaPlant->GetPosition().x - _mario->GetPosition().x < 0.0f) {
 									piranaPlant->SetScale({ -1.0f, piranaPlant->GetScale().y });
 								}
 								else {
@@ -580,7 +621,7 @@ void Scene::Update(DWORD deltaTime) {
 								}
 
 								//Mario is below
-								if (piranaPlant->GetPosition().y - _mario->GetPosition().y < 0) {
+								if (piranaPlant->GetPosition().y - _mario->GetPosition().y < 0.0f) {
 									piranaPlant->SetNormal({ -1.0f, piranaPlant->GetNormal().y });
 								}
 								else {

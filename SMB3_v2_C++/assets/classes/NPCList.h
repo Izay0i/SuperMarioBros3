@@ -7,3 +7,6 @@
 #include "npc/PiranaPlant.h"
 #include "npc/VenusPlant.h"
 #include "npc/BoomerBro.h"
+
+#include "projectile/Fireball.h"
+#include "projectile/Boomerang.h"
