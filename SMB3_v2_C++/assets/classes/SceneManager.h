@@ -8,8 +8,8 @@ class SceneManager {
 private:
 	static SceneManager* _managerInstance;
 
-	int _currentSceneID;
-	std::unordered_map<int, Scene*> _scenes;
+	unsigned int _currentSceneID;
+	std::unordered_map<unsigned int, Scene*> _scenes;
 
 	SceneManager();
 	~SceneManager();
@@ -19,6 +19,6 @@ public:
 
 	Scene* GetCurrentScene();
 	void ParseScenes(std::string);
-	void ChangeScene(int);
+	void ChangeScene(unsigned int);
 	void Release();
 };

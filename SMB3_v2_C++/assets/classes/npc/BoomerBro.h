@@ -4,8 +4,8 @@ class Boomerang;
 class BoomerBro : public Entity {
 private:
 	enum class _State {
-		WALK,
-		DIE
+		WALK = 1,
+		DIE = 0
 	};
 
 	static LPDIRECT3DTEXTURE9 _boomerTexture;

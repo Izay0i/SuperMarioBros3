@@ -3,9 +3,9 @@
 class Goomba : public Entity {
 protected:
 	enum class _State {
-		FLY,
-		WALK,
-		DIE
+		FLY = 2,
+		WALK = 1,
+		DIE = 0
 	};
 
 	static LPDIRECT3DTEXTURE9 _goombaTexture;

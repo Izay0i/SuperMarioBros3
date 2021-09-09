@@ -72,14 +72,7 @@ void PiranaPlant::ComparePlayerPosToSelf(D3DXVECTOR2 playerPos) {
 }
 
 void PiranaPlant::HandleStates() {
-	switch (_health) {
-		case 0:
-			_state = _State::DIE;
-			break;
-		case 1:
-			_state = _State::BITE;
-			break;
-	}
+	_state = static_cast<_State>(_health);
 
 	if (_health == 0 && !IsRemoved()) {
 		StartRemoveTimer();
@@ -106,6 +99,7 @@ void PiranaPlant::HandleCollisionResult(
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
+			OutputDebugStringA("Tail?\n");
 			TakeDamage();
 			break;
 	}

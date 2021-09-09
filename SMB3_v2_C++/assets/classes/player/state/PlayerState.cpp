@@ -51,17 +51,15 @@ void PlayerState::Update(DWORD) {
 void PlayerState::Render() {
 	if (_player->IsInvulnerable()) {
 		if (_currentHealth > _player->_health) {
-			_OnExit();
-		}
-		else {
 			_OnEntry();
 		}
-		return;
+		else {
+			_OnExit();
+		}
 	}
 
 	if (_player->_health == 0) {
 		_player->_animatedSprite.PlaySpriteAnimation("Die", _player->_position);
-		return;
 	}
 }
 

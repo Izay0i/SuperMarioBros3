@@ -25,12 +25,12 @@ void SceneManager::ParseScenes(std::string line) {
 		return;
 	}
 
-	int sceneID = std::stoi(tokens.at(0));
+	unsigned int sceneID = std::stoul(tokens.at(0));
 	std::string scenePath = tokens.at(1);
 	_scenes.insert(std::make_pair(sceneID, new Scene(static_cast<Scene::SceneType>(sceneID), scenePath)));
 }
 
-void SceneManager::ChangeScene(int sceneID) {
+void SceneManager::ChangeScene(unsigned int sceneID) {
 	_scenes[_currentSceneID]->Release();
 	_currentSceneID = sceneID;
 	_scenes[_currentSceneID]->LoadScene();

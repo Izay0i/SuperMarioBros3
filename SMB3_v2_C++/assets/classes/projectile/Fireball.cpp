@@ -8,15 +8,14 @@ void Fireball::_ParseSprites(std::string line) {
 }
 
 Fireball::Fireball() {
-	_renderPriority = 1;
+	_renderPriority = 2;
 	_removeTime = 300;
 
 	_travelSpeed = 0.0012f;
-	_runSpeed = _objectType == GameObjectType::GAMEOBJECT_TYPE_PFIREBALL ? 0.2f : 0.05f;
 	_bounceSpeed = 0.2f;
 	_gravity = 0.002f;
 
-	_aliveTime = 10000;
+	_aliveTime = 8000;
 	StartAliveTimer();
 }
 
@@ -43,17 +42,12 @@ void Fireball::ParseData(
 		_fireballTexture = texture;
 	}
 	Entity::ParseData(dataPath, texture, extraData);
+
+	_runSpeed = _objectType == GameObjectType::GAMEOBJECT_TYPE_PFIREBALL ? 0.2f : 0.05f;
 }
 
 void Fireball::HandleStates() {
-	switch (_health) {
-		case 0:
-			_state = _State::EXPLODE;
-			break;
-		case 1:
-			_state = _State::BOUNCE;
-			break;
-	}
+	_state = static_cast<_State>(_health);
 
 	switch (_state) {
 		case _State::BOUNCE:
@@ -83,31 +77,39 @@ void Fireball::HandleCollisionResult(
 		return;
 	}
 
-	if (eventNormal.y == -1.0f) {
-		if (_objectType == GameObjectType::GAMEOBJECT_TYPE_PFIREBALL) {
+	if (_objectType == GameObjectType::GAMEOBJECT_TYPE_PFIREBALL) {
+		if (eventNormal.y == -1.0f) {
 			_velocity.y = -_bounceSpeed;
 		}
+	}
+	else if (_objectType == GameObjectType::GAMEOBJECT_TYPE_VFIREBALL) {
+		minTime = { 1.0f, 1.0f };
+		offset = normal = relativeDistance = { 0, 0 };
 	}
 
 	switch (_objectType) {
 		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
 			switch (eventEntity->GetObjectType()) {
+				case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+					TakeDamage();
+					break;
+				case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+				case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 				case GameObjectType::GAMEOBJECT_TYPE_TILE:
 					if (eventNormal.x != 0.0f) {
 						TakeDamage();
 					}
 					break;
 				//Ignore these entities
+				case GameObjectType::GAMEOBJECT_TYPE_MARIO:
 				case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
 				case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
 				case GameObjectType::GAMEOBJECT_TYPE_FLOWER:
 				case GameObjectType::GAMEOBJECT_TYPE_STAR:
 				case GameObjectType::GAMEOBJECT_TYPE_COIN:
 				case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
-				case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
-				case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 				case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:
-					//NULL
+					//Pokemon Black & White, Black 2 & White 2 stories were the peak of the franchise, change my mind
 					break;
 				default:
 					eventEntity->TakeDamage();
@@ -117,6 +119,9 @@ void Fireball::HandleCollisionResult(
 			switch (eventEntity->GetObjectType()) {
 				case GameObjectType::GAMEOBJECT_TYPE_MARIO:
 					eventEntity->TakeDamage();
+					break;
+				case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
+					TakeDamage();
 					break;
 			}
 			break;
@@ -137,17 +142,8 @@ void Fireball::Update(
 	HandleStates();
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 	
-	switch (_objectType) {
-		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
-			_velocity.y = -_travelSpeed * _normal.y * deltaTime;
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
-			//_velocity.y += _gravity * deltaTime;
-			break;
-	}
-	
 	if (_objectType == GameObjectType::GAMEOBJECT_TYPE_VFIREBALL) {
-		_position += _distance;
+		_velocity.y = -_travelSpeed * _normal.y * deltaTime;
 	}
 }
 
@@ -155,15 +151,8 @@ void Fireball::Render() {
 	if (!_isActive) {
 		return;
 	}
-
-	switch (_objectType) {
-		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
-			_animatedSprite.PlaySpriteAnimation("PFireball", _position);
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
-			_animatedSprite.PlaySpriteAnimation("VFireball", _position);
-			break;
-	}
+	
+	_animatedSprite.PlaySpriteAnimation("Fireball", _position);
 }
 
 void Fireball::Release() {

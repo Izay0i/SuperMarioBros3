@@ -220,7 +220,7 @@ void Game::_ParseSettings(std::string line) {
 	}
 
 	if (tokens.at(0) == "default") {
-		_defaultSceneID = std::stoi(tokens.at(1));
+		_defaultSceneID = std::stoul(tokens.at(1));
 	}
 	else {
 		OutputDebugStringA("[GAME] Unknown game settings\n");

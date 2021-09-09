@@ -85,6 +85,9 @@ public:
 	Scene(SceneType, std::string);
 	~Scene();
 
+	bool IsTransitioningToScene() const;
+	void StartToSceneTimer();
+
 	unsigned int GetSceneWidth() const;
 	unsigned int GetSceneHeight() const;
 
@@ -96,9 +99,8 @@ public:
 
 	void AddEntityToScene(Entity*);
 	void RemoveEntityFromScene(Entity*);
-	//NPCs/Blocks -> spawn items/particles -> added to the scene -> deleted if lifetime is 0
-	//Else
-	//Be sure to keep track of who's the owner
+	//Creates entity from extra data
+	//Make sure to keep track of who's the owner of the object
 	//Object ID, data path, texture ID
 	Entity* CreateEntityFromData(std::string, std::string, std::string);
 

@@ -42,17 +42,7 @@ void Goomba::ParseData(
 }
 
 void Goomba::HandleStates() {
-	switch (_health) {
-		case 0:
-			_state = _State::DIE;
-			break;
-		case 1:
-			_state = _State::WALK;
-			break;
-		case 2:
-			_state = _State::FLY;
-			break;
-	}
+	_state = static_cast<_State>(_health);
 
 	switch (_state) {
 		case _State::FLY:

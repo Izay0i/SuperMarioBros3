@@ -2,7 +2,7 @@
 #include "../SceneManager.h"
 #include "Player.h"
 #include "state/IdleState.h"
-#include "../NPCList.h"
+#include "../EntityList.h"
 
 LPDIRECT3DTEXTURE9 Player::_playerTexture = nullptr;
 
@@ -36,6 +36,9 @@ Player::Player() {
 
 	_playerState = new IdleState(this);
 	_tail = new Tail(this);
+	
+	_bonusItems.reserve(3);
+	_fireballs.reserve(2);
 }
 
 Player::~Player() {}
@@ -210,8 +213,19 @@ void Player::OnKeyDown(int keyCode) {
 			break;
 		case DIK_J:
 			_isHolding = true;
+			//Fireball attack
+			if (_health == 3 && !_isCrouching) {
+				if (_fireballs.size() < 2) {
+					_fireballs.emplace_back(SpawnFireball());
+
+					for (auto& fireball : _fireballs) {
+						SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(fireball);
+					}
+				}
+			}
+
 			//Tail attack
-			if (_health == 4 && _isOnGround && !IsAttacking()) {
+			if (_health == 4 && !IsAttacking()) {
 				StartAttackTimer();
 				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
 			}
@@ -284,6 +298,19 @@ void Player::SlowFall() {
 	}
 }
 
+Fireball* Player::SpawnFireball() {
+	Fireball* fireball = dynamic_cast<Fireball*>(
+		SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
+			_extraData.at(0),
+			_extraData.at(1),
+			_extraData.at(2)
+		)
+	);
+	fireball->SetNormal({ _normal.x, fireball->GetNormal().y });
+	fireball->SetPosition({ _position.x, _position.y + 10.0f });
+	return fireball;
+}
+
 void Player::HandleCollisionResult(
 	LPCOLLISIONEVENT result, 
 	D3DXVECTOR2& minTime, 
@@ -336,7 +363,7 @@ void Player::HandleCollisionResult(
 					if (koopa->GetHealth() != 1) {
 						koopa->TakeDamage();
 					}
-					else {
+					else if (koopa->GetHealth() == 1) {
 						koopa->SetHealth(2);
 					}
 				}
@@ -408,7 +435,7 @@ void Player::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:
 			TakeDamage();
 			minTime = { 1.0f, 1.0f };
-			offset = normal = relativeDistance = { 0, 0 };
+			offset = normal = { 0, 0 };
 			break;
 	//----------------------------------------------------------------------------
 	//PROJECTILES
@@ -430,6 +457,54 @@ void Player::HandleCollisionResult(
 	//----------------------------------------------------------------------------
 	//SPECIAL ENTITIES
 	//----------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------
+	//Items
+	//----------------------------------------------------------------------------
+		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
+
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_COIN:
+			{
+				Coin* coin = dynamic_cast<Coin*>(eventEntity);
+				if (coin->GetHealth() == 1) {
+					coin->TakeDamage();
+				}
+				else if (coin->GetHealth() == 3) {
+					if (eventNormal.y == 1.0f) {
+						//coin->SetHealth(-1);
+					}
+				}
+
+				if (coin->GetHealth() != 3) {
+					minTime = { 1.0f, 1.0f };
+					offset = normal = { 0, 0 };
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
+			{
+				BonusItem* bonusItem = dynamic_cast<BonusItem*>(eventEntity);
+				if (bonusItem->GetHealth() == 2) {
+					_bonusItems.emplace_back(bonusItem->GetCurrentItem());
+					bonusItem->TakeDamage();
+				}
+
+				minTime = { 1.0f, 1.0f };
+				offset = normal = { 0, 0 };
+
+				_triggeredStageEnd = true;
+			}
+			break;
+	//----------------------------------------------------------------------------
+	//Items
+	//----------------------------------------------------------------------------
 	}
 }
 
@@ -446,6 +521,13 @@ void Player::Update(
 
 	if (_isCrouching || IsAttacking()) {
 		_velocity.x = 0.0f;
+	}
+
+	//Remove fireballs
+	for (unsigned int i = 0; i < _fireballs.size(); ++i) {
+		if (_fireballs.at(i)->flaggedForRemoval) {
+			_fireballs.erase(std::remove(_fireballs.begin(), _fireballs.end(), _fireballs.at(i)), _fireballs.end());
+		}
 	}
 
 	//----------------------------------------------------------------------------

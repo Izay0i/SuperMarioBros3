@@ -35,7 +35,7 @@ private:
 	static void _ResizeWindow(int, RECT&);
 
 	unsigned int _windowWidth, _windowHeight;
-	int _defaultSceneID;
+	unsigned int _defaultSceneID;
 	bool _isRunning;
 
 	Device* _deviceInstance;

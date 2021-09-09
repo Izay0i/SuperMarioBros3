@@ -3,5 +3,5 @@ GreenShroom	51	0	67	16	1	0
 [/]
 
 [HITBOXES]
-0	0	16	16
+0	0	14	14
 [/]

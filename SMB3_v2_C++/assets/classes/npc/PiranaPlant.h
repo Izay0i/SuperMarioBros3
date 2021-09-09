@@ -3,8 +3,8 @@
 class PiranaPlant : public Entity {
 protected:
 	enum class _State {
-		BITE,
-		DIE
+		BITE = 1,
+		DIE = 0
 	};
 
 	const float _MAX_Y_OFFSET = 38.0f;

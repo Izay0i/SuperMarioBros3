@@ -42,7 +42,6 @@ struct CollisionEvent {
 
 class GameObject {
 public:
-	//Max value of UINT 4294967295 (0xffffffff)
 	enum class GameObjectType {
 		//Players
 		GAMEOBJECT_TYPE_MARIO = 0,
@@ -110,6 +109,11 @@ protected:
 	D3DXVECTOR2 _scale;
 
 public:
+	//If true, the entity is removed from the container
+	//But its resources will not be released
+	//Useful for when an object needs to know when another object is ready to be removed
+	bool flaggedForRemoval;
+
 	GameObject();
 	virtual ~GameObject();
 

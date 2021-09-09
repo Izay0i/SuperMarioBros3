@@ -120,6 +120,18 @@
     <ClCompile Include="assets\classes\projectile\Fireball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\classes\item\Mushroom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\item\Leaf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\item\Coin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\item\BonusItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\classes\GlobalUtil.h">
@@ -194,7 +206,7 @@
     <ClInclude Include="assets\classes\npc\BoomerBro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="assets\classes\NPCList.h">
+    <ClInclude Include="assets\classes\EntityList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\player\state\FallState.h">
@@ -225,6 +237,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\projectile\Fireball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\item\Mushroom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\item\Leaf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\item\Coin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\item\BonusItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

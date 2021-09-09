@@ -59,23 +59,7 @@ void Koopa::TakeDamage() {
 }
 
 void Koopa::HandleStates() {
-	switch (_health) {
-		case 0:
-			_state = _State::DIE;
-			break;
-		case 1:
-			_state = _State::SPIN;
-			break;
-		case 2:
-			_state = _State::RETRACT;
-			break;
-		case 3:
-			_state = _State::WALK;
-			break;
-		case 4:
-			_state = _State::FLY;
-			break;
-	}
+	_state = static_cast<_State>(_health);
 
 	switch (_state) {
 		case _State::FLY:
@@ -123,6 +107,55 @@ void Koopa::HandleCollisionResult(
 			_scale.y = -1.0f;
 			_velocity.y = -_bounceSpeed;
 			break;
+		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
+		case GameObjectType::GAMEOBJECT_TYPE_COIN:
+		case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
+			minTime = { 1.0f, 1.0f };
+			offset = normal = relativeDistance = { 0, 0 };
+			break;
+		//Kill both of them if one is spinning or is being held by the player;
+		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+			{
+				Koopa* koopa = dynamic_cast<Koopa*>(eventEntity);
+				if (koopa->_state == _State::SPIN || isBeingHeld) {
+					koopa->SetHealth(0);
+					koopa->SetScale({ 1.0f, -1.0f });
+					koopa->SetVelocity({ 0.0f, -_jumpSpeed });
+
+					_health = 0;
+					tookDamage = true;
+					_scale.y = -1.0f;
+					_velocity.y = -_jumpSpeed;
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
+			//Ignore
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_TILE:
+		case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:
+			if (_variant == "red") {
+				if (_state != _State::SPIN) {
+					if (_position.x <= eventEntity->GetPosition().x - 5.0f) {
+						_normal.x = -1.0f;
+
+					}
+					else if (_position.x + _hitbox.GetBoxWidth() >= eventEntity->GetPosition().x + eventEntity->GetBoxWidth() + 5.0f) {
+						_normal.x = 1.0f;
+					}
+				}
+			}
+			break;
+		default:
+			if (_state == _State::WALK || _state == _State::SPIN) {
+				if (eventNormal.x != 0.0f) {
+					eventEntity->TakeDamage();
+				}
+			}
 	}
 }
 
@@ -132,7 +165,7 @@ void Koopa::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	if (_health == 1) {
+	if (_state == _State::SPIN) {
 		StartRetractTimer();
 	}
 
@@ -162,7 +195,7 @@ void Koopa::Render() {
 		case _State::RETRACT:
 			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellIdle" : "GreenShellIdle", _position, _scale);
 
-			if (GetTickCount64() - _retractStart > _retractTime * 3 / 4) {
+			if (GetTickCount64() - _retractStart > _retractTime * 0.75f) {
 				_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellWake" : "GreenShellWake", _position, _scale);
 			}
 			break;

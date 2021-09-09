@@ -1,19 +1,22 @@
 [SPRITES]
-BonusItem	0	34	16	51	3	50
-BonusItem	20	34	36	51
-BonusItem	40	34	56	51
+BonusItem	0	34	16	50	3	100
+BonusItem	17	34	33	50
+BonusItem	34	34	50	50
 
-Shroom	62	34	72	51	2	50
-Shroom	106	34	107	51
+Shroom	0	34	16	50	3	100
+Shroom	51	34	67	50
+Shroom	136	34	152	50
 
-Flower	75	34	85	52	2	50
-Flower	106	34	107	51
+Flower	17	34	33	50	3	100
+Flower	68	34	84	50
+Flower	136	34	152	50
 
-Star	90	34	100	51	2	50
-Start	106	34	107	51
+Star	34	34	50	50	3	100
+Star	85	34	101	50
+Star	136	34	152	50
 
-Spark	113	24	128	52	2	50
-Spark	132	34	147	52
+Spark	102	34	118	50	2	100
+Spark	119	34	135	50
 [/]
 
 [HITBOXES]

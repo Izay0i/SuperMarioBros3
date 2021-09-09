@@ -1,15 +1,15 @@
 #include "GlobalUtil.h"
 #include "Game.h"
 #include "Scene.h"
-#include "NPCList.h"
+#include "EntityList.h"
 
 bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {	
 	float entityWidth = entity->GetPosition().x + entity->GetBoxWidth();
 	float entityHeight = entity->GetPosition().y + entity->GetBoxHeight();
 	if (entityWidth >= viewport.left && 
 		entityHeight >= viewport.top && 
-		entityWidth <= viewport.right && 
-		entityHeight <= viewport.bottom) 
+		entity->GetPosition().x <= viewport.right && 
+		entity->GetPosition().y <= viewport.bottom) 
 	{
 		return true;
 	}
@@ -18,22 +18,25 @@ bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {
 }
 
 bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
-	return true;
-	
-	if (entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL) {
+	//Ignore the player and tail
+	if (entity->GetObjectType() < GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA || 
+		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL) 
+	{
 		return  true;
 	}
 
 	float entityWidth = entity->GetPosition().x + entity->GetBoxWidth();
 	float entityHeight = entity->GetPosition().y + entity->GetBoxHeight();
-	if (entity->GetHealth() > -1 && (entityWidth >= 0 && 
+	if (entity->GetHealth() > -1 && 
+		(entityWidth >= 0 && 
 		entityHeight >= 0 && 
-		entityWidth <= _sceneWidth && 
-		entityHeight <= _sceneHeight)) 
+		entity->GetPosition().x <= _sceneWidth && 
+		entity->GetPosition().y <= _sceneHeight)) 
 	{
 		return true;
 	}
 
+	entity->flaggedForRemoval = true;
 	return false;
 }
 
@@ -182,25 +185,25 @@ void Scene::_ParseEntityData(std::string line) {
 			_entities.emplace_back(_luigi);
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
-			entity = new Goomba;
+			//entity = new Goomba;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
-			entity = new Paragoomba;
+			//entity = new Paragoomba;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_KOOPA:
-			entity = new Koopa;
+			//entity = new Koopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
-			entity = new Parakoopa;
+			//entity = new Parakoopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
-			entity = new PiranaPlant;
+			//entity = new PiranaPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
-			entity = new VenusPlant;
+			//entity = new VenusPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
-			entity = new BoomerBro;
+			//entity = new BoomerBro;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PORTAL:
 			//entity = new Portal;
@@ -209,10 +212,10 @@ void Scene::_ParseEntityData(std::string line) {
 			//entity = new MovingPlatform;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
-			//entity = new Coin;
+			entity = new Coin;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
-			//entity = new BonusItem;
+			entity = new BonusItem;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 			//entity = new QuestionBlock;
@@ -321,6 +324,14 @@ Scene::Scene(SceneType sceneID, std::string path) {
 
 Scene::~Scene() {}
 
+bool Scene::IsTransitioningToScene() const {
+	return _toSceneStart != 0;
+}
+
+void Scene::StartToSceneTimer() {
+	_toSceneStart = static_cast<DWORD>(GetTickCount64());
+}
+
 unsigned int Scene::GetSceneWidth() const {
 	return _sceneWidth;
 }
@@ -377,26 +388,21 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 		//Items
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
-
+			entity = new Mushroom;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LEAF:
-
+			entity = new Leaf;
 			break;
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_FLOWER:
-
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
+			entity = new Coin;
 			break;
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_STAR:
-
-			break;
-		//Particles
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARTICLE:
-
+			//entity = new Particle;
 			break;
 	}
 
 	entity->SetOjectType(objectType);
 	entity->ParseData(dataPath, _textureMap[texID]);
-
 	return entity;
 }
 
@@ -414,7 +420,7 @@ void Scene::LoadScene() {
 	}
 
 	//Load objects here, cause the Scene won't be calling destructor before the game ends
-	const unsigned int MAX_ENTITIES_PER_SCENE = 200;
+	const unsigned int MAX_ENTITIES_PER_SCENE = 256;
 	_entities.reserve(MAX_ENTITIES_PER_SCENE);
 	_tiles.reserve(MAX_ENTITIES_PER_SCENE);
 
@@ -589,7 +595,7 @@ void Scene::Update(DWORD deltaTime) {
 					--_sceneTime;
 				}
 			}
-
+			
 			if (_mario->GetHealth() > 0) {
 				//Range-based loop, for_each, iterators will all be invalidated if an element is either removed or inserted
 				//And the container has to do a reallocation
@@ -662,7 +668,16 @@ void Scene::Update(DWORD deltaTime) {
 
 			if (_mario->TriggeredStageEnd() || _mario->GetHealth() == 0 || _sceneTime == 0) {
 				//Warp back to map
+				
+				//DEBUGGING
+				if (!IsTransitioningToScene()) {
+					StartToSceneTimer();
+				}
 
+				if (IsTransitioningToScene() && GetTickCount64() - _toSceneStart > _toSceneTime) {
+					_toSceneStart = 0;
+					SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_TYPE_STAGE_ONE));
+				}
 			}
 			break;
 	}

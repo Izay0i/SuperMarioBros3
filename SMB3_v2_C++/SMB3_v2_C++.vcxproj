@@ -151,6 +151,10 @@
     <ClCompile Include="assets\classes\GameObject.cpp" />
     <ClCompile Include="assets\classes\GlobalUtil.cpp" />
     <ClCompile Include="assets\classes\Hitbox.cpp" />
+    <ClCompile Include="assets\classes\item\BonusItem.cpp" />
+    <ClCompile Include="assets\classes\item\Coin.cpp" />
+    <ClCompile Include="assets\classes\item\Leaf.cpp" />
+    <ClCompile Include="assets\classes\item\Mushroom.cpp" />
     <ClCompile Include="assets\classes\npc\BoomerBro.cpp" />
     <ClCompile Include="assets\classes\npc\Goomba.cpp" />
     <ClCompile Include="assets\classes\npc\Koopa.cpp" />
@@ -188,7 +192,11 @@
     <ClInclude Include="assets\classes\GlobalUtil.h" />
     <ClInclude Include="assets\classes\Device.h" />
     <ClInclude Include="assets\classes\Hitbox.h" />
-    <ClInclude Include="assets\classes\NPCList.h" />
+    <ClInclude Include="assets\classes\item\BonusItem.h" />
+    <ClInclude Include="assets\classes\item\Coin.h" />
+    <ClInclude Include="assets\classes\item\Leaf.h" />
+    <ClInclude Include="assets\classes\item\Mushroom.h" />
+    <ClInclude Include="assets\classes\EntityList.h" />
     <ClInclude Include="assets\classes\npc\BoomerBro.h" />
     <ClInclude Include="assets\classes\npc\Goomba.h" />
     <ClInclude Include="assets\classes\npc\Koopa.h" />

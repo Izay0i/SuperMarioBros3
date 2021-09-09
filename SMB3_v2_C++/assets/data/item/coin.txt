@@ -1,10 +1,13 @@
 [SPRITES]
-Coin	0	17	16	33	6	50
+Coin	0	17	16	33	5	50
 Coin	17	17	33	33
 Coin	34	17	50	33
 Coin	51	17	67	33
 Coin	68	17	84	33
-Coin	85	17	101	33
+
+Pushed	85	17	101	33	3	25
+Pushed	102	17	118	33
+Pushed	119	17	135	33
 [/]
 
 [HITBOXES]

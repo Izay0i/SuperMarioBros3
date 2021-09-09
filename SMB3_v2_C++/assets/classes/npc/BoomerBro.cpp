@@ -1,5 +1,6 @@
 #include "../SceneManager.h"
 #include "../Entity.h"
+#include "Koopa.h"
 #include "BoomerBro.h"
 #include "../projectile/Boomerang.h"
 
@@ -13,7 +14,8 @@ BoomerBro::BoomerBro() {
 	_renderPriority = 1;
 
 	_runSpeed = 0.03f;
-	_gravity = 0.0002f;
+	_bounceSpeed = 0.23f;
+	_gravity = 0.002f;
 
 	_attackTime = 3000;
 	_state = _State::WALK;
@@ -69,14 +71,7 @@ void BoomerBro::TakeDamage() {
 }
 
 void BoomerBro::HandleStates() {
-	switch (_health) {
-		case 0:
-			_state = _State::DIE;
-			break;
-		case 1:
-			_state = _State::WALK;
-			break;
-	}
+	_state = static_cast<_State>(_health);
 
 	switch (_state) {
 		case _State::WALK:
@@ -85,10 +80,6 @@ void BoomerBro::HandleStates() {
 		case _State::DIE:
 			_velocity.x = 0.0f;
 			_scale.y = -1.0f;
-
-			if (_health == 0 && !IsRemoved()) {
-				StartRemoveTimer();
-			}
 			break;
 	}
 }
@@ -100,7 +91,35 @@ void BoomerBro::HandleCollisionResult(
 	D3DXVECTOR2& normal, 
 	D3DXVECTOR2& relativeDistance) 
 {
+	Entity* eventEntity = result->entity;
+	D3DXVECTOR2 eventNormal = result->normal;
 
+	if (eventEntity == nullptr) {
+		return;
+	}
+
+	switch (eventEntity->GetObjectType()) {
+		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+			{
+				Koopa* koopa = dynamic_cast<Koopa*>(eventEntity);
+				koopa->SetHealth(0);
+				koopa->SetScale({ koopa->GetScale().x, -1.0f });
+				koopa->SetVelocity({ 0.0f, -_bounceSpeed });
+
+				TakeDamage();
+				_velocity.y = -_bounceSpeed;
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
+		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
+			TakeDamage();
+			_velocity.y = -_bounceSpeed;
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:
+			eventEntity->SetHealth(-1);
+			break;
+	}
 }
 
 void BoomerBro::Update(

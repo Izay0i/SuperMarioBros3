@@ -30,9 +30,6 @@ private:
 	void _ParsePositions(std::string, std::vector<Entity*>&);
 
 public:
-	Grid();
-	~Grid();
-
 	Cell* GetCell(unsigned int, unsigned int);
 	Cell* GetCell(D3DXVECTOR2);
 

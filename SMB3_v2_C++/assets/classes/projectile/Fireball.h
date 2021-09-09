@@ -3,8 +3,8 @@
 class Fireball : public Entity {
 private:
 	enum class _State {
-		BOUNCE,
-		EXPLODE
+		BOUNCE = 1,
+		EXPLODE = 0
 	};
 	
 	static LPDIRECT3DTEXTURE9 _fireballTexture;

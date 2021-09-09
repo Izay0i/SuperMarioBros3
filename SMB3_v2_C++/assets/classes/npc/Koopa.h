@@ -3,11 +3,11 @@
 class Koopa : public Entity {
 protected:
 	enum class _State {
-		FLY,
-		WALK,
-		RETRACT,
-		SPIN,
-		DIE
+		FLY = 4,
+		WALK = 3,
+		RETRACT = 2,
+		SPIN = 1,
+		DIE = 0
 	};
 
 	static LPDIRECT3DTEXTURE9 _koopaTexture;

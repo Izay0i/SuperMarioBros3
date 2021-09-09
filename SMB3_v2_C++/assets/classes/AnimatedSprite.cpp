@@ -18,6 +18,13 @@ void AnimatedSprite::ParseSprites(std::string line, const LPDIRECT3DTEXTURE9& sp
 	spriteBound.bottom = std::stoi(tokens.at(4));
 
 	if (!_HasAnimation(tokens.at(0))) {
+		if (tokens.size() < 7) {
+			char debug[100];
+			sprintf_s(debug, "[ANIMATED SPRITE] Insufficient parameters from animation named %s\n", tokens.at(0).c_str());
+			OutputDebugStringA(debug);
+			return;
+		}
+
 		int totalFrames = std::stoi(tokens.at(5));
 		int animationSpeed = std::stoi(tokens.at(6));
 		_sprites.insert(

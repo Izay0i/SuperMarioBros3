@@ -39,7 +39,12 @@ void Boomerang::ParseData(
 
 void Boomerang::HandleStates() {}
 
-void Boomerang::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
+void Boomerang::HandleCollisionResult(
+	LPCOLLISIONEVENT result, 
+	D3DXVECTOR2& minTime, 
+	D3DXVECTOR2& offset, 
+	D3DXVECTOR2& normal, 
+	D3DXVECTOR2& relativeDistance) {}
 
 void Boomerang::Update(
 	DWORD deltaTime, 
@@ -47,7 +52,16 @@ void Boomerang::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
+	if (IsRemoved() && GetTickCount64() - _removeStart > _removeTime) {
+		_health = -1;
+		_removeStart = 0;
+	}
+
+	if (!_isActive && _objectType >= GameObjectType::GAMEOBJECT_TYPE_GOOMBA) {
+		return;
+	}
+
+	GameObject::Update(deltaTime);
 	_position += _distance;
 	
 	if (_velocity.x > 0.0f) {

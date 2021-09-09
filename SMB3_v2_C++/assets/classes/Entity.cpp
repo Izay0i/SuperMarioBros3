@@ -196,17 +196,17 @@ void Entity::Update(
 		D3DXVECTOR2 relativeDistance;
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
-		
+
+		for (LPCOLLISIONEVENT result : eventResults) {
+			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
+		}
+
 		if (normal.x != 0.0f) {
 			_velocity.x = 0.0f;
 		}
 
 		if (normal.y != 0.0f) {
 			_velocity.y = 0.0f;
-		}
-
-		for (LPCOLLISIONEVENT result : eventResults) {
-			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
 		}
 
 		_position.x += _distance.x * minTime.x + normal.x * offset.x;
@@ -227,7 +227,7 @@ CollisionEvent* Entity::SweptAABBEx(Entity*& entity) {
 	staticEntity = entity->GetBoundingBox();
 	D3DXVECTOR2 staticVeloctity = entity->GetVelocity();
 	D3DXVECTOR2 staticDistance = staticVeloctity * static_cast<float>(_deltaTime);
-	D3DXVECTOR2 relativeDistance = _distance - staticDistance;
+	D3DXVECTOR2 relativeDistance = this->_distance - staticDistance;
 
 	movingEntity = this->GetBoundingBox();
 	SweptAABB(movingEntity, staticEntity, relativeDistance, normal, time);
@@ -246,7 +246,7 @@ void Entity::CalcPotentialCollision(std::vector<Entity*>* collidableEntities, st
 	
 	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
 		LPCOLLISIONEVENT event = SweptAABBEx(collidableEntities->at(i));
-		if (event->time >= 0.0f && event->time <= 1.0f) {
+		if (event->time > 0.0f && event->time <= 1.0f) {
 			collisionEvents.emplace_back(event);
 		}
 		else {

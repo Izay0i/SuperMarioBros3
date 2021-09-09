@@ -10,3 +10,8 @@
 
 #include "projectile/Fireball.h"
 #include "projectile/Boomerang.h"
+
+#include "item/Mushroom.h"
+#include "item/Leaf.h"
+#include "item/Coin.h"
+#include "item/BonusItem.h"

@@ -43,10 +43,6 @@ void Grid::_ParsePositions(std::string line, std::vector<Entity*>& entities) {
 	}
 }
 
-Grid::Grid() {}
-
-Grid::~Grid() {}
-
 Cell* Grid::GetCell(unsigned int x, unsigned int y) {
 	if (x < 0) {
 		x = 0;
@@ -136,5 +132,10 @@ void Grid::ParseData(std::string filePath, std::vector<Entity*>& entities) {
 }
 
 void Grid::Release() {
+	for (unsigned int i = 0; i < _xCells; ++i) {
+		for (unsigned int j = 0; j < _yCells; ++j) {
+			_cells.at(i).at(j).entities.clear();
+		}
+	}
 	_cells.clear();
 }

@@ -6,6 +6,7 @@
 
 #include <fstream>
 
+class Fireball;
 class PlayerState;
 class Player : public Entity {
 private:
@@ -54,7 +55,7 @@ private:
 	Tail* _tail;
 
 	std::vector<GameObject::GameObjectType> _bonusItems;
-	//std::vector<Fireball*> _fireballs;
+	std::vector<Fireball*> _fireballs;
 
 	DWORD _flyStart;
 	DWORD _flyTime;
@@ -104,6 +105,8 @@ public:
 	//Raccoon
 	void SlowFall();
 	
+	Fireball* SpawnFireball();
+
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
 
 	void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr) override;

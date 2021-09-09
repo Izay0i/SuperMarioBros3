@@ -116,6 +116,7 @@ void GameObject::SweptAABB(
 	float entry;
 	float exit;
 
+	//No collision
 	time = -1.0f;
 	normal = D3DXVECTOR2(0, 0);
 
@@ -126,10 +127,10 @@ void GameObject::SweptAABB(
 	box.right = distance.x > 0 ? movingObject.right + distance.x : movingObject.right;
 	box.bottom = distance.y > 0 ? movingObject.bottom + distance.y : movingObject.bottom;
 
-	if (box.right <= staticObject.left ||
-		box.left >= staticObject.right ||
-		box.bottom <= staticObject.top ||
-		box.top >= staticObject.bottom)
+	if (box.right < staticObject.left ||
+		box.left > staticObject.right ||
+		box.bottom < staticObject.top ||
+		box.top > staticObject.bottom)
 	{
 		return;
 	}
