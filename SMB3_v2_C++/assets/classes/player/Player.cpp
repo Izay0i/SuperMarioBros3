@@ -4,7 +4,7 @@
 #include "state/IdleState.h"
 #include "../EntityList.h"
 
-LPDIRECT3DTEXTURE9 Player::_playerTexture = nullptr;
+Texture* Player::_playerTexture = nullptr;
 
 void Player::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _playerTexture);
@@ -240,7 +240,7 @@ void Player::OnKeyDown(int keyCode) {
 
 void Player::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_playerTexture == nullptr) {

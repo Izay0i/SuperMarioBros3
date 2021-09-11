@@ -3,7 +3,7 @@
 
 #include <random>
 
-LPDIRECT3DTEXTURE9 BonusItem::_bonusTexture = nullptr;
+Texture* BonusItem::_bonusTexture = nullptr;
 
 void BonusItem::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _bonusTexture);
@@ -33,7 +33,7 @@ RECTF BonusItem::GetBoundingBox(int index) const {
 
 void BonusItem::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_bonusTexture == nullptr) {

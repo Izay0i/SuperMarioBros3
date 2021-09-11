@@ -1,7 +1,7 @@
 #include "../Entity.h"
 #include "Koopa.h"
 
-LPDIRECT3DTEXTURE9 Koopa::_koopaTexture = nullptr;
+Texture* Koopa::_koopaTexture = nullptr;
 
 void Koopa::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _koopaTexture);
@@ -37,7 +37,7 @@ RECTF Koopa::GetBoundingBox(int index) const {
 
 void Koopa::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_koopaTexture == nullptr) {

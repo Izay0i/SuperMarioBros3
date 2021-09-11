@@ -1,7 +1,7 @@
 #include "../Entity.h"
 #include "Coin.h"
 
-LPDIRECT3DTEXTURE9 Coin::_coinTexture = nullptr;
+Texture* Coin::_coinTexture = nullptr;
 
 void Coin::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _coinTexture);
@@ -22,7 +22,7 @@ RECTF Coin::GetBoundingBox(int index) const {
 
 void Coin::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_coinTexture == nullptr) {

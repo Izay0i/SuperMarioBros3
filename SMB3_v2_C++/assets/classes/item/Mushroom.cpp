@@ -1,7 +1,7 @@
 #include "../Entity.h"
 #include "Mushroom.h"
 
-LPDIRECT3DTEXTURE9 Mushroom::_shroomTexture = nullptr;
+Texture* Mushroom::_shroomTexture = nullptr;
 
 void Mushroom::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _shroomTexture);
@@ -35,7 +35,7 @@ RECTF Mushroom::GetBoundingBox(int index) const {
 
 void Mushroom::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_shroomTexture == nullptr) {

@@ -1,7 +1,7 @@
 #include "../Entity.h"
 #include "Goomba.h"
 
-LPDIRECT3DTEXTURE9 Goomba::_goombaTexture = nullptr;
+Texture* Goomba::_goombaTexture = nullptr;
 
 void Goomba::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _goombaTexture);
@@ -27,7 +27,7 @@ RECTF Goomba::GetBoundingBox(int index) const {
 
 void Goomba::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_goombaTexture == nullptr) {

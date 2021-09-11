@@ -40,40 +40,83 @@ bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
 	return false;
 }
 
-LPDIRECT3DTEXTURE9 Scene::_LoadTexture(LPDIRECT3DTEXTURE9 texture, LPCWSTR filePath, D3DCOLOR colorKey) {
-	HRESULT hResult;
-	D3DXIMAGE_INFO imageInfo;
+//Direct3D 10
+Texture* Scene::_LoadTexture(LPCWSTR filePath, D3DXCOLOR colorKey) {
+	ID3D10Resource* resource = nullptr;
+	ID3D10Texture2D* texture = nullptr;
 
-	hResult = D3DXGetImageInfoFromFile(filePath, &imageInfo);
-	if (hResult != D3D_OK) {
-		OutputDebugStringA("[SCENE] Failed to get image info\n");
-		return nullptr;
-	}
-
-	hResult = D3DXCreateTextureFromFileEx(
-		GlobalUtil::directDevice,
-		filePath,
-		imageInfo.Width,
-		imageInfo.Height,
-		1,
-		D3DUSAGE_DYNAMIC,
-		D3DFMT_UNKNOWN,
-		D3DPOOL_DEFAULT,
-		D3DX_DEFAULT,
-		D3DX_DEFAULT,
-		colorKey,
-		&imageInfo,
-		nullptr,
-		&texture
+	HRESULT hResult = D3DX10CreateTextureFromFile(
+		GlobalUtil::directDevice, 
+		filePath, 
+		nullptr, 
+		nullptr, 
+		&resource, 
+		nullptr
 	);
-
-	if (hResult != D3D_OK) {
+	if (FAILED(hResult)) {
 		OutputDebugStringA("[SCENE] Failed to create texture from file\n");
 		return nullptr;
 	}
 
-	return texture;
+	//Converts the ID3D10Resource into a ID3D10Texture2D object
+	resource->QueryInterface(__uuidof(ID3D10Texture2D), reinterpret_cast<LPVOID*>(&texture));
+	resource->Release();
+
+	if (texture == nullptr) {
+		OutputDebugStringA("[SCENE] Failed to convert the resource into a texture2D\n");
+		return nullptr;
+	}
+
+	D3D10_TEXTURE2D_DESC desc;
+	texture->GetDesc(&desc);
+
+	D3D10_SHADER_RESOURCE_VIEW_DESC resourceViewDesc;
+	ZeroMemory(&resourceViewDesc, sizeof(resourceViewDesc));
+	resourceViewDesc.Format = desc.Format;
+	resourceViewDesc.ViewDimension = D3D10_SRV_DIMENSION_TEXTURE2D;
+	resourceViewDesc.Texture2D.MipLevels = desc.MipLevels;
+
+	ID3D10ShaderResourceView* srView = nullptr;
+	GlobalUtil::directDevice->CreateShaderResourceView(texture, &resourceViewDesc, &srView);
+
+	return new Texture(texture, srView, colorKey);
 }
+//CHANGED
+//LPDIRECT3DTEXTURE9 Scene::_LoadTexture(LPDIRECT3DTEXTURE9 texture, LPCWSTR filePath, D3DCOLOR colorKey) {
+//	HRESULT hResult;
+//	D3DXIMAGE_INFO imageInfo;
+//
+//	hResult = D3DXGetImageInfoFromFile(filePath, &imageInfo);
+//	if (hResult != D3D_OK) {
+//		OutputDebugStringA("[SCENE] Failed to get image info\n");
+//		return nullptr;
+//	}
+//
+//	hResult = D3DXCreateTextureFromFileEx(
+//		GlobalUtil::directDevice,
+//		filePath,
+//		imageInfo.Width,
+//		imageInfo.Height,
+//		1,
+//		D3DUSAGE_DYNAMIC,
+//		D3DFMT_UNKNOWN,
+//		D3DPOOL_DEFAULT,
+//		D3DX_DEFAULT,
+//		D3DX_DEFAULT,
+//		colorKey,
+//		&imageInfo,
+//		nullptr,
+//		&texture
+//	);
+//
+//	if (hResult != D3D_OK) {
+//		OutputDebugStringA("[SCENE] Failed to create texture from file\n");
+//		return nullptr;
+//	}
+//
+//	return texture;
+//}
+//END
 
 void Scene::_ParseSceneSize(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
@@ -119,11 +162,15 @@ void Scene::_ParseBackgroundColor(std::string line) {
 		return;
 	}
 
-	unsigned int r = std::stoul(tokens.at(0));
-	unsigned int g = std::stoul(tokens.at(1));
-	unsigned int b = std::stoul(tokens.at(2));
+	float r = std::stof(tokens.at(0)) / 255.0f;
+	float g = std::stof(tokens.at(1)) / 255.0f;
+	float b = std::stof(tokens.at(2)) / 255.0f;
 
-	_backgroundColor = D3DCOLOR_XRGB(r, g, b);
+	//Direct3D 10
+	_backgroundColor = { r, g, b, 1.0f };
+	//CHANGED
+	//_backgroundColor = D3DCOLOR_XRGB(r, g, b);
+	//END
 }
 
 void Scene::_ParseTextures(std::string line) {
@@ -135,12 +182,15 @@ void Scene::_ParseTextures(std::string line) {
 
 	unsigned int textureID = std::stoul(tokens.at(0));
 
-	unsigned int r = std::stoul(tokens.at(2));
-	unsigned int g = std::stoul(tokens.at(3));
-	unsigned int b = std::stoul(tokens.at(4));
+	float r = std::stof(tokens.at(2));
+	float g = std::stof(tokens.at(3));
+	float b = std::stof(tokens.at(4));
 	
-	LPDIRECT3DTEXTURE9 texture = _LoadTexture(nullptr, GlobalUtil::ToLPCWSTR(tokens.at(1)), D3DCOLOR_XRGB(r, g, b));
-
+	//Direct3D 10
+	Texture* texture = _LoadTexture(GlobalUtil::ToLPCWSTR(tokens.at(1)), D3DXCOLOR(r, g, b, 1.0f));
+	//CHANGED
+	//LPDIRECT3DTEXTURE9 texture = _LoadTexture(nullptr, GlobalUtil::ToLPCWSTR(tokens.at(1)), D3DCOLOR_XRGB(r, g, b));
+	//END
 	_textureMap.insert(std::make_pair(textureID, texture));
 }
 
@@ -340,7 +390,7 @@ unsigned int Scene::GetSceneHeight() const {
 	return _sceneHeight;
 }
 
-D3DCOLOR Scene::GetBGColor() const {
+D3DXCOLOR Scene::GetBGColor() const {
 	return _backgroundColor;
 }
 
@@ -739,7 +789,9 @@ void Scene::Release() {
 	_tiles.clear();
 
 	for (auto& texture : _textureMap) {
-		texture.second->Release();
+		texture.second->texture->Release();
+		texture.second->resourceView->Release();
+		delete texture.second;
 	}
 	_textureMap.clear();
 

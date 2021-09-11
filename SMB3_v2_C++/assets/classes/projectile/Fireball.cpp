@@ -1,7 +1,7 @@
 #include "../Entity.h"
 #include "Fireball.h"
 
-LPDIRECT3DTEXTURE9 Fireball::_fireballTexture = nullptr;
+Texture* Fireball::_fireballTexture = nullptr;
 
 void Fireball::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _fireballTexture);
@@ -35,7 +35,7 @@ RECTF Fireball::GetBoundingBox(int index) const {
 
 void Fireball::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_fireballTexture == nullptr) {

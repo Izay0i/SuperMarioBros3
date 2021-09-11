@@ -8,7 +8,7 @@ protected:
 		DIE = 0
 	};
 
-	static LPDIRECT3DTEXTURE9 _goombaTexture;
+	static Texture* _goombaTexture;
 
 	std::string _animationName;
 
@@ -22,7 +22,7 @@ public:
 
 	RECTF GetBoundingBox(int = 0) const override;
 
-	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
+	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 
 	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;

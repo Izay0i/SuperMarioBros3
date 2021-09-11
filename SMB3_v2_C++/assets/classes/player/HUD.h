@@ -4,7 +4,7 @@
 
 class HUD : public Entity {
 private:
-	static LPDIRECT3DTEXTURE9 _hudTexture;
+	static Texture* _hudTexture;
 
 	const unsigned int _LIVES_MAX_LENGTH = 2;
 	const unsigned int _COINS_MAX_LENGTH = 2;
@@ -36,7 +36,7 @@ public:
 	HUD(Player*);
 	~HUD();
 
-	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
+	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 	
 	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;

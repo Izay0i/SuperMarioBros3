@@ -3,7 +3,7 @@
 
 #include <random>
 
-LPDIRECT3DTEXTURE9 Leaf::_leafTexture = nullptr;
+Texture* Leaf::_leafTexture = nullptr;
 
 void Leaf::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _leafTexture);
@@ -24,7 +24,11 @@ RECTF Leaf::GetBoundingBox(int index) const {
 	return _health <= 0 ? RECTF() : GameObject::GetBoundingBox();
 }
 
-void Leaf::ParseData(std::string dataPath, const LPDIRECT3DTEXTURE9& texture, std::vector<std::string> extraData) {
+void Leaf::ParseData(
+	std::string dataPath, 
+	Texture*& texture, 
+	std::vector<std::string> extraData) 
+{
 	if (_leafTexture == nullptr) {
 		_leafTexture = texture;
 	}

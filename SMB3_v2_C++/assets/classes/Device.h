@@ -2,8 +2,6 @@
 
 #include "SceneManager.h"
 
-#include <d3d9.h>
-
 class Device {
 private:
 	const static unsigned int _KEYBOARD_BUFFER_SIZE = 1024;

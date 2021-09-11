@@ -9,7 +9,7 @@ protected:
 
 	const float _MAX_Y_OFFSET = 38.0f;
 
-	static LPDIRECT3DTEXTURE9 _piranaTexture;
+	static Texture* _piranaTexture;
 
 	_State _state;
 
@@ -35,7 +35,7 @@ public:
 
 	void SetPosition(D3DXVECTOR2) override;
 
-	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
+	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 
 	void TakeDamage() override;
 

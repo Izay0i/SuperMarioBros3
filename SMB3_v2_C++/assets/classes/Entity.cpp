@@ -54,7 +54,7 @@ int Entity::GetHealth() const {
 
 void Entity::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture,  
+	Texture*& texture,  
 	std::vector<std::string> extraData) 
 {
 	std::ifstream readFile;

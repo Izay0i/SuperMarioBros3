@@ -1,7 +1,7 @@
 #include "../Entity.h"
 #include "Boomerang.h"
 
-LPDIRECT3DTEXTURE9 Boomerang::_boomerangTexture = nullptr;
+Texture* Boomerang::_boomerangTexture = nullptr;
 
 void Boomerang::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _boomerangTexture);
@@ -28,7 +28,7 @@ void Boomerang::SetPosition(D3DXVECTOR2 position) {
 
 void Boomerang::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_boomerangTexture == nullptr) {

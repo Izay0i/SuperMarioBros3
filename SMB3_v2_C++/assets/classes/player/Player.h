@@ -21,7 +21,7 @@ private:
 	friend class Tail;
 	friend class HUD;
 
-	static LPDIRECT3DTEXTURE9 _playerTexture;
+	static Texture* _playerTexture;
 
 	const unsigned int _DEFAULT_LIVES = 3;
 	const unsigned int _MAX_LIVES = 99;
@@ -94,7 +94,7 @@ public:
 	void OnKeyUp(int);
 	void OnKeyDown(int);
 
-	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
+	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 
 	void TakeDamage() override;
 

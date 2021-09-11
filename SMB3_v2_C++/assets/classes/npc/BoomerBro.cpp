@@ -4,7 +4,7 @@
 #include "BoomerBro.h"
 #include "../projectile/Boomerang.h"
 
-LPDIRECT3DTEXTURE9 BoomerBro::_boomerTexture = nullptr;
+Texture* BoomerBro::_boomerTexture = nullptr;
 
 void BoomerBro::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _boomerTexture);
@@ -55,7 +55,7 @@ Boomerang* BoomerBro::SpawnBoomerang() {
 
 void BoomerBro::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_boomerTexture == nullptr) {

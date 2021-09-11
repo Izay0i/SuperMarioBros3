@@ -34,15 +34,27 @@ private:
 
 	static void _ResizeWindow(int, RECT&);
 
-	unsigned int _windowWidth, _windowHeight;
+	//NEW
+	unsigned int _backBufferWidth;
+	unsigned int _backBufferHeight;
+
+	unsigned int _windowWidth;
+	unsigned int _windowHeight;
+
 	unsigned int _defaultSceneID;
 	bool _isRunning;
 
 	Device* _deviceInstance;
 	SceneManager* _managerInstance;
 
-	LPDIRECT3D9 _direct3D;
-	LPDIRECT3DSURFACE9 _backBuffer;
+	//Direct3D 10
+	IDXGISwapChain* _swapChain;
+	ID3D10RenderTargetView* _renderTargetView;
+	ID3D10BlendState* _blendState;
+	//REMOVED
+	//LPDIRECT3D9 _direct3D;
+	//LPDIRECT3DSURFACE9 _backBuffer;
+	//END
 
 	Game();
 	~Game();
@@ -59,6 +71,9 @@ public:
 	static unsigned int windowAdjustY;
 
 	static Game* GetInstance();
+
+	unsigned int GetBackBufferWidth() const;
+	unsigned int GetBackBufferHeight() const;
 
 	unsigned int GetWindowWidth() const;
 	unsigned int GetWindowHeight() const;

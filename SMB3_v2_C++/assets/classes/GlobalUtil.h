@@ -6,8 +6,8 @@
 #include <string>
 #include <codecvt>
 
-#include <d3d9.h>
-#include <d3dx9.h>
+#include <d3d10.h>
+#include <D3DX10.h>
 
 #include <dinput.h>
 
@@ -20,8 +20,13 @@ namespace GlobalUtil {
 	const unsigned int MAX_FILE_LINE = 5000;
 
 	//Mainly used in the Game and Sprite class
-	extern LPDIRECT3DDEVICE9 directDevice;
-	extern LPD3DXSPRITE spriteHandler;
+	//Direct3D 10
+	extern ID3D10Device* directDevice;
+	extern LPD3DX10SPRITE spriteHandler;
+	//REMOVED
+	//extern LPDIRECT3DDEVICE9 directDevice;
+	//extern LPD3DXSPRITE spriteHandler;
+	//END
 
 	extern std::vector<std::string> SplitStr(std::string, std::string = "\t");
 
@@ -39,3 +44,31 @@ typedef struct RectFloat {
 	RectFloat() : left(0), top(0), right(0), bottom(0) {}
 	RectFloat(float l, float t, float r, float b) : left(l), top(t), right(r), bottom(b) {}
 } RECTF;
+
+//A structure that contains a loaded texture,
+//and a shader resource view that is bound to said texture
+struct Texture {
+	unsigned int width = 0;
+	unsigned int height = 0;
+
+	ID3D10Texture2D* texture = nullptr;
+	ID3D10ShaderResourceView* resourceView = nullptr;
+	D3DXCOLOR colorKey = { 0, 0, 0, 0 };
+
+	//Texture, shader resource view, color key/ color modulate
+	Texture(ID3D10Texture2D* tex, ID3D10ShaderResourceView* rsView, D3DXCOLOR key) {
+		texture = tex;
+		resourceView = rsView;
+		colorKey = { 
+			key.r / 255.0f, 
+			key.g / 255.0f, 
+			key.b / 255.0f, 
+			key.a
+		};
+
+		D3D10_TEXTURE2D_DESC desc;
+		texture->GetDesc(&desc);
+		width = desc.Width;
+		height = desc.Height;
+	}
+};

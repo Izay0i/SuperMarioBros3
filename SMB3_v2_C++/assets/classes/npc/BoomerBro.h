@@ -8,7 +8,7 @@ private:
 		DIE = 0
 	};
 
-	static LPDIRECT3DTEXTURE9 _boomerTexture;
+	static Texture* _boomerTexture;
 
 	_State _state;
 
@@ -32,7 +32,7 @@ public:
 
 	Boomerang* SpawnBoomerang();
 
-	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
+	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 
 	void TakeDamage() override;
 

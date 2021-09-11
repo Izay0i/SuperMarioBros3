@@ -1,7 +1,7 @@
 #include "../Camera.h"
 #include "HUD.h"
 
-LPDIRECT3DTEXTURE9 HUD::_hudTexture = nullptr;
+Texture* HUD::_hudTexture = nullptr;
 
 void HUD::_ParseLives() {
 	_lives.clear();
@@ -155,7 +155,7 @@ HUD::~HUD() {}
 
 void HUD::ParseData(
 	std::string dataPath, 
-	const LPDIRECT3DTEXTURE9& texture, 
+	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
 	if (_hudTexture == nullptr) {

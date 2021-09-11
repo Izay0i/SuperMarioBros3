@@ -4,12 +4,17 @@
 
 class Background : public GameObject {
 private:
-	static LPDIRECT3DTEXTURE9 _backgroundTexture;
+	static Texture* _backgroundTexture;
 
 	std::vector<std::pair<RECT, D3DXVECTOR2>> _sprites;
 
+	D3DXMATRIX _scaleMatrix;
+	D3DX10_SPRITE _sprite;
+
+	void _ScaleSprite(const RECT&);
+
 public:
-	Background(const LPDIRECT3DTEXTURE9&);
+	Background(Texture*&);
 	~Background();
 
 	void AddSprite(RECT, D3DXVECTOR2);

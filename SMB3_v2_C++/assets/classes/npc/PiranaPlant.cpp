@@ -1,7 +1,7 @@
 #include "../Entity.h"
 #include "PiranaPlant.h"
 
-LPDIRECT3DTEXTURE9 PiranaPlant::_piranaTexture = nullptr;
+Texture* PiranaPlant::_piranaTexture = nullptr;
 
 void PiranaPlant::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _piranaTexture);
@@ -41,7 +41,11 @@ void PiranaPlant::SetPosition(D3DXVECTOR2 position) {
 	_boundary.bottom = _originalPos.y + _hitbox.GetBoxHeight() * 4.0f;
 }
 
-void PiranaPlant::ParseData(std::string dataPath, const LPDIRECT3DTEXTURE9& texture, std::vector<std::string> extraData) {
+void PiranaPlant::ParseData(
+	std::string dataPath, 
+	Texture*& texture, 
+	std::vector<std::string> extraData) 
+{
 	if (_piranaTexture == nullptr) {
 		_piranaTexture = texture;
 	}

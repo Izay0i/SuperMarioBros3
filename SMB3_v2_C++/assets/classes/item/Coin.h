@@ -8,7 +8,7 @@ private:
 		BRICK = 3
 	};
 
-	static LPDIRECT3DTEXTURE9 _coinTexture;
+	static Texture* _coinTexture;
 
 	_State _state;
 
@@ -20,7 +20,7 @@ public:
 
 	RECTF GetBoundingBox(int = 0) const override;
 
-	void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>()) override;
+	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 
 	void TakeDamage() override;
 
