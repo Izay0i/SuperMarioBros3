@@ -1,3 +1,4 @@
+#include "../Game.h"
 #include "../Camera.h"
 #include "HUD.h"
 
@@ -179,7 +180,7 @@ void HUD::Update(DWORD sceneTime, std::vector<GameObject*>*) {
 
 	D3DXVECTOR2 hudPosition;
 	hudPosition.x = Camera::GetInstance()->GetPosition().x;
-	hudPosition.y = Camera::GetInstance()->GetPosition().y + 154.0f;
+	//hudPosition.y = Camera::GetInstance()->GetPosition().y + 154.0f;
 	_position = hudPosition;
 }
 

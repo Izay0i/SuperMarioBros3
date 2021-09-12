@@ -3,7 +3,7 @@
 namespace GlobalUtil {
 	//Direct3D 10
 	ID3D10Device* directDevice = nullptr;
-	LPD3DX10SPRITE spriteHandler = nullptr;
+	ID3DX10Sprite* spriteHandler = nullptr;
 	//REMOVED
 	//LPDIRECT3DDEVICE9 directDevice = nullptr;
 	//LPD3DXSPRITE spriteHandler = nullptr;

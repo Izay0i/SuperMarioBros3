@@ -236,7 +236,7 @@ void Game::_Render() {
 	GlobalUtil::directDevice->ClearRenderTargetView(_renderTargetView, _managerInstance->GetCurrentScene()->GetBGColor());
 	GlobalUtil::spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 	//RGBA
-	float newBlendFactor[4] = { 0, 0, 0, 0 };
+	float newBlendFactor[4] = { 0 };
 	GlobalUtil::directDevice->OMSetBlendState(_blendState, newBlendFactor, 0xffffffff);
 	
 	_managerInstance->GetCurrentScene()->Render();
@@ -283,6 +283,10 @@ Game::~Game() {
 
 	if (_blendState != nullptr) {
 		_blendState->Release();
+	}
+
+	if (_rasterizerState != nullptr) {
+		_rasterizerState->Release();
 	}
 
 	if (GlobalUtil::spriteHandler != nullptr) {
@@ -417,7 +421,7 @@ bool Game::InitGame(HWND hWND)
 	RECT window;
 	GetClientRect(hWND, &window);
 
-	_backBufferWidth = window.right + 1;
+	_backBufferWidth = window.right;
 	_backBufferHeight = window.bottom + 1;
 
 	_windowWidth = window.right + 1;
@@ -519,7 +523,30 @@ bool Game::InitGame(HWND hWND)
 	blendDesc.DestBlendAlpha = D3D10_BLEND_ZERO;
 	blendDesc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
 	blendDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
-	GlobalUtil::directDevice->CreateBlendState(&blendDesc, &_blendState);
+	
+	hResult = GlobalUtil::directDevice->CreateBlendState(&blendDesc, &_blendState);
+	if (hResult != S_OK) {
+		MessageBoxA(hWND, "Failed to create blend state in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+
+	//IMPORTANT:
+	//If you want to flip sprites
+	//Create a rasterizer state and disable culling
+	//Source: https://gamedev.net/forums/topic/541543-cull-disable-dx10/4493656/
+	D3D10_RASTERIZER_DESC rasterizerDesc;
+	ZeroMemory(&rasterizerDesc, sizeof(D3D10_RASTERIZER_DESC));
+	rasterizerDesc.FillMode = D3D10_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D10_CULL_NONE;
+	rasterizerDesc.DepthClipEnable = true;
+	
+	hResult = GlobalUtil::directDevice->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
+	if (hResult != S_OK) {
+		MessageBoxA(hWND, "Failed to create rasterizer state in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+	GlobalUtil::directDevice->RSSetState(_rasterizerState);
+	//
 
 	return true;
 }

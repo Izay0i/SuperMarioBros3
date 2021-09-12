@@ -51,6 +51,7 @@ private:
 	IDXGISwapChain* _swapChain;
 	ID3D10RenderTargetView* _renderTargetView;
 	ID3D10BlendState* _blendState;
+	ID3D10RasterizerState* _rasterizerState;
 	//REMOVED
 	//LPDIRECT3D9 _direct3D;
 	//LPDIRECT3DSURFACE9 _backBuffer;

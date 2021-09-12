@@ -13,7 +13,8 @@ void Background::_ScaleSprite(const RECT& spriteBound) {
 	int spriteHeight = spriteBound.bottom - spriteBound.top;
 	_sprite.TexSize.x = spriteWidth / static_cast<float>(_backgroundTexture->width);
 	_sprite.TexSize.y = spriteHeight / static_cast<float>(_backgroundTexture->height);
-	_sprite.ColorModulate = _backgroundTexture->colorKey;
+	//_sprite.ColorModulate = _backgroundTexture->colorKey;
+	_sprite.ColorModulate = { 1.0f, 1.0f, 1.0f, 1.0f };
 	_sprite.TextureIndex = 0;
 
 	D3DXMatrixScaling(&_scaleMatrix, static_cast<float>(spriteWidth), static_cast<float>(spriteHeight), 1.0f);

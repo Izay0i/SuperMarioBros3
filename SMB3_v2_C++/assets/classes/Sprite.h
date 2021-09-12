@@ -25,7 +25,7 @@ private:
 	//END
 
 	//Scales sprite based on the texture position
-	void _ScaleSprite(const RECT&);
+	void _ScaleSprite(const RECT&, D3DXVECTOR2, unsigned int);
 
 public:
 	//Sprite texture, sprite bound, total frames, animation speed

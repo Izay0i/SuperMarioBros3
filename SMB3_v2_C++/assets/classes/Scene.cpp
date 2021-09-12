@@ -76,10 +76,10 @@ Texture* Scene::_LoadTexture(LPCWSTR filePath, D3DXCOLOR colorKey) {
 	resourceViewDesc.ViewDimension = D3D10_SRV_DIMENSION_TEXTURE2D;
 	resourceViewDesc.Texture2D.MipLevels = desc.MipLevels;
 
-	ID3D10ShaderResourceView* srView = nullptr;
-	GlobalUtil::directDevice->CreateShaderResourceView(texture, &resourceViewDesc, &srView);
+	ID3D10ShaderResourceView* spriteTextureSRView = nullptr;
+	GlobalUtil::directDevice->CreateShaderResourceView(texture, &resourceViewDesc, &spriteTextureSRView);
 
-	return new Texture(texture, srView, colorKey);
+	return new Texture(texture, spriteTextureSRView, colorKey);
 }
 //CHANGED
 //LPDIRECT3DTEXTURE9 Scene::_LoadTexture(LPDIRECT3DTEXTURE9 texture, LPCWSTR filePath, D3DCOLOR colorKey) {
@@ -182,9 +182,9 @@ void Scene::_ParseTextures(std::string line) {
 
 	unsigned int textureID = std::stoul(tokens.at(0));
 
-	float r = std::stof(tokens.at(2));
-	float g = std::stof(tokens.at(3));
-	float b = std::stof(tokens.at(4));
+	float r = std::stof(tokens.at(2)) / 255.0f;
+	float g = std::stof(tokens.at(3)) / 255.0f;
+	float b = std::stof(tokens.at(4)) / 255.0f;
 	
 	//Direct3D 10
 	Texture* texture = _LoadTexture(GlobalUtil::ToLPCWSTR(tokens.at(1)), D3DXCOLOR(r, g, b, 1.0f));
@@ -247,10 +247,10 @@ void Scene::_ParseEntityData(std::string line) {
 			//entity = new Parakoopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
-			//entity = new PiranaPlant;
+			entity = new PiranaPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
-			//entity = new VenusPlant;
+			entity = new VenusPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
 			//entity = new BoomerBro;
@@ -776,9 +776,9 @@ void Scene::Release() {
 		_cameraInstance->Release();
 	}
 	
-	for (auto& entity : _entities) {
-		entity->Release();
-		delete entity;
+	for (unsigned int i = 0; i < _entities.size(); ++i) {
+		_entities.at(i)->Release();
+		delete _entities.at(i);
 	}
 	_entities.clear();
 	

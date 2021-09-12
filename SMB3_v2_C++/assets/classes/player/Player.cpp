@@ -606,13 +606,7 @@ void Player::Render() {
 }
 
 void Player::Release() {
-	/*
-	for (auto& fireball : _fireballs) {
-		fireball->Release();
-		delete fireball;
-	}
 	_fireballs.clear();
-	*/
 
 	if (_playerState != nullptr) {
 		_playerState->Release();

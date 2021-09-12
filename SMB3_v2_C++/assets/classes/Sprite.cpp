@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Sprite.h"
 
-void Sprite::_ScaleSprite(const RECT& spriteBound) {
+void Sprite::_ScaleSprite(const RECT& spriteBound, D3DXVECTOR2 scale, unsigned int alpha) {
 	_sprite.TexCoord.x = spriteBound.left / static_cast<float>(_texture->width);
 	_sprite.TexCoord.y = spriteBound.top / static_cast<float>(_texture->height);
 
@@ -10,10 +10,11 @@ void Sprite::_ScaleSprite(const RECT& spriteBound) {
 	int spriteHeight = spriteBound.bottom - spriteBound.top;
 	_sprite.TexSize.x = spriteWidth / static_cast<float>(_texture->width);
 	_sprite.TexSize.y = spriteHeight / static_cast<float>(_texture->height);
-	_sprite.ColorModulate = _texture->colorKey;
+	//_sprite.ColorModulate = _texture->colorKey;
+	_sprite.ColorModulate = { 1.0f, 1.0f, 1.0f, alpha / 255.0f };
 	_sprite.TextureIndex = 0;
 
-	D3DXMatrixScaling(&_scaleMatrix, static_cast<float>(spriteWidth), static_cast<float>(spriteHeight), 1.0f);
+	D3DXMatrixScaling(&_scaleMatrix, static_cast<float>(spriteWidth) * scale.x, static_cast<float>(spriteHeight) * scale.y, 1.0f);
 }
 
 //Direct3D 10
@@ -69,7 +70,7 @@ void Sprite::DrawSprite(D3DXVECTOR2 position, D3DXVECTOR2 scale, unsigned int al
 	float y = (Game::GetInstance()->GetBackBufferHeight() - position.y) + _cameraInstance->GetPosition().y;
 	D3DXVECTOR2 spritePosition = { floor(x), floor(y) };
 
-	_ScaleSprite(_bounds.at(_currentFrame));
+	_ScaleSprite(_bounds.at(_currentFrame), scale, alpha);
 
 	D3DXMATRIX translationMatrix;
 	D3DXMatrixTranslation(&translationMatrix, spritePosition.x, spritePosition.y, 0.1f);

@@ -22,7 +22,7 @@ namespace GlobalUtil {
 	//Mainly used in the Game and Sprite class
 	//Direct3D 10
 	extern ID3D10Device* directDevice;
-	extern LPD3DX10SPRITE spriteHandler;
+	extern ID3DX10Sprite* spriteHandler;
 	//REMOVED
 	//extern LPDIRECT3DDEVICE9 directDevice;
 	//extern LPD3DXSPRITE spriteHandler;
@@ -46,7 +46,7 @@ typedef struct RectFloat {
 } RECTF;
 
 //A structure that contains a loaded texture,
-//and a shader resource view that is bound to said texture
+//and a shader resource view that is bound to it
 struct Texture {
 	unsigned int width = 0;
 	unsigned int height = 0;
@@ -56,15 +56,10 @@ struct Texture {
 	D3DXCOLOR colorKey = { 0, 0, 0, 0 };
 
 	//Texture, shader resource view, color key/ color modulate
-	Texture(ID3D10Texture2D* tex, ID3D10ShaderResourceView* rsView, D3DXCOLOR key) {
+	Texture(ID3D10Texture2D* tex, ID3D10ShaderResourceView* srView, D3DXCOLOR key) {
 		texture = tex;
-		resourceView = rsView;
-		colorKey = { 
-			key.r / 255.0f, 
-			key.g / 255.0f, 
-			key.b / 255.0f, 
-			key.a
-		};
+		resourceView = srView;
+		colorKey = key;
 
 		D3D10_TEXTURE2D_DESC desc;
 		texture->GetDesc(&desc);
