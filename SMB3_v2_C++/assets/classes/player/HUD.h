@@ -41,6 +41,7 @@ public:
 	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
 
+	void UpdateHUDPosition(const D3DXVECTOR2&);
 	//Scene time
 	void Update(DWORD, std::vector<GameObject*>* = nullptr) override;
 	void Render() override;

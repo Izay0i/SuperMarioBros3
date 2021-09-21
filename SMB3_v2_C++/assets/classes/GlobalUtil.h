@@ -53,17 +53,22 @@ struct Texture {
 
 	ID3D10Texture2D* texture = nullptr;
 	ID3D10ShaderResourceView* resourceView = nullptr;
-	D3DXCOLOR colorKey = { 0, 0, 0, 0 };
 
-	//Texture, shader resource view, color key/ color modulate
-	Texture(ID3D10Texture2D* tex, ID3D10ShaderResourceView* srView, D3DXCOLOR key) {
+	//Texture, shader resource view
+	Texture(ID3D10Texture2D* tex, ID3D10ShaderResourceView* srView) {
 		texture = tex;
 		resourceView = srView;
-		colorKey = key;
 
 		D3D10_TEXTURE2D_DESC desc;
 		texture->GetDesc(&desc);
 		width = desc.Width;
 		height = desc.Height;
+	}
+
+	//Use this to release resources
+	//Otherwise, release them individually
+	void Release() {
+		texture->Release();
+		resourceView->Release();
 	}
 };

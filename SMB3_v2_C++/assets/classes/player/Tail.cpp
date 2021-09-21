@@ -17,7 +17,7 @@ void Tail::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D
 
 void Tail::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {		
 	_position.x = _player->_position.x - _player->GetBoxWidth();
-	_position.y = _player->_position.y + 22.0f;
+	_position.y = _player->_position.y + 11.0f;
 }
 
 void Tail::Release() {

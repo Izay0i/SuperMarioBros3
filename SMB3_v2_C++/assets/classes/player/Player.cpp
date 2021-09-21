@@ -26,19 +26,21 @@ Player::Player() {
 	_coins = 0;
 	_score = 0;
 
+	_fireballsCount = 0;
+
 	_heldEntity = nullptr;
 	_touchedEntity = nullptr;
 
 	_flyTime = 6000;
 	_inPipeTime = 4000;
 	_attackTime = 300;
+	_fireballCoolDownTime = 2500;
 	_invulnerableTime = 3000;
 
 	_playerState = new IdleState(this);
 	_tail = new Tail(this);
 	
 	_bonusItems.reserve(3);
-	_fireballs.reserve(2);
 }
 
 Player::~Player() {}
@@ -71,6 +73,10 @@ bool Player::IsAttacking() const {
 	return _attackStart != 0;
 }
 
+bool Player::IsOnFireballCoolDown() const {
+	return _fireballCoolDownStart != 0;
+}
+
 bool Player::IsInvulnerable() const {
 	return _invulnerableStart != 0;
 }
@@ -85,6 +91,10 @@ void Player::StartInPipeTimer() {
 
 void Player::StartAttackTimer() {
 	_attackStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::StartFireballCoolDownTimer() {
+	_fireballCoolDownStart = static_cast<DWORD>(GetTickCount64());
 }
 
 void Player::StartInvulnerableTimer() {
@@ -215,11 +225,12 @@ void Player::OnKeyDown(int keyCode) {
 			_isHolding = true;
 			//Fireball attack
 			if (_health == 3 && !_isCrouching) {
-				if (_fireballs.size() < 2) {
-					_fireballs.emplace_back(SpawnFireball());
+				if (_fireballsCount < _FIREBALLS_LIMIT) {
+					SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnFireball());
+					++_fireballsCount;
 
-					for (auto& fireball : _fireballs) {
-						SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(fireball);
+					if (_fireballsCount == _FIREBALLS_LIMIT) {
+						StartFireballCoolDownTimer();
 					}
 				}
 			}
@@ -523,13 +534,6 @@ void Player::Update(
 		_velocity.x = 0.0f;
 	}
 
-	//Remove fireballs
-	for (unsigned int i = 0; i < _fireballs.size(); ++i) {
-		if (_fireballs.at(i)->flaggedForRemoval) {
-			_fireballs.erase(std::remove(_fireballs.begin(), _fireballs.end(), _fireballs.at(i)), _fireballs.end());
-		}
-	}
-
 	//----------------------------------------------------------------------------
 	//TIMERS
 	//----------------------------------------------------------------------------
@@ -544,6 +548,11 @@ void Player::Update(
 	if (IsAttacking() && GetTickCount64() - _attackStart > _attackTime) {
 		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(_tail);
 		_attackStart = 0;
+	}
+
+	if (IsOnFireballCoolDown() && GetTickCount64() - _fireballCoolDownStart > _fireballCoolDownTime) {
+		_fireballsCount = 0;
+		_fireballCoolDownStart = 0;
 	}
 
 	if (IsInvulnerable() && GetTickCount64() - _invulnerableStart > _invulnerableTime) {
@@ -606,8 +615,6 @@ void Player::Render() {
 }
 
 void Player::Release() {
-	_fireballs.clear();
-
 	if (_playerState != nullptr) {
 		_playerState->Release();
 		delete _playerState;

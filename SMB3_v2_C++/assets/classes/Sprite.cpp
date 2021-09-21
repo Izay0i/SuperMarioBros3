@@ -10,7 +10,6 @@ void Sprite::_ScaleSprite(const RECT& spriteBound, D3DXVECTOR2 scale, unsigned i
 	int spriteHeight = spriteBound.bottom - spriteBound.top;
 	_sprite.TexSize.x = spriteWidth / static_cast<float>(_texture->width);
 	_sprite.TexSize.y = spriteHeight / static_cast<float>(_texture->height);
-	//_sprite.ColorModulate = _texture->colorKey;
 	_sprite.ColorModulate = { 1.0f, 1.0f, 1.0f, alpha / 255.0f };
 	_sprite.TextureIndex = 0;
 

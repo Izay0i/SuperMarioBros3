@@ -7,7 +7,7 @@
 [/]
 
 [CAMERABOUNDS]
-8	0	2816	465
+0	-8	2808	465
 1968	464	2479	689
 [/]
 
@@ -28,7 +28,7 @@
 
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
 [ENTITYDATA]
-#Player								OBJ_ID	FILE_PATH				texID
+#Player											OBJ_ID	FILE_PATH				texID
 0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7	888	assets\data\particle\score.txt	6
 #0	assets\data\player\mario.txt	2	1776	368
 
@@ -53,7 +53,7 @@
 #Pirana plant
 104	assets\data\npc\piranaplant.txt	4	1800	400	green
 #Venus plant
-105	assets\data\npc\venusplant.txt	4	360	375	red	108	assets\data\projectile\fireball.txt	7
+105	assets\data\npc\venusplant.txt	4	360	384	red	108	assets\data\projectile\fireball.txt	7
 105	assets\data\npc\venusplant.txt	4	1864	384	green	108	assets\data\projectile\fireball.txt	7
 
 #Portal								#destination
@@ -100,7 +100,7 @@
 205	assets\data\item\coin.txt	5	2208	584
 
 #Bonus item
-206	assets\data\item\bonusitem.txt	5	2688	337
+206	assets\data\item\bonusitem.txt	5	2683	331
 
 #Animated block
 #Question block

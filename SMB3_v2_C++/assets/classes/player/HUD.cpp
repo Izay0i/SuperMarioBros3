@@ -1,5 +1,4 @@
 #include "../Game.h"
-#include "../Camera.h"
 #include "HUD.h"
 
 Texture* HUD::_hudTexture = nullptr;
@@ -169,6 +168,11 @@ void HUD::HandleStates() {}
 
 void HUD::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
+void HUD::UpdateHUDPosition(const D3DXVECTOR2& position) {
+	_position.x = position.x + 132.0f;
+	_position.y = position.y + 161.0f;
+}
+
 void HUD::Update(DWORD sceneTime, std::vector<GameObject*>*) {
 	_ParseLives();
 	_ParseCoins();
@@ -177,68 +181,63 @@ void HUD::Update(DWORD sceneTime, std::vector<GameObject*>*) {
 	_ParseScore();
 	_ParseTimeLeft(sceneTime);
 	_ParseSceneEnd();
-
-	D3DXVECTOR2 hudPosition;
-	hudPosition.x = Camera::GetInstance()->GetPosition().x;
-	//hudPosition.y = Camera::GetInstance()->GetPosition().y + 154.0f;
-	_position = hudPosition;
 }
 
 void HUD::Render() {
-	_animatedSprite.PlaySpriteAnimation("BlackBG", _position);
+	_animatedSprite.PlaySpriteAnimation("BlackBG", { _position.x, _position.y + 50.0f });
 	_animatedSprite.PlaySpriteAnimation("Panel", _position);
 
 	//Lives
 	for (unsigned int i = 0; i < _lives.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_lives.at(i), D3DXVECTOR2(
-			_position.x + 30.0f + (8.0f * i),
-			_position.y + 16.0f
+			_position.x - 98.0f + (8.0f * i),
+			_position.y + 5.0f
 		));
 	}
 
 	//Coins
 	for (unsigned int i = 0; i < _coins.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_coins.at(i), D3DXVECTOR2(
-			_position.x + 134.0f + (8.0f * i),
-			_position.y + 8.0f
+			_position.x + 6.0f + (8.0f * i),
+			_position.y - 3.0f
 		));
 	}
 
 	//Items
 	for (unsigned int i = 0; i < _items.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_items.at(i), D3DXVECTOR2(
-			_position.x + 162.0f + (24.0f * i),
-			_position.y + 1.0f
+			_position.x + 42.0f + (24.0f * i),
+			_position.y + 0.0f
 		));
 	}
 
 	//Speed gauge
 	for (unsigned int i = 0; i < _speedGauge.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_speedGauge.at(i), D3DXVECTOR2(
-			_position.x + 54.0f + (8.0f * i),
-			_position.y + 8.0f
+			_position.x - 74.0f + (8.0f * i),
+			_position.y - 3.0f
 		));
 	}
 
 	//Score
 	for (unsigned int i = 0; i < _score.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_score.at(i), D3DXVECTOR2(
-			_position.x + 54.0f + (8.0f * i),
-			_position.y + 16.0f
+			_position.x - 74.0f + (8.0f * i),
+			_position.y + 5.0f
 		));
 	}
 
 	//Time left
 	for (unsigned int i = 0; i < _timeLeft.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_timeLeft.at(i), D3DXVECTOR2(
-			_position.x + 126.0f + (8.0f * i),
-			_position.y + 16.0f
+			_position.x - 2.0f + (8.0f * i),
+			_position.y + 5.0f
 		));
 	}
 
 	if (_player->_triggeredStageEnd) {
-		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x + 60.0f, _position.y - 170.0f));
-		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 183.0f, _position.y - 154.0f));
+		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x - 10.0f, _position.y - 120.0f));
+		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 51.0f, _position.y - 112.0f));
 	}
 }
 

@@ -29,10 +29,10 @@ GameObject::GameObjectType GameObject::GetObjectType() const
 
 RECTF GameObject::GetBoundingBox(int index) const {
 	RECTF bound;
-	bound.left = _position.x;
-	bound.top = _position.y;
-	bound.right = _position.x + _hitbox.GetBoxWidth(index);
-	bound.bottom = _position.y + _hitbox.GetBoxHeight(index);
+	bound.left = _position.x + _hitbox.GetBoxOffsetX(index);
+	bound.top = _position.y + _hitbox.GetBoxOffsetY(index);
+	bound.right = bound.left + _hitbox.GetBoxWidth(index);
+	bound.bottom = bound.top + _hitbox.GetBoxHeight(index);
 	return bound;
 }
 

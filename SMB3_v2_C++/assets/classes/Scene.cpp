@@ -41,7 +41,7 @@ bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
 }
 
 //Direct3D 10
-Texture* Scene::_LoadTexture(LPCWSTR filePath, D3DXCOLOR colorKey) {
+Texture* Scene::_LoadTexture(LPCWSTR filePath) {
 	ID3D10Resource* resource = nullptr;
 	ID3D10Texture2D* texture = nullptr;
 
@@ -79,7 +79,7 @@ Texture* Scene::_LoadTexture(LPCWSTR filePath, D3DXCOLOR colorKey) {
 	ID3D10ShaderResourceView* spriteTextureSRView = nullptr;
 	GlobalUtil::directDevice->CreateShaderResourceView(texture, &resourceViewDesc, &spriteTextureSRView);
 
-	return new Texture(texture, spriteTextureSRView, colorKey);
+	return new Texture(texture, spriteTextureSRView);
 }
 //CHANGED
 //LPDIRECT3DTEXTURE9 Scene::_LoadTexture(LPDIRECT3DTEXTURE9 texture, LPCWSTR filePath, D3DCOLOR colorKey) {
@@ -187,7 +187,7 @@ void Scene::_ParseTextures(std::string line) {
 	float b = std::stof(tokens.at(4)) / 255.0f;
 	
 	//Direct3D 10
-	Texture* texture = _LoadTexture(GlobalUtil::ToLPCWSTR(tokens.at(1)), D3DXCOLOR(r, g, b, 1.0f));
+	Texture* texture = _LoadTexture(GlobalUtil::ToLPCWSTR(tokens.at(1)));
 	//CHANGED
 	//LPDIRECT3DTEXTURE9 texture = _LoadTexture(nullptr, GlobalUtil::ToLPCWSTR(tokens.at(1)), D3DCOLOR_XRGB(r, g, b));
 	//END
@@ -262,7 +262,7 @@ void Scene::_ParseEntityData(std::string line) {
 			//entity = new MovingPlatform;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
-			entity = new Coin;
+			//entity = new Coin;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
 			entity = new BonusItem;
@@ -310,8 +310,8 @@ void Scene::_ParseTileData(std::string line) {
 	D3DXVECTOR2 position = D3DXVECTOR2(x, y);
 
 	RECTF hitbox;
-	hitbox.left = 0;
-	hitbox.top = 0;
+	hitbox.left = -8.0f;
+	hitbox.top = -8.0f;
 	hitbox.right = std::stof(tokens.at(3));
 	hitbox.bottom = std::stof(tokens.at(4));
 	
@@ -735,6 +735,7 @@ void Scene::Update(DWORD deltaTime) {
 	UpdateCameraPosition();
 	if (_hud != nullptr) {
 		_hud->Update(_sceneTime);
+		_hud->UpdateHUDPosition(_cameraInstance->GetPosition());
 	}
 }
 
@@ -757,30 +758,20 @@ void Scene::Release() {
 	sprintf_s(debug, "[SCENE] Unloading scene with ID: %d\n", _sceneID);
 	OutputDebugStringA(debug);
 
-	if (_hud != nullptr) {
-		_hud->Release();
-		delete _hud;
-	}
-
 	if (_background != nullptr) {
 		_background->Release();
 		delete _background;
+	}
+
+	if (_hud != nullptr) {
+		_hud->Release();
+		delete _hud;
 	}
 
 	if (_grid != nullptr) {
 		_grid->Release();
 		delete _grid;
 	}
-
-	if (_cameraInstance != nullptr) {
-		_cameraInstance->Release();
-	}
-	
-	for (unsigned int i = 0; i < _entities.size(); ++i) {
-		_entities.at(i)->Release();
-		delete _entities.at(i);
-	}
-	_entities.clear();
 	
 	for (auto& tile : _tiles) {
 		tile->Release();
@@ -788,12 +779,28 @@ void Scene::Release() {
 	}
 	_tiles.clear();
 
+	for (unsigned int i = 0; i < _entities.size(); ++i) {
+		//These entities belong to the player, so they have a responsibility to release their resources
+		if (_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL ||
+			_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_PARTICLE)
+		{
+			continue;
+		}
+
+		_entities.at(i)->Release();
+		delete _entities.at(i);
+	}
+	_entities.clear();
+
 	for (auto& texture : _textureMap) {
-		texture.second->texture->Release();
-		texture.second->resourceView->Release();
+		texture.second->Release();
 		delete texture.second;
 	}
 	_textureMap.clear();
+
+	if (_cameraInstance != nullptr) {
+		_cameraInstance->Release();
+	}
 
 	sprintf_s(debug, "[SCENE] Unloaded scene with ID: %d\n", _sceneID);
 	OutputDebugStringA(debug);

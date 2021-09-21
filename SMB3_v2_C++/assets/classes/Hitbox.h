@@ -10,6 +10,8 @@ private:
 
 public:
 	RECTF GetBoundingBox(int = 0) const;
+	float GetBoxOffsetX(int = 0) const;
+	float GetBoxOffsetY(int = 0) const;
 	float GetBoxWidth(int = 0) const;
 	float GetBoxHeight(int = 0) const;
 

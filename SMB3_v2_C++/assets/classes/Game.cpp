@@ -212,6 +212,193 @@ void Game::_CreateContentWindow(HINSTANCE hInstance) {
 	}
 }
 
+bool Game::_CreateDeviceAndSwapChain() {
+	//Creates and clears the DXGI_SWAP_CHAIN_DESC structure
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
+	swapChainDesc.BufferCount = 1;
+	swapChainDesc.BufferDesc.Width = _backBufferWidth;
+	swapChainDesc.BufferDesc.Height = _backBufferHeight;
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = _FRAME_RATE;
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.OutputWindow = _contentHWND;
+	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Quality = 0;
+	swapChainDesc.Windowed = true;
+
+	HRESULT hResult = D3D10CreateDeviceAndSwapChain(
+		nullptr,
+		D3D10_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		0,
+		D3D10_SDK_VERSION,
+		&swapChainDesc,
+		&_swapChain,
+		&GlobalUtil::directDevice
+	);
+
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to create device and swap chain in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+
+	return true;
+}
+
+bool Game::_CreateRenderTargetView() {
+	//Gets the back buffer from the swap chain
+	ID3D10Texture2D* backBuffer;
+	HRESULT hResult = _swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), reinterpret_cast<LPVOID*>(&backBuffer));
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to get the back buffer in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+
+	//Creates the render target view
+	hResult = GlobalUtil::directDevice->CreateRenderTargetView(backBuffer, nullptr, &_renderTargetView);
+	backBuffer->Release();
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to create render target view in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+	//Sets the render target;
+	GlobalUtil::directDevice->OMSetRenderTargets(1, &_renderTargetView, nullptr);
+
+	return true;
+}
+
+bool Game::_CreateViewport() {
+	//Creates and sets the viewport
+	D3D10_VIEWPORT viewPort;
+	viewPort.Width = _backBufferWidth;
+	viewPort.Height = _backBufferHeight;
+	viewPort.MinDepth = 0.0f;
+	viewPort.MaxDepth = 1.0f;
+	viewPort.TopLeftX = 0;
+	viewPort.TopLeftY = 0;
+	GlobalUtil::directDevice->RSSetViewports(1, &viewPort);
+
+	//Creates the sprite handler;
+	HRESULT hResult = D3DX10CreateSprite(GlobalUtil::directDevice, 0, &GlobalUtil::spriteHandler);
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to create sprite handler", "Error", MB_ICONERROR);
+		return false;
+	}
+
+	//Creates the projection matrix using the values in the viewport
+	D3DXMATRIX projectionMatrix;
+	D3DXMatrixOrthoOffCenterLH(
+		&projectionMatrix,
+		static_cast<float>(viewPort.TopLeftX),
+		static_cast<float>(viewPort.Width),
+		static_cast<float>(viewPort.TopLeftY),
+		static_cast<float>(viewPort.Height),
+		0.1f,
+		10.0f
+	);
+	hResult = GlobalUtil::spriteHandler->SetProjectionTransform(&projectionMatrix);
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to create the projection matrix in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+
+	return true;
+}
+
+bool Game::_CreateRasterizerState() {
+	D3D10_RASTERIZER_DESC rasterizerDesc;
+	ZeroMemory(&rasterizerDesc, sizeof(D3D10_RASTERIZER_DESC));
+	rasterizerDesc.FillMode = D3D10_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D10_CULL_NONE;
+	rasterizerDesc.DepthClipEnable = true;
+
+	HRESULT hResult = GlobalUtil::directDevice->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to create rasterizer state in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+	GlobalUtil::directDevice->RSSetState(_rasterizerState);
+
+	return true;
+}
+
+bool Game::_CreateBlendState() {
+	//Initializes the blend state for alpha drawing
+	D3D10_BLEND_DESC blendDesc;
+	ZeroMemory(&blendDesc, sizeof(D3D10_BLEND_DESC));
+	blendDesc.AlphaToCoverageEnable = false;
+	blendDesc.BlendEnable[0] = true;
+	blendDesc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
+	blendDesc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
+	blendDesc.BlendOp = D3D10_BLEND_OP_ADD;
+	blendDesc.SrcBlendAlpha = D3D10_BLEND_ONE;
+	blendDesc.DestBlendAlpha = D3D10_BLEND_ZERO;
+	blendDesc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
+	blendDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
+
+	HRESULT hResult = GlobalUtil::directDevice->CreateBlendState(&blendDesc, &_blendState);
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to create blend state in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+
+	return true;
+}
+
+bool Game::_CreateSamplerState() {
+	D3D10_SAMPLER_DESC samplerDesc;
+	samplerDesc.Filter = D3D10_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+	samplerDesc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D10_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D10_COMPARISON_NEVER;
+	samplerDesc.MinLOD = -FLT_MAX;
+	samplerDesc.MaxLOD = FLT_MAX;
+
+	HRESULT hResult = GlobalUtil::directDevice->CreateSamplerState(&samplerDesc, &_samplerState);
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to create sampler state in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+	
+	return true;
+}
+
+bool Game::_CreatePixelShader(std::string path, std::string fileName) {
+	ID3D10Blob* blob = nullptr;
+
+	HRESULT hResult = D3D10CompileShader(
+		path.c_str(), 
+		strlen(path.c_str()), 
+		fileName.c_str(), 
+		nullptr, 
+		nullptr, 
+		"ColorPixelShader", 
+		"ps_4_0", 
+		D3D10_SHADER_ENABLE_STRICTNESS, 
+		&blob, 
+		nullptr
+	);
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to compile pixel shader in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+
+	hResult = GlobalUtil::directDevice->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), &_pixelShader);
+	blob->Release();
+	if (hResult != S_OK) {
+		MessageBoxA(_hWND, "Failed to create pixel shader in Game class", "Error", MB_ICONERROR);
+		return false;
+	}
+	GlobalUtil::directDevice->PSSetShader(_pixelShader);
+
+	return true;
+}
+
 void Game::_ParseSettings(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
@@ -232,13 +419,14 @@ void Game::_Update(DWORD deltaTime) {
 }
 
 void Game::_Render() {
-	//Direct3D 10	
+	//Direct3D 10
 	GlobalUtil::directDevice->ClearRenderTargetView(_renderTargetView, _managerInstance->GetCurrentScene()->GetBGColor());
 	GlobalUtil::spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
+
 	//RGBA
 	float newBlendFactor[4] = { 0 };
 	GlobalUtil::directDevice->OMSetBlendState(_blendState, newBlendFactor, 0xffffffff);
-	
+
 	_managerInstance->GetCurrentScene()->Render();
 	
 	GlobalUtil::spriteHandler->End();
@@ -273,12 +461,8 @@ Game::~Game() {
 		_managerInstance->Release();
 	}
 
-	if (_swapChain != nullptr) {
-		_swapChain->Release();
-	}
-
-	if (_renderTargetView != nullptr) {
-		_renderTargetView->Release();
+	if (_samplerState != nullptr) {
+		_samplerState->Release();
 	}
 
 	if (_blendState != nullptr) {
@@ -287,6 +471,14 @@ Game::~Game() {
 
 	if (_rasterizerState != nullptr) {
 		_rasterizerState->Release();
+	}
+
+	if (_renderTargetView != nullptr) {
+		_renderTargetView->Release();
+	}
+
+	if (_swapChain != nullptr) {
+		_swapChain->Release();
 	}
 
 	if (GlobalUtil::spriteHandler != nullptr) {
@@ -375,8 +567,7 @@ HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int he
 	return _hWND;
 }
 
-bool Game::InitGame(HWND hWND)
-{
+bool Game::InitGame(HWND hWND) {
 	//Direct3D 10
 	//REMOVED
 	//_direct3D = Direct3DCreate9(D3D_SDK_VERSION);
@@ -421,112 +612,17 @@ bool Game::InitGame(HWND hWND)
 	RECT window;
 	GetClientRect(hWND, &window);
 
-	_backBufferWidth = window.right;
+	_backBufferWidth = window.right + 1;
 	_backBufferHeight = window.bottom + 1;
 
 	_windowWidth = window.right + 1;
 	_windowHeight = window.bottom + 1;
 
-	//Creates and clears the DXGI_SWAP_CHAIN_DESC structure
-	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-	swapChainDesc.BufferCount = 1;
-	swapChainDesc.BufferDesc.Width = _backBufferWidth;
-	swapChainDesc.BufferDesc.Height = _backBufferHeight;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = _FRAME_RATE;
-	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.OutputWindow = _contentHWND;
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
-	swapChainDesc.Windowed = true;
-
-	HRESULT hResult = D3D10CreateDeviceAndSwapChain(
-		nullptr, 
-		D3D10_DRIVER_TYPE_HARDWARE, 
-		nullptr, 
-		0, 
-		D3D10_SDK_VERSION, 
-		&swapChainDesc, 
-		&_swapChain, 
-		&GlobalUtil::directDevice
-	);
-
-	if (hResult != S_OK) {
-		MessageBoxA(hWND, "Failed to create device and swap chain in Game class", "Error", MB_ICONERROR);
+	if (!_CreateDeviceAndSwapChain()) {
 		return false;
 	}
 
-	//Gets the back buffer from the swap chain
-	ID3D10Texture2D* backBuffer;
-	hResult = _swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), reinterpret_cast<LPVOID*>(&backBuffer));
-	if (hResult != S_OK) {
-		MessageBoxA(hWND, "Failed to get the back buffer in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	//Creates the render target view
-	hResult = GlobalUtil::directDevice->CreateRenderTargetView(backBuffer, nullptr, &_renderTargetView);
-	backBuffer->Release();
-	if (hResult != S_OK) {
-		MessageBoxA(hWND, "Failed to create render target view in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	//Sets the render target;
-	GlobalUtil::directDevice->OMSetRenderTargets(1, &_renderTargetView, nullptr);
-
-	//Creates and sets the viewport
-	D3D10_VIEWPORT viewPort;
-	viewPort.Width = _backBufferWidth;
-	viewPort.Height = _backBufferHeight;
-	viewPort.MinDepth = 0.0f;
-	viewPort.MaxDepth = 1.0f;
-	viewPort.TopLeftX = 0;
-	viewPort.TopLeftY = 0;
-	GlobalUtil::directDevice->RSSetViewports(1, &viewPort);
-
-	//Creates the sprite handler;
-	hResult = D3DX10CreateSprite(GlobalUtil::directDevice, 0, &GlobalUtil::spriteHandler);
-	if (hResult != S_OK) {
-		MessageBoxA(hWND, "Failed to create sprite handler", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	//Creates the projection matrix using the values in the viewport
-	D3DXMATRIX projectionMatrix;
-	D3DXMatrixOrthoOffCenterLH(
-		&projectionMatrix, 
-		static_cast<float>(viewPort.TopLeftX), 
-		static_cast<float>(viewPort.Width), 
-		static_cast<float>(viewPort.TopLeftY), 
-		static_cast<float>(viewPort.Height), 
-		0.1f, 
-		10.0f
-	);
-	hResult = GlobalUtil::spriteHandler->SetProjectionTransform(&projectionMatrix);
-	if (hResult != S_OK) {
-		MessageBoxA(hWND, "Failed to create the projection matrix in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	//Initializes the blend state for alpha drawing
-	D3D10_BLEND_DESC blendDesc;
-	ZeroMemory(&blendDesc, sizeof(D3D10_BLEND_DESC));
-	blendDesc.AlphaToCoverageEnable = false;
-	blendDesc.BlendEnable[0] = true;
-	blendDesc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
-	blendDesc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
-	blendDesc.BlendOp = D3D10_BLEND_OP_ADD;
-	blendDesc.SrcBlendAlpha = D3D10_BLEND_ZERO;
-	blendDesc.DestBlendAlpha = D3D10_BLEND_ZERO;
-	blendDesc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
-	blendDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
-	
-	hResult = GlobalUtil::directDevice->CreateBlendState(&blendDesc, &_blendState);
-	if (hResult != S_OK) {
-		MessageBoxA(hWND, "Failed to create blend state in Game class", "Error", MB_ICONERROR);
+	if (!_CreateRenderTargetView()) {
 		return false;
 	}
 
@@ -534,19 +630,25 @@ bool Game::InitGame(HWND hWND)
 	//If you want to flip sprites
 	//Create a rasterizer state and disable culling
 	//Source: https://gamedev.net/forums/topic/541543-cull-disable-dx10/4493656/
-	D3D10_RASTERIZER_DESC rasterizerDesc;
-	ZeroMemory(&rasterizerDesc, sizeof(D3D10_RASTERIZER_DESC));
-	rasterizerDesc.FillMode = D3D10_FILL_SOLID;
-	rasterizerDesc.CullMode = D3D10_CULL_NONE;
-	rasterizerDesc.DepthClipEnable = true;
-	
-	hResult = GlobalUtil::directDevice->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
-	if (hResult != S_OK) {
-		MessageBoxA(hWND, "Failed to create rasterizer state in Game class", "Error", MB_ICONERROR);
+	if (!_CreateRasterizerState()) {
 		return false;
 	}
-	GlobalUtil::directDevice->RSSetState(_rasterizerState);
-	//
+
+	if (!_CreateViewport()) {
+		return false;
+	}
+
+	if (!_CreateBlendState()) {
+		return false;
+	}
+
+	if (!_CreateSamplerState()) {
+		return false;
+	}
+
+	/*if (!_CreatePixelShader("assets/shaders/pixelshader.hlsl", "pixelshader")) {
+		return false;
+	}*/
 
 	return true;
 }

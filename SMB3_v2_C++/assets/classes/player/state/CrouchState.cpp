@@ -34,7 +34,7 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("BigFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("BigCrouch", { _player->_position.x, _player->_position.y - 16.0f }, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigCrouch", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale);
 			}
 			break;
 		case _Form::FIRE:
@@ -42,7 +42,7 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("FireFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("FireCrouch", { _player->_position.x, _player->_position.y - 16.0f }, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireCrouch", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale);
 			}
 			break;
 		case _Form::RACCOON:
@@ -50,7 +50,7 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("RacCrouch", { _player->_position.x, _player->_position.y - 16.0f }, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacCrouch", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale);
 			}
 			break;
 	}

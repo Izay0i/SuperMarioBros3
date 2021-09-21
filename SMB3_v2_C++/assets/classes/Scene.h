@@ -73,7 +73,7 @@ private:
 
 	//Load textures and pass them to the game objects in the scene
 	//Direct3D 10
-	Texture* _LoadTexture(LPCWSTR, D3DXCOLOR);
+	Texture* _LoadTexture(LPCWSTR);
 	//CHANGED
 	//LPDIRECT3DTEXTURE9 _LoadTexture(LPDIRECT3DTEXTURE9, LPCWSTR, D3DCOLOR);
 	//END
@@ -119,5 +119,8 @@ public:
 	void Update(DWORD);
 	void Render();
 
+	//Knowing how to prevent a memory leak is just the basics
+	//Knowing how to keep the heap from looking like swiss cheese is the hard part
+	//And I don't know how to do either of those
 	void Release();
 };

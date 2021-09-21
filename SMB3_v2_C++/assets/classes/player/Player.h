@@ -28,6 +28,8 @@ private:
 	const unsigned int _MAX_COINS = 99;
 	const unsigned int _MAX_SCORE = 9999999;
 
+	const unsigned int _FIREBALLS_LIMIT = 2;
+
 	//Used only when the player is in the map scene
 	const float _MAX_TRAVEL_DISTANCE = 31.0f;
 	const float _MAX_GRAVITY = 0.0005f;
@@ -38,6 +40,10 @@ private:
 	unsigned int _lives;
 	unsigned int _coins;
 	unsigned int _score;
+
+	//How many fireballs the player can throw in a given time
+	//Default is 2
+	unsigned int _fireballsCount;
 
 	bool _triggeredStageEnd;
 	bool _wentIntoPipe;
@@ -55,7 +61,6 @@ private:
 	Tail* _tail;
 
 	std::vector<GameObject::GameObjectType> _bonusItems;
-	std::vector<Fireball*> _fireballs;
 
 	DWORD _flyStart;
 	DWORD _flyTime;
@@ -63,8 +68,13 @@ private:
 	DWORD _inPipeStart;
 	DWORD _inPipeTime;
 
+	//Tail attack
 	DWORD _attackStart;
 	DWORD _attackTime;
+
+	//Fireball attack cooldown
+	DWORD _fireballCoolDownStart;
+	DWORD _fireballCoolDownTime;
 
 	DWORD _invulnerableStart;
 	DWORD _invulnerableTime;
@@ -83,11 +93,13 @@ public:
 	bool IsFlying() const;
 	bool IsInPipe() const;
 	bool IsAttacking() const;
+	bool IsOnFireballCoolDown() const;
 	bool IsInvulnerable() const;
 
 	void StartFlyTimer();
 	void StartInPipeTimer();
 	void StartAttackTimer();
+	void StartFireballCoolDownTimer();
 	void StartInvulnerableTimer();
 
 	void HandleStates() override;

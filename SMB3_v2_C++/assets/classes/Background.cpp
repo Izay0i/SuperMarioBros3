@@ -13,7 +13,6 @@ void Background::_ScaleSprite(const RECT& spriteBound) {
 	int spriteHeight = spriteBound.bottom - spriteBound.top;
 	_sprite.TexSize.x = spriteWidth / static_cast<float>(_backgroundTexture->width);
 	_sprite.TexSize.y = spriteHeight / static_cast<float>(_backgroundTexture->height);
-	//_sprite.ColorModulate = _backgroundTexture->colorKey;
 	_sprite.ColorModulate = { 1.0f, 1.0f, 1.0f, 1.0f };
 	_sprite.TextureIndex = 0;
 
@@ -46,7 +45,7 @@ void Background::Render() {
 		D3DXMATRIX translationMatrix;
 		D3DXMatrixTranslation(&translationMatrix, spritePosition.x, spritePosition.y, 0.1f);
 		_sprite.matWorld = _scaleMatrix * translationMatrix;
-		
+
 		GlobalUtil::spriteHandler->DrawSpritesImmediate(&_sprite, 1, 0, 0);
 	}
 

@@ -4,6 +4,14 @@ RECTF Hitbox::GetBoundingBox(int index) const {
 	return _hitboxes.at(index);
 }
 
+float Hitbox::GetBoxOffsetX(int index) const {
+	return GetBoundingBox(index).left;
+}
+
+float Hitbox::GetBoxOffsetY(int index) const {
+	return GetBoundingBox(index).top;
+}
+
 float Hitbox::GetBoxWidth(int index) const {
 	return GetBoundingBox(index).right;
 }
