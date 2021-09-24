@@ -16,7 +16,7 @@ private:
 	DWORD _aliveStart;
 	DWORD _aliveTime;
 
-	void _ParseSprites(std::string);
+	void _ParseSprites(std::string) override;
 
 public:
 	Fireball();

@@ -45,10 +45,33 @@ Texture* Scene::_LoadTexture(LPCWSTR filePath) {
 	ID3D10Resource* resource = nullptr;
 	ID3D10Texture2D* texture = nullptr;
 
-	HRESULT hResult = D3DX10CreateTextureFromFile(
+	D3DX10_IMAGE_INFO imageInfo;
+	HRESULT hResult = D3DX10GetImageInfoFromFile(filePath, nullptr, &imageInfo, nullptr);
+	if (FAILED(hResult)) {
+		OutputDebugStringA("[SCENE] Failed to get image info from file\n");
+		return nullptr;
+	}
+
+	D3DX10_IMAGE_LOAD_INFO loadInfo;
+	ZeroMemory(&loadInfo, sizeof(D3DX10_IMAGE_LOAD_INFO));
+	loadInfo.Width = imageInfo.Width;
+	loadInfo.Height = imageInfo.Height;
+	loadInfo.Depth = imageInfo.Depth;
+	loadInfo.FirstMipLevel = 0;
+	loadInfo.MipLevels = 1;
+	loadInfo.Usage = D3D10_USAGE_DEFAULT;
+	loadInfo.BindFlags = D3DX10_DEFAULT;
+	loadInfo.CpuAccessFlags = D3DX10_DEFAULT;
+	loadInfo.MiscFlags = D3DX10_DEFAULT;
+	loadInfo.Format = imageInfo.Format;
+	loadInfo.Filter = D3DX10_FILTER_NONE;
+	loadInfo.MipFilter = D3DX10_DEFAULT;
+	loadInfo.pSrcInfo = &imageInfo;
+
+	hResult = D3DX10CreateTextureFromFile(
 		GlobalUtil::directDevice, 
 		filePath, 
-		nullptr, 
+		&loadInfo, 
 		nullptr, 
 		&resource, 
 		nullptr
@@ -247,16 +270,16 @@ void Scene::_ParseEntityData(std::string line) {
 			//entity = new Parakoopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
-			entity = new PiranaPlant;
+			//entity = new PiranaPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
-			entity = new VenusPlant;
+			//entity = new VenusPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
 			//entity = new BoomerBro;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PORTAL:
-			//entity = new Portal;
+			entity = new Portal;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
 			//entity = new MovingPlatform;
@@ -268,13 +291,13 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new BonusItem;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
-			//entity = new QuestionBlock;
+			entity = new QuestionBlock;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
-			//entity = new ShinyBrick;
+			entity = new ShinyBrick;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
-			//entity = new PBlock;
+			entity = new PBlock;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_CACTUS:
 			//entity = new Cactus;
@@ -445,6 +468,10 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
 			entity = new Coin;
+			break;
+		//Animated blocks
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
+			entity = new PBlock;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARTICLE:
 			//entity = new Particle;
@@ -686,7 +713,12 @@ void Scene::Update(DWORD deltaTime) {
 							}
 							break;
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
-
+							{
+								QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(entity);
+								if (questionBlock->tookDamage) {
+									AddEntityToScene(questionBlock->SpawnItem(_mario->GetHealth()));
+								}
+							}
 							break;
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 

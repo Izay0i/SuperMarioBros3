@@ -160,5 +160,6 @@ void BoomerBro::Render() {
 }
 
 void BoomerBro::Release() {
+	_animatedSprite.Release();
 	_boomerTexture = nullptr;
 }

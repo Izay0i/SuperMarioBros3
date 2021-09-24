@@ -121,5 +121,6 @@ void Goomba::Render() {
 }
 
 void Goomba::Release() {
+	_animatedSprite.Release();
 	_goombaTexture = nullptr;
 }

@@ -479,7 +479,11 @@ void Player::HandleCollisionResult(
 
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
+			_health = 4;
+			eventEntity->TakeDamage();
 
+			minTime = { 1.0f, 1.0f };
+			offset = normal = { 0, 0 };
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			{
@@ -515,6 +519,27 @@ void Player::HandleCollisionResult(
 			break;
 	//----------------------------------------------------------------------------
 	//Items
+	//----------------------------------------------------------------------------
+
+	//----------------------------------------------------------------------------
+	//Animated blocks
+	//----------------------------------------------------------------------------
+			case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+				{
+					QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(eventEntity);
+					if (eventNormal.y == 1.0f) {
+						questionBlock->TakeDamage();
+					}
+				}
+				break;
+			case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+
+				break;
+			case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
+
+				break;
+	//----------------------------------------------------------------------------
+	//Animated blocks
 	//----------------------------------------------------------------------------
 	}
 }

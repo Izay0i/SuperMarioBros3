@@ -69,5 +69,6 @@ void Leaf::Render() {
 }
 
 void Leaf::Release() {
+	_animatedSprite.Release();
 	_leafTexture = nullptr;
 }

@@ -161,5 +161,6 @@ void PiranaPlant::Render() {
 }
 
 void PiranaPlant::Release() {
+	_animatedSprite.Release();
 	_piranaTexture = nullptr;
 }

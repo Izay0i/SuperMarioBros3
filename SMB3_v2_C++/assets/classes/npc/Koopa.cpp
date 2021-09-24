@@ -209,5 +209,6 @@ void Koopa::Render() {
 }
 
 void Koopa::Release() {
+	_animatedSprite.Release();
 	_koopaTexture = nullptr;
 }

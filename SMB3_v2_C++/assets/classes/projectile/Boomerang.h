@@ -6,7 +6,7 @@ private:
 
 	D3DXVECTOR2 _originalPos;
 
-	void _ParseSprites(std::string);
+	void _ParseSprites(std::string) override;
 
 public:
 	Boomerang();

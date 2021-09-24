@@ -15,3 +15,8 @@
 #include "item/Leaf.h"
 #include "item/Coin.h"
 #include "item/BonusItem.h"
+
+#include "block/Portal.h"
+#include "block/QuestionBlock.h"
+#include "block/ShinyBrick.h"
+#include "block/PBlock.h"

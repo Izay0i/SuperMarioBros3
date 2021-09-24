@@ -1,1 +1,114 @@
+#include "../Entity.h"
+#include "../item/Coin.h"
+#include "ShinyBrick.h"
 #include "PBlock.h"
+
+Texture* PBlock::_pBlockTexture = nullptr;
+
+void PBlock::_ParseSprites(std::string line) {
+	_animatedSprite.ParseSprites(line, _pBlockTexture);
+}
+
+PBlock::PBlock() {
+	_renderPriority = 3;
+	_health = 2;
+	_activateTime = 5000;
+}
+
+PBlock::~PBlock() {}
+
+bool PBlock::IsActivated() const {
+	return _activateStart != 0;
+}
+
+void PBlock::StartActivationTimer() {
+	_activateStart = static_cast<DWORD>(GetTickCount64());
+}
+
+RECTF PBlock::GetBoundingBox(int) const {
+	return _health <= 1 ? RECTF() : GameObject::GetBoundingBox();
+}
+
+void PBlock::ParseData(
+	std::string dataPath, 
+	Texture*& texture, 
+	std::vector<std::string> extraData) 
+{
+	if (_pBlockTexture == nullptr) {
+		_pBlockTexture = texture;
+	}
+	Entity::ParseData(dataPath, texture, extraData);
+}
+
+void PBlock::TakeDamage() {
+	if (_health > 1) {
+		--_health;
+		StartActivationTimer();
+
+		tookDamage = true;
+	}
+}
+
+void PBlock::HandleStates() {
+	_state = static_cast<_State>(_health);
+}
+
+void PBlock::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
+
+void PBlock::Update(
+	DWORD deltaTime, 
+	std::vector<Entity*>* collidableEntities, 
+	std::vector<Entity*>* collidableTiles, 
+	Grid* grid) 
+{
+	HandleStates();
+
+	if (IsActivated() && GetTickCount64() - _activateStart > _activateTime) {
+		_activateStart = 0;
+	}
+	
+	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
+		if (collidableEntities->at(i)->GetHealth() <= 0) {
+			continue;
+		}
+		
+		switch (collidableEntities->at(i)->GetObjectType()) {
+			case GameObjectType::GAMEOBJECT_TYPE_COIN:
+				{
+					Coin* coin = dynamic_cast<Coin*>(collidableEntities->at(i));
+					coin->SetHealth(IsActivated() ? 3 : 1);
+				}
+				break;
+			case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+				{
+					ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(collidableEntities->at(i));
+					/*
+					if (shinyBrick->GetExtraDataSize() == 0) {
+						shinyBrick->SetHealth(IsActivated() ? 3 : 2);
+					}
+					*/
+				}
+				break;
+		}
+	}
+}
+
+void PBlock::Render() {
+	if (!_isActive) {
+		return;
+	}
+
+	switch (_state) {
+		case _State::ACTIVE:
+			_animatedSprite.PlaySpriteAnimation("PBlock", _position);
+			break;
+		case _State::INACTIVE:
+			_animatedSprite.PlaySpriteAnimation("Blank", _position);
+			break;
+	}
+}
+
+void PBlock::Release() {
+	_animatedSprite.Release();
+	_pBlockTexture = nullptr;
+}

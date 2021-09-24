@@ -53,10 +53,6 @@ void Coin::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities, std
 		_health = -1;
 		_removeStart = 0;
 	}
-
-	if (!_isActive && _objectType >= GameObjectType::GAMEOBJECT_TYPE_GOOMBA) {
-		return;
-	}
 	
 	HandleStates();
 	if (_state == _State::PUSHEDFROMBLOCK) {
@@ -81,5 +77,6 @@ void Coin::Render() {
 }
 
 void Coin::Release() {
+	_animatedSprite.Release();
 	_coinTexture = nullptr;
 }

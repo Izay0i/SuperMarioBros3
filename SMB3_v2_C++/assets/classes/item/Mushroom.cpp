@@ -118,5 +118,6 @@ void Mushroom::Render() {
 }
 
 void Mushroom::Release() {
+	_animatedSprite.Release();
 	_shroomTexture = nullptr;
 }

@@ -107,5 +107,6 @@ void BonusItem::Render() {
 }
 
 void BonusItem::Release() {
+	_animatedSprite.Release();
 	_bonusTexture = nullptr;
 }
