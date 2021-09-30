@@ -78,7 +78,7 @@ void Grid::AddEntity(Entity* entity, Cell* newCell) {
 	entity->ownerCell = newCell;
 }
 
-void Grid::RemoveEntityFromCell(Entity* entity) {
+void Grid::RemoveEntity(Entity* entity) {
 	std::vector<Entity*>& entities = entity->ownerCell->entities;
 	entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
 	entity->ownerCell = nullptr;

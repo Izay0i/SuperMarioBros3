@@ -44,34 +44,11 @@ bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
 Texture* Scene::_LoadTexture(LPCWSTR filePath) {
 	ID3D10Resource* resource = nullptr;
 	ID3D10Texture2D* texture = nullptr;
-
-	D3DX10_IMAGE_INFO imageInfo;
-	HRESULT hResult = D3DX10GetImageInfoFromFile(filePath, nullptr, &imageInfo, nullptr);
-	if (FAILED(hResult)) {
-		OutputDebugStringA("[SCENE] Failed to get image info from file\n");
-		return nullptr;
-	}
-
-	D3DX10_IMAGE_LOAD_INFO loadInfo;
-	ZeroMemory(&loadInfo, sizeof(D3DX10_IMAGE_LOAD_INFO));
-	loadInfo.Width = imageInfo.Width;
-	loadInfo.Height = imageInfo.Height;
-	loadInfo.Depth = imageInfo.Depth;
-	loadInfo.FirstMipLevel = 0;
-	loadInfo.MipLevels = 1;
-	loadInfo.Usage = D3D10_USAGE_DEFAULT;
-	loadInfo.BindFlags = D3DX10_DEFAULT;
-	loadInfo.CpuAccessFlags = D3DX10_DEFAULT;
-	loadInfo.MiscFlags = D3DX10_DEFAULT;
-	loadInfo.Format = imageInfo.Format;
-	loadInfo.Filter = D3DX10_FILTER_NONE;
-	loadInfo.MipFilter = D3DX10_DEFAULT;
-	loadInfo.pSrcInfo = &imageInfo;
-
-	hResult = D3DX10CreateTextureFromFile(
+	
+	HRESULT hResult = D3DX10CreateTextureFromFile(
 		GlobalUtil::directDevice, 
 		filePath, 
-		&loadInfo, 
+		nullptr, 
 		nullptr, 
 		&resource, 
 		nullptr
@@ -285,7 +262,7 @@ void Scene::_ParseEntityData(std::string line) {
 			//entity = new MovingPlatform;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
-			//entity = new Coin;
+			entity = new Coin;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
 			entity = new BonusItem;
@@ -349,6 +326,20 @@ void Scene::_ParseTileData(std::string line) {
 void Scene::_ParseGrid(std::string line) {
 	_grid = new Grid;
 	_grid->ParseData(line, _entities);
+}
+
+void Scene::_ParseMainEffect(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
+
+	if (tokens.size() < 3) {
+		return;
+	}
+
+	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(tokens.at(0)));
+	unsigned int textureID = std::stoul(tokens.at(2));
+	_scorePopUp = new ScorePopUp(_mario);
+	_scorePopUp->SetOjectType(objectType);
+	_scorePopUp->ParseData(tokens.at(1), _textureMap[textureID]);
 }
 
 void Scene::_ParseHUD(std::string line) {
@@ -417,6 +408,15 @@ D3DXCOLOR Scene::GetBGColor() const {
 	return _backgroundColor;
 }
 
+Texture* Scene::GetTexture(unsigned int id) const {
+	if (_textureMap.find(id) == _textureMap.end()) {
+		OutputDebugStringA("[SCENE] No valid texture with the corresponding ID\n");
+		return nullptr;
+	}
+
+	return _textureMap.at(id);
+}
+
 void Scene::HandleStates() {
 	_mario->HandleStates();
 }
@@ -438,7 +438,7 @@ void Scene::AddEntityToScene(Entity* entity) {
 
 void Scene::RemoveEntityFromScene(Entity* entity) {
 	if (_grid != nullptr) {
-		_grid->RemoveEntityFromCell(entity);
+		_grid->RemoveEntity(entity);
 	}
 	_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
 }
@@ -473,8 +473,9 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 			entity = new PBlock;
 			break;
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARTICLE:
-			//entity = new Particle;
+		//Effects
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BRICKEFFECT:
+			//entity = new BrickDebris;
 			break;
 	}
 
@@ -504,6 +505,7 @@ void Scene::LoadScene() {
 	_mario = nullptr;
 	_luigi = nullptr;
 
+	_scorePopUp = nullptr;
 	_hud = nullptr;
 	_background = nullptr;
 	_grid = nullptr;
@@ -570,6 +572,11 @@ void Scene::LoadScene() {
 			continue;
 		}
 
+		if (line == "[MAINEFFECT]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_MAINEFFECT;
+			continue;
+		}
+
 		if (line == "[BACKGROUND]") {
 			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_BACKGROUND;
 			continue;
@@ -602,6 +609,9 @@ void Scene::LoadScene() {
 				break;
 			case _SceneFileSection::SCENEFILE_SECTION_HUD:
 				_ParseHUD(line);
+				break;
+			case _SceneFileSection::SCENEFILE_SECTION_MAINEFFECT:
+				_ParseMainEffect(line);
 				break;
 			case _SceneFileSection::SCENEFILE_SECTION_BACKGROUND:
 				_ParseBackground(line);
@@ -681,14 +691,42 @@ void Scene::Update(DWORD deltaTime) {
 					entity->SetActive(_IsEntityInViewport(entity, _cameraInstance->GetViewport()));
 					entity->Update(deltaTime, &_entities, &_tiles, _grid);
 
-					//Global events
+					//Entities events
+					if (entity->tookDamage) {
+						_scorePopUp->GetEntity(entity);
+						_scorePopUp->SetPosition(entity->GetPosition());
+						_scorePopUp->StartFloatTimer();
+					}
+					
 					switch (entity->GetObjectType()) {
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
-
+							{
+								Paragoomba* paragoomba = dynamic_cast<Paragoomba*>(entity);
+								if (paragoomba->IsWalking() && paragoomba->GetHealth() == 2) {
+									//Mario is on the right side
+									if (paragoomba->GetPosition().x - _mario->GetPosition().x < 0.0f) {
+										paragoomba->SetNormal({ -1.0f, 0.0f });
+									}
+									else {
+										paragoomba->SetNormal({ 1.0f, 0.0f });
+									}
+								}
+							}
 							break;
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_KOOPA:
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
-
+							{
+								Koopa* koopa = dynamic_cast<Koopa*>(entity);
+								if (koopa->GetHealth() == 2) {
+									//Mario is on the right side
+									if (koopa->GetPosition().x - _mario->GetPosition().x < 0.0f) {
+										koopa->SetNormal({ -1.0f, 0.0f });
+									}
+									else {
+										koopa->SetNormal({ 1.0f, 0.0f });
+									}
+								}
+							}
 							break;
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
@@ -721,10 +759,12 @@ void Scene::Update(DWORD deltaTime) {
 							}
 							break;
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
-
-							break;
-						case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
-
+							{
+								ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(entity);
+								if (shinyBrick->tookDamage) {
+									AddEntityToScene(shinyBrick->SpawnItem());
+								}
+							}
 							break;
 					}
 					//
@@ -732,14 +772,14 @@ void Scene::Update(DWORD deltaTime) {
 					if (_grid != nullptr) {
 						Cell* newCell = _grid->GetCell(entity->GetPosition());
 						if (newCell != entity->ownerCell) {
-							_grid->RemoveEntityFromCell(entity);
+							_grid->RemoveEntity(entity);
 							_grid->AddEntity(entity, newCell);
 						}
 					}
 
 					if (!_IsEntityAliveAndIB(entity)) {
 						if (_grid != nullptr) {
-							_grid->RemoveEntityFromCell(entity);
+							_grid->RemoveEntity(entity);
 						}
 						delete entity;
 
@@ -767,7 +807,10 @@ void Scene::Update(DWORD deltaTime) {
 	UpdateCameraPosition();
 	if (_hud != nullptr) {
 		_hud->Update(_sceneTime);
-		_hud->UpdateHUDPosition(_cameraInstance->GetPosition());
+		_hud->SetPosition({
+			_cameraInstance->GetPosition().x + 132.0f, 
+			_cameraInstance->GetPosition().y + 161.0f 
+		});
 	}
 }
 
@@ -777,11 +820,19 @@ void Scene::Render() {
 	}
 
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
+		if (!_entities.at(i)->IsActive()) {
+			continue;
+		}
+		
 		_entities.at(i)->Render();
 	}
 
 	if (_hud != nullptr) {
 		_hud->Render();
+	}
+
+	if (_scorePopUp != nullptr) {
+		_scorePopUp->Render();
 	}
 }
 
@@ -800,6 +851,11 @@ void Scene::Release() {
 		delete _hud;
 	}
 
+	if (_scorePopUp != nullptr) {
+		_scorePopUp->Release();
+		delete _scorePopUp;
+	}
+
 	if (_grid != nullptr) {
 		_grid->Release();
 		delete _grid;
@@ -814,7 +870,7 @@ void Scene::Release() {
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		//These entities belong to the player, so they have a responsibility to release their resources
 		if (_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL ||
-			_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_PARTICLE)
+			_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_SCOREEFFECT)
 		{
 			continue;
 		}

@@ -30,7 +30,6 @@ protected:
 	
 	//The lower the value, the higher the render priority;
 	unsigned int _renderPriority;
-	unsigned int _score, _scoreMultiplier;
 
 	std::string _variant;
 
@@ -55,6 +54,8 @@ public:
 
 	bool IsRemoved() const;
 	void StartRemoveTimer();
+
+	std::vector<std::string> GetExtraData() const;
 
 	virtual void SetHealth(int);
 	virtual int GetHealth() const;

@@ -9,6 +9,8 @@
 #include "player/Player.h"
 #include "player/HUD.h"
 
+#include "effect/ScorePopUp.h"
+
 #include <vector>
 #include <string>
 #include <fstream>
@@ -35,6 +37,7 @@ private:
 		SCENEFILE_SECTION_TILEDATA,
 		SCENEFILE_SECTION_GRID,
 		SCENEFILE_SECTION_HUD,
+		SCENEFILE_SECTION_MAINEFFECT,
 		SCENEFILE_SECTION_BACKGROUND
 	};
 
@@ -60,6 +63,7 @@ private:
 	Camera* _cameraInstance;
 	Background* _background;
 	HUD* _hud;
+	ScorePopUp* _scorePopUp;
 
 	//Do the Mario, swing your arms from side to side, cmon let's go and do the Mario now
 	Player* _mario;
@@ -87,6 +91,7 @@ private:
 	void _ParseTileData(std::string);
 	void _ParseGrid(std::string);
 	void _ParseHUD(std::string);
+	void _ParseMainEffect(std::string);
 	void _ParseBackground(std::string);
 
 public:
@@ -100,6 +105,8 @@ public:
 	unsigned int GetSceneHeight() const;
 
 	D3DXCOLOR GetBGColor() const;
+
+	Texture* GetTexture(unsigned int) const;
 
 	void HandleStates();
 	void OnKeyUp(int);

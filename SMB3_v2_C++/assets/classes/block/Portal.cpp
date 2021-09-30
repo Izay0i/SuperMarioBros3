@@ -36,6 +36,8 @@ void Portal::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&,
 
 void Portal::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {}
 
+void Portal::Render() {}
+
 void Portal::Release() {
 	_animatedSprite.Release();
 	_portalTexture = nullptr;

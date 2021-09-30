@@ -39,7 +39,7 @@ Player::Player() {
 
 	_playerState = new IdleState(this);
 	_tail = new Tail(this);
-	
+
 	_bonusItems.reserve(3);
 }
 
@@ -188,7 +188,7 @@ void Player::OnKeyUp(int keyCode) {
 
 			if (_health > 1 && _isOnGround && !IsInPipe()) {
 				_isOnGround = false;
-				_position.y -= _hitbox.GetBoxHeight(1);
+				_position.y -= GetBoxHeight(1);
 			}
 			break;
 		case DIK_J:
@@ -258,6 +258,8 @@ void Player::ParseData(
 		_playerTexture = texture;
 	}
 	Entity::ParseData(dataPath, texture, extraData);
+
+	Texture* scoreTexture = SceneManager::GetInstance()->GetCurrentScene()->GetTexture(std::stoul(extraData.back()));
 }
 
 void Player::TakeDamage() {
@@ -457,7 +459,31 @@ void Player::HandleCollisionResult(
 	//----------------------------------------------------------------------------
 		case GameObjectType::GAMEOBJECT_TYPE_PORTAL:
 			{
-				
+				Portal* portal = dynamic_cast<Portal*>(eventEntity);
+				/*
+				if (portal->GetExtraDataSize() == 1) {
+					_nextSceneID = portal->GetSceneID();
+					_mapNodePos = portal->GetPosition();
+
+					minTime = { 1.0f, 1.0f };
+					offset = normal = { 0, 0 };
+				}
+				else {
+					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W) {
+						if (eventNormal.y == 1.0f) {
+							_normal.y = -1.0f;
+						}
+						else if (eventNormal.y == -1.0f) {
+							_normal.y = 1.0f;
+						}
+
+						if (IsInPipe()) {
+							StartInPipeTimer();
+							_destination = portal->GetDestination();
+						}
+					}
+				}
+				*/
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
@@ -473,10 +499,25 @@ void Player::HandleCollisionResult(
 	//Items
 	//----------------------------------------------------------------------------
 		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-
-			break;
 		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+			{
+				Mushroom* mushroom = dynamic_cast<Mushroom*>(eventEntity);
+				mushroom->TakeDamage();
+				switch (mushroom->GetObjectType()) {
+					case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+						if (_health <= 1) {
+							_health = 2;
+							_position.y -= GetBoxHeight();
+						}
+						break;
+					case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+						//Stub
+						break;
+				}
 
+				minTime = { 1.0f, 1.0f };
+				offset = normal = { 0, 0 };
+			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
 			_health = 4;
@@ -533,10 +574,36 @@ void Player::HandleCollisionResult(
 				}
 				break;
 			case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
-
+				{
+					ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(eventEntity);
+					if (shinyBrick->GetHealth() == 2) {
+						if (eventNormal.y == 1.0f) {
+							if (shinyBrick->GetExtraData().empty()) {
+								if (_health > 1) {
+									shinyBrick->StartRemoveTimer();
+								}
+							}
+							else {
+								shinyBrick->TakeDamage();
+							}
+						}
+					}
+					//Is coin
+					else if (shinyBrick->GetHealth() == 3) {
+						shinyBrick->SetHealth(-1);
+						minTime = { 1.0f, 1.0f };
+						offset = normal = { 0, 0 };
+					}
+				}
 				break;
 			case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
-
+				{
+					PBlock* pBlock = dynamic_cast<PBlock*>(eventEntity);
+					if (eventNormal.y == -1.0f) {
+						pBlock->TakeDamage();
+						_velocity.y = -_bounceSpeed;
+					}
+				}
 				break;
 	//----------------------------------------------------------------------------
 	//Animated blocks
@@ -592,7 +659,6 @@ void Player::Update(
 	}
 
 	_playerState->Update(deltaTime);
-	_tail->Update(deltaTime);
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 
 	if (_heldEntity != nullptr) {

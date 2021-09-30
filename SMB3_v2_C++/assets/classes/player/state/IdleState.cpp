@@ -16,7 +16,7 @@ IdleState::IdleState(Player* player) {
 }
 
 PlayerState* IdleState::HandleStates() {
-	if (_player->_velocity.x != 0.0f && _player->_isOnGround) {
+	if (_player->_velocity.x != 0.0f && _player->_isOnGround || _player->_triggeredStageEnd) {
 		return new RunState(_player);
 	}
 	else if (_player->_velocity.y < 0.0f) {

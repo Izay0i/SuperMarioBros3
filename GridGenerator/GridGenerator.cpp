@@ -13,7 +13,7 @@ const unsigned int CELL_HEIGHT = static_cast<unsigned int>(SCREEN_HEIGHT / 2);
 
 const unsigned int MAX_FILE_LINE = 5000;
 
-bool writtenTagOnce = false;
+bool wroteTagOnce = false;
 unsigned int xCells = 0, yCells = 0;
 
 enum class GridFileSection {
@@ -53,7 +53,7 @@ void ParseSceneSize(std::ofstream& outFile, std::string line) {
     //Be sure to use std::flush or std::endl to flush the buffer
     outFile << "[GRIDCELLS]\n";
     outFile << xCells << '\t' << yCells << '\n';
-    outFile << "[/]\n" << std::endl;
+    outFile << "[/]\n\n";
 }
 
 void ParseEntityData(std::ofstream& outFile, std::string line) {
@@ -86,14 +86,14 @@ void ParseEntityData(std::ofstream& outFile, std::string line) {
         cellPosY = yCells - 1;
     }
 
-    if (!writtenTagOnce) {
-        writtenTagOnce = true;
+    if (!wroteTagOnce) {
+        wroteTagOnce = true;
         
         outFile << "#Cell_X" << '\t' << "Cell_Y" << '\t' << "objID\n";
         outFile << "[POSITIONS]\n";
     }
 
-    outFile << cellPosX << '\t' << cellPosY << '\t' << objectID << std::endl;
+    outFile << cellPosX << '\t' << cellPosY << '\t' << objectID << '\n';
 }
 
 int main() {

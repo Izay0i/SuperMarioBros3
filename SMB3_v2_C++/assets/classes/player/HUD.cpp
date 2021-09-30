@@ -168,11 +168,6 @@ void HUD::HandleStates() {}
 
 void HUD::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
-void HUD::UpdateHUDPosition(const D3DXVECTOR2& position) {
-	_position.x = position.x + 132.0f;
-	_position.y = position.y + 161.0f;
-}
-
 void HUD::Update(DWORD sceneTime, std::vector<GameObject*>*) {
 	_ParseLives();
 	_ParseCoins();

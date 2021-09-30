@@ -36,7 +36,7 @@ public:
 	void AddEntity(Entity*);
 	void AddEntity(Entity*, Cell*);
 
-	void RemoveEntityFromCell(Entity*);
+	void RemoveEntity(Entity*);
 
 	void ParseData(std::string, std::vector<Entity*>&);
 

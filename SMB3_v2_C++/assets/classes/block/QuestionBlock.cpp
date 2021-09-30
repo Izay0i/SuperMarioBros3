@@ -14,7 +14,7 @@ void QuestionBlock::_ParseSprites(std::string line) {
 QuestionBlock::QuestionBlock() {
 	_renderPriority = 3;
 	_health = 2;
-	_jumpSpeed = 0.4f;
+	_jumpSpeed = 0.2f;
 	_gravity = 0.001f;
 }
 

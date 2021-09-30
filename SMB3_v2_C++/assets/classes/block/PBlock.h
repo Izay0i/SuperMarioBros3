@@ -3,8 +3,8 @@
 class PBlock : public Entity {
 private:
 	enum class _State {
-		ACTIVE = 1,
-		INACTIVE = 2
+		ACTIVE = 2,
+		INACTIVE = 1
 	};
 
 	//Yeah calling this PBlock was a bad idea

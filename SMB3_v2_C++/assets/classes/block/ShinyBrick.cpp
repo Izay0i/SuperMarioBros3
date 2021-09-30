@@ -13,7 +13,7 @@ void ShinyBrick::_ParseSprites(std::string line) {
 ShinyBrick::ShinyBrick() {
 	_renderPriority = 3;
 	_health = 2;
-	_jumpSpeed = 0.4f;
+	_jumpSpeed = 0.2f;
 	_gravity = 0.001f;
 	_removeTime = 200;
 }
@@ -30,7 +30,7 @@ void ShinyBrick::SetPosition(D3DXVECTOR2 position) {
 }
 
 Entity* ShinyBrick::SpawnItem() {
-	if (_extraData.size() <= 3) {
+	if (_itemCount == 0) {
 		return nullptr;
 	}
 

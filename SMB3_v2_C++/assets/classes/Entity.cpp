@@ -25,8 +25,6 @@ bool Entity::CompareRenderPriority(Entity*& a, Entity*& b) {
 Entity::Entity() {
 	_health = 1;
 	_renderPriority = std::numeric_limits<unsigned int>::max();
-	_score = 100;
-	_scoreMultiplier = 1;
 	_removeTime = 800;
 
 	ownerCell = nullptr;
@@ -40,6 +38,10 @@ bool Entity::IsRemoved() const {
 
 void Entity::StartRemoveTimer() {
 	_removeStart = static_cast<DWORD>(GetTickCount64());
+}
+
+std::vector<std::string> Entity::GetExtraData() const {
+	return _extraData;
 }
 
 void Entity::SetHealth(int health) {
@@ -120,7 +122,7 @@ void Entity::Update(
 	Grid* grid) 
 {
 	if (_position.y > SceneManager::GetInstance()->GetCurrentScene()->GetSceneHeight()) {
-		//_health = 0;
+		_health = 0;
 	}
 
 	if (IsRemoved() && GetTickCount64() - _removeStart > _removeTime) {
@@ -150,7 +152,7 @@ void Entity::Update(
 			//Only need half of the neighboring cells to avoid double checking
 			// cell	cell
 			// cell	entity
-			// cell
+			// cell cell
 			//Left
 			if (ownerCell->indexX > 0) {
 				CalcPotentialCollision(
@@ -175,9 +177,16 @@ void Entity::Update(
 			//Top
 			if (ownerCell->indexY > 0) {
 				CalcPotentialCollision(
-					&grid->GetCell(ownerCell->indexX, ownerCell->indexY - 1)->entities, 
+					&grid->GetCell(ownerCell->indexX, ownerCell->indexY - 1)->entities,
 					collisionEvents
-				);				
+				);
+				//Bottom
+				if (ownerCell->indexY < grid->_yCells - 1) {
+					CalcPotentialCollision(
+						&grid->GetCell(ownerCell->indexX, ownerCell->indexY + 1)->entities,
+						collisionEvents
+					);
+				}
 			}
 		}
 		else {

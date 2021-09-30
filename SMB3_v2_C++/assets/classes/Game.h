@@ -52,7 +52,6 @@ private:
 	ID3D10RenderTargetView* _renderTargetView;
 	ID3D10RasterizerState* _rasterizerState;
 	ID3D10BlendState* _blendState;
-	ID3D10SamplerState* _samplerState;
 
 	ID3D10PixelShader* _pixelShader;
 	//REMOVED
@@ -70,7 +69,6 @@ private:
 	bool _CreateViewport();
 	bool _CreateRasterizerState();
 	bool _CreateBlendState();
-	bool _CreateSamplerState();
 	bool _CreatePixelShader(std::string, std::string);
 
 	void _ParseSettings(std::string);

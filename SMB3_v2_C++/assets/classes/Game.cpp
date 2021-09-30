@@ -347,27 +347,6 @@ bool Game::_CreateBlendState() {
 	return true;
 }
 
-bool Game::_CreateSamplerState() {
-	D3D10_SAMPLER_DESC samplerDesc;
-	samplerDesc.Filter = D3D10_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-	samplerDesc.AddressU = D3D10_TEXTURE_ADDRESS_CLAMP;
-	samplerDesc.AddressV = D3D10_TEXTURE_ADDRESS_CLAMP;
-	samplerDesc.AddressW = D3D10_TEXTURE_ADDRESS_CLAMP;
-	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 1;
-	samplerDesc.ComparisonFunc = D3D10_COMPARISON_NEVER;
-	samplerDesc.MinLOD = -FLT_MAX;
-	samplerDesc.MaxLOD = FLT_MAX;
-
-	HRESULT hResult = GlobalUtil::directDevice->CreateSamplerState(&samplerDesc, &_samplerState);
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to create sampler state in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-	
-	return true;
-}
-
 bool Game::_CreatePixelShader(std::string path, std::string fileName) {
 	ID3D10Blob* blob = nullptr;
 
@@ -459,10 +438,6 @@ Game::~Game() {
 
 	if (_managerInstance != nullptr) {
 		_managerInstance->Release();
-	}
-
-	if (_samplerState != nullptr) {
-		_samplerState->Release();
 	}
 
 	if (_blendState != nullptr) {
@@ -639,10 +614,6 @@ bool Game::InitGame(HWND hWND) {
 	}
 
 	if (!_CreateBlendState()) {
-		return false;
-	}
-
-	if (!_CreateSamplerState()) {
 		return false;
 	}
 

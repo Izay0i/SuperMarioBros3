@@ -20,6 +20,7 @@ private:
 	friend class WagState;
 	friend class Tail;
 	friend class HUD;
+	friend class ScorePopUp;
 
 	static Texture* _playerTexture;
 
