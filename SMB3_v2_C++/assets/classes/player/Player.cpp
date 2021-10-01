@@ -258,8 +258,6 @@ void Player::ParseData(
 		_playerTexture = texture;
 	}
 	Entity::ParseData(dataPath, texture, extraData);
-
-	Texture* scoreTexture = SceneManager::GetInstance()->GetCurrentScene()->GetTexture(std::stoul(extraData.back()));
 }
 
 void Player::TakeDamage() {
@@ -578,9 +576,9 @@ void Player::HandleCollisionResult(
 					ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(eventEntity);
 					if (shinyBrick->GetHealth() == 2) {
 						if (eventNormal.y == 1.0f) {
-							if (shinyBrick->GetExtraData().empty()) {
+							if (shinyBrick->GetExtraData().size() == 3) {
 								if (_health > 1) {
-									shinyBrick->StartRemoveTimer();
+									shinyBrick->SetHealth(-1);
 								}
 							}
 							else {

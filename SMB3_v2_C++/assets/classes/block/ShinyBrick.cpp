@@ -2,6 +2,7 @@
 #include "../Entity.h"
 #include "../item/Mushroom.h"
 #include "PBlock.h"
+#include "../effect/BrickDebris.h"
 #include "ShinyBrick.h"
 
 Texture* ShinyBrick::_brickTexture = nullptr;
@@ -15,7 +16,7 @@ ShinyBrick::ShinyBrick() {
 	_health = 2;
 	_jumpSpeed = 0.2f;
 	_gravity = 0.001f;
-	_removeTime = 200;
+	_removeTime = 1;
 }
 
 ShinyBrick::~ShinyBrick() {}
@@ -30,10 +31,6 @@ void ShinyBrick::SetPosition(D3DXVECTOR2 position) {
 }
 
 Entity* ShinyBrick::SpawnItem() {
-	if (_itemCount == 0) {
-		return nullptr;
-	}
-
 	Entity* item = SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
 		_extraData.at(3),
 		_extraData.at(4),
@@ -63,6 +60,19 @@ Entity* ShinyBrick::SpawnItem() {
 	tookDamage = false;
 
 	return item;
+}
+
+BrickDebris* ShinyBrick::SpawnDebris() {
+	BrickDebris* brickDebris = dynamic_cast<BrickDebris*>(
+		SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
+			_extraData.at(0), 
+			_extraData.at(1), 
+			_extraData.at(2)
+		)
+	);
+	brickDebris->SetPosition(_position);
+	brickDebris->StartRemoveTimer();
+	return brickDebris;
 }
 
 void ShinyBrick::ParseData(

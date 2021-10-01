@@ -31,7 +31,7 @@
 [ENTITYDATA]
 #Player											OBJ_ID	FILE_PATH				texID
 0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
-#0	assets\data\player\mario.txt	2	1776	368
+#0	assets\data\player\mario.txt	2	1952	368
 
 #NPC
 #Goomba
@@ -115,27 +115,27 @@
 300	assets\data\block\questionblock.txt	0	1472	368	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
 
 #Shiny brick															quantity
-301	assets\data\block\brickblock.txt	0	1440	128	888	assets\data\effect\brick.txt	4	201	assets\data\item\greenshroom.txt	5	1
-301	assets\data\block\brickblock.txt	0	2032	368	888	assets\data\effect\brick.txt	4	302	assets\data\block\pblock.txt	0	1
+301	assets\data\block\brickblock.txt	0	1440	128	601	assets\data\effect\brick.txt	6	201	assets\data\item\greenshroom.txt	5	1
+301	assets\data\block\brickblock.txt	0	2032	368	601	assets\data\effect\brick.txt	6	302	assets\data\block\pblock.txt	0	1
 
-301	assets\data\block\brickblock.txt	0	1984	368	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2000	368	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2016	368	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	1968	384	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	1984	384	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2000	384	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2016	384	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2032	384	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2096	384	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	1952	400	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	1968	400	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	1984	400	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2000	400	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2016	400	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2032	400	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2048	400	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2096	400	888	assets\data\effect\brick.txt	4
-301	assets\data\block\brickblock.txt	0	2112	400	888	assets\data\effect\brick.txt	4
+301	assets\data\block\brickblock.txt	0	1984	368	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2000	368	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2016	368	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	1968	384	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	1984	384	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2000	384	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2016	384	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2032	384	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2096	384	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	1952	400	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	1968	400	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	1984	400	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2000	400	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2016	400	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2032	400	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2048	400	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2096	400	601	assets\data\effect\brick.txt	6
+301	assets\data\block\brickblock.txt	0	2112	400	601	assets\data\effect\brick.txt	6
 [/]
 
 #objID	x	y	width	height

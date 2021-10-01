@@ -1,5 +1,4 @@
 #include "../player/Player.h"
-#include "../block/ShinyBrick.h"
 #include "ScorePopUp.h"
 
 Texture* ScorePopUp::_scoreTexture = nullptr;
@@ -10,13 +9,13 @@ void ScorePopUp::_ParseSprites(std::string line) {
 
 ScorePopUp::ScorePopUp(Player* player) {
 	_player = player;
-
-	_position = { 100, 400 };
+	
+	_gravity = -0.001f;
 
 	_index = 2;
-	_score = 1000;
+	_score = 100;
 	_scores = { 10, 50, 100, 200, 400, 800, 1000, 2000, 4000, 8000, 10000 };
-	_floatTime = 2000;
+	_floatTime = 1000;
 }
 
 ScorePopUp::~ScorePopUp() {}
@@ -32,17 +31,15 @@ void ScorePopUp::GetEntity(Entity* entity) {
 	//If the player touches the ground, the chain is broken and resets back to 100 points
 	//Here I assume default is objectType >= GOOMBA
 	//An index is used to get the current score, everytime the player defeats an enemy and is not on ground, the index increments
-	//'till _index < _scores.size() where it stays until the player touches the ground
+	//'till _index < _scores.size() - 1 where it stays until the player touches the ground
 	//_score variable is used to display the current score the object emits
 	switch (entity->GetObjectType()) {
 		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
-			{
-				ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(entity);
-
-			}
+			_score = entity->GetExtraData().empty() ? _scores.front() : _scores.at(2);
+			_player->_score += _score;
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
-			_score = _scores.at(1);
+			_score = entity->GetHealth() == 1 ? _scores.at(1) : _scores.at(2);
 			_player->_score += _score;
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
@@ -61,7 +58,7 @@ void ScorePopUp::GetEntity(Entity* entity) {
 				_player->_score += _scores.at(2);
 			}
 			else {
-				if (_index < _scores.size()) {
+				if (_index < _scores.size() - 1) {
 					++_index;
 				}
 
@@ -101,14 +98,17 @@ void ScorePopUp::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTO
 void ScorePopUp::Update(
 	DWORD deltaTime, 
 	std::vector<Entity*>* collidableEntities, 
-	std::vector<Entity*>* collidableTiles, Grid* grid) 
+	std::vector<Entity*>* collidableTiles, 
+	Grid* grid) 
 {
 	if (IsFloating() && GetTickCount64() - _floatStart > _floatTime) {
 		_floatStart = 0;
 		_position = { -1.0f, -1.0f };
 	}
 
-	Entity::Update(deltaTime);
+	GameObject::Update(deltaTime);
+	_velocity.y = _gravity * deltaTime;
+	_position += _distance;
 }
 
 void ScorePopUp::Render() {

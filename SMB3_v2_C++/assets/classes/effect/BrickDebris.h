@@ -1,40 +1,18 @@
 #pragma once
 
-class BrickDebris;
-class ShinyBrick : public Entity {
+class BrickDebris : public Entity {
 private:
-	enum class _State {
-		COIN = 3,
-		ROTATE = 2,
-		PUSHED = 1,
-	};
-
-	const float _MAX_Y_OFFSET = 0.4f;
-
-	static Texture* _brickTexture;
-
-	_State _state;
-
-	unsigned int _itemCount;
-
-	D3DXVECTOR2 _originalPos;
+	static Texture* _debrisTexture;
 
 	void _ParseSprites(std::string) override;
 
 public:
-	ShinyBrick();
-	~ShinyBrick();
+	BrickDebris();
+	~BrickDebris();
 
 	RECTF GetBoundingBox(int = 0) const override;
 
-	void SetPosition(D3DXVECTOR2) override;
-
-	Entity* SpawnItem();
-	BrickDebris* SpawnDebris();
-
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
-
-	void TakeDamage() override;
 
 	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;

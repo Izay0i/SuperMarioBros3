@@ -475,7 +475,7 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 			break;
 		//Effects
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BRICKEFFECT:
-			//entity = new BrickDebris;
+			entity = new BrickDebris;
 			break;
 	}
 
@@ -764,6 +764,30 @@ void Scene::Update(DWORD deltaTime) {
 								if (shinyBrick->tookDamage) {
 									AddEntityToScene(shinyBrick->SpawnItem());
 								}
+								else if (shinyBrick->GetHealth() == -1) {
+									//This is what your brain creates at 4AM
+									
+									//Top left
+									auto debris = shinyBrick->SpawnDebris();
+									debris->SetVelocity({ -0.05f, -0.18f });
+									AddEntityToScene(debris);
+									//Top right
+									debris = shinyBrick->SpawnDebris();
+									debris->SetScale({ -1.0f, 1.0f });
+									debris->SetVelocity({ 0.05f, -0.18f });
+									AddEntityToScene(debris);
+									//Bottom left
+									debris = shinyBrick->SpawnDebris();
+									debris->SetVelocity({ -0.05f, -0.18f });
+									debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + 10.0f });
+									AddEntityToScene(debris);
+									//Bottom right
+									debris = shinyBrick->SpawnDebris();
+									debris->SetScale({ -1.0f, 1.0f });
+									debris->SetVelocity({ 0.05f, -0.18f });
+									debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + 10.0f });
+									AddEntityToScene(debris);
+								}
 							}
 							break;
 					}
@@ -811,6 +835,10 @@ void Scene::Update(DWORD deltaTime) {
 			_cameraInstance->GetPosition().x + 132.0f, 
 			_cameraInstance->GetPosition().y + 161.0f 
 		});
+	}
+
+	if (_scorePopUp != nullptr) {
+		_scorePopUp->Update(deltaTime);
 	}
 }
 

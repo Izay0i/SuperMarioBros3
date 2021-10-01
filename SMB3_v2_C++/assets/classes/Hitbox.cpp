@@ -1,7 +1,7 @@
 #include "Hitbox.h"
 
 RECTF Hitbox::GetBoundingBox(int index) const {
-	return _hitboxes.at(index);
+	return _hitboxes.empty() ? RECTF() : _hitboxes.at(index);
 }
 
 float Hitbox::GetBoxOffsetX(int index) const {

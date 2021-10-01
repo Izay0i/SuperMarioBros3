@@ -82,7 +82,7 @@ void PBlock::Update(
 			case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 				{
 					ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(collidableEntities->at(i));
-					if (shinyBrick->GetExtraData().empty()) {
+					if (shinyBrick->GetExtraData().size() == 3) {
 						shinyBrick->SetHealth(IsActivated() ? 3 : 2);
 					}
 				}

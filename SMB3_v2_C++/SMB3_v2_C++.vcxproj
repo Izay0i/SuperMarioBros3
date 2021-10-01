@@ -148,6 +148,7 @@
     <ClCompile Include="assets\classes\block\Portal.cpp" />
     <ClCompile Include="assets\classes\block\ShinyBrick.cpp" />
     <ClCompile Include="assets\classes\Camera.cpp" />
+    <ClCompile Include="assets\classes\effect\BrickDebris.cpp" />
     <ClCompile Include="assets\classes\effect\ScorePopUp.cpp" />
     <ClCompile Include="assets\classes\Entity.cpp" />
     <ClCompile Include="assets\classes\Game.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="assets\classes\block\QuestionBlock.h" />
     <ClInclude Include="assets\classes\block\ShinyBrick.h" />
     <ClInclude Include="assets\classes\Camera.h" />
+    <ClInclude Include="assets\classes\effect\BrickDebris.h" />
     <ClInclude Include="assets\classes\effect\ScorePopUp.h" />
     <ClInclude Include="assets\classes\Entity.h" />
     <ClInclude Include="assets\classes\Game.h" />

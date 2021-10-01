@@ -180,13 +180,13 @@ void Entity::Update(
 					&grid->GetCell(ownerCell->indexX, ownerCell->indexY - 1)->entities,
 					collisionEvents
 				);
-				//Bottom
-				if (ownerCell->indexY < grid->_yCells - 1) {
-					CalcPotentialCollision(
-						&grid->GetCell(ownerCell->indexX, ownerCell->indexY + 1)->entities,
-						collisionEvents
-					);
-				}
+			}
+			//Bottom
+			if (ownerCell->indexY < grid->_yCells - 1) {
+				CalcPotentialCollision(
+					&grid->GetCell(ownerCell->indexX, ownerCell->indexY + 1)->entities,
+					collisionEvents
+				);
 			}
 		}
 		else {

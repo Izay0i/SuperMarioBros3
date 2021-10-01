@@ -20,3 +20,5 @@
 #include "block/QuestionBlock.h"
 #include "block/ShinyBrick.h"
 #include "block/PBlock.h"
+
+#include "effect/BrickDebris.h"

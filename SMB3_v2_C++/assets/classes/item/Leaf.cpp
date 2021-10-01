@@ -15,7 +15,7 @@ Leaf::Leaf() {
 
 	_runSpeed = 0.02f;
 	_jumpSpeed = 0.2f;
-	_gravity = 0.00001f;
+	_gravity = 0.0008f;
 }
 
 Leaf::~Leaf() {}
@@ -45,14 +45,14 @@ void Leaf::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D
 
 void Leaf::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities, std::vector<Entity*>* collidableTiles, Grid* grid) {
 	HandleStates();
-	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
+	Entity::Update(deltaTime);
 
 	std::random_device randomDevice;
 	std::uniform_real_distribution<float> dist(0.0f, 1.2f);
 
+	_velocity.y = _gravity * deltaTime;
 	//Voodoo magic
 	_position.x += sin(_distance.x) + dist(randomDevice) * _normal.x;
-	_position.y += _distance.y;
 
 	if (GetTickCount64() % 1000 == 0) {
 		_scale.x = -_scale.x;

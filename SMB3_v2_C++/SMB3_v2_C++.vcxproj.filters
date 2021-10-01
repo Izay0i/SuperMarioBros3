@@ -147,6 +147,9 @@
     <ClCompile Include="assets\classes\effect\ScorePopUp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\classes\effect\BrickDebris.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\classes\GlobalUtil.h">
@@ -279,6 +282,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\effect\ScorePopUp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\effect\BrickDebris.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
