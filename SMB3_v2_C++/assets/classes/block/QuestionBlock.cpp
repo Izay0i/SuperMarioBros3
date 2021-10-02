@@ -45,8 +45,8 @@ Entity* QuestionBlock::SpawnItem(int currentHealth) {
 				_extraData.at(2)
 			);
 			item->SetHealth(2);
-			item->SetVelocity({ 0.0f, -0.18f });
-			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() - 1.0f });
+			item->SetVelocity({ 0.0f, -0.20f });
+			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
 			break;
 		case 6:
 			if (currentHealth >= 2) {
@@ -56,8 +56,8 @@ Entity* QuestionBlock::SpawnItem(int currentHealth) {
 					_extraData.at(4),
 					_extraData.at(5)
 				);
-				item->SetVelocity({ 0.0f, -0.008f });
-				item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() - 1.0f });
+				item->SetVelocity({ 0.0f, -0.38f });
+				item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
 			}
 			else {
 				//Mushroom

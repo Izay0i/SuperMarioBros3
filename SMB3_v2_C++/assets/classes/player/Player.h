@@ -45,6 +45,7 @@ private:
 	//How many fireballs the player can throw in a given time
 	//Default is 2
 	unsigned int _fireballsCount;
+	unsigned int _nextSceneID;
 
 	bool _triggeredStageEnd;
 	bool _wentIntoPipe;
@@ -62,6 +63,8 @@ private:
 	Tail* _tail;
 
 	std::vector<GameObject::GameObjectType> _bonusItems;
+
+	D3DXVECTOR2 _destination;
 
 	DWORD _flyStart;
 	DWORD _flyTime;

@@ -396,6 +396,10 @@ void Scene::StartToSceneTimer() {
 	_toSceneStart = static_cast<DWORD>(GetTickCount64());
 }
 
+Scene::SceneType Scene::GetSceneID() const {
+	return _sceneID;
+}
+
 unsigned int Scene::GetSceneWidth() const {
 	return _sceneWidth;
 }
@@ -769,22 +773,22 @@ void Scene::Update(DWORD deltaTime) {
 									
 									//Top left
 									auto debris = shinyBrick->SpawnDebris();
-									debris->SetVelocity({ -0.05f, -0.18f });
+									debris->SetVelocity({ -0.08f, -0.28f });
 									AddEntityToScene(debris);
 									//Top right
 									debris = shinyBrick->SpawnDebris();
 									debris->SetScale({ -1.0f, 1.0f });
-									debris->SetVelocity({ 0.05f, -0.18f });
+									debris->SetVelocity({ 0.08f, -0.28f });
 									AddEntityToScene(debris);
 									//Bottom left
 									debris = shinyBrick->SpawnDebris();
-									debris->SetVelocity({ -0.05f, -0.18f });
+									debris->SetVelocity({ -0.08f, -0.18f });
 									debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + 10.0f });
 									AddEntityToScene(debris);
 									//Bottom right
 									debris = shinyBrick->SpawnDebris();
 									debris->SetScale({ -1.0f, 1.0f });
-									debris->SetVelocity({ 0.05f, -0.18f });
+									debris->SetVelocity({ 0.08f, -0.18f });
 									debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + 10.0f });
 									AddEntityToScene(debris);
 								}

@@ -44,8 +44,8 @@ Entity* ShinyBrick::SpawnItem() {
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			item->SetHealth(2);
-			item->SetVelocity({ 0.0f, -0.18f });
-			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() - 1.0f });
+			item->SetVelocity({ 0.0f, -0.2f });
+			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });

@@ -101,6 +101,7 @@ public:
 	bool IsTransitioningToScene() const;
 	void StartToSceneTimer();
 
+	SceneType GetSceneID() const;
 	unsigned int GetSceneWidth() const;
 	unsigned int GetSceneHeight() const;
 

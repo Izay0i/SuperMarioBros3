@@ -20,6 +20,9 @@ void Portal::ParseData(
 	Texture*& texture, 
 	std::vector<std::string> extraData) 
 {
+	if (_portalTexture == nullptr) {
+		_portalTexture = texture;
+	}
 	Entity::ParseData(dataPath, texture, extraData);
 	
 	if (_extraData.size() > 1) {
@@ -36,7 +39,9 @@ void Portal::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&,
 
 void Portal::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {}
 
-void Portal::Render() {}
+void Portal::Render() {
+	_animatedSprite.PlaySpriteAnimation("Portal", _position);
+}
 
 void Portal::Release() {
 	_animatedSprite.Release();

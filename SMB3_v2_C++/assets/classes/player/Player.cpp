@@ -458,30 +458,32 @@ void Player::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_PORTAL:
 			{
 				Portal* portal = dynamic_cast<Portal*>(eventEntity);
-				/*
-				if (portal->GetExtraDataSize() == 1) {
+				if (portal->GetExtraData().size() == 1) {
 					_nextSceneID = portal->GetSceneID();
-					_mapNodePos = portal->GetPosition();
+					//_mapNodePos = portal->GetPosition();
 
 					minTime = { 1.0f, 1.0f };
 					offset = normal = { 0, 0 };
 				}
 				else {
-					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W) {
-						if (eventNormal.y == 1.0f) {
+					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
+						if (eventNormal.y == 1.0f && Device::IsKeyDown(DIK_W)) {
 							_normal.y = -1.0f;
 						}
-						else if (eventNormal.y == -1.0f) {
+						else if (eventNormal.y == -1.0f && Device::IsKeyDown(DIK_S)) {
 							_normal.y = 1.0f;
 						}
 
-						if (IsInPipe()) {
+						if (!IsInPipe()) {
 							StartInPipeTimer();
 							_destination = portal->GetDestination();
+
+							char debug[100];
+							sprintf_s(debug, "Des: %f %f\n", _destination.x, _destination.y);
+							OutputDebugStringA(debug);
 						}
 					}
 				}
-				*/
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
@@ -658,6 +660,25 @@ void Player::Update(
 
 	_playerState->Update(deltaTime);
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
+
+	if (IsInPipe()) {
+		_velocity.y = _health > 1 ? 0.007f : 0.005f;
+		_velocity.y *= _normal.y;
+		_position.y += _distance.y;
+
+		_isHolding = false;
+		_velocity.x = 0.0f;
+
+		if (GetTickCount64() - _inPipeStart == _inPipeTime * 0.5f) {
+			_wentIntoPipe = !_wentIntoPipe;
+			_position = _destination;
+			_isOnGround = false;
+
+			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == Scene::SceneType::SCENE_TYPE_STAGE_FOUR) {
+				_normal.y = -_normal.y;
+			}
+		}
+	}
 
 	if (_heldEntity != nullptr) {
 		if (_heldEntity->GetHealth() == 0 || _heldEntity->GetHealth() == 3) {

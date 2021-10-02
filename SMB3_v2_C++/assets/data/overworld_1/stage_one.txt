@@ -30,8 +30,9 @@
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
 [ENTITYDATA]
 #Player											OBJ_ID	FILE_PATH				texID
-0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
+#0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	1952	368
+0	assets\data\player\mario.txt	2	2256	80
 
 #NPC
 #Goomba
@@ -58,8 +59,8 @@
 105	assets\data\npc\venusplant.txt	4	1864	384	green	108	assets\data\projectile\fireball.txt	7
 
 #Portal								#destination
-198	assets\data\npc\portal.txt	0	2257	112	2101	468
-198	assets\data\npc\portal.txt	0	2321	488	2328	386
+198	assets\data\npc\portal.txt	0	2264	107	2101	468
+198	assets\data\npc\portal.txt	0	2328	485	2328	386
 
 #Item
 #Coin
