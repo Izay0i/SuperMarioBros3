@@ -17,7 +17,7 @@ Coin::Coin() {
 Coin::~Coin() {}
 
 RECTF Coin::GetBoundingBox(int index) const {
-	return _health <= 0 ? RECTF() : GameObject::GetBoundingBox();
+	return _health <= 0 || _health == 2 ? RECTF() : GameObject::GetBoundingBox();
 }
 
 void Coin::ParseData(

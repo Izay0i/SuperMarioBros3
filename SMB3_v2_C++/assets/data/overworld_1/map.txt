@@ -1,0 +1,41 @@
+[SCENESIZE]
+224	152
+[/]
+
+[BGCOLOR]
+255	255	255
+[/]
+
+[TEXTURES]
+0	assets\textures\map.png	224	163	216
+1	assets\textures\player.png	224	163	216
+2	assets\textures\hud.png	224	163	216
+[/]
+
+[ENTITYDATA]
+#Player
+0	assets\data\player\mario.txt	1	0	0
+
+#Map
+
+[/]
+
+[TILEDATA]
+
+[/]
+
+[GRID]
+
+[/]
+
+[HUD]
+assets\data\hud\hud.txt	2
+[/]
+
+[BACKGROUND]
+#texID
+0
+#Left	top	right	bottom	X	Y
+#Map
+10	10	244	172	120	81
+[/]

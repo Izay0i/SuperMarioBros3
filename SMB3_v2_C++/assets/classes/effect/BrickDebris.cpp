@@ -49,5 +49,6 @@ void BrickDebris::Render() {
 }
 
 void BrickDebris::Release() {
+	_animatedSprite.Release();
 	_debrisTexture = nullptr;
 }

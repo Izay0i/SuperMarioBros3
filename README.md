@@ -1,21 +1,19 @@
-# Super Mario Bros. 3 Demo
+# Super Mario Bros. 3 Demo v2.0 (WIP)
 
 ## Installation
 + Download VS2019 [here](https://visualstudio.microsoft.com/vs/).
-+ Download DirectX 9 [here](https://www.microsoft.com/en-us/download/details.aspx?id=6812) and install it inside your `C:\` drive.
-+ Link the `Include` and `Lib(x86)` folder to the `Include Directories` and `Library Directories` if you haven't already.
-+ Include `d3d9.lib;d3dx9.lib;dxguid.lib;dinput8.lib` to the `Additional Dependencies`.
-+ And finally make sure that the active `Platform` is `Win32`.
++ Linker > Input > Additional Dependencies: `d3d10.lib;dxguid.lib;dinput8.lib;`.
++ Configuration: `Active(Debug)`, Platform: `Win32`.
 
 ## Controls
 
-|Key          |Action             |
-|-------------|-------------------|
-|<kbd>A</kbd> |Move left          |
-|<kbd>D</kbd> |Move right         |
-|<kbd>S</kbd> |Crouch/Duck        |
-|<kbd>J</kbd> |Attack/Hold shell  |
-|<kbd>K</kbd> |Jump               |
+|Key          |Action                 |
+|-------------|-----------------------|
+|<kbd>A</kbd> |Move left              |
+|<kbd>D</kbd> |Move right             |
+|<kbd>S</kbd> |Crouch/Duck            |
+|<kbd>J</kbd> |Attack/Hold shell/Run  |
+|<kbd>K</kbd> |Jump                   |
 
 ## Credits
 + 125scratch, Jermungandr for the Mario & Luigi sprites.

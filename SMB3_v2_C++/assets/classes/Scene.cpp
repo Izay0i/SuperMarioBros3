@@ -674,10 +674,23 @@ void Scene::Update(DWORD deltaTime) {
 	std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
 	switch (_sceneID) {
 		case SceneType::SCENE_TYPE_INTRO:
-
+			for (unsigned int i = 0; i < _entities.size(); ++i) {
+				Entity* entity = _entities.at(i);
+				entity->Update(deltaTime, &_entities, &_tiles);
+			}
 			break;
 		case SceneType::SCENE_TYPE_MAP:
+			for (unsigned int i = 0; i < _entities.size(); ++i) {
+				Entity* entity = _entities.at(i);
+				entity->SetActive(_IsEntityInViewport(entity, _cameraInstance->GetViewport()));
+				entity->Update(deltaTime, &_entities, &_tiles, _grid);
+			}
 
+			/*
+			if (_mario->IsInStageNode()) {
+				SceneManager::GetInstance()->ChangeScene(_mario->GetNextSceneID());
+			}
+			*/
 			break;
 		case SceneType::SCENE_TYPE_STAGE_ONE:
 		case SceneType::SCENE_TYPE_STAGE_FOUR:
@@ -816,6 +829,8 @@ void Scene::Update(DWORD deltaTime) {
 				}
 			}
 
+			UpdateCameraPosition();
+
 			if (_mario->TriggeredStageEnd() || _mario->GetHealth() == 0 || _sceneTime == 0) {
 				//Warp back to map
 				
@@ -831,13 +846,12 @@ void Scene::Update(DWORD deltaTime) {
 			}
 			break;
 	}
-
-	UpdateCameraPosition();
+	
 	if (_hud != nullptr) {
 		_hud->Update(_sceneTime);
 		_hud->SetPosition({
 			_cameraInstance->GetPosition().x + 132.0f, 
-			_cameraInstance->GetPosition().y + 161.0f 
+			_cameraInstance->GetPosition().y + 171.0f 
 		});
 	}
 

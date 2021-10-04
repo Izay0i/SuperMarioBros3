@@ -32,7 +32,7 @@ Player::Player() {
 	_touchedEntity = nullptr;
 
 	_flyTime = 6000;
-	_inPipeTime = 4000;
+	_inPipeTime = 2000;
 	_attackTime = 300;
 	_fireballCoolDownTime = 2500;
 	_invulnerableTime = 3000;
@@ -332,7 +332,9 @@ void Player::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventEntity == nullptr) {
+	if (IsInPipe()) {
+		minTime = { 1.0f, 1.0f };
+		offset = normal = { 0, 0 };
 		return;
 	}
 
@@ -658,13 +660,9 @@ void Player::Update(
 		MoveRight();
 	}
 
-	_playerState->Update(deltaTime);
-	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
-
 	if (IsInPipe()) {
-		_velocity.y = _health > 1 ? 0.007f : 0.005f;
+		_velocity.y = _health > 1 ? 0.035f : 0.03f;
 		_velocity.y *= _normal.y;
-		_position.y += _distance.y;
 
 		_isHolding = false;
 		_velocity.x = 0.0f;
@@ -679,6 +677,9 @@ void Player::Update(
 			}
 		}
 	}
+
+	_playerState->Update(deltaTime);
+	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 
 	if (_heldEntity != nullptr) {
 		if (_heldEntity->GetHealth() == 0 || _heldEntity->GetHealth() == 3) {
