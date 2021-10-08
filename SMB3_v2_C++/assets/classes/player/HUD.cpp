@@ -179,7 +179,7 @@ void HUD::Update(DWORD sceneTime, std::vector<GameObject*>*) {
 }
 
 void HUD::Render() {
-	_animatedSprite.PlaySpriteAnimation("BlackBG", { _position.x, _position.y + 50.0f });
+	_animatedSprite.PlaySpriteAnimation("BlackBG", { _position.x - 2.0f, _position.y + 42.0f });
 	_animatedSprite.PlaySpriteAnimation("Panel", _position);
 
 	//Lives

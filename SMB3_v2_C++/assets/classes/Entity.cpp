@@ -135,16 +135,19 @@ void Entity::Update(
 	}
 	
 	GameObject::Update(deltaTime);
-	_velocity.y += _gravity * _deltaTime;
+	//Disables gravity if scene type is overworld map
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() != Scene::SceneType::SCENE_TYPE_MAP) {
+		_velocity.y += _gravity * _deltaTime;
+	}
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	if (_health > 0) {
-		if (grid != nullptr) {
-			//Edge case: what if the entity's bounding box is larger than the grid cell size? i.e: tile->_hitbox > grid->_cellsize
-			//Use another collection (collidableTiles) and calculate the collisions
-			//Since tiles themselves are static, as in, they don't update and render every tick, performance wise it's negligible
-			CalcPotentialCollision(collidableTiles, collisionEvents);
-			
+		//Edge case: what if the entity's bounding box is larger than the grid cell size? i.e: tile->_hitbox > grid->_cellsize
+		//Use another collection (collidableTiles) and calculate the collisions
+		//Since tiles themselves are static, as in, they don't update and render every tick, performance wise it's negligible
+		CalcPotentialCollision(collidableTiles, collisionEvents);
+
+		if (grid != nullptr) {	
 			//Check collisions from the residing cell
 			CalcPotentialCollision(&ownerCell->entities, collisionEvents);
 
@@ -190,7 +193,6 @@ void Entity::Update(
 			}
 		}
 		else {
-			CalcPotentialCollision(collidableTiles, collisionEvents);
 			CalcPotentialCollision(collidableEntities, collisionEvents);
 		}
 	}

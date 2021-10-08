@@ -135,10 +135,6 @@ void ShinyBrick::Update(
 }
 
 void ShinyBrick::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_state) {
 		case _State::PUSHED:
 			_animatedSprite.PlaySpriteAnimation("Blank", _position);

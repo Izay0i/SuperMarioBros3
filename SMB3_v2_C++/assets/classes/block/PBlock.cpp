@@ -92,10 +92,6 @@ void PBlock::Update(
 }
 
 void PBlock::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_state) {
 		case _State::ACTIVE:
 			_animatedSprite.PlaySpriteAnimation("PBlock", _position);

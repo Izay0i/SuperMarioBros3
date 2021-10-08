@@ -72,10 +72,6 @@ void BonusItem::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities
 }
 
 void BonusItem::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_state) {
 		case _State::PICKEDUP:
 			{

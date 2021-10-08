@@ -61,10 +61,6 @@ void Leaf::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities, std
 }
 
 void Leaf::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	_animatedSprite.PlaySpriteAnimation("Leaf", _position, _scale);
 }
 

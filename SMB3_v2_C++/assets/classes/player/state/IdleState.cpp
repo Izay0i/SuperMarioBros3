@@ -1,6 +1,7 @@
 #include "../../Device.h"
 #include "PlayerState.h"
 #include "IdleState.h"
+#include "MapState.h"
 #include "RunState.h"
 #include "JumpState.h"
 #include "FallState.h"
@@ -16,7 +17,10 @@ IdleState::IdleState(Player* player) {
 }
 
 PlayerState* IdleState::HandleStates() {
-	if (_player->_velocity.x != 0.0f && _player->_isOnGround || _player->_triggeredStageEnd) {
+	if (_player->_isInMap) {
+		return new MapState(_player);
+	}
+	else if (_player->_velocity.x != 0.0f && _player->_isOnGround || _player->_triggeredStageEnd) {
 		return new RunState(_player);
 	}
 	else if (_player->_velocity.y < 0.0f) {

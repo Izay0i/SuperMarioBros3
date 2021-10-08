@@ -215,13 +215,14 @@ void Scene::_ParseEntityData(std::string line) {
 	D3DXVECTOR2 position = D3DXVECTOR2(x, y);
 
 	unsigned int textureID = std::stoul(tokens.at(2));
+	Texture* texture = GetTexture(textureID);
 
 	Entity* entity = nullptr;
 	switch (objectType) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MARIO:
 			_mario = new Player;
 			_mario->SetOjectType(objectType);
-			_mario->ParseData(tokens.at(1), _textureMap[textureID], extraData);
+			_mario->ParseData(tokens.at(1), texture, extraData);
 			_mario->SetPosition(position);
 
 			_entities.emplace_back(_mario);
@@ -229,31 +230,31 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LUIGI:
 			_luigi = new Player;
 			_luigi->SetOjectType(objectType);
-			_luigi->ParseData(tokens.at(1), _textureMap[textureID], extraData);
+			_luigi->ParseData(tokens.at(1), texture, extraData);
 			_luigi->SetPosition(position);
 
 			_entities.emplace_back(_luigi);
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
-			//entity = new Goomba;
+			entity = new Goomba;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
-			//entity = new Paragoomba;
+			entity = new Paragoomba;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_KOOPA:
-			//entity = new Koopa;
+			entity = new Koopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
-			//entity = new Parakoopa;
+			entity = new Parakoopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
-			//entity = new PiranaPlant;
+			entity = new PiranaPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
-			//entity = new VenusPlant;
+			entity = new VenusPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
-			//entity = new BoomerBro;
+			entity = new BoomerBro;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PORTAL:
 			entity = new Portal;
@@ -277,19 +278,19 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new PBlock;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_CACTUS:
-			//entity = new Cactus;
+			entity = new Cactus;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_HELPTEXT:
-			//entity = new HelpText;
+			entity = new HelpText;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_HAMMERBRO:
-			//entity = new HammerBro;
+			entity = new HammerBro;
 			break;
 	}
 
 	if (entity != nullptr) {
 		entity->SetOjectType(objectType);
-		entity->ParseData(tokens.at(1), _textureMap[textureID], extraData);
+		entity->ParseData(tokens.at(1), texture, extraData);
 		entity->SetPosition(position);
 		
 		_entities.emplace_back(entity);
@@ -337,9 +338,11 @@ void Scene::_ParseMainEffect(std::string line) {
 
 	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(tokens.at(0)));
 	unsigned int textureID = std::stoul(tokens.at(2));
+	Texture* texture = GetTexture(textureID);
+
 	_scorePopUp = new ScorePopUp(_mario);
 	_scorePopUp->SetOjectType(objectType);
-	_scorePopUp->ParseData(tokens.at(1), _textureMap[textureID]);
+	_scorePopUp->ParseData(tokens.at(1), texture);
 }
 
 void Scene::_ParseHUD(std::string line) {
@@ -350,8 +353,10 @@ void Scene::_ParseHUD(std::string line) {
 	}
 
 	unsigned int textureID = std::stoul(tokens.at(1));
+	Texture* texture = GetTexture(textureID);
+
 	_hud = new HUD(_mario);
-	_hud->ParseData(tokens.at(0), _textureMap[textureID]);
+	_hud->ParseData(tokens.at(0), texture);
 }
 
 void Scene::_ParseBackground(std::string line) {
@@ -359,7 +364,9 @@ void Scene::_ParseBackground(std::string line) {
 
 	if (tokens.size() == 1) {
 		unsigned int textureID = std::stoul(tokens.at(0));
-		_background = new Background(_textureMap[textureID]);
+		Texture* texture = GetTexture(textureID);
+
+		_background = new Background(texture);
 		return;
 	}
 
@@ -430,6 +437,26 @@ void Scene::OnKeyUp(int keyCode) {
 }
 
 void Scene::OnKeyDown(int keyCode) {
+	switch (keyCode) {
+		case DIK_1:
+			_mario->SetHealth(1);
+			break;
+		case DIK_2:
+			_mario->SetHealth(2);
+			break;
+		case DIK_3:
+			_mario->SetHealth(3);
+			break;
+		case DIK_4:
+			_mario->SetHealth(4);
+			break;
+		case DIK_K:
+			if (_mario->IsInMap() && _mario->GetNextSceneID() != 0) {
+				SceneManager::GetInstance()->ChangeScene(_mario->GetNextSceneID());
+			}
+			break;
+	}
+	
 	_mario->OnKeyDown(keyCode);
 }
 
@@ -452,6 +479,7 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 
 	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(objectID));
 	unsigned int texID = std::stoul(textureID);
+	Texture* texture = GetTexture(texID);
 
 	switch (objectType) {
 		//Projectiles
@@ -484,7 +512,7 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 	}
 
 	entity->SetOjectType(objectType);
-	entity->ParseData(dataPath, _textureMap[texID]);
+	entity->ParseData(dataPath, texture);
 	return entity;
 }
 
@@ -670,8 +698,7 @@ void Scene::Update(DWORD deltaTime) {
 		OutputDebugStringA(debug);
 		return;
 	}
-	
-	std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
+
 	switch (_sceneID) {
 		case SceneType::SCENE_TYPE_INTRO:
 			for (unsigned int i = 0; i < _entities.size(); ++i) {
@@ -682,15 +709,8 @@ void Scene::Update(DWORD deltaTime) {
 		case SceneType::SCENE_TYPE_MAP:
 			for (unsigned int i = 0; i < _entities.size(); ++i) {
 				Entity* entity = _entities.at(i);
-				entity->SetActive(_IsEntityInViewport(entity, _cameraInstance->GetViewport()));
 				entity->Update(deltaTime, &_entities, &_tiles, _grid);
 			}
-
-			/*
-			if (_mario->IsInStageNode()) {
-				SceneManager::GetInstance()->ChangeScene(_mario->GetNextSceneID());
-			}
-			*/
 			break;
 		case SceneType::SCENE_TYPE_STAGE_ONE:
 		case SceneType::SCENE_TYPE_STAGE_FOUR:
@@ -713,6 +733,7 @@ void Scene::Update(DWORD deltaTime) {
 						_scorePopUp->GetEntity(entity);
 						_scorePopUp->SetPosition(entity->GetPosition());
 						_scorePopUp->StartFloatTimer();
+						//entity->tookDamage = false;
 					}
 					
 					switch (entity->GetObjectType()) {
@@ -782,8 +803,6 @@ void Scene::Update(DWORD deltaTime) {
 									AddEntityToScene(shinyBrick->SpawnItem());
 								}
 								else if (shinyBrick->GetHealth() == -1) {
-									//This is what your brain creates at 4AM
-									
 									//Top left
 									auto debris = shinyBrick->SpawnDebris();
 									debris->SetVelocity({ -0.08f, -0.28f });
@@ -832,27 +851,29 @@ void Scene::Update(DWORD deltaTime) {
 			UpdateCameraPosition();
 
 			if (_mario->TriggeredStageEnd() || _mario->GetHealth() == 0 || _sceneTime == 0) {
-				//Warp back to map
-				
-				//DEBUGGING
+				//Warp back to map				
 				if (!IsTransitioningToScene()) {
 					StartToSceneTimer();
 				}
 
 				if (IsTransitioningToScene() && GetTickCount64() - _toSceneStart > _toSceneTime) {
 					_toSceneStart = 0;
-					SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_TYPE_STAGE_ONE));
+					SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_TYPE_MAP));
+					//Prematurely end the loop to avoid nullptr on some objects
+					//No an elegant solution, could possibly move those objects above the loop
+					return;
 				}
 			}
 			break;
 	}
-	
+	std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
+
 	if (_hud != nullptr) {
 		_hud->Update(_sceneTime);
 		_hud->SetPosition({
-			_cameraInstance->GetPosition().x + 132.0f, 
-			_cameraInstance->GetPosition().y + 171.0f 
-		});
+			_cameraInstance->GetPosition().x + 134.0f,
+			_cameraInstance->GetPosition().y + (_sceneID == SceneType::SCENE_TYPE_MAP ? 177.0f : 161.0f)
+			});
 	}
 
 	if (_scorePopUp != nullptr) {
@@ -915,9 +936,7 @@ void Scene::Release() {
 
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		//These entities belong to the player, so they have a responsibility to release their resources
-		if (_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL ||
-			_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_SCOREEFFECT)
-		{
+		if (_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL) {
 			continue;
 		}
 

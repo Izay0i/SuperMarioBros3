@@ -10,102 +10,11 @@ void Player::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _playerTexture);
 }
 
-Player::Player() {
-	_scale = D3DXVECTOR2(-1.0f, 1.0f);
-	_renderPriority = 0;
-
-	_runSpeed = 0.09f;
-	_jumpSpeed = 0.327f;
-	_bounceSpeed = 0.4f;
-	_gravity = 0.0025f;
-	_acceleration = 0.5f;
-
-	_health = 4;
-
-	_lives = 3;
-	_coins = 0;
-	_score = 0;
-
-	_fireballsCount = 0;
-
-	_heldEntity = nullptr;
-	_touchedEntity = nullptr;
-
-	_flyTime = 6000;
-	_inPipeTime = 2000;
-	_attackTime = 300;
-	_fireballCoolDownTime = 2500;
-	_invulnerableTime = 3000;
-
-	_playerState = new IdleState(this);
-	_tail = new Tail(this);
-
-	_bonusItems.reserve(3);
-}
-
-Player::~Player() {}
-
-RECTF Player::GetBoundingBox(int index) const {
-	return GameObject::GetBoundingBox(_health >= 2 && !_isInMap && !_isCrouching);
-}
-
-Entity* Player::GetHeldEntity() const {
-	return _heldEntity;
-}
-
-bool Player::TriggeredStageEnd() const {
-	return _triggeredStageEnd;
-}
-
-bool Player::WentIntoPipe() const {
-	return _wentIntoPipe;
-}
-
-bool Player::IsFlying() const {
-	return _flyStart != 0;
-}
-
-bool Player::IsInPipe() const {
-	return _inPipeStart != 0;
-}
-
-bool Player::IsAttacking() const {
-	return _attackStart != 0;
-}
-
-bool Player::IsOnFireballCoolDown() const {
-	return _fireballCoolDownStart != 0;
-}
-
-bool Player::IsInvulnerable() const {
-	return _invulnerableStart != 0;
-}
-
-void Player::StartFlyTimer() {
-	_flyStart = static_cast<DWORD>(GetTickCount64());
-}
-
-void Player::StartInPipeTimer() {
-	_inPipeStart = static_cast<DWORD>(GetTickCount64());
-}
-
-void Player::StartAttackTimer() {
-	_attackStart = static_cast<DWORD>(GetTickCount64());
-}
-
-void Player::StartFireballCoolDownTimer() {
-	_fireballCoolDownStart = static_cast<DWORD>(GetTickCount64());
-}
-
-void Player::StartInvulnerableTimer() {
-	_invulnerableStart = static_cast<DWORD>(GetTickCount64());
-}
-
-void Player::HandleStates() {
+void Player::_HandleMovement() {
 	if (_isOnGround) {
 		_gravity = 0.0025f;
 	}
-	
+
 	//Variable jump height	
 	if (Device::IsKeyDown(DIK_K)) {
 		if (_gravity > _MAX_GRAVITY) {
@@ -173,15 +82,13 @@ void Player::HandleStates() {
 	if (_acceleration >= _ACCEL_THRESHOLD) {
 		_gravity = 0.0013f;
 	}
-
-	PlayerState* currentState = _playerState->HandleStates();
-	if (currentState != nullptr) {
-		delete _playerState;
-		_playerState = currentState;
-	}
 }
 
-void Player::OnKeyUp(int keyCode) {
+void Player::_OnKeyUpMap(int keyCode) {
+	//Stub
+}
+
+void Player::_OnKeyUpGame(int keyCode) {
 	switch (keyCode) {
 		case DIK_S:
 			_isCrouching = false;
@@ -197,21 +104,25 @@ void Player::OnKeyUp(int keyCode) {
 	}
 }
 
-void Player::OnKeyDown(int keyCode) {
+void Player::_OnKeyDownMap(int keyCode) {
 	switch (keyCode) {
-		case DIK_1:
-			_health = 1;
+		case DIK_W:
+			_velocity.y = -0.08f;
 			break;
-		case DIK_2:
-			_health = 2;
+		case DIK_A:
+			_velocity.x = -0.08f;
 			break;
-		case DIK_3:
-			_health = 3;
+		case DIK_S:
+			_velocity.y = 0.08f;
 			break;
-		case DIK_4:
-			_health = 4;
+		case DIK_D:
+			_velocity.x = 0.08f;
 			break;
+	}
+}
 
+void Player::_OnKeyDownGame(int keyCode) {
+	switch (keyCode) {
 		case DIK_A:
 			_normal.x = -1.0f;
 			break;
@@ -246,6 +157,148 @@ void Player::OnKeyDown(int keyCode) {
 			RunFly();
 			Jump();
 			break;
+	}
+}
+
+Player::Player() {
+	_scale = D3DXVECTOR2(-1.0f, 1.0f);
+	_renderPriority = 0;
+
+	_runSpeed = 0.09f;
+	_jumpSpeed = 0.327f;
+	_bounceSpeed = 0.4f;
+	_gravity = 0.0025f;
+	_acceleration = 0.5f;
+
+	_health = 4;
+
+	_lives = 3;
+	_coins = 0;
+	_score = 0;
+
+	_fireballsCount = 0;
+
+	_heldEntity = nullptr;
+	_touchedEntity = nullptr;
+
+	_flyTime = 6000;
+	_inPipeTime = 2000;
+	_attackTime = 300;
+	_fireballCoolDownTime = 2500;
+	_invulnerableTime = 3000;
+
+	_playerState = new IdleState(this);
+	_tail = new Tail(this);
+
+	_bonusItems.reserve(3);
+
+	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == Scene::SceneType::SCENE_TYPE_MAP) {
+		_isInMap = true;
+	}
+}
+
+Player::~Player() {}
+
+unsigned int Player::GetNextSceneID() const {
+	return _nextSceneID;
+}
+
+RECTF Player::GetBoundingBox(int index) const {
+	return GameObject::GetBoundingBox(_health >= 2 && !_isInMap && !_isCrouching);
+}
+
+Entity* Player::GetHeldEntity() const {
+	return _heldEntity;
+}
+
+bool Player::TriggeredStageEnd() const {
+	return _triggeredStageEnd;
+}
+
+bool Player::WentIntoPipe() const {
+	return _wentIntoPipe;
+}
+
+bool Player::IsInMap() const {
+	return _isInMap;
+}
+
+bool Player::IsFlying() const {
+	return _flyStart != 0;
+}
+
+bool Player::IsInPipe() const {
+	return _inPipeStart != 0;
+}
+
+bool Player::IsAttacking() const {
+	return _attackStart != 0;
+}
+
+bool Player::IsOnFireballCoolDown() const {
+	return _fireballCoolDownStart != 0;
+}
+
+bool Player::IsInvulnerable() const {
+	return _invulnerableStart != 0;
+}
+
+void Player::StartFlyTimer() {
+	_flyStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::StartInPipeTimer() {
+	_inPipeStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::StartAttackTimer() {
+	_attackStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::StartFireballCoolDownTimer() {
+	_fireballCoolDownStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::StartInvulnerableTimer() {
+	_invulnerableStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Player::HandleStates() {
+	if (_isInMap) {	
+		if (abs(_position.x - _lastPos.x) >= _MAX_TRAVEL_DISTANCE || abs(_position.y - _lastPos.y) >= _MAX_TRAVEL_DISTANCE) {
+			_velocity = { 0.0f, 0.0f };
+			_lastPos = _position;
+			if (_mapNodePos.x != 0.0f && _mapNodePos.y != 0.0f) {
+				_position = _mapNodePos;
+			}
+		}
+	}
+	else {
+		_HandleMovement();
+	}
+
+	PlayerState* currentState = _playerState->HandleStates();
+	if (currentState != nullptr) {
+		delete _playerState;
+		_playerState = currentState;
+	}
+}
+
+void Player::OnKeyUp(int keyCode) {
+	if (_isInMap) {
+		_OnKeyUpMap(keyCode);
+	}
+	else {
+		_OnKeyUpGame(keyCode);
+	}
+}
+
+void Player::OnKeyDown(int keyCode) {
+	if (_isInMap) {
+		_OnKeyDownMap(keyCode);
+	}
+	else {
+		_OnKeyDownGame(keyCode);
 	}
 }
 
@@ -462,7 +515,7 @@ void Player::HandleCollisionResult(
 				Portal* portal = dynamic_cast<Portal*>(eventEntity);
 				if (portal->GetExtraData().size() == 1) {
 					_nextSceneID = portal->GetSceneID();
-					//_mapNodePos = portal->GetPosition();
+					_mapNodePos = portal->GetPosition();
 
 					minTime = { 1.0f, 1.0f };
 					offset = normal = { 0, 0 };
@@ -718,10 +771,6 @@ void Player::Update(
 }
 
 void Player::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	_playerState->Render();
 }
 

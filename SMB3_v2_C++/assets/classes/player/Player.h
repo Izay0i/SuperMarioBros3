@@ -11,6 +11,7 @@ class PlayerState;
 class Player : public Entity {
 private:
 	friend class PlayerState;
+	friend class MapState;
 	friend class IdleState;
 	friend class RunState;
 	friend class JumpState;
@@ -64,6 +65,8 @@ private:
 
 	std::vector<GameObject::GameObjectType> _bonusItems;
 
+	D3DXVECTOR2 _lastPos;
+	D3DXVECTOR2 _mapNodePos;
 	D3DXVECTOR2 _destination;
 
 	DWORD _flyStart;
@@ -84,16 +87,23 @@ private:
 	DWORD _invulnerableTime;
 
 	void _ParseSprites(std::string) override;
+	void _HandleMovement();
+	void _OnKeyUpMap(int);
+	void _OnKeyUpGame(int);
+	void _OnKeyDownMap(int);
+	void _OnKeyDownGame(int);
 
 public:
 	Player();
 	~Player();
 
+	unsigned int GetNextSceneID() const;
 	RECTF GetBoundingBox(int = 0) const override;
 	Entity* GetHeldEntity() const;
 	
 	bool TriggeredStageEnd() const;
 	bool WentIntoPipe() const;
+	bool IsInMap() const;
 	bool IsFlying() const;
 	bool IsInPipe() const;
 	bool IsAttacking() const;

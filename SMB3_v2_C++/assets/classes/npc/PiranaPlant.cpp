@@ -146,10 +146,6 @@ void PiranaPlant::Update(
 }
 
 void PiranaPlant::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_state) {
 		case _State::BITE:
 			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedChomp" : "GreenChomp", _position);

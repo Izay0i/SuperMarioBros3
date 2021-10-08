@@ -21,4 +21,8 @@
 #include "block/ShinyBrick.h"
 #include "block/PBlock.h"
 
+#include "map/Cactus.h"
+#include "map/HelpText.h"
+#include "map/HammerBro.h"
+
 #include "effect/BrickDebris.h"

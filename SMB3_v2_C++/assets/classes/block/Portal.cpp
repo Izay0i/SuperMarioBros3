@@ -40,7 +40,7 @@ void Portal::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&,
 void Portal::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {}
 
 void Portal::Render() {
-	_animatedSprite.PlaySpriteAnimation("Portal", _position);
+	//_animatedSprite.PlaySpriteAnimation("Portal", _position);
 }
 
 void Portal::Release() {

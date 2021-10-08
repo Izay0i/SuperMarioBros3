@@ -103,10 +103,6 @@ void Goomba::Update(
 }
 
 void Goomba::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_state) {
 		case _State::FLY:
 			_animatedSprite.PlaySpriteAnimation(_isOnGround ? "RedWingIdle" : "RedWingActive", { _position.x, _position.y - 8.0f });

@@ -103,10 +103,6 @@ void Mushroom::Update(
 }
 
 void Mushroom::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_objectType) {
 		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
 			_animatedSprite.PlaySpriteAnimation("RedShroom", _position);

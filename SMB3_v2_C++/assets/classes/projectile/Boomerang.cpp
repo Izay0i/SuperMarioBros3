@@ -96,13 +96,10 @@ void Boomerang::Update(
 }
 
 void Boomerang::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	_animatedSprite.PlaySpriteAnimation("Boomerang", _position);
 }
 
 void Boomerang::Release() {
+	_animatedSprite.Release();
 	_boomerangTexture = nullptr;
 }

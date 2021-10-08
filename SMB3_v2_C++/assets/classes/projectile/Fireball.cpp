@@ -148,13 +148,10 @@ void Fireball::Update(
 }
 
 void Fireball::Render() {
-	if (!_isActive) {
-		return;
-	}
-	
 	_animatedSprite.PlaySpriteAnimation("Fireball", _position);
 }
 
 void Fireball::Release() {
+	_animatedSprite.Release();
 	_fireballTexture = nullptr;
 }

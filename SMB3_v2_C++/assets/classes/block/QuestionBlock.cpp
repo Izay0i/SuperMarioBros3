@@ -153,10 +153,6 @@ void QuestionBlock::Update(
 }
 
 void QuestionBlock::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_state) {
 		case _State::PUSHED:
 			_animatedSprite.PlaySpriteAnimation("Blank", _position);

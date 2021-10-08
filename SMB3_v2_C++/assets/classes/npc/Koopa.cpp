@@ -181,10 +181,6 @@ void Koopa::Update(
 }
 
 void Koopa::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_state) {
 		case _State::FLY:
 			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedFly" : "GreenFly", _position, { _normal.x, _scale.y });
