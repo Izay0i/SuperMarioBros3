@@ -262,6 +262,9 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
 			//entity = new MovingPlatform;
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LEAF:
+			entity = new Leaf;
+			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
 			entity = new Coin;
 			break;
@@ -285,6 +288,24 @@ void Scene::_ParseEntityData(std::string line) {
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_HAMMERBRO:
 			entity = new HammerBro;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LOGO:
+			entity = new GameLogo;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_ICON:
+			entity = new GameIcon;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_SELECT:
+			entity = new SelectText;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_CURTAIN:
+			entity = new Curtain;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PROPPLANT:
+			entity = new PropPlant;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BUZZYBEETLE:
+			entity = new BuzzyBeetle;
 			break;
 	}
 
@@ -387,6 +408,152 @@ void Scene::_ParseBackground(std::string line) {
 	_background->AddSprite(spriteBound, position);
 }
 
+void Scene::_IntroScript(DWORD deltaTime) {
+	for (unsigned int i = 0; i < _entities.size(); ++i) {
+		Entity* entity = _entities.at(i);
+		entity->Update(deltaTime, &_entities, &_tiles);
+
+		/*char debug[100];
+		sprintf_s(debug, "Scene time: %lu\n", _sceneTime);
+		OutputDebugStringA(debug);*/
+
+		switch (_sceneTime) {
+			case 60:
+				_mario->MoveLeft();
+				_mario->SetScale({ 1.0f, _mario->GetScale().y });
+				_luigi->MoveRight();
+				break;
+			case 59:
+
+				break;
+			case 58:
+
+				break;
+			case 57:
+
+				break;
+			case 56:
+
+				break;
+			case 55:
+				_luigi->SetVelocity({ _luigi->GetVelocity().x, -0.4f });
+				_luigi->Jump();
+				break;
+			case 54:
+
+				break;
+			case 53:
+
+				break;
+			case 52:
+
+				break;
+			case 51:
+
+				break;
+			case 50:
+
+				break;
+			case 49:
+
+				break;
+			case 48:
+
+				break;
+			case 47:
+
+				break;
+			case 46:
+
+				break;
+			case 45:
+
+				break;
+			case 44:
+
+				break;
+			case 43:
+
+				break;
+			case 42:
+
+				break;
+			case 41:
+
+				break;
+			case 40:
+
+				break;
+			case 39:
+
+				break;
+			case 38:
+
+				break;
+			case 37:
+
+				break;
+			case 36:
+
+				break;
+			case 35:
+
+				break;
+			case 34:
+
+				break;
+			case 33:
+
+				break;
+			case 32:
+
+				break;
+			case 31:
+
+				break;
+			case 30:
+
+				break;
+			case 29:
+
+				break;
+			case 28:
+
+				break;
+			case 27:
+
+				break;
+			case 26:
+
+				break;
+			case 25:
+
+				break;
+			case 24:
+
+				break;
+			case 23:
+
+				break;
+			case 22:
+
+				break;
+			case 21:
+
+				break;
+			case 20:
+
+				break;
+		}
+
+		if (entity->GetHealth() == -1) {
+			delete entity;
+
+			_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
+		}
+	}
+}
+
 Scene::Scene(SceneType sceneID, std::string path) {
 	_sceneID = sceneID;
 	_filePath = path;
@@ -421,7 +588,9 @@ D3DXCOLOR Scene::GetBGColor() const {
 
 Texture* Scene::GetTexture(unsigned int id) const {
 	if (_textureMap.find(id) == _textureMap.end()) {
-		OutputDebugStringA("[SCENE] No valid texture with the corresponding ID\n");
+		char debug[100];
+		sprintf_s(debug, "[SCENE] No valid texture with the corresponding ID: %lu\n", id);
+		OutputDebugStringA(debug);
 		return nullptr;
 	}
 
@@ -701,10 +870,12 @@ void Scene::Update(DWORD deltaTime) {
 
 	switch (_sceneID) {
 		case SceneType::SCENE_TYPE_INTRO:
-			for (unsigned int i = 0; i < _entities.size(); ++i) {
-				Entity* entity = _entities.at(i);
-				entity->Update(deltaTime, &_entities, &_tiles);
+			if (_sceneTime > 0 && GetTickCount64() % 1000 == 0) {
+				--_sceneTime;
 			}
+
+			//Script
+			_IntroScript(deltaTime);
 			break;
 		case SceneType::SCENE_TYPE_MAP:
 			for (unsigned int i = 0; i < _entities.size(); ++i) {

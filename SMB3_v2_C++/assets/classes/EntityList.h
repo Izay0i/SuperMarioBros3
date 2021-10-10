@@ -25,4 +25,11 @@
 #include "map/HelpText.h"
 #include "map/HammerBro.h"
 
+#include "intro/GameLogo.h"
+#include "intro/GameIcon.h"
+#include "intro/SelectText.h"
+#include "intro/Curtain.h"
+#include "intro/PropPlant.h"
+#include "intro/BuzzyBeetle.h"
+
 #include "effect/BrickDebris.h"

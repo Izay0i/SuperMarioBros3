@@ -1,0 +1,53 @@
+[SCENESIZE]
+256	224
+[/]
+
+[SCENETIME]
+60
+[/]
+
+[BGCOLOR]
+255	255	255
+[/]
+
+[TEXTURES]
+0	assets\textures\titlescreen.png	224	163	216
+1	assets\textures\player.png	224	163	216
+2	assets\textures\enemies.png	224	163	216
+[/]
+
+[ENTITYDATA]
+0	assets\data\player\mario.txt	1	240	125
+1	assets\data\player\luigi.txt	1	0	125
+
+#Goomba
+
+#Koopa
+
+#Leaf
+
+#Logo
+
+#Icon
+501	assets\data\intro\icon.txt	0	128	70
+
+#Select text
+
+#Curtain
+503	assets\data\intro\curtain.txt	0	128	70
+
+#Prop plant
+
+#Buzzy
+
+[/]
+
+[TILEDATA]
+777	-64	155	384	37
+[/]
+
+[BACKGROUND]
+0
+#Floor
+0	0	256	224	120	74
+[/]

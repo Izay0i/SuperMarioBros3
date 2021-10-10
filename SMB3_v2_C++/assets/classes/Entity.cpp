@@ -44,6 +44,10 @@ std::vector<std::string> Entity::GetExtraData() const {
 	return _extraData;
 }
 
+AnimatedSprite Entity::GetAnimatedSprite() const {
+	return _animatedSprite;
+}
+
 void Entity::SetHealth(int health) {
 	if (health > -2) {
 		_health = health;

@@ -170,7 +170,7 @@ Player::Player() {
 	_gravity = 0.0025f;
 	_acceleration = 0.5f;
 
-	_health = 4;
+	_health = 2;
 
 	_lives = 3;
 	_coins = 0;
@@ -771,7 +771,14 @@ void Player::Update(
 }
 
 void Player::Render() {
-	_playerState->Render();
+	switch (_objectType) {
+		case GameObjectType::GAMEOBJECT_TYPE_MARIO:
+			_playerState->Render();
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_LUIGI:
+			_animatedSprite.PlaySpriteAnimation("BigRun", _position, _scale);
+			break;
+	}
 }
 
 void Player::Release() {

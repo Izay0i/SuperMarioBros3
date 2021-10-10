@@ -57,6 +57,8 @@ public:
 
 	std::vector<std::string> GetExtraData() const;
 
+	AnimatedSprite GetAnimatedSprite() const;
+
 	virtual void SetHealth(int);
 	virtual int GetHealth() const;
 

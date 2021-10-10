@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -156,6 +156,12 @@
     <ClCompile Include="assets\classes\GameObject.cpp" />
     <ClCompile Include="assets\classes\GlobalUtil.cpp" />
     <ClCompile Include="assets\classes\Hitbox.cpp" />
+    <ClCompile Include="assets\classes\intro\BuzzyBeetle.cpp" />
+    <ClCompile Include="assets\classes\intro\Curtain.cpp" />
+    <ClCompile Include="assets\classes\intro\GameIcon.cpp" />
+    <ClCompile Include="assets\classes\intro\GameLogo.cpp" />
+    <ClCompile Include="assets\classes\intro\PropPlant.cpp" />
+    <ClCompile Include="assets\classes\intro\SelectText.cpp" />
     <ClCompile Include="assets\classes\item\BonusItem.cpp" />
     <ClCompile Include="assets\classes\item\Coin.cpp" />
     <ClCompile Include="assets\classes\item\Leaf.cpp" />
@@ -208,6 +214,12 @@
     <ClInclude Include="assets\classes\GlobalUtil.h" />
     <ClInclude Include="assets\classes\Device.h" />
     <ClInclude Include="assets\classes\Hitbox.h" />
+    <ClInclude Include="assets\classes\intro\BuzzyBeetle.h" />
+    <ClInclude Include="assets\classes\intro\Curtain.h" />
+    <ClInclude Include="assets\classes\intro\GameIcon.h" />
+    <ClInclude Include="assets\classes\intro\GameLogo.h" />
+    <ClInclude Include="assets\classes\intro\PropPlant.h" />
+    <ClInclude Include="assets\classes\intro\SelectText.h" />
     <ClInclude Include="assets\classes\item\BonusItem.h" />
     <ClInclude Include="assets\classes\item\Coin.h" />
     <ClInclude Include="assets\classes\item\Leaf.h" />

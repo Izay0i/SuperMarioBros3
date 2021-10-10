@@ -94,6 +94,8 @@ private:
 	void _ParseMainEffect(std::string);
 	void _ParseBackground(std::string);
 
+	void _IntroScript(DWORD);
+
 public:
 	Scene(SceneType, std::string);
 	~Scene();
