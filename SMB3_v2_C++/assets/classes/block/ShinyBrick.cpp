@@ -103,6 +103,14 @@ void ShinyBrick::TakeDamage() {
 
 void ShinyBrick::HandleStates() {
 	_state = static_cast<_State>(_health);
+
+	switch (_state) {
+		case _State::COIN:
+			_gravity = 0.0f;
+			break;
+		default:
+			_gravity = 0.001f;
+	}
 }
 
 void ShinyBrick::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
@@ -143,7 +151,7 @@ void ShinyBrick::Render() {
 			_animatedSprite.PlaySpriteAnimation("Brick", _position);
 			break;
 		case _State::COIN:
-
+			_animatedSprite.PlaySpriteAnimation("Coin", _position);
 			break;
 	}
 }

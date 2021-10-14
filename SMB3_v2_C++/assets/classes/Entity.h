@@ -52,12 +52,15 @@ public:
 	Entity();
 	virtual ~Entity();
 
+	
+
 	bool IsRemoved() const;
 	void StartRemoveTimer();
 
 	std::vector<std::string> GetExtraData() const;
-
-	AnimatedSprite GetAnimatedSprite() const;
+	
+	void SetGravity(float);
+	float GetGravity() const;
 
 	virtual void SetHealth(int);
 	virtual int GetHealth() const;

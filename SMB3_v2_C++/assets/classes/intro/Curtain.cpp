@@ -10,7 +10,7 @@ void Curtain::_ParseSprites(std::string line) {
 Curtain::Curtain() {
 	_renderPriority = 0;
 	_velocity = { 0.0f, -0.05f };
-	_curlUpTime = 1250;
+	_curlUpTime = 3000;
 
 	StartCurlUpTimer();
 }
@@ -53,6 +53,7 @@ void Curtain::Update(
 	if (IsCurlingUp() && GetTickCount64() - _curlUpStart > _curlUpTime) {
 		_curlUpStart = 0;
 		_velocity = { 0.0f, 0.0f };
+		_position.y = 14.0f;
 	}
 
 	Entity::Update(deltaTime);

@@ -89,11 +89,11 @@ void ParseEntityData(std::ofstream& outFile, std::string line) {
     if (!wroteTagOnce) {
         wroteTagOnce = true;
         
-        outFile << "#Cell_X" << '\t' << "Cell_Y" << '\t' << "objID\n";
+        outFile << "#objID" << '\t' << "Cell_X" << '\t' << "Cell_Y\n";
         outFile << "[POSITIONS]\n";
     }
 
-    outFile << cellPosX << '\t' << cellPosY << '\t' << objectID << '\n';
+    outFile << objectID << '\t' << cellPosX << '\t' << cellPosY << '\n';
 }
 
 int main() {

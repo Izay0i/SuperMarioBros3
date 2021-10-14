@@ -34,7 +34,7 @@
 #Select text
 
 #Curtain
-503	assets\data\intro\curtain.txt	0	128	70
+503	assets\data\intro\curtain.txt	0	130	70
 
 #Prop plant
 

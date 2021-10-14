@@ -9,7 +9,7 @@ MapState::MapState(Player* player) {
 }
 
 PlayerState* MapState::HandleStates() {
-	if (!_player->_isInMap) {
+	if (!_player->isInMap) {
 		return new IdleState(_player);
 	}
 	

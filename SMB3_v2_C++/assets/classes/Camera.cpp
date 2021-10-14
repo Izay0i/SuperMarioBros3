@@ -30,6 +30,14 @@ unsigned int Camera::GetCameraHeight() const {
 	return _cameraHeight;
 }
 
+float Camera::GetUpVector(int index) const {
+	return _upVectors.at(index);
+}
+
+void Camera::AddUpVector(float upVector) {
+	_upVectors.emplace_back(upVector);
+}
+
 RECTF Camera::GetViewport() const {
 	RECTF viewport;
 	viewport.left = _position.x - GlobalUtil::SCREEN_WIDTH * 0.2f;

@@ -19,7 +19,6 @@ private:
 	friend class CrouchState;
 	friend class ThrowState;
 	friend class WagState;
-	friend class Tail;
 	friend class HUD;
 	friend class ScorePopUp;
 
@@ -48,9 +47,11 @@ private:
 	unsigned int _fireballsCount;
 	unsigned int _nextSceneID;
 
+	//Determines whether the player goes up or down in the pipe
+	float _upVector;
+
 	bool _triggeredStageEnd;
 	bool _wentIntoPipe;
-	bool _isInMap;
 	bool _isCrouching;
 	//Can be interpreted as holding an entity or pressing the K key
 	bool _isHolding;
@@ -60,8 +61,6 @@ private:
 	Entity* _touchedEntity;
 
 	PlayerState* _playerState;
-
-	Tail* _tail;
 
 	std::vector<GameObject::GameObjectType> _bonusItems;
 
@@ -94,6 +93,8 @@ private:
 	void _OnKeyDownGame(int);
 
 public:
+	bool isInMap;
+
 	Player();
 	~Player();
 
@@ -101,9 +102,10 @@ public:
 	RECTF GetBoundingBox(int = 0) const override;
 	Entity* GetHeldEntity() const;
 	
+	void SetUpVector(float);
+
 	bool TriggeredStageEnd() const;
 	bool WentIntoPipe() const;
-	bool IsInMap() const;
 	bool IsFlying() const;
 	bool IsInPipe() const;
 	bool IsAttacking() const;

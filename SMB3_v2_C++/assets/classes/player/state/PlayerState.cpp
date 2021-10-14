@@ -28,7 +28,7 @@ void PlayerState::_OnExit() {
 PlayerState::~PlayerState() {}
 
 void PlayerState::Update(DWORD) {
-	if (_player->_isInMap && GetTickCount64() % 50 == 0) {		
+	if (_player->isInMap && GetTickCount64() % 50 == 0) {		
 		_player->_scale.x = -_player->_scale.x;
 	}
 	

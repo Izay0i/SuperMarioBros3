@@ -11,6 +11,8 @@
 #include "projectile/Fireball.h"
 #include "projectile/Boomerang.h"
 
+#include "player/Tail.h"
+
 #include "item/Mushroom.h"
 #include "item/Leaf.h"
 #include "item/Coin.h"
@@ -31,5 +33,6 @@
 #include "intro/Curtain.h"
 #include "intro/PropPlant.h"
 #include "intro/BuzzyBeetle.h"
+#include "intro/PropPlayer.h"
 
 #include "effect/BrickDebris.h"

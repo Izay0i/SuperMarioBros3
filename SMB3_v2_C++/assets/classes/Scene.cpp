@@ -142,7 +142,7 @@ void Scene::_ParseSceneTime(std::string line) {
 void Scene::_ParseCameraBounds(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
-	if (tokens.size() < 4) {
+	if (tokens.size() < 5) {
 		return;
 	}
 
@@ -151,6 +151,9 @@ void Scene::_ParseCameraBounds(std::string line) {
 	cameraBound.top = std::stof(tokens.at(1));
 	cameraBound.right = std::stof(tokens.at(2));
 	cameraBound.bottom = std::stof(tokens.at(3));
+
+	float upVector = std::stof(tokens.at(4));
+	_cameraInstance->AddUpVector(upVector);
 
 	_cameraInstance->AddCameraBound(cameraBound);
 }
@@ -228,12 +231,7 @@ void Scene::_ParseEntityData(std::string line) {
 			_entities.emplace_back(_mario);
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LUIGI:
-			_luigi = new Player;
-			_luigi->SetOjectType(objectType);
-			_luigi->ParseData(tokens.at(1), texture, extraData);
-			_luigi->SetPosition(position);
-
-			_entities.emplace_back(_luigi);
+			//Stub
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
 			entity = new Goomba;
@@ -255,6 +253,9 @@ void Scene::_ParseEntityData(std::string line) {
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
 			entity = new BoomerBro;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL:
+			entity = new Tail;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PORTAL:
 			entity = new Portal;
@@ -306,6 +307,22 @@ void Scene::_ParseEntityData(std::string line) {
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BUZZYBEETLE:
 			entity = new BuzzyBeetle;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PROPMARIO:
+			_propMario = new PropPlayer;
+			_propMario->SetOjectType(objectType);
+			_propMario->ParseData(tokens.at(1), texture, extraData);
+			_propMario->SetPosition(position);
+
+			_entities.emplace_back(_propMario);
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PROPLUIGI:
+			_propLuigi = new PropPlayer;
+			_propLuigi->SetOjectType(objectType);
+			_propLuigi->ParseData(tokens.at(1), texture, extraData);
+			_propLuigi->SetPosition(position);
+
+			_entities.emplace_back(_propLuigi);
 			break;
 	}
 
@@ -409,142 +426,13 @@ void Scene::_ParseBackground(std::string line) {
 }
 
 void Scene::_IntroScript(DWORD deltaTime) {
+	if (_sceneTime > 0 && GetTickCount64() % 1000 == 0) {
+		--_sceneTime;
+	}
+
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		Entity* entity = _entities.at(i);
-		entity->Update(deltaTime, &_entities, &_tiles);
-
-		/*char debug[100];
-		sprintf_s(debug, "Scene time: %lu\n", _sceneTime);
-		OutputDebugStringA(debug);*/
-
-		switch (_sceneTime) {
-			case 60:
-				_mario->MoveLeft();
-				_mario->SetScale({ 1.0f, _mario->GetScale().y });
-				_luigi->MoveRight();
-				break;
-			case 59:
-
-				break;
-			case 58:
-
-				break;
-			case 57:
-
-				break;
-			case 56:
-
-				break;
-			case 55:
-				_luigi->SetVelocity({ _luigi->GetVelocity().x, -0.4f });
-				_luigi->Jump();
-				break;
-			case 54:
-
-				break;
-			case 53:
-
-				break;
-			case 52:
-
-				break;
-			case 51:
-
-				break;
-			case 50:
-
-				break;
-			case 49:
-
-				break;
-			case 48:
-
-				break;
-			case 47:
-
-				break;
-			case 46:
-
-				break;
-			case 45:
-
-				break;
-			case 44:
-
-				break;
-			case 43:
-
-				break;
-			case 42:
-
-				break;
-			case 41:
-
-				break;
-			case 40:
-
-				break;
-			case 39:
-
-				break;
-			case 38:
-
-				break;
-			case 37:
-
-				break;
-			case 36:
-
-				break;
-			case 35:
-
-				break;
-			case 34:
-
-				break;
-			case 33:
-
-				break;
-			case 32:
-
-				break;
-			case 31:
-
-				break;
-			case 30:
-
-				break;
-			case 29:
-
-				break;
-			case 28:
-
-				break;
-			case 27:
-
-				break;
-			case 26:
-
-				break;
-			case 25:
-
-				break;
-			case 24:
-
-				break;
-			case 23:
-
-				break;
-			case 22:
-
-				break;
-			case 21:
-
-				break;
-			case 20:
-
-				break;
-		}
+		entity->Update(deltaTime, &_entities, &_tiles);		
 
 		if (entity->GetHealth() == -1) {
 			delete entity;
@@ -620,7 +508,7 @@ void Scene::OnKeyDown(int keyCode) {
 			_mario->SetHealth(4);
 			break;
 		case DIK_K:
-			if (_mario->IsInMap() && _mario->GetNextSceneID() != 0) {
+			if (_mario->isInMap && _mario->GetNextSceneID() != 0) {
 				SceneManager::GetInstance()->ChangeScene(_mario->GetNextSceneID());
 			}
 			break;
@@ -698,13 +586,15 @@ void Scene::LoadScene() {
 		return;
 	}
 
-	//Load objects here, cause the Scene won't be calling destructor before the game ends
+	//Load objects here, cause the Scene won't be calling destructor before the game ends	
 	const unsigned int MAX_ENTITIES_PER_SCENE = 256;
 	_entities.reserve(MAX_ENTITIES_PER_SCENE);
 	_tiles.reserve(MAX_ENTITIES_PER_SCENE);
 
 	_mario = nullptr;
-	_luigi = nullptr;
+
+	_propMario = nullptr;
+	_propLuigi = nullptr;
 
 	_scorePopUp = nullptr;
 	_hud = nullptr;
@@ -829,6 +719,7 @@ void Scene::LoadScene() {
 void Scene::UpdateCameraPosition() {
 	unsigned int index = _mario->WentIntoPipe() ? 1 : 0;
 	RECTF cameraBound = _cameraInstance->GetCameraBound(index);
+	_mario->SetUpVector(_cameraInstance->GetUpVector(index));
 	D3DXVECTOR2 cameraPosition = _cameraInstance->GetPosition();
 
 	if (!_mario->TriggeredStageEnd() && !_mario->IsInPipe()) {
@@ -861,7 +752,7 @@ void Scene::UpdateCameraPosition() {
 }
 
 void Scene::Update(DWORD deltaTime) {
-	if (_mario == nullptr && _luigi == nullptr) {
+	if (_mario == nullptr) {
 		char debug[100];
 		sprintf_s(debug, "[SCENE] No player loaded in, scene ID: %d\n", _sceneID);
 		OutputDebugStringA(debug);
@@ -878,8 +769,11 @@ void Scene::Update(DWORD deltaTime) {
 			_IntroScript(deltaTime);
 			break;
 		case SceneType::SCENE_TYPE_MAP:
+			_mario->isInMap = true;
+
 			for (unsigned int i = 0; i < _entities.size(); ++i) {
 				Entity* entity = _entities.at(i);
+				entity->SetGravity(0.0f);
 				entity->Update(deltaTime, &_entities, &_tiles, _grid);
 			}
 			break;
@@ -959,6 +853,16 @@ void Scene::Update(DWORD deltaTime) {
 								}
 							}
 							break;
+						case GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL:
+							{
+								Tail* tail = dynamic_cast<Tail*>(entity);
+								tail->SetPosition({ 
+									_mario->GetPosition().x - _mario->GetBoxWidth(), 
+									_mario->IsAttacking() ? _mario->GetPosition().y + 11.0f : -32.0f 
+									}
+								);
+							}
+							break;
 						case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 							{
 								QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(entity);
@@ -998,7 +902,6 @@ void Scene::Update(DWORD deltaTime) {
 							}
 							break;
 					}
-					//
 
 					if (_grid != nullptr) {
 						Cell* newCell = _grid->GetCell(entity->GetPosition());
@@ -1044,7 +947,8 @@ void Scene::Update(DWORD deltaTime) {
 		_hud->SetPosition({
 			_cameraInstance->GetPosition().x + 134.0f,
 			_cameraInstance->GetPosition().y + (_sceneID == SceneType::SCENE_TYPE_MAP ? 177.0f : 161.0f)
-			});
+			}
+		);
 	}
 
 	if (_scorePopUp != nullptr) {
@@ -1106,11 +1010,6 @@ void Scene::Release() {
 	_tiles.clear();
 
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
-		//These entities belong to the player, so they have a responsibility to release their resources
-		if (_entities.at(i)->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL) {
-			continue;
-		}
-
 		_entities.at(i)->Release();
 		delete _entities.at(i);
 	}

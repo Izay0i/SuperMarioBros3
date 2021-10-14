@@ -71,7 +71,7 @@ void Coin::Render() {
 			_animatedSprite.PlaySpriteAnimation("Pushed", _position);
 			break;
 		case _State::BRICK:
-
+			_animatedSprite.PlaySpriteAnimation("Brick", _position);
 			break;
 	}
 }

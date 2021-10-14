@@ -44,8 +44,12 @@ std::vector<std::string> Entity::GetExtraData() const {
 	return _extraData;
 }
 
-AnimatedSprite Entity::GetAnimatedSprite() const {
-	return _animatedSprite;
+void Entity::SetGravity(float gravity) {
+	_gravity = gravity;
+}
+
+float Entity::GetGravity() const {
+	return _gravity;
 }
 
 void Entity::SetHealth(int health) {
@@ -139,10 +143,7 @@ void Entity::Update(
 	}
 	
 	GameObject::Update(deltaTime);
-	//Disables gravity if scene type is overworld map
-	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() != Scene::SceneType::SCENE_TYPE_MAP) {
-		_velocity.y += _gravity * _deltaTime;
-	}
+	_velocity.y += _gravity * _deltaTime;
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	if (_health > 0) {
@@ -157,29 +158,22 @@ void Entity::Update(
 
 			//Check collisions from neighboring cells
 			//Only need half of the neighboring cells to avoid double checking
-			// cell	cell
-			// cell	entity
-			// cell cell
+			//		cell
+			// cell	entity cell
+			//		cell
 			//Left
 			if (ownerCell->indexX > 0) {
 				CalcPotentialCollision(
 					&grid->GetCell(ownerCell->indexX - 1, ownerCell->indexY)->entities, 
 					collisionEvents
 				);
-				//Top left
-				if (ownerCell->indexY > 0) {
-					CalcPotentialCollision(
-						&grid->GetCell(ownerCell->indexX - 1, ownerCell->indexY - 1)->entities,
-						collisionEvents
-					);
-				}
-				//Bottom left
-				if (ownerCell->indexY < grid->_yCells - 1) {
-					CalcPotentialCollision(
-						&grid->GetCell(ownerCell->indexX - 1, ownerCell->indexY + 1)->entities, 
-						collisionEvents
-					);
-				}
+			}
+			//Right
+			if (ownerCell->indexX < grid->_xCells - 1) {
+				CalcPotentialCollision(
+					&grid->GetCell(ownerCell->indexX + 1, ownerCell->indexY)->entities,
+					collisionEvents
+				);
 			}
 			//Top
 			if (ownerCell->indexY > 0) {
@@ -212,6 +206,12 @@ void Entity::Update(
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
+		if (eventResults.size() > 1) {
+			char debug[100];
+			sprintf_s(debug, "Collision event size: %d\n", eventResults.size());
+			OutputDebugStringA(debug);
+		}
+
 		for (LPCOLLISIONEVENT result : eventResults) {
 			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
 		}
@@ -224,8 +224,8 @@ void Entity::Update(
 			_velocity.y = 0.0f;
 		}
 
-		_position.x += _distance.x * minTime.x + normal.x * offset.x;
-		_position.y += _distance.y * minTime.y + normal.y * offset.y;
+		_position.x += _distance.x * minTime.x + normal.x * 0.4f;
+		_position.y += _distance.y * minTime.y + normal.y * 0.4f;
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {
@@ -247,7 +247,7 @@ CollisionEvent* Entity::SweptAABBEx(Entity*& entity) {
 	movingEntity = this->GetBoundingBox();
 	SweptAABB(movingEntity, staticEntity, relativeDistance, normal, time);
 
-	if (entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM) {
+	if (entity->GetObjectType() == GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM) {
 		normal.x = 0.0f;
 	}
 
@@ -261,7 +261,7 @@ void Entity::CalcPotentialCollision(std::vector<Entity*>* collidableEntities, st
 	
 	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
 		LPCOLLISIONEVENT event = SweptAABBEx(collidableEntities->at(i));
-		if (event->time > 0.0f && event->time <= 1.0f) {
+		if (event->time >= 0.0f && event->time <= 1.0f) {
 			collisionEvents.emplace_back(event);
 		}
 		else {

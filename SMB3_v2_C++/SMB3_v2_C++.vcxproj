@@ -161,6 +161,7 @@
     <ClCompile Include="assets\classes\intro\GameIcon.cpp" />
     <ClCompile Include="assets\classes\intro\GameLogo.cpp" />
     <ClCompile Include="assets\classes\intro\PropPlant.cpp" />
+    <ClCompile Include="assets\classes\intro\PropPlayer.cpp" />
     <ClCompile Include="assets\classes\intro\SelectText.cpp" />
     <ClCompile Include="assets\classes\item\BonusItem.cpp" />
     <ClCompile Include="assets\classes\item\Coin.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="assets\classes\intro\GameIcon.h" />
     <ClInclude Include="assets\classes\intro\GameLogo.h" />
     <ClInclude Include="assets\classes\intro\PropPlant.h" />
+    <ClInclude Include="assets\classes\intro\PropPlayer.h" />
     <ClInclude Include="assets\classes\intro\SelectText.h" />
     <ClInclude Include="assets\classes\item\BonusItem.h" />
     <ClInclude Include="assets\classes\item\Coin.h" />

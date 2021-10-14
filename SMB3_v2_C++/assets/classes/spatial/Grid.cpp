@@ -29,10 +29,10 @@ void Grid::_ParsePositions(std::string line, std::vector<Entity*>& entities) {
 		return;
 	}
 
-	unsigned int cellX = std::stoul(tokens.at(0));
-	unsigned int cellY = std::stoul(tokens.at(1));
+	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(tokens.at(0)));
 
-	GameObject::GameObjectType objectType = static_cast<GameObject::GameObjectType>(std::stoul(tokens.at(2)));
+	unsigned int cellX = std::stoul(tokens.at(1));
+	unsigned int cellY = std::stoul(tokens.at(2));
 
 	for (auto& entity : entities) {
 		if (entity->ownerCell == nullptr && entity->GetObjectType() == objectType) {

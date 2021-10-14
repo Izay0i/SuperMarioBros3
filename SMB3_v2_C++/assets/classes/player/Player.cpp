@@ -149,7 +149,6 @@ void Player::_OnKeyDownGame(int keyCode) {
 			//Tail attack
 			if (_health == 4 && !IsAttacking()) {
 				StartAttackTimer();
-				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(_tail);
 			}
 			break;
 		case DIK_K:
@@ -178,6 +177,8 @@ Player::Player() {
 
 	_fireballsCount = 0;
 
+	_upVector = 1.0f;
+
 	_heldEntity = nullptr;
 	_touchedEntity = nullptr;
 
@@ -188,13 +189,8 @@ Player::Player() {
 	_invulnerableTime = 3000;
 
 	_playerState = new IdleState(this);
-	_tail = new Tail(this);
 
 	_bonusItems.reserve(3);
-
-	if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == Scene::SceneType::SCENE_TYPE_MAP) {
-		_isInMap = true;
-	}
 }
 
 Player::~Player() {}
@@ -204,11 +200,19 @@ unsigned int Player::GetNextSceneID() const {
 }
 
 RECTF Player::GetBoundingBox(int index) const {
-	return GameObject::GetBoundingBox(_health >= 2 && !_isInMap && !_isCrouching);
+	return GameObject::GetBoundingBox(_health >= 2 && !isInMap && !_isCrouching);
 }
 
 Entity* Player::GetHeldEntity() const {
 	return _heldEntity;
+}
+
+void Player::SetUpVector(float upVector) {
+	if (upVector == 0.0f) {
+		return;
+	}
+	
+	_upVector = upVector;
 }
 
 bool Player::TriggeredStageEnd() const {
@@ -217,10 +221,6 @@ bool Player::TriggeredStageEnd() const {
 
 bool Player::WentIntoPipe() const {
 	return _wentIntoPipe;
-}
-
-bool Player::IsInMap() const {
-	return _isInMap;
 }
 
 bool Player::IsFlying() const {
@@ -264,7 +264,7 @@ void Player::StartInvulnerableTimer() {
 }
 
 void Player::HandleStates() {
-	if (_isInMap) {	
+	if (isInMap) {	
 		if (abs(_position.x - _lastPos.x) >= _MAX_TRAVEL_DISTANCE || abs(_position.y - _lastPos.y) >= _MAX_TRAVEL_DISTANCE) {
 			_velocity = { 0.0f, 0.0f };
 			_lastPos = _position;
@@ -285,7 +285,7 @@ void Player::HandleStates() {
 }
 
 void Player::OnKeyUp(int keyCode) {
-	if (_isInMap) {
+	if (isInMap) {
 		_OnKeyUpMap(keyCode);
 	}
 	else {
@@ -294,7 +294,7 @@ void Player::OnKeyUp(int keyCode) {
 }
 
 void Player::OnKeyDown(int keyCode) {
-	if (_isInMap) {
+	if (isInMap) {
 		_OnKeyDownMap(keyCode);
 	}
 	else {
@@ -387,12 +387,32 @@ void Player::HandleCollisionResult(
 
 	if (IsInPipe()) {
 		minTime = { 1.0f, 1.0f };
-		offset = normal = { 0, 0 };
+		offset = normal = { 0.0f, 0.0f };
 		return;
 	}
 
-	if (eventNormal.y == -1.0f) {
-		_isOnGround = true;
+	switch (eventEntity->GetObjectType()) {
+		case GameObjectType::GAMEOBJECT_TYPE_PORTAL:
+		case GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
+		case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+		case GameObjectType::GAMEOBJECT_TYPE_TILE:
+		case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:
+			if (eventNormal.y == -1.0f) {
+				_isOnGround = true;
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_COIN:
+			//Is brick
+			if (eventEntity->GetHealth() == 3) {
+				_isOnGround = true;
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+			//Is coin
+			if (eventEntity->GetHealth() != 3) {
+				_isOnGround = true;
+			}
+			break;
 	}
 
 	switch (eventEntity->GetObjectType()) {
@@ -532,10 +552,6 @@ void Player::HandleCollisionResult(
 						if (!IsInPipe()) {
 							StartInPipeTimer();
 							_destination = portal->GetDestination();
-
-							char debug[100];
-							sprintf_s(debug, "Des: %f %f\n", _destination.x, _destination.y);
-							OutputDebugStringA(debug);
 						}
 					}
 				}
@@ -595,7 +611,9 @@ void Player::HandleCollisionResult(
 
 				if (coin->GetHealth() != 3) {
 					minTime = { 1.0f, 1.0f };
-					offset = normal = { 0, 0 };
+					//offset = normal = { 0, 0 };
+					normal.x = 0.0f;
+					normal.y = _isOnGround ? normal.y : 0.0f;
 				}
 			}
 			break;
@@ -647,7 +665,8 @@ void Player::HandleCollisionResult(
 					else if (shinyBrick->GetHealth() == 3) {
 						shinyBrick->SetHealth(-1);
 						minTime = { 1.0f, 1.0f };
-						offset = normal = { 0, 0 };
+						normal.x = 0.0f;
+						normal.y = _isOnGround ? normal.y : 0.0f;
 					}
 				}
 				break;
@@ -693,7 +712,6 @@ void Player::Update(
 	}
 
 	if (IsAttacking() && GetTickCount64() - _attackStart > _attackTime) {
-		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(_tail);
 		_attackStart = 0;
 	}
 
@@ -724,10 +742,7 @@ void Player::Update(
 			_wentIntoPipe = !_wentIntoPipe;
 			_position = _destination;
 			_isOnGround = false;
-
-			if (SceneManager::GetInstance()->GetCurrentScene()->GetSceneID() == Scene::SceneType::SCENE_TYPE_STAGE_FOUR) {
-				_normal.y = -_normal.y;
-			}
+			_normal.y *= _upVector;
 		}
 	}
 
@@ -771,25 +786,13 @@ void Player::Update(
 }
 
 void Player::Render() {
-	switch (_objectType) {
-		case GameObjectType::GAMEOBJECT_TYPE_MARIO:
-			_playerState->Render();
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_LUIGI:
-			_animatedSprite.PlaySpriteAnimation("BigRun", _position, _scale);
-			break;
-	}
+	_playerState->Render();
 }
 
 void Player::Release() {
 	if (_playerState != nullptr) {
 		_playerState->Release();
 		delete _playerState;
-	}
-
-	if (_tail != nullptr) {
-		_tail->Release();
-		delete _tail;
 	}
 
 	_animatedSprite.Release();

@@ -7,9 +7,10 @@
 300
 [/]
 
+#Left	top	right	bottom	up_vector
 [CAMERABOUNDS]
-0	-8	2808	465
-1968	464	2479	689
+0	-8	2808	465	1
+1968	464	2479	689	1
 [/]
 
 [BGCOLOR]
@@ -57,6 +58,9 @@
 #Venus plant
 105	assets\data\npc\venusplant.txt	4	360	384	red	108	assets\data\projectile\fireball.txt	7
 105	assets\data\npc\venusplant.txt	4	1864	384	green	108	assets\data\projectile\fireball.txt	7
+
+#Tail
+197	assets\data\player\tail.txt	2	0	999
 
 #Portal								#destination
 198	assets\data\npc\portal.txt	0	2264	107	2101	468

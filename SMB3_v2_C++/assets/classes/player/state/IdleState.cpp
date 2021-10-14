@@ -17,7 +17,7 @@ IdleState::IdleState(Player* player) {
 }
 
 PlayerState* IdleState::HandleStates() {
-	if (_player->_isInMap) {
+	if (_player->isInMap) {
 		return new MapState(_player);
 	}
 	else if (_player->_velocity.x != 0.0f && _player->_isOnGround || _player->_triggeredStageEnd) {
