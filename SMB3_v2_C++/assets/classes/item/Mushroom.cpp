@@ -16,6 +16,8 @@ Mushroom::Mushroom() {
 	_gravity = 0.002f;
 
 	_emergeTime = 700;
+
+	isPassThroughable = true;
 	StartEmergeTimer();
 }
 

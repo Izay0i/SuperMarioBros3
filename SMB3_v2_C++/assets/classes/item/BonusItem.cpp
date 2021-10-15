@@ -19,6 +19,8 @@ BonusItem::BonusItem() {
 		GameObjectType::GAMEOBJECT_TYPE_FLOWER,
 		GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM
 	};
+
+	isPassThroughable = true;
 }
 
 BonusItem::~BonusItem() {}

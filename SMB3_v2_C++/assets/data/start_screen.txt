@@ -14,31 +14,43 @@
 0	assets\textures\titlescreen.png	224	163	216
 1	assets\textures\player.png	224	163	216
 2	assets\textures\enemies.png	224	163	216
+3	assets\textures\items.png	224	163	216
 [/]
 
 [ENTITYDATA]
 0	assets\data\player\mario.txt	1	240	125
-1	assets\data\player\luigi.txt	1	0	125
+
+#Prop player
+506	assets\data\player\mario.txt	1	240	125
+507	assets\data\player\luigi.txt	1	0	125
 
 #Goomba
+100	assets\data\npc\goomba.txt	2	0	0
 
 #Koopa
+102	assets\data\npc\koopa.txt	2	0	0
 
 #Leaf
+202	assets\data\item\leaf.txt	3	0	0
 
 #Logo
+500	assets\data\into\logo.txt	0	0	0
 
 #Icon
 501	assets\data\intro\icon.txt	0	128	70
 
 #Select text
+502	assets\data\intro\selecttext.txt	0	0	0
 
 #Curtain
 503	assets\data\intro\curtain.txt	0	130	70
 
 #Prop plant
+504	assets\data\intro\propplant.txt	0	0	0
+504	assets\data\intro\propplant.txt	0	0	0
 
 #Buzzy
+505	assets\data\intro\buzzybeetle.txt	0	0	0
 
 [/]
 

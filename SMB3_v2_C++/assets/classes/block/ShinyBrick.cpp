@@ -103,6 +103,7 @@ void ShinyBrick::TakeDamage() {
 
 void ShinyBrick::HandleStates() {
 	_state = static_cast<_State>(_health);
+	isPassThroughable = _state == _State::COIN;
 
 	switch (_state) {
 		case _State::COIN:

@@ -12,6 +12,8 @@ Coin::Coin() {
 	_removeTime = 50;
 
 	_gravity = 0.0005f;
+
+	isPassThroughable = true;
 }
 
 Coin::~Coin() {}
@@ -40,6 +42,7 @@ void Coin::TakeDamage() {
 
 void Coin::HandleStates() {
 	_state = static_cast<_State>(_health);
+	isPassThroughable = _state != _State::BRICK;
 
 	if (_health == 0 && !IsRemoved()) {
 		StartRemoveTimer();

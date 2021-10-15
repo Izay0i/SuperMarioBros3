@@ -520,8 +520,6 @@ void Player::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:
 			TakeDamage();
-			minTime = { 1.0f, 1.0f };
-			offset = normal = { 0, 0 };
 			break;
 	//----------------------------------------------------------------------------
 	//PROJECTILES
@@ -536,9 +534,6 @@ void Player::HandleCollisionResult(
 				if (portal->GetExtraData().size() == 1) {
 					_nextSceneID = portal->GetSceneID();
 					_mapNodePos = portal->GetPosition();
-
-					minTime = { 1.0f, 1.0f };
-					offset = normal = { 0, 0 };
 				}
 				else {
 					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
@@ -585,17 +580,15 @@ void Player::HandleCollisionResult(
 						//Stub
 						break;
 				}
-
-				minTime = { 1.0f, 1.0f };
-				offset = normal = { 0, 0 };
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
-			_health = 4;
-			eventEntity->TakeDamage();
-
-			minTime = { 1.0f, 1.0f };
-			offset = normal = { 0, 0 };
+			{
+				Leaf* leaf = dynamic_cast<Leaf*>(eventEntity);
+				leaf->TakeDamage();
+				
+				_health = 4;
+			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			{
@@ -603,17 +596,11 @@ void Player::HandleCollisionResult(
 				if (coin->GetHealth() == 1) {
 					coin->TakeDamage();
 				}
+				//Is brick
 				else if (coin->GetHealth() == 3) {
 					if (eventNormal.y == 1.0f) {
-						//coin->SetHealth(-1);
+						coin->SetHealth(-1);
 					}
-				}
-
-				if (coin->GetHealth() != 3) {
-					minTime = { 1.0f, 1.0f };
-					//offset = normal = { 0, 0 };
-					normal.x = 0.0f;
-					normal.y = _isOnGround ? normal.y : 0.0f;
 				}
 			}
 			break;
@@ -624,9 +611,6 @@ void Player::HandleCollisionResult(
 					_bonusItems.emplace_back(bonusItem->GetCurrentItem());
 					bonusItem->TakeDamage();
 				}
-
-				minTime = { 1.0f, 1.0f };
-				offset = normal = { 0, 0 };
 
 				_triggeredStageEnd = true;
 			}
@@ -664,9 +648,6 @@ void Player::HandleCollisionResult(
 					//Is coin
 					else if (shinyBrick->GetHealth() == 3) {
 						shinyBrick->SetHealth(-1);
-						minTime = { 1.0f, 1.0f };
-						normal.x = 0.0f;
-						normal.y = _isOnGround ? normal.y : 0.0f;
 					}
 				}
 				break;

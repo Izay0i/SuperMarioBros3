@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Entity.h"
 
 GameObject::GameObject() {
 	_isActive = true;
@@ -213,10 +214,12 @@ void GameObject::FilterCollision(
 
 	int minIndX = -1, minIndY = -1;
 
-	eventsResult.clear();
-
 	for (unsigned int i = 0; i < collisionEvents.size(); ++i) {
 		LPCOLLISIONEVENT coEvent = collisionEvents.at(i);
+
+		if (coEvent->entity->isPassThroughable) {
+			continue;
+		}
 
 		if (coEvent->time < minTime.x && coEvent->normal.x != 0) {
 			minTime.x = coEvent->time;
@@ -239,6 +242,13 @@ void GameObject::FilterCollision(
 
 	if (minIndY >= 0) {
 		eventsResult.emplace_back(collisionEvents.at(minIndY));
+	}
+
+	for (unsigned int i = 0; i < collisionEvents.size(); ++i) {
+		LPCOLLISIONEVENT coEvent = collisionEvents.at(i);
+		if (coEvent->entity->isPassThroughable) {
+			eventsResult.emplace_back(coEvent);
+		}
 	}
 }
 

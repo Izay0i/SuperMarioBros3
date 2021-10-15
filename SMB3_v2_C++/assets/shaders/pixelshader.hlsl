@@ -1,10 +1,8 @@
-struct PixelInputType 
+float4 PS(PS_INPUT input) : SV_Target
 {
-	float4 position: SV_POSITION;
-	float4 color : COLOR;
-};
-
-float4 ColorPixelShader(PixelInputType input) : SV_TARGET
-{
-	return input.color;
+	float4 result = float4(1, 1, 1, 0);
+	if (input.Col) {
+		clip(result);
+	}
+	return result;
 }

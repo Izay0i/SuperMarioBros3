@@ -1,15 +1,15 @@
 #pragma once
 
-#include "spatial/Grid.h"
-#include "Camera.h"
-#include "Background.h"
-#include "Entity.h"
-#include "Tile.h"
+#include "../spatial/Grid.h"
+#include "../Camera.h"
+#include "../Background.h"
+#include "../Entity.h"
+#include "../Tile.h"
 
-#include "player/Player.h"
-#include "player/HUD.h"
+#include "../player/Player.h"
+#include "../player/HUD.h"
 
-#include "effect/ScorePopUp.h"
+#include "../effect/ScorePopUp.h"
 
 #include <vector>
 #include <string>
@@ -27,7 +27,7 @@ public:
 		SCENE_TYPE_STAGE_DEBUG = 999
 	};
 
-private:
+protected:
 	enum class _SceneFileSection {
 		SCENEFILE_SECTION_UNKNOWN,
 		SCENEFILE_SECTION_SCENESIZE,
@@ -68,7 +68,7 @@ private:
 	ScorePopUp* _scorePopUp;
 
 	//Do the Mario, swing your arms from side to side, cmon let's go and do the Mario now
-	Player* _mario;
+	Player* _player;
 
 	PropPlayer* _propMario;
 	PropPlayer* _propLuigi;
@@ -98,11 +98,9 @@ private:
 	void _ParseMainEffect(std::string);
 	void _ParseBackground(std::string);
 
-	void _IntroScript(DWORD);
-
 public:
 	Scene(SceneType, std::string);
-	~Scene();
+	virtual ~Scene();
 
 	bool IsTransitioningToScene() const;
 	void StartToSceneTimer();
@@ -115,9 +113,9 @@ public:
 
 	Texture* GetTexture(unsigned int) const;
 
-	void HandleStates();
-	void OnKeyUp(int);
-	void OnKeyDown(int);
+	virtual void HandleStates();
+	virtual void OnKeyUp(int);
+	virtual void OnKeyDown(int);
 
 	void AddEntityToScene(Entity*);
 	void RemoveEntityFromScene(Entity*);
@@ -126,15 +124,15 @@ public:
 	//Object ID, data path, texture ID
 	Entity* CreateEntityFromData(std::string, std::string, std::string);
 
-	void LoadScene();
+	virtual void LoadScene();
 	
-	void UpdateCameraPosition();
+	virtual void UpdateCameraPosition();
 
-	void Update(DWORD);
-	void Render();
+	virtual void Update(DWORD);
+	virtual void Render();
 
 	//Knowing how to prevent a memory leak is just the basics
 	//Knowing how to keep the heap from looking like swiss cheese is the hard part
 	//And I don't know how to do either of those
-	void Release();
+	virtual void Release();
 };

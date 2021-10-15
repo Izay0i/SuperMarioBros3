@@ -9,6 +9,9 @@ private:
 	void _ParseSprites(std::string) override;
 
 public:
+	Portal();
+	~Portal();
+
 	unsigned int GetSceneID() const;
 	D3DXVECTOR2 GetDestination() const;
 

@@ -31,8 +31,8 @@
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
 [ENTITYDATA]
 #Player											OBJ_ID	FILE_PATH				texID
-0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
-#0	assets\data\player\mario.txt	2	1952	368
+#0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
+0	assets\data\player\mario.txt	2	1952	368
 #0	assets\data\player\mario.txt	2	2256	80
 
 #NPC

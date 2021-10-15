@@ -16,6 +16,7 @@ Boomerang::Boomerang() {
 	_velocity.y = -0.12f;
 	_gravity = 0.0f;
 
+	isPassThroughable = true;
 	StartRemoveTimer();
 }
 

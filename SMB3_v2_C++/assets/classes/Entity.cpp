@@ -206,12 +206,6 @@ void Entity::Update(
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		if (eventResults.size() > 1) {
-			char debug[100];
-			sprintf_s(debug, "Collision event size: %d\n", eventResults.size());
-			OutputDebugStringA(debug);
-		}
-
 		for (LPCOLLISIONEVENT result : eventResults) {
 			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
 		}
@@ -224,8 +218,8 @@ void Entity::Update(
 			_velocity.y = 0.0f;
 		}
 
-		_position.x += _distance.x * minTime.x + normal.x * 0.4f;
-		_position.y += _distance.y * minTime.y + normal.y * 0.4f;
+		_position.x += _distance.x * minTime.x + normal.x * offset.x;
+		_position.y += _distance.y * minTime.y + normal.y * offset.y;
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {
@@ -266,7 +260,6 @@ void Entity::CalcPotentialCollision(std::vector<Entity*>* collidableEntities, st
 		}
 		else {
 			delete event;
-			event = nullptr;
 		}
 	}
 

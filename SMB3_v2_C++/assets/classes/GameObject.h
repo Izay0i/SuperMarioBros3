@@ -121,6 +121,9 @@ public:
 	//But its resources will not be released
 	//Useful for when an object needs to know when another object is ready to be removed
 	bool flaggedForRemoval;
+	//Pass throughable entities are entities that
+	//Other entities can pass through without blocking their velocity
+	bool isPassThroughable;
 
 	GameObject();
 	virtual ~GameObject();

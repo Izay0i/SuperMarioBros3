@@ -16,6 +16,8 @@ Fireball::Fireball() {
 	_gravity = 0.002f;
 
 	_aliveTime = 8000;
+
+	isPassThroughable = true;
 	StartAliveTimer();
 }
 

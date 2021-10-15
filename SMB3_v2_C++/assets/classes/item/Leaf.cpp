@@ -16,6 +16,8 @@ Leaf::Leaf() {
 	_runSpeed = 0.02f;
 	_jumpSpeed = 0.2f;
 	_gravity = 0.001f;
+
+	isPassThroughable = true;
 }
 
 Leaf::~Leaf() {}

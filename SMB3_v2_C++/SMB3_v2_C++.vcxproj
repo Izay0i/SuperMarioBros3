@@ -191,7 +191,10 @@
     <ClCompile Include="assets\classes\player\Tail.cpp" />
     <ClCompile Include="assets\classes\projectile\Boomerang.cpp" />
     <ClCompile Include="assets\classes\projectile\Fireball.cpp" />
-    <ClCompile Include="assets\classes\Scene.cpp" />
+    <ClCompile Include="assets\classes\scene\Scene.cpp" />
+    <ClCompile Include="assets\classes\scene\SceneIntro.cpp" />
+    <ClCompile Include="assets\classes\scene\SceneMap.cpp" />
+    <ClCompile Include="assets\classes\scene\ScenePlay.cpp" />
     <ClCompile Include="assets\classes\spatial\Grid.cpp" />
     <ClCompile Include="assets\classes\Tile.cpp" />
     <ClCompile Include="main.cpp" />
@@ -251,8 +254,11 @@
     <ClInclude Include="assets\classes\player\Tail.h" />
     <ClInclude Include="assets\classes\projectile\Boomerang.h" />
     <ClInclude Include="assets\classes\projectile\Fireball.h" />
-    <ClInclude Include="assets\classes\Scene.h" />
+    <ClInclude Include="assets\classes\scene\Scene.h" />
     <ClInclude Include="assets\classes\SceneManager.h" />
+    <ClInclude Include="assets\classes\scene\SceneIntro.h" />
+    <ClInclude Include="assets\classes\scene\SceneMap.h" />
+    <ClInclude Include="assets\classes\scene\ScenePlay.h" />
     <ClInclude Include="assets\classes\spatial\Grid.h" />
     <ClInclude Include="assets\classes\Sprite.h" />
     <ClInclude Include="assets\classes\Tile.h" />

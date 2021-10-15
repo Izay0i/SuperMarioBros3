@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene.h"
+#include "scene/Scene.h"
 
 #include <unordered_map>
 
@@ -13,6 +13,8 @@ private:
 
 	SceneManager();
 	~SceneManager();
+
+	Scene* _CreateScene(unsigned int, std::string);
 
 public:
 	static SceneManager* GetInstance();

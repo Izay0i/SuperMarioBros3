@@ -7,6 +7,12 @@ void Portal::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _portalTexture);
 }
 
+Portal::Portal() {
+	isPassThroughable = true;
+}
+
+Portal::~Portal() {}
+
 unsigned int Portal::GetSceneID() const {
 	return std::stoul(_extraData.front());
 }
