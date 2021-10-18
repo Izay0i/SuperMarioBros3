@@ -15,25 +15,17 @@ private:
 
 	DWORD _lastFrameTime;
 
-	//Direct3D 10
 	Texture* _texture;
 
 	D3DXMATRIX _scaleMatrix;
 	D3DX10_SPRITE _sprite;
-	//REMOVED
-	//LPDIRECT3DTEXTURE9 _spriteTexture;
-	//END
 
 	//Scales sprite based on the texture position
 	void _ScaleSprite(const RECT&, D3DXVECTOR2, unsigned int);
 
 public:
 	//Sprite texture, sprite bound, total frames, animation speed
-	//Direct3D 10
 	Sprite(Texture*&, RECT, unsigned int, int);
-	//CHANGED
-	//Sprite(const LPDIRECT3DTEXTURE9&, RECT, unsigned int, int);
-	//END
 	~Sprite();
 
 	void AddSpriteBound(RECT);

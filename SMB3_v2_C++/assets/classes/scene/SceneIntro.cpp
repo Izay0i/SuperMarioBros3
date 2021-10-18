@@ -1,6 +1,10 @@
 #include "Scene.h"
 #include "SceneIntro.h"
 
+void SceneIntro::_IntroScript() {
+
+}
+
 SceneIntro::SceneIntro(SceneType sceneID, std::string path) : Scene(sceneID, path) {}
 
 SceneIntro::~SceneIntro() {}
@@ -10,6 +14,8 @@ void SceneIntro::OnKeyDown(int keyCode) {
 }
 
 void SceneIntro::Update(DWORD deltaTime) {
+	_IntroScript();
+	
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		Entity* entity = _entities.at(i);
 		entity->Update(deltaTime, &_entities, &_tiles);

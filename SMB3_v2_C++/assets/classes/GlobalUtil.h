@@ -20,13 +20,8 @@ namespace GlobalUtil {
 	const unsigned int MAX_FILE_LINE = 5000;
 
 	//Mainly used in the Game and Sprite class
-	//Direct3D 10
 	extern ID3D10Device* directDevice;
 	extern ID3DX10Sprite* spriteHandler;
-	//REMOVED
-	//extern LPDIRECT3DDEVICE9 directDevice;
-	//extern LPD3DXSPRITE spriteHandler;
-	//END
 
 	extern std::vector<std::string> SplitStr(std::string, std::string = "\t");
 

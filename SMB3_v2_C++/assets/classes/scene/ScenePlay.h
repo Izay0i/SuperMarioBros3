@@ -11,8 +11,8 @@ public:
 
 	void UpdateCameraPosition() override;
 
-	void Update(DWORD);
-	void Render();
+	void Update(DWORD) override;
+	void Render() override;
 
-	void Release();
+	void Release() override;
 };

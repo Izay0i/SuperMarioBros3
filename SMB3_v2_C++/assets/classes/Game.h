@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 
+class Shader;
 class Game {
 private:
 	enum class _GameFileSection {
@@ -47,17 +48,12 @@ private:
 	Device* _deviceInstance;
 	SceneManager* _managerInstance;
 
-	//Direct3D 10
+	Shader* _shader;
+	
 	IDXGISwapChain* _swapChain;
 	ID3D10RenderTargetView* _renderTargetView;
 	ID3D10RasterizerState* _rasterizerState;
 	ID3D10BlendState* _blendState;
-
-	ID3D10PixelShader* _pixelShader;
-	//REMOVED
-	//LPDIRECT3D9 _direct3D;
-	//LPDIRECT3DSURFACE9 _backBuffer;
-	//END
 
 	Game();
 	~Game();
@@ -69,7 +65,6 @@ private:
 	bool _CreateViewport();
 	bool _CreateRasterizerState();
 	bool _CreateBlendState();
-	bool _CreatePixelShader(std::string, std::string);
 
 	void _ParseSettings(std::string);
 	void _Update(DWORD);

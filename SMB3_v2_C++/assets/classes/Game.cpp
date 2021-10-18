@@ -1,5 +1,6 @@
 #include "GlobalUtil.h"
 #include "Game.h"
+#include "shader/Shader.h"
 
 HWND Game::_hWND = nullptr;
 HWND Game::_contentHWND = nullptr;
@@ -347,37 +348,6 @@ bool Game::_CreateBlendState() {
 	return true;
 }
 
-bool Game::_CreatePixelShader(std::string path, std::string fileName) {
-	ID3D10Blob* blob = nullptr;
-
-	HRESULT hResult = D3D10CompileShader(
-		path.c_str(), 
-		strlen(path.c_str()), 
-		fileName.c_str(), 
-		nullptr, 
-		nullptr, 
-		"ColorPixelShader", 
-		"ps_4_0", 
-		D3D10_SHADER_ENABLE_STRICTNESS, 
-		&blob, 
-		nullptr
-	);
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to compile pixel shader in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	hResult = GlobalUtil::directDevice->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), &_pixelShader);
-	blob->Release();
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to create pixel shader in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-	GlobalUtil::directDevice->PSSetShader(_pixelShader);
-
-	return true;
-}
-
 void Game::_ParseSettings(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
@@ -398,7 +368,6 @@ void Game::_Update(DWORD deltaTime) {
 }
 
 void Game::_Render() {
-	//Direct3D 10
 	GlobalUtil::directDevice->ClearRenderTargetView(_renderTargetView, _managerInstance->GetCurrentScene()->GetBGColor());
 	GlobalUtil::spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 
@@ -406,29 +375,23 @@ void Game::_Render() {
 	float newBlendFactor[4] = { 0 };
 	GlobalUtil::directDevice->OMSetBlendState(_blendState, newBlendFactor, 0xffffffff);
 
+	GlobalUtil::directDevice->IASetInputLayout(_shader->GetInputLayout());
+	GlobalUtil::directDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	
+	GlobalUtil::directDevice->VSSetShader(_shader->GetVertexShader());
+	GlobalUtil::directDevice->PSSetShader(_shader->GetPixelShader());
+
 	_managerInstance->GetCurrentScene()->Render();
 	
 	GlobalUtil::spriteHandler->End();
 	_swapChain->Present(0, 0);
-
-	//CHANGED
-	/*if (GlobalUtil::directDevice->BeginScene() == D3D_OK) {
-		GlobalUtil::directDevice->ColorFill(_backBuffer, nullptr, _managerInstance->GetCurrentScene()->GetBGColor());
-		GlobalUtil::spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-		
-		_managerInstance->GetCurrentScene()->Render();
-		
-		GlobalUtil::spriteHandler->End();
-		GlobalUtil::directDevice->EndScene();
-	}
-	GlobalUtil::directDevice->Present(nullptr, nullptr, _contentHWND, nullptr);
-	*/
-	//END
 }
 
 Game::Game() {
 	_deviceInstance = Device::GetInstance();
 	_managerInstance = SceneManager::GetInstance();
+
+	_shader = new Shader;
 }
 
 Game::~Game() {
@@ -448,6 +411,11 @@ Game::~Game() {
 		_rasterizerState->Release();
 	}
 
+	if (_shader != nullptr) {
+		_shader->Release();
+		delete _shader;
+	}
+
 	if (_renderTargetView != nullptr) {
 		_renderTargetView->Release();
 	}
@@ -463,17 +431,6 @@ Game::~Game() {
 	if (GlobalUtil::directDevice != nullptr) {
 		GlobalUtil::directDevice->Release();
 	}
-
-	//Direct3D 10
-	//REMOVED
-	/*if (_backBuffer != nullptr) {
-		_backBuffer->Release();
-	}*/
-
-	/*if (_direct3D != nullptr) {
-		_direct3D->Release();
-	}*/
-	//END	
 }
 
 Game* Game::GetInstance() {
@@ -543,45 +500,6 @@ HWND Game::CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int width, int he
 }
 
 bool Game::InitGame(HWND hWND) {
-	//Direct3D 10
-	//REMOVED
-	//_direct3D = Direct3DCreate9(D3D_SDK_VERSION);
-	/*D3DPRESENT_PARAMETERS directParams;
-	ZeroMemory(&directParams, sizeof(directParams));
-	directParams.Windowed = true;
-	directParams.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	directParams.BackBufferFormat = D3DFMT_A8R8G8B8;
-	directParams.BackBufferCount = 1;
-	directParams.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-	directParams.MultiSampleType = D3DMULTISAMPLE_NONE;
-	directParams.MultiSampleQuality = 0;
-	directParams.BackBufferWidth = window.right + 1;
-	directParams.BackBufferHeight = window.height + 1;
-	*/
-	/*_direct3D->CreateDevice(
-		D3DADAPTER_DEFAULT,
-		D3DDEVTYPE_HAL,
-		hWND,
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-		&directParams,
-		&GlobalUtil::directDevice
-	);
-
-	if (GlobalUtil::directDevice == nullptr) {
-		MessageBoxA(hWND, "Failed to create device in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	GlobalUtil::directDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &_backBuffer);
-
-	HRESULT hResult = D3DXCreateSprite(GlobalUtil::directDevice, &GlobalUtil::spriteHandler);
-	if (hResult != D3D_OK) {
-		MessageBoxA(hWND, "Failed to create sprite handler", "Error", MB_ICONERROR);
-		return false;
-	}
-	*/
-	//END
-
 	_isRunning = true;
 
 	RECT window;
@@ -601,6 +519,18 @@ bool Game::InitGame(HWND hWND) {
 		return false;
 	}
 
+	if (!_shader->LoadVertexShaderCSO("D:\\File\\Git Repos\\SuperMarioBros3\\Debug\\VertexShader.cso")) {
+		return false;
+	}
+
+	if (!_shader->LoadPixelShaderCSO("D:\\File\\Git Repos\\SuperMarioBros3\\Debug\\PixelShader.cso")) {
+		return false;
+	}
+
+	if (!_shader->CreateInputLayout()) {
+		return false;
+	}
+
 	//IMPORTANT:
 	//If you want to flip sprites
 	//Create a rasterizer state and disable culling
@@ -616,10 +546,6 @@ bool Game::InitGame(HWND hWND) {
 	if (!_CreateBlendState()) {
 		return false;
 	}
-
-	/*if (!_CreatePixelShader("assets/shaders/pixelshader.hlsl", "pixelshader")) {
-		return false;
-	}*/
 
 	return true;
 }

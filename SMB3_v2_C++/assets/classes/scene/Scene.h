@@ -50,11 +50,7 @@ protected:
 	std::vector<Entity*> _entities;
 	std::vector<Entity*> _tiles;
 	
-	//Direct3D 10
 	std::unordered_map<unsigned int, Texture*> _textureMap;
-	//CHANGED
-	//std::unordered_map<unsigned int, LPDIRECT3DTEXTURE9> _textureMap;
-	//END
 
 	D3DXCOLOR _backgroundColor;
 	DWORD _sceneTime;
@@ -80,11 +76,7 @@ protected:
 	bool _IsEntityAliveAndIB(Entity*) const;
 
 	//Load textures and pass them to the game objects in the scene
-	//Direct3D 10
 	Texture* _LoadTexture(LPCWSTR);
-	//CHANGED
-	//LPDIRECT3DTEXTURE9 _LoadTexture(LPDIRECT3DTEXTURE9, LPCWSTR, D3DCOLOR);
-	//END
 
 	void _ParseSceneSize(std::string);
 	void _ParseSceneTime(std::string);
@@ -134,5 +126,5 @@ public:
 	//Knowing how to prevent a memory leak is just the basics
 	//Knowing how to keep the heap from looking like swiss cheese is the hard part
 	//And I don't know how to do either of those
-	virtual void Release();
+	virtual void Release() = 0;
 };

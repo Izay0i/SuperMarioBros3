@@ -66,12 +66,7 @@ public:
 	virtual int GetHealth() const;
 
 	//Entity data  file path, texture, extra data/properties
-	//Direct3D 10
 	virtual void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>());
-	
-	//CHANGED
-	//virtual void ParseData(std::string, const LPDIRECT3DTEXTURE9&, std::vector<std::string> = std::vector<std::string>());
-	//END
 
 	virtual void TakeDamage();
 

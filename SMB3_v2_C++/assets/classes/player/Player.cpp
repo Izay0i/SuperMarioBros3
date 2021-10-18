@@ -647,7 +647,7 @@ void Player::HandleCollisionResult(
 					}
 					//Is coin
 					else if (shinyBrick->GetHealth() == 3) {
-						shinyBrick->SetHealth(-1);
+						shinyBrick->SetHealth(-2);
 					}
 				}
 				break;

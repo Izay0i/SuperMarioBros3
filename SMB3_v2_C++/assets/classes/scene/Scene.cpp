@@ -40,7 +40,6 @@ bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
 	return false;
 }
 
-//Direct3D 10
 Texture* Scene::_LoadTexture(LPCWSTR filePath) {
 	ID3D10Resource* resource = nullptr;
 	ID3D10Texture2D* texture = nullptr;
@@ -81,42 +80,6 @@ Texture* Scene::_LoadTexture(LPCWSTR filePath) {
 
 	return new Texture(texture, spriteTextureSRView);
 }
-//CHANGED
-//LPDIRECT3DTEXTURE9 Scene::_LoadTexture(LPDIRECT3DTEXTURE9 texture, LPCWSTR filePath, D3DCOLOR colorKey) {
-//	HRESULT hResult;
-//	D3DXIMAGE_INFO imageInfo;
-//
-//	hResult = D3DXGetImageInfoFromFile(filePath, &imageInfo);
-//	if (hResult != D3D_OK) {
-//		OutputDebugStringA("[SCENE] Failed to get image info\n");
-//		return nullptr;
-//	}
-//
-//	hResult = D3DXCreateTextureFromFileEx(
-//		GlobalUtil::directDevice,
-//		filePath,
-//		imageInfo.Width,
-//		imageInfo.Height,
-//		1,
-//		D3DUSAGE_DYNAMIC,
-//		D3DFMT_UNKNOWN,
-//		D3DPOOL_DEFAULT,
-//		D3DX_DEFAULT,
-//		D3DX_DEFAULT,
-//		colorKey,
-//		&imageInfo,
-//		nullptr,
-//		&texture
-//	);
-//
-//	if (hResult != D3D_OK) {
-//		OutputDebugStringA("[SCENE] Failed to create texture from file\n");
-//		return nullptr;
-//	}
-//
-//	return texture;
-//}
-//END
 
 void Scene::_ParseSceneSize(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
@@ -168,12 +131,7 @@ void Scene::_ParseBackgroundColor(std::string line) {
 	float r = std::stof(tokens.at(0)) / 255.0f;
 	float g = std::stof(tokens.at(1)) / 255.0f;
 	float b = std::stof(tokens.at(2)) / 255.0f;
-
-	//Direct3D 10
 	_backgroundColor = { r, g, b, 1.0f };
-	//CHANGED
-	//_backgroundColor = D3DCOLOR_XRGB(r, g, b);
-	//END
 }
 
 void Scene::_ParseTextures(std::string line) {
@@ -189,11 +147,7 @@ void Scene::_ParseTextures(std::string line) {
 	float g = std::stof(tokens.at(3)) / 255.0f;
 	float b = std::stof(tokens.at(4)) / 255.0f;
 	
-	//Direct3D 10
 	Texture* texture = _LoadTexture(GlobalUtil::ToLPCWSTR(tokens.at(1)));
-	//CHANGED
-	//LPDIRECT3DTEXTURE9 texture = _LoadTexture(nullptr, GlobalUtil::ToLPCWSTR(tokens.at(1)), D3DCOLOR_XRGB(r, g, b));
-	//END
 	_textureMap.insert(std::make_pair(textureID, texture));
 }
 
@@ -678,5 +632,3 @@ void Scene::UpdateCameraPosition() {}
 void Scene::Update(DWORD deltaTime) {}
 
 void Scene::Render() {}
-
-void Scene::Release() {}

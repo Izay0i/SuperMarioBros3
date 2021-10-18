@@ -1,13 +1,8 @@
 #include "GlobalUtil.h"
 
 namespace GlobalUtil {
-	//Direct3D 10
 	ID3D10Device* directDevice = nullptr;
 	ID3DX10Sprite* spriteHandler = nullptr;
-	//REMOVED
-	//LPDIRECT3DDEVICE9 directDevice = nullptr;
-	//LPD3DXSPRITE spriteHandler = nullptr;
-	//END
 
 	std::vector<std::string> SplitStr(std::string line, std::string delimeter) {
 		std::vector<std::string> tokens;

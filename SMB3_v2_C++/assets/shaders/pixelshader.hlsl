@@ -1,8 +1,4 @@
-float4 PS(PS_INPUT input) : SV_Target
+float4 main() : SV_TARGET
 {
-	float4 result = float4(1, 1, 1, 0);
-	if (input.Col) {
-		clip(result);
-	}
-	return result;
+	return float4(1.0f, 1.0f, 1.0f, 1.0f);
 }

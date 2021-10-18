@@ -1,6 +1,9 @@
 #pragma once
 
 class SceneIntro : public Scene {
+private:
+	void _IntroScript();
+
 public:
 	SceneIntro(SceneType, std::string);
 	~SceneIntro();

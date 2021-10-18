@@ -192,6 +192,9 @@
     <ClCompile Include="assets\classes\scene\ScenePlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\classes\shader\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\classes\GlobalUtil.h">
@@ -371,9 +374,16 @@
     <ClInclude Include="assets\classes\scene\ScenePlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="assets\classes\shader\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="assets\shaders\VertexShader.hlsl" />
+    <FxCompile Include="assets\shaders\PixelShader.hlsl" />
   </ItemGroup>
 </Project>
