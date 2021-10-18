@@ -1,6 +1,6 @@
 #include "GlobalUtil.h"
 #include "Game.h"
-#include "shader/Shader.h"
+#include "Pipeline.h"
 
 HWND Game::_hWND = nullptr;
 HWND Game::_contentHWND = nullptr;
@@ -213,141 +213,6 @@ void Game::_CreateContentWindow(HINSTANCE hInstance) {
 	}
 }
 
-bool Game::_CreateDeviceAndSwapChain() {
-	//Creates and clears the DXGI_SWAP_CHAIN_DESC structure
-	DXGI_SWAP_CHAIN_DESC swapChainDesc;
-	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-	swapChainDesc.BufferCount = 1;
-	swapChainDesc.BufferDesc.Width = _backBufferWidth;
-	swapChainDesc.BufferDesc.Height = _backBufferHeight;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = _FRAME_RATE;
-	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.OutputWindow = _contentHWND;
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
-	swapChainDesc.Windowed = true;
-
-	HRESULT hResult = D3D10CreateDeviceAndSwapChain(
-		nullptr,
-		D3D10_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		0,
-		D3D10_SDK_VERSION,
-		&swapChainDesc,
-		&_swapChain,
-		&GlobalUtil::directDevice
-	);
-
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to create device and swap chain in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	return true;
-}
-
-bool Game::_CreateRenderTargetView() {
-	//Gets the back buffer from the swap chain
-	ID3D10Texture2D* backBuffer;
-	HRESULT hResult = _swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), reinterpret_cast<LPVOID*>(&backBuffer));
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to get the back buffer in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	//Creates the render target view
-	hResult = GlobalUtil::directDevice->CreateRenderTargetView(backBuffer, nullptr, &_renderTargetView);
-	backBuffer->Release();
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to create render target view in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-	//Sets the render target;
-	GlobalUtil::directDevice->OMSetRenderTargets(1, &_renderTargetView, nullptr);
-
-	return true;
-}
-
-bool Game::_CreateViewport() {
-	//Creates and sets the viewport
-	D3D10_VIEWPORT viewPort;
-	viewPort.Width = _backBufferWidth;
-	viewPort.Height = _backBufferHeight;
-	viewPort.MinDepth = 0.0f;
-	viewPort.MaxDepth = 1.0f;
-	viewPort.TopLeftX = 0;
-	viewPort.TopLeftY = 0;
-	GlobalUtil::directDevice->RSSetViewports(1, &viewPort);
-
-	//Creates the sprite handler;
-	HRESULT hResult = D3DX10CreateSprite(GlobalUtil::directDevice, 0, &GlobalUtil::spriteHandler);
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to create sprite handler", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	//Creates the projection matrix using the values in the viewport
-	D3DXMATRIX projectionMatrix;
-	D3DXMatrixOrthoOffCenterLH(
-		&projectionMatrix,
-		static_cast<float>(viewPort.TopLeftX),
-		static_cast<float>(viewPort.Width),
-		static_cast<float>(viewPort.TopLeftY),
-		static_cast<float>(viewPort.Height),
-		0.1f,
-		10.0f
-	);
-	hResult = GlobalUtil::spriteHandler->SetProjectionTransform(&projectionMatrix);
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to create the projection matrix in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	return true;
-}
-
-bool Game::_CreateRasterizerState() {
-	D3D10_RASTERIZER_DESC rasterizerDesc;
-	ZeroMemory(&rasterizerDesc, sizeof(D3D10_RASTERIZER_DESC));
-	rasterizerDesc.FillMode = D3D10_FILL_SOLID;
-	rasterizerDesc.CullMode = D3D10_CULL_NONE;
-	rasterizerDesc.DepthClipEnable = true;
-
-	HRESULT hResult = GlobalUtil::directDevice->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to create rasterizer state in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-	GlobalUtil::directDevice->RSSetState(_rasterizerState);
-
-	return true;
-}
-
-bool Game::_CreateBlendState() {
-	//Initializes the blend state for alpha drawing
-	D3D10_BLEND_DESC blendDesc;
-	ZeroMemory(&blendDesc, sizeof(D3D10_BLEND_DESC));
-	blendDesc.AlphaToCoverageEnable = false;
-	blendDesc.BlendEnable[0] = true;
-	blendDesc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
-	blendDesc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
-	blendDesc.BlendOp = D3D10_BLEND_OP_ADD;
-	blendDesc.SrcBlendAlpha = D3D10_BLEND_ONE;
-	blendDesc.DestBlendAlpha = D3D10_BLEND_ZERO;
-	blendDesc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
-	blendDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
-
-	HRESULT hResult = GlobalUtil::directDevice->CreateBlendState(&blendDesc, &_blendState);
-	if (hResult != S_OK) {
-		MessageBoxA(_hWND, "Failed to create blend state in Game class", "Error", MB_ICONERROR);
-		return false;
-	}
-
-	return true;
-}
-
 void Game::_ParseSettings(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
@@ -368,68 +233,57 @@ void Game::_Update(DWORD deltaTime) {
 }
 
 void Game::_Render() {
-	GlobalUtil::directDevice->ClearRenderTargetView(_renderTargetView, _managerInstance->GetCurrentScene()->GetBGColor());
-	GlobalUtil::spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
+	auto device = GlobalUtil::directDevice;
+	auto spriteHandler = GlobalUtil::spriteHandler;
+	auto currentScene = _managerInstance->GetCurrentScene();
+
+	auto technique = _pipeline->GetEffectTechnique();
+	auto effectSRV = _pipeline->GetEffectSRV();
+	auto swapChain = _pipeline->GetSwapChain();
+	auto renderTargetView = _pipeline->GetRenderTargetView();
+	auto blendState = _pipeline->GetBlendState();
+
+	device->ClearRenderTargetView(renderTargetView, currentScene->GetBGColor());
+	device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE | D3DX10_SPRITE_SAVE_STATE);
+
+	effectSRV->SetResource(currentScene->GetTexture(1)->resourceView);
 
 	//RGBA
-	float newBlendFactor[4] = { 0 };
-	GlobalUtil::directDevice->OMSetBlendState(_blendState, newBlendFactor, 0xffffffff);
+	float newBlendFactor[4] = { 0.0f };
+	device->OMSetBlendState(blendState, newBlendFactor, 0xffffffff);
 
-	GlobalUtil::directDevice->IASetInputLayout(_shader->GetInputLayout());
-	GlobalUtil::directDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
-	GlobalUtil::directDevice->VSSetShader(_shader->GetVertexShader());
-	GlobalUtil::directDevice->PSSetShader(_shader->GetPixelShader());
+	D3D10_TECHNIQUE_DESC techDesc;
+	technique->GetDesc(&techDesc);
+	for (unsigned int p = 0; p < techDesc.Passes; ++p) {
+		technique->GetPassByIndex(p)->Apply(0);
 
-	_managerInstance->GetCurrentScene()->Render();
-	
-	GlobalUtil::spriteHandler->End();
-	_swapChain->Present(0, 0);
+		currentScene->Render();
+	}
+
+	spriteHandler->End();
+	swapChain->Present(0, 0);
 }
 
 Game::Game() {
 	_deviceInstance = Device::GetInstance();
 	_managerInstance = SceneManager::GetInstance();
 
-	_shader = new Shader;
+	_pipeline = new Pipeline;
 }
 
 Game::~Game() {
+	if (_pipeline != nullptr) {
+		_pipeline->Release();
+		delete _pipeline;
+	}
+	
 	if (_deviceInstance != nullptr) {
 		_deviceInstance->Release();
 	}
 
 	if (_managerInstance != nullptr) {
 		_managerInstance->Release();
-	}
-
-	if (_blendState != nullptr) {
-		_blendState->Release();
-	}
-
-	if (_rasterizerState != nullptr) {
-		_rasterizerState->Release();
-	}
-
-	if (_shader != nullptr) {
-		_shader->Release();
-		delete _shader;
-	}
-
-	if (_renderTargetView != nullptr) {
-		_renderTargetView->Release();
-	}
-
-	if (_swapChain != nullptr) {
-		_swapChain->Release();
-	}
-
-	if (GlobalUtil::spriteHandler != nullptr) {
-		GlobalUtil::spriteHandler->Release();
-	}
-
-	if (GlobalUtil::directDevice != nullptr) {
-		GlobalUtil::directDevice->Release();
 	}
 }
 
@@ -511,39 +365,41 @@ bool Game::InitGame(HWND hWND) {
 	_windowWidth = window.right + 1;
 	_windowHeight = window.bottom + 1;
 
-	if (!_CreateDeviceAndSwapChain()) {
+	if (!_pipeline->CreateDeviceAndSwapChain(_contentHWND, _backBufferWidth, _backBufferHeight, _FRAME_RATE)) {
 		return false;
 	}
 
-	if (!_CreateRenderTargetView()) {
+	if (!_pipeline->LoadEffect("assets\\shaders\\effect.fx")) {
 		return false;
 	}
 
-	if (!_shader->LoadVertexShaderCSO("D:\\File\\Git Repos\\SuperMarioBros3\\Debug\\VertexShader.cso")) {
+	D3D10_INPUT_ELEMENT_DESC layout[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D10_INPUT_PER_VERTEX_DATA, 0 }
+	};
+	const unsigned int numElements = ARRAYSIZE(layout);
+	if (!_pipeline->CreateInputLayout(layout, numElements)) {
 		return false;
 	}
 
-	if (!_shader->LoadPixelShaderCSO("D:\\File\\Git Repos\\SuperMarioBros3\\Debug\\PixelShader.cso")) {
+	if (!_pipeline->CreateRenderTagetView()) {
 		return false;
 	}
 
-	if (!_shader->CreateInputLayout()) {
-		return false;
-	}
-
-	//IMPORTANT:
+	//OPTIONAL:
 	//If you want to flip sprites
 	//Create a rasterizer state and disable culling
 	//Source: https://gamedev.net/forums/topic/541543-cull-disable-dx10/4493656/
-	if (!_CreateRasterizerState()) {
+	if (!_pipeline->CreateRasterizerState()) {
 		return false;
 	}
 
-	if (!_CreateViewport()) {
+	if (!_pipeline->CreateViewport(_backBufferWidth, _backBufferHeight)) {
 		return false;
 	}
 
-	if (!_CreateBlendState()) {
+	if (!_pipeline->CreateBlendState()) {
 		return false;
 	}
 

@@ -6,7 +6,7 @@
 #include <fstream>
 #include <vector>
 
-class Shader;
+class Pipeline;
 class Game {
 private:
 	enum class _GameFileSection {
@@ -48,23 +48,12 @@ private:
 	Device* _deviceInstance;
 	SceneManager* _managerInstance;
 
-	Shader* _shader;
-	
-	IDXGISwapChain* _swapChain;
-	ID3D10RenderTargetView* _renderTargetView;
-	ID3D10RasterizerState* _rasterizerState;
-	ID3D10BlendState* _blendState;
+	Pipeline* _pipeline;
 
 	Game();
 	~Game();
 
 	void _CreateContentWindow(HINSTANCE);
-
-	bool _CreateDeviceAndSwapChain();
-	bool _CreateRenderTargetView();
-	bool _CreateViewport();
-	bool _CreateRasterizerState();
-	bool _CreateBlendState();
 
 	void _ParseSettings(std::string);
 	void _Update(DWORD);

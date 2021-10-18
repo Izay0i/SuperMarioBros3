@@ -16,12 +16,12 @@ int __stdcall WinMain(
 	HWND hWND = gameInstance->CreateGameWindow(hInstance, nCmdShow, GlobalUtil::SCREEN_WIDTH, GlobalUtil::SCREEN_HEIGHT);
 
 	if (!gameInstance->InitGame(hWND)) {
-		MessageBoxA(hWND, "Failed to create game", "Error", MB_ICONERROR);
+		MessageBoxA(hWND, "Failed to create the game, see output console", "Error", MB_ICONERROR);
 		return -1;
 	}
 
 	if (!gameInstance->InitDevice()) {
-		MessageBoxA(hWND, "Failed to create device", "Error", MB_ICONERROR);
+		MessageBoxA(hWND, "Failed to create the device", "Error", MB_ICONERROR);
 		return -1;
 	}
 

@@ -45,34 +45,19 @@ PS_INPUT VS( VS_INPUT input )
 //--------------------------------------------------------------------------------------
 float4 textured( PS_INPUT input ) : SV_Target
 {
+    clip(input.Color.r >= 0.999998f);
     return tex2D.Sample( linearSampler, input.Tex ); 
 }
-
-float4 noTexture( PS_INPUT input ) : SV_Target
-{
-    return input.Color; 
-}
-
 
 //--------------------------------------------------------------------------------------
 // Techniques
 //--------------------------------------------------------------------------------------
-technique10 full
+technique10 main
 {
     pass P0
     {
         SetVertexShader( CompileShader( vs_4_0, VS() ) );
         SetGeometryShader( NULL );
         SetPixelShader( CompileShader( ps_4_0, textured() ) );
-    }
-}
-
-technique10 texturingDisabled
-{
-    pass P0
-    {
-        SetVertexShader( CompileShader( vs_4_0, VS() ) );
-        SetGeometryShader( NULL );
-        SetPixelShader( CompileShader( ps_4_0, noTexture() ) );
     }
 }
