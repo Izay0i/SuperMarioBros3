@@ -4,11 +4,11 @@ GreenShellIdle	34	17	50	33	1	0
 GreenShellWake	34	17	50	33	2	50
 GreenShellWake	34	34	50	50
 
-GreenShellSpin	0	51	16	66	3	50
-GreenShellSpin	17	51	33	66
-GreenShellSpin	34	51	50	66
+GreenShellSpin	0	51	16	67	3	50
+GreenShellSpin	17	51	33	67
+GreenShellSpin	34	51	50	67
 
-GreenWalk	0	17	16	46	2	100
+GreenWalk	0	17	16	47	2	100
 GreenWalk	17	17	33	47
 
 GreenFly	68	68	84	100	2	100
@@ -28,6 +28,8 @@ RedWalk	68	17	84	49
 
 RedFly	102	68	118	100	2	100
 RedFly	119	68	135	100
+
+SlamDunk	203	0	219	16	1	0
 [/]
 
 [HITBOXES]

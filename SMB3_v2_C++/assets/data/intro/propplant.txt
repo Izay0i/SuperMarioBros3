@@ -1,5 +1,0 @@
-[SPRITES]
-LeftProp	257	168	321	264	1	0
-
-RightProp	323	168	386	264	1	0
-[/]

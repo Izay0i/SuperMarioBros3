@@ -1,21 +1,14 @@
 #pragma once
 
-class PropPlayer : public Entity {
+class PropNormalKoopa : public Entity {
 private:
-	static Texture* _propTexture;
+	static Texture* _normalTexture;
 
 	void _ParseSprites(std::string) override;
 
 public:
-	std::string animationName;
-
-	PropPlayer();
-	~PropPlayer();
-
-	void SetRenderPriority(unsigned int);
-	void SetRunSpeed(float);
-	void SetJumpSpeed(float);
-	void SetGravity(float);
+	PropNormalKoopa();
+	~PropNormalKoopa();
 
 	RECTF GetBoundingBox(int = 0) const override;
 
@@ -23,11 +16,6 @@ public:
 
 	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
-
-	void MoveLeft();
-	void MoveRight();
-	void Jump();
-	void SlowFall();
 
 	void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr) override;
 	void Render() override;

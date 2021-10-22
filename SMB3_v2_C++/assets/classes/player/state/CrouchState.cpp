@@ -19,6 +19,9 @@ PlayerState* CrouchState::HandleStates() {
 
 void CrouchState::Render() {
 	PlayerState::Render();
+	if (_player->IsInvulnerable()) {
+		return;
+	}
 
 	switch (_form) {
 		case _Form::SMALL:

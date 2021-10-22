@@ -17,7 +17,7 @@ void PlayerState::_OnEntry() {
 void PlayerState::_OnExit() {
 	switch (_player->_health) {
 		case 1:
-			_player->_animatedSprite.PlaySpriteAnimation("ShrinkDown", _player->_position, _player->_scale);
+			_player->_animatedSprite.PlaySpriteAnimation("ShrinkDown", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale);
 			break;
 		case 2:
 			_player->_animatedSprite.PlaySpriteAnimation("SmokePuff", _player->_position);

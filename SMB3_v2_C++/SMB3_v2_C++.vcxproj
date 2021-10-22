@@ -160,6 +160,9 @@
     <ClCompile Include="assets\classes\intro\Curtain.cpp" />
     <ClCompile Include="assets\classes\intro\GameIcon.cpp" />
     <ClCompile Include="assets\classes\intro\GameLogo.cpp" />
+    <ClCompile Include="assets\classes\intro\PropFastKoopa.cpp" />
+    <ClCompile Include="assets\classes\intro\PropKoopaShell.cpp" />
+    <ClCompile Include="assets\classes\intro\PropNormalKoopa.cpp" />
     <ClCompile Include="assets\classes\intro\PropPlant.cpp" />
     <ClCompile Include="assets\classes\intro\PropPlayer.cpp" />
     <ClCompile Include="assets\classes\intro\SelectText.cpp" />
@@ -167,6 +170,7 @@
     <ClCompile Include="assets\classes\item\Coin.cpp" />
     <ClCompile Include="assets\classes\item\Leaf.cpp" />
     <ClCompile Include="assets\classes\item\Mushroom.cpp" />
+    <ClCompile Include="assets\classes\item\Star.cpp" />
     <ClCompile Include="assets\classes\map\Cactus.cpp" />
     <ClCompile Include="assets\classes\map\HammerBro.cpp" />
     <ClCompile Include="assets\classes\map\HelpText.cpp" />
@@ -223,6 +227,9 @@
     <ClInclude Include="assets\classes\intro\Curtain.h" />
     <ClInclude Include="assets\classes\intro\GameIcon.h" />
     <ClInclude Include="assets\classes\intro\GameLogo.h" />
+    <ClInclude Include="assets\classes\intro\PropFastKoopa.h" />
+    <ClInclude Include="assets\classes\intro\PropKoopaShell.h" />
+    <ClInclude Include="assets\classes\intro\PropNormalKoopa.h" />
     <ClInclude Include="assets\classes\intro\PropPlant.h" />
     <ClInclude Include="assets\classes\intro\PropPlayer.h" />
     <ClInclude Include="assets\classes\intro\SelectText.h" />
@@ -231,6 +238,7 @@
     <ClInclude Include="assets\classes\item\Leaf.h" />
     <ClInclude Include="assets\classes\item\Mushroom.h" />
     <ClInclude Include="assets\classes\EntityList.h" />
+    <ClInclude Include="assets\classes\item\Star.h" />
     <ClInclude Include="assets\classes\map\Cactus.h" />
     <ClInclude Include="assets\classes\map\HammerBro.h" />
     <ClInclude Include="assets\classes\map\HelpText.h" />
@@ -270,6 +278,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="assets\shaders\effect.fx">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+    </FxCompile>
     <FxCompile Include="assets\shaders\PixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

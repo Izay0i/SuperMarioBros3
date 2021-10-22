@@ -1,7 +1,10 @@
 #pragma once
 
+//Render pipeline or graphics pipeline, AIO
 class Pipeline {
 private:
+	static Pipeline* _pipelineInstance;
+
 	ID3D10Effect* _effect;
 	ID3D10EffectTechnique* _effectTechnique;
 	ID3D10EffectShaderResourceVariable* _effectSRV;
@@ -11,9 +14,14 @@ private:
 	ID3D10RasterizerState* _rasterizerState;
 	ID3D10BlendState* _blendState;
 
+	Pipeline();
+	~Pipeline();
+
 public:
-	ID3D10EffectShaderResourceVariable* GetEffectSRV() const;
+	static Pipeline* GetInstance();
+
 	ID3D10EffectTechnique* GetEffectTechnique() const;
+	ID3D10EffectShaderResourceVariable* GetEffectSRV() const;
 	IDXGISwapChain* GetSwapChain() const;
 	ID3D10InputLayout* GetInputLayout() const;
 	ID3D10RenderTargetView* GetRenderTargetView() const;
@@ -36,7 +44,3 @@ public:
 
 	void Release();
 };
-
-//It's so nice to learn that the framework I built upon is all legacy code
-//Really helps when I'm stuck with a problem that only a website from 200X could fix
-//Oh wait, that website is gone. Perfect

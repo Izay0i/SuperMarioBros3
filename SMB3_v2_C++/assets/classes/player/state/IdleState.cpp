@@ -46,6 +46,9 @@ PlayerState* IdleState::HandleStates() {
 
 void IdleState::Render() {
 	PlayerState::Render();
+	if (_player->IsInvulnerable()) {
+		return;
+	}
 
 	switch (_form) {
 		case _Form::SMALL:

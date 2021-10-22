@@ -7,6 +7,8 @@ private:
 	void _ParseSprites(std::string) override;
 
 public:
+	bool isMultiplayer;
+
 	SelectText();
 	~SelectText();
 

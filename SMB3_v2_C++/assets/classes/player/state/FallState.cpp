@@ -23,6 +23,9 @@ PlayerState* FallState::HandleStates() {
 
 void FallState::Render() {
 	PlayerState::Render();
+	if (_player->IsInvulnerable()) {
+		return;
+	}
 
 	switch (_form) {
 		case _Form::SMALL:

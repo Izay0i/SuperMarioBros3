@@ -217,8 +217,14 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
 			//entity = new MovingPlatform;
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+			entity = new Mushroom;
+			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LEAF:
 			entity = new Leaf;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_STAR:
+			entity = new Star;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
 			entity = new Coin;
@@ -251,7 +257,12 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new GameIcon;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_SELECT:
-			entity = new SelectText;
+			_selectText = new SelectText;
+			_selectText->SetOjectType(objectType);
+			_selectText->ParseData(tokens.at(1), texture, extraData);
+			_selectText->SetPosition(position);
+			
+			_entities.emplace_back(_selectText);
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_CURTAIN:
 			entity = new Curtain;
@@ -277,6 +288,15 @@ void Scene::_ParseEntityData(std::string line) {
 			_propLuigi->SetPosition(position);
 
 			_entities.emplace_back(_propLuigi);
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PROPFASTKOOPA:
+			entity = new PropFastKoopa;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PROPKOOPASHELL:
+			entity = new PropKoopaShell;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PROPNORMALKOOPA:
+			entity = new PropNormalKoopa;
 			break;
 	}
 
@@ -506,6 +526,8 @@ void Scene::LoadScene() {
 
 	_propMario = nullptr;
 	_propLuigi = nullptr;
+
+	_selectText = nullptr;
 
 	_scorePopUp = nullptr;
 	_hud = nullptr;

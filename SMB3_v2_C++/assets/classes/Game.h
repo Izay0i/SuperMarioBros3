@@ -47,8 +47,7 @@ private:
 
 	Device* _deviceInstance;
 	SceneManager* _managerInstance;
-
-	Pipeline* _pipeline;
+	Pipeline* _pipelineInstance;
 
 	Game();
 	~Game();

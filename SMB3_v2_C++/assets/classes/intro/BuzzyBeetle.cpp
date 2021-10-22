@@ -8,13 +8,17 @@ void BuzzyBeetle::_ParseSprites(std::string line) {
 }
 
 BuzzyBeetle::BuzzyBeetle() {
+	_renderPriority = 1;
 
+	_bounceSpeed = 0.3f;
+
+	_gravity = 0.0002f;
 }
 
 BuzzyBeetle::~BuzzyBeetle() {}
 
 RECTF BuzzyBeetle::GetBoundingBox(int) const {
-	return RECTF();
+	return _health <= 0 ? RECTF() : GameObject::GetBoundingBox();
 }
 
 void BuzzyBeetle::ParseData(
@@ -30,7 +34,28 @@ void BuzzyBeetle::ParseData(
 
 void BuzzyBeetle::HandleStates() {}
 
-void BuzzyBeetle::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
+void BuzzyBeetle::HandleCollisionResult(
+	LPCOLLISIONEVENT result, 
+	D3DXVECTOR2& minTime, 
+	D3DXVECTOR2& offset, 
+	D3DXVECTOR2& normal, 
+	D3DXVECTOR2& relativeDistance) 
+{
+	Entity* eventEntity = result->entity;
+	D3DXVECTOR2 eventNormal = result->normal;
+
+	switch (eventEntity->GetObjectType()) {
+		case GameObjectType::GAMEOBJECT_TYPE_PROPKOOPASHELL:
+			if (eventNormal.x != 0.0f) {
+				_health = 0;
+				_scale.y = -1.0f;
+				_velocity.y = -_bounceSpeed;
+				_runSpeed = 0.08f;
+				_gravity = 0.0014f;
+			}
+			break;
+	}
+}
 
 void BuzzyBeetle::Update(
 	DWORD deltaTime, 
@@ -38,7 +63,8 @@ void BuzzyBeetle::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	
+	_velocity.x = _runSpeed;
+	Entity::Update(deltaTime, collidableEntities, collidableTiles);
 }
 
 void BuzzyBeetle::Render() {

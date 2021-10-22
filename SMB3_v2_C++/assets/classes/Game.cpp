@@ -236,31 +236,19 @@ void Game::_Render() {
 	auto device = GlobalUtil::directDevice;
 	auto spriteHandler = GlobalUtil::spriteHandler;
 	auto currentScene = _managerInstance->GetCurrentScene();
-
-	auto technique = _pipeline->GetEffectTechnique();
-	auto effectSRV = _pipeline->GetEffectSRV();
-	auto swapChain = _pipeline->GetSwapChain();
-	auto renderTargetView = _pipeline->GetRenderTargetView();
-	auto blendState = _pipeline->GetBlendState();
+	
+	auto swapChain = _pipelineInstance->GetSwapChain();
+	auto renderTargetView = _pipelineInstance->GetRenderTargetView();
+	auto blendState = _pipelineInstance->GetBlendState();
 
 	device->ClearRenderTargetView(renderTargetView, currentScene->GetBGColor());
-	device->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE | D3DX10_SPRITE_SAVE_STATE);
-
-	effectSRV->SetResource(currentScene->GetTexture(1)->resourceView);
 
 	//RGBA
 	float newBlendFactor[4] = { 0.0f };
 	device->OMSetBlendState(blendState, newBlendFactor, 0xffffffff);
 
-	D3D10_TECHNIQUE_DESC techDesc;
-	technique->GetDesc(&techDesc);
-	for (unsigned int p = 0; p < techDesc.Passes; ++p) {
-		technique->GetPassByIndex(p)->Apply(0);
-
-		currentScene->Render();
-	}
-
+	currentScene->Render();
 	spriteHandler->End();
 	swapChain->Present(0, 0);
 }
@@ -269,13 +257,12 @@ Game::Game() {
 	_deviceInstance = Device::GetInstance();
 	_managerInstance = SceneManager::GetInstance();
 
-	_pipeline = new Pipeline;
+	_pipelineInstance = Pipeline::GetInstance();
 }
 
 Game::~Game() {
-	if (_pipeline != nullptr) {
-		_pipeline->Release();
-		delete _pipeline;
+	if (_pipelineInstance != nullptr) {
+		_pipelineInstance->Release();
 	}
 	
 	if (_deviceInstance != nullptr) {
@@ -365,25 +352,11 @@ bool Game::InitGame(HWND hWND) {
 	_windowWidth = window.right + 1;
 	_windowHeight = window.bottom + 1;
 
-	if (!_pipeline->CreateDeviceAndSwapChain(_contentHWND, _backBufferWidth, _backBufferHeight, _FRAME_RATE)) {
+	if (!_pipelineInstance->CreateDeviceAndSwapChain(_contentHWND, _backBufferWidth, _backBufferHeight, _FRAME_RATE)) {
 		return false;
 	}
 
-	if (!_pipeline->LoadEffect("assets\\shaders\\effect.fx")) {
-		return false;
-	}
-
-	D3D10_INPUT_ELEMENT_DESC layout[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D10_INPUT_PER_VERTEX_DATA, 0 }
-	};
-	const unsigned int numElements = ARRAYSIZE(layout);
-	if (!_pipeline->CreateInputLayout(layout, numElements)) {
-		return false;
-	}
-
-	if (!_pipeline->CreateRenderTagetView()) {
+	if (!_pipelineInstance->CreateRenderTagetView()) {
 		return false;
 	}
 
@@ -391,15 +364,15 @@ bool Game::InitGame(HWND hWND) {
 	//If you want to flip sprites
 	//Create a rasterizer state and disable culling
 	//Source: https://gamedev.net/forums/topic/541543-cull-disable-dx10/4493656/
-	if (!_pipeline->CreateRasterizerState()) {
+	if (!_pipelineInstance->CreateRasterizerState()) {
 		return false;
 	}
 
-	if (!_pipeline->CreateViewport(_backBufferWidth, _backBufferHeight)) {
+	if (!_pipelineInstance->CreateViewport(_backBufferWidth, _backBufferHeight)) {
 		return false;
 	}
 
-	if (!_pipeline->CreateBlendState()) {
+	if (!_pipelineInstance->CreateBlendState()) {
 		return false;
 	}
 

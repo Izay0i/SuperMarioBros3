@@ -2,12 +2,13 @@
 256	224
 [/]
 
+#In ms
 [SCENETIME]
-60
+60000
 [/]
 
 [BGCOLOR]
-255	255	255
+0	0	0
 [/]
 
 [TEXTURES]
@@ -17,45 +18,61 @@
 3	assets\textures\items.png	224	163	216
 [/]
 
+#If you're wondering it looks messy
+#Let's just say my ass is on the line
+#So I have no choice but to hard code everything
+#GG
 [ENTITYDATA]
-0	assets\data\player\mario.txt	1	240	125
+#Goomba
+100	assets\data\npc\goomba.txt	2	80	-58000
+
+#Mushroom
+200	assets\data\item\redshroom.txt	3	30	-62000
+
+#Leaf
+202	assets\data\item\leaf.txt	3	115	-190
+
+#Star
+204	assets\data\item\star.txt	3	200	-60000
+
+#Logo
+500	assets\data\intro\logo.txt	0	115	-60
+
+#Icon
+501	assets\data\intro\icon.txt	0	128	98
+
+#Select text
+502	assets\data\intro\selecttext.txt	0	121	128
+
+#Curtain
+503	assets\data\intro\curtain.txt	0	128	70
+
+#Prop plant
+504	assets\data\intro\propplant_left.txt	0	20	100
+504	assets\data\intro\propplant_right.txt	0	220	100
+
+#Buzzy
+505	assets\data\intro\buzzybeetle.txt	0	175	-8000
 
 #Prop player
 506	assets\data\player\mario.txt	1	240	125
 507	assets\data\player\luigi.txt	1	0	125
 
-#Goomba
-100	assets\data\npc\goomba.txt	2	0	0
+#Fast koopa
+508	assets\data\npc\koopa.txt	2	-242	134
 
-#Koopa
-102	assets\data\npc\koopa.txt	2	0	0
+#Koopa shell
+509	assets\data\npc\koopa.txt	2	115	-5900
 
-#Leaf
-202	assets\data\item\leaf.txt	3	0	0
-
-#Logo
-500	assets\data\into\logo.txt	0	0	0
-
-#Icon
-501	assets\data\intro\icon.txt	0	128	70
-
-#Select text
-502	assets\data\intro\selecttext.txt	0	0	0
-
-#Curtain
-503	assets\data\intro\curtain.txt	0	130	70
-
-#Prop plant
-504	assets\data\intro\propplant.txt	0	0	0
-504	assets\data\intro\propplant.txt	0	0	0
-
-#Buzzy
-505	assets\data\intro\buzzybeetle.txt	0	0	0
-
+#Normal koopa
+510	assets\data\npc\koopa.txt	2	-50	134
+510	assets\data\npc\koopa.txt	2	-114	134
+510	assets\data\npc\koopa.txt	2	-178	134
 [/]
 
 [TILEDATA]
-777	-64	155	384	37
+777	-100	155	400	37
+777	270	125	16	32
 [/]
 
 [BACKGROUND]

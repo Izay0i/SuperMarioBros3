@@ -35,6 +35,9 @@ PlayerState* RunState::HandleStates() {
 
 void RunState::Render() {
 	PlayerState::Render();
+	if (_player->IsInvulnerable()) {
+		return;
+	}
 
 	switch (_form) {
 		case _Form::SMALL:

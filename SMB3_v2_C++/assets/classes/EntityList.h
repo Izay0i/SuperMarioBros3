@@ -15,6 +15,7 @@
 
 #include "item/Mushroom.h"
 #include "item/Leaf.h"
+#include "item/Star.h"
 #include "item/Coin.h"
 #include "item/BonusItem.h"
 
@@ -34,5 +35,8 @@
 #include "intro/PropPlant.h"
 #include "intro/BuzzyBeetle.h"
 #include "intro/PropPlayer.h"
+#include "intro/PropFastKoopa.h"
+#include "intro/PropKoopaShell.h"
+#include "intro/PropNormalKoopa.h"
 
 #include "effect/BrickDebris.h"

@@ -8,9 +8,8 @@ void Curtain::_ParseSprites(std::string line) {
 }
 
 Curtain::Curtain() {
-	_renderPriority = 0;
-	_velocity = { 0.0f, -0.05f };
-	_curlUpTime = 3000;
+	_renderPriority = 1;
+	_curlUpTime = 5000;
 
 	StartCurlUpTimer();
 }
@@ -50,10 +49,16 @@ void Curtain::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
+	const unsigned int TIME_TO_CURL_UP = 1000;
+	if (IsCurlingUp() && GetTickCount64() - _curlUpStart > TIME_TO_CURL_UP) {
+		_velocity.y = -0.05f;
+	}
+
 	if (IsCurlingUp() && GetTickCount64() - _curlUpStart > _curlUpTime) {
 		_curlUpStart = 0;
 		_velocity = { 0.0f, 0.0f };
-		_position.y = 14.0f;
+		_scale = { 0.0f, 0.0f };
+		_position.y = 2.0f;
 	}
 
 	Entity::Update(deltaTime);

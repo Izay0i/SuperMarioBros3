@@ -67,13 +67,6 @@ void Mushroom::HandleCollisionResult(
 	}
 
 	switch (eventEntity->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
-		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
-		case GameObjectType::GAMEOBJECT_TYPE_COIN:
-			minTime = { 1.0f, 1.0f };
-			offset = normal = relativeDistance = { 0, 0 };
-			break;
 		case GameObjectType::GAMEOBJECT_TYPE_TILE:
 			if (eventNormal.x != 0.0f) {
 				_normal.x = -_normal.x;
@@ -107,10 +100,10 @@ void Mushroom::Update(
 void Mushroom::Render() {
 	switch (_objectType) {
 		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-			_animatedSprite.PlaySpriteAnimation("RedShroom", _position);
+			_animatedSprite.PlaySpriteAnimation("RedShroom", _position, _scale);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
-			_animatedSprite.PlaySpriteAnimation("GreenShroom", _position);
+			_animatedSprite.PlaySpriteAnimation("GreenShroom", _position, _scale);
 			break;
 	}
 }

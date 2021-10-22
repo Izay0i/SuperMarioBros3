@@ -3,6 +3,20 @@
 
 Texture* GameLogo::_logoTexture = nullptr;
 
+GameLogo::GameLogo() {
+	_fallDownTime = 400;
+}
+
+GameLogo::~GameLogo() {}
+
+bool GameLogo::IsFallingDown() const {
+	return _fallDownStart != 0;
+}
+
+void GameLogo::StartFallDownTimer() {
+	_fallDownStart = static_cast<DWORD>(GetTickCount64());
+}
+
 void GameLogo::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _logoTexture);
 }
@@ -26,7 +40,24 @@ void GameLogo::HandleStates() {}
 
 void GameLogo::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
-void GameLogo::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {}
+void GameLogo::Update(
+	DWORD deltaTime, 
+	std::vector<Entity*>* collidableEntities, 
+	std::vector<Entity*>* collidableTiles, 
+	Grid* grid) 
+{
+	if (IsFallingDown()) {
+		_velocity.y = 0.2f;
+	}
+
+	if (IsFallingDown() && GetTickCount64() - _fallDownStart > _fallDownTime) {
+		_fallDownStart = 0;
+		_velocity.y = 0.0f;
+		_position.y = 60.0f;
+	}
+
+	Entity::Update(deltaTime);
+}
 
 void GameLogo::Render() {
 	_animatedSprite.PlaySpriteAnimation("Logo", _position);

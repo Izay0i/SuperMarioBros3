@@ -1,5 +1,5 @@
 [SPRITES]
-Default	0	255	256	412	1	0
+Default	0	255	256	413	1	0
 
 Curled	257	110	513	124	1	0
 [/]

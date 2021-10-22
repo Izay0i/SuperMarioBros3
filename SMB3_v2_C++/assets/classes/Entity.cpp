@@ -53,9 +53,7 @@ float Entity::GetGravity() const {
 }
 
 void Entity::SetHealth(int health) {
-	if (health > -2) {
-		_health = health;
-	}
+	_health = health;
 }
 
 int Entity::GetHealth() const {
@@ -71,7 +69,9 @@ void Entity::ParseData(
 	readFile.open(dataPath, std::ios::in);
 
 	if (!readFile.is_open()) {
-		OutputDebugStringA("[ENTITY] Failed to read data\n");
+		char debug[100];
+		sprintf_s(debug, "[ENTITY] Failed to read data for object with ID: %d\n", _objectType);
+		OutputDebugStringA(debug);
 		return;
 	}
 
@@ -206,16 +206,16 @@ void Entity::Update(
 
 		FilterCollision(collisionEvents, eventResults, minTime, normal, relativeDistance);
 
-		for (LPCOLLISIONEVENT result : eventResults) {
-			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
-		}
-
 		if (normal.x != 0.0f) {
 			_velocity.x = 0.0f;
 		}
 
 		if (normal.y != 0.0f) {
 			_velocity.y = 0.0f;
+		}
+
+		for (LPCOLLISIONEVENT result : eventResults) {
+			HandleCollisionResult(result, minTime, offset, normal, relativeDistance);
 		}
 
 		_position.x += _distance.x * minTime.x + normal.x * offset.x;

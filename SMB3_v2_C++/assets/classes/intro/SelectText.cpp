@@ -44,7 +44,7 @@ void SelectText::Update(
 }
 
 void SelectText::Render() {
-
+	_animatedSprite.PlaySpriteAnimation(isMultiplayer ? "2P" : "1P", _position, _scale);
 }
 
 void SelectText::Release() {

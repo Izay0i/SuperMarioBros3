@@ -1,5 +1,6 @@
 #pragma once
 
+//Hard-coding galore
 class SceneIntro : public Scene {
 private:
 	void _IntroScript();
@@ -9,6 +10,8 @@ public:
 	~SceneIntro();
 
 	void OnKeyDown(int) override;
+
+	void LoadScene() override;
 
 	void Update(DWORD) override;
 	void Render() override;

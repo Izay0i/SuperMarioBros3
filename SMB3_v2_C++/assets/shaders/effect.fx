@@ -6,9 +6,17 @@ SamplerState linearSampler
     AddressV = Wrap;
 };
 
-matrix World;
-matrix View;
-matrix Projection;
+BlendState SrcAlphaBlendingAdd
+{
+    BlendEnable[0] = TRUE;
+    SrcBlend = SRC_ALPHA;
+    DestBlend = INV_SRC_ALPHA;
+    BlendOp = ADD;
+    SrcBlendAlpha = ZERO;
+    DestBlendAlpha = ZERO;
+    BlendOpAlpha = ADD;
+    RenderTargetWriteMask[0] = 0x0F;
+};
 
 struct PS_INPUT
 {
@@ -27,26 +35,19 @@ struct VS_INPUT
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
-PS_INPUT VS( VS_INPUT input )
+PS_INPUT VS(VS_INPUT input)
 {
-	PS_INPUT output;
-	
-	output.Pos = mul( input.Pos, World );
-    output.Pos = mul( output.Pos, View );    
-    output.Pos = mul( output.Pos, Projection );
-	output.Color = input.Color;
-	output.Tex = input.Tex;
-	
-    return output;  
+    return input;  
 }
 
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 textured( PS_INPUT input ) : SV_Target
+float4 PS(PS_INPUT input) : SV_Target
 {
-    clip(input.Color.r >= 0.999998f);
-    return tex2D.Sample( linearSampler, input.Tex ); 
+    if (input.Color.r == 0.8784313725490196 && input.Color.g == 0.6392156862745098 && input.Color.b == 0.8470588235294118)
+        clip(-1);
+    return tex2D.Sample(linearSampler, input.Tex);
 }
 
 //--------------------------------------------------------------------------------------
@@ -56,8 +57,10 @@ technique10 main
 {
     pass P0
     {
-        SetVertexShader( CompileShader( vs_4_0, VS() ) );
-        SetGeometryShader( NULL );
-        SetPixelShader( CompileShader( ps_4_0, textured() ) );
+        SetVertexShader(CompileShader(vs_4_0, VS()));
+        SetGeometryShader(NULL);
+        SetPixelShader(CompileShader(ps_4_0, PS()));
+
+        SetBlendState(SrcAlphaBlendingAdd, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
     }
 }

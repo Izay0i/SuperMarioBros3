@@ -8,7 +8,7 @@ void PropPlant::_ParseSprites(std::string line) {
 }
 
 PropPlant::PropPlant() {
-	_renderPriority = 0;
+	_renderPriority = 3;
 }
 
 PropPlant::~PropPlant() {}
@@ -35,6 +35,7 @@ void PropPlant::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR
 void PropPlant::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {}
 
 void PropPlant::Render() {
+	_animatedSprite.PlaySpriteAnimation("Plant", _position, _scale);
 }
 
 void PropPlant::Release() {

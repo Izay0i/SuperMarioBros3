@@ -1,12 +1,25 @@
 #include "GlobalUtil.h"
 #include "Pipeline.h"
 
-ID3D10EffectShaderResourceVariable* Pipeline::GetEffectSRV() const {
-	return _effectSRV;
+Pipeline* Pipeline::_pipelineInstance = nullptr;
+
+Pipeline::Pipeline() {}
+
+Pipeline::~Pipeline() {}
+
+Pipeline* Pipeline::GetInstance() {
+	if (_pipelineInstance == nullptr) {
+		_pipelineInstance = new Pipeline;
+	}
+	return _pipelineInstance;
 }
 
 ID3D10EffectTechnique* Pipeline::GetEffectTechnique() const {
 	return _effectTechnique;
+}
+
+ID3D10EffectShaderResourceVariable* Pipeline::GetEffectSRV() const {
+	return _effectSRV;
 }
 
 IDXGISwapChain* Pipeline::GetSwapChain() const {
@@ -243,7 +256,13 @@ void Pipeline::Release() {
 	}
 
 	if (_effectTechnique != nullptr) {
+		delete _effectSRV;
 		delete _effectTechnique;
 		_effect->Release();
+	}
+
+	if (_pipelineInstance != nullptr) {
+		delete _pipelineInstance;
+		_pipelineInstance = nullptr;
 	}
 }

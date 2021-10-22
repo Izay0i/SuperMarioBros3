@@ -16,11 +16,13 @@
 #include <fstream>
 #include <unordered_map>
 
+class SelectText;
 class PropPlayer;
 class Scene {
 public:
 	enum class SceneType {
 		SCENE_TYPE_INTRO = 0,
+		SCENE_TYPE_SECRET = 1,
 		SCENE_TYPE_MAP = 10,
 		SCENE_TYPE_STAGE_ONE = 11,
 		SCENE_TYPE_STAGE_FOUR = 14,
@@ -44,7 +46,8 @@ protected:
 	};
 
 	SceneType _sceneID;
-	unsigned int _sceneWidth, _sceneHeight;
+	unsigned int _sceneWidth;
+	unsigned int _sceneHeight;
 
 	std::string _filePath;
 	std::vector<Entity*> _entities;
@@ -68,6 +71,8 @@ protected:
 
 	PropPlayer* _propMario;
 	PropPlayer* _propLuigi;
+
+	SelectText* _selectText;
 
 	Grid* _grid;
 

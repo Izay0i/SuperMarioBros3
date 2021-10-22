@@ -60,10 +60,15 @@ void ScenePlay::UpdateCameraPosition() {
 	}
 
 	cameraPosition.y -= Game::GetInstance()->GetWindowHeight() / 2.25f;
-	if (cameraPosition.y < cameraBound.top) {
-		cameraPosition.y = cameraBound.top;
+	if (_player->IsFlying() || _player->GetPosition().y < _sceneHeight * 0.3f) {
+		if (cameraPosition.y < cameraBound.top) {
+			cameraPosition.y = cameraBound.top;
+		}
+		else if (cameraPosition.y + Game::GetInstance()->GetWindowHeight() > cameraBound.bottom) {
+			cameraPosition.y = cameraBound.bottom - Game::GetInstance()->GetWindowHeight();
+		}
 	}
-	else if (cameraPosition.y + Game::GetInstance()->GetWindowHeight() > cameraBound.bottom) {
+	else {
 		cameraPosition.y = cameraBound.bottom - Game::GetInstance()->GetWindowHeight();
 	}
 
@@ -219,6 +224,7 @@ void ScenePlay::Update(DWORD deltaTime) {
 				_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
 			}
 		}
+		std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
 	}
 
 	UpdateCameraPosition();
@@ -237,8 +243,6 @@ void ScenePlay::Update(DWORD deltaTime) {
 			return;
 		}
 	}
-
-	std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
 
 	_hud->Update(_sceneTime);
 	_hud->SetPosition({

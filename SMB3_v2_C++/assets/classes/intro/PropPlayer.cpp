@@ -17,9 +17,27 @@ PropPlayer::PropPlayer() {
 	_bounceSpeed = 0.4f;
 	_gravity = 0.0025f;
 	_acceleration = 0.5f;
+
+	animationName = "BigIdle";
 }
 
 PropPlayer::~PropPlayer() {}
+
+void PropPlayer::SetRenderPriority(unsigned int rp) {
+	_renderPriority = rp;
+}
+
+void PropPlayer::SetRunSpeed(float runSpeed) {
+	_runSpeed = runSpeed;
+}
+
+void PropPlayer::SetJumpSpeed(float jumpSpeed) {
+	_jumpSpeed = jumpSpeed;
+}
+
+void PropPlayer::SetGravity(float gravity) {
+	_gravity = gravity;
+}
 
 RECTF PropPlayer::GetBoundingBox(int) const {
 	return GameObject::GetBoundingBox(_health >= 2);
@@ -38,7 +56,12 @@ void PropPlayer::ParseData(
 
 void PropPlayer::HandleStates() {}
 
-void PropPlayer::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
+void PropPlayer::HandleCollisionResult(
+	LPCOLLISIONEVENT result, 
+	D3DXVECTOR2& minTime, 
+	D3DXVECTOR2& offset, 
+	D3DXVECTOR2& normal, 
+	D3DXVECTOR2& relativeDistance) {}
 
 void PropPlayer::MoveLeft() {
 	_velocity.x = -_runSpeed;
@@ -53,7 +76,7 @@ void PropPlayer::Jump() {
 }
 
 void PropPlayer::SlowFall() {
-	_velocity.y *= 0.2f;
+	_velocity.y *= 0.56f;
 }
 
 void PropPlayer::Update(
@@ -62,7 +85,7 @@ void PropPlayer::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	Entity::Update(deltaTime, nullptr, collidableTiles, nullptr);
+	Entity::Update(deltaTime, nullptr, collidableTiles);
 }
 
 void PropPlayer::Render() {

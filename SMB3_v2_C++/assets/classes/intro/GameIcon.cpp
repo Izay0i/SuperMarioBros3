@@ -29,7 +29,7 @@ void GameIcon::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2
 void GameIcon::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {}
 
 void GameIcon::Render() {
-	_animatedSprite.PlaySpriteAnimation("Icon", _position);
+	_animatedSprite.PlaySpriteAnimation("Icon", _position, _scale);
 }
 
 void GameIcon::Release() {
