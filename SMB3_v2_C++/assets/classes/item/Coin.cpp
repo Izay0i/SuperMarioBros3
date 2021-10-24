@@ -49,9 +49,27 @@ void Coin::HandleStates() {
 	}
 }
 
-void Coin::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
+void Coin::HandleCollisionResult(
+	LPCOLLISIONEVENT result, 
+	D3DXVECTOR2& minTime, 
+	D3DXVECTOR2& offset, 
+	D3DXVECTOR2& normal, 
+	D3DXVECTOR2& relativeDistance) 
+{
+	Entity* eventEntity = result->entity;
+	D3DXVECTOR2 eventNormal = result->normal;
 
-void Coin::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities, std::vector<Entity*>* collidableTiles, Grid* grid) {
+	if (eventNormal.y == -1.0f) {
+		_health = -1;
+	}
+}
+
+void Coin::Update(
+	DWORD deltaTime, 
+	std::vector<Entity*>* collidableEntities, 
+	std::vector<Entity*>* collidableTiles, 
+	Grid* grid) 
+{
 	if (IsRemoved() && GetTickCount64() - _removeStart > _removeTime) {
 		_health = -1;
 		_removeStart = 0;
@@ -59,7 +77,7 @@ void Coin::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities, std
 	
 	HandleStates();
 	if (_state == _State::PUSHEDFROMBLOCK) {
-		GameObject::Update(deltaTime);
+		Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 		_velocity.y += _gravity * deltaTime;
 		_position += _distance;
 	}

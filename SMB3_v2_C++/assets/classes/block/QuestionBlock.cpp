@@ -114,16 +114,6 @@ void QuestionBlock::HandleCollisionResult(
 {
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
-
-	if (eventEntity == nullptr) {
-		return;
-	}
-
-	switch (eventEntity->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
-			TakeDamage();
-			break;
-	}
 }
 
 void QuestionBlock::Update(

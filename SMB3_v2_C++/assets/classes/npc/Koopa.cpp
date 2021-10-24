@@ -1,5 +1,6 @@
 #include "../Entity.h"
 #include "Koopa.h"
+#include "../EntityList.h"
 
 Texture* Koopa::_koopaTexture = nullptr;
 
@@ -93,51 +94,154 @@ void Koopa::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventEntity == nullptr) {
-		return;
-	}
-
 	if (eventNormal.y == -1.0f) {
 		_isOnGround = true;
 	}
 
 	switch (eventEntity->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
-			TakeDamage();
-			_scale.y = -1.0f;
-			_velocity.y = -_bounceSpeed;
+		case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
+			{
+				Goomba* goomba = dynamic_cast<Goomba*>(eventEntity);
+				if (_state == _State::SPIN) {
+					goomba->SetHealth(0);
+					goomba->SetScale({ 1.0f, -1.0f });
+					goomba->SetVelocity({ 0.0f, -_jumpSpeed });
+				}
+				else {
+					if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
+				}
+			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
-		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
-		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
-		case GameObjectType::GAMEOBJECT_TYPE_COIN:
-		case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
-			minTime = { 1.0f, 1.0f };
-			offset = normal = relativeDistance = { 0, 0 };
-			break;
-		//Kill both of them if one is spinning or is being held by the player;
 		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
 		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
 			{
 				Koopa* koopa = dynamic_cast<Koopa*>(eventEntity);
-				if (koopa->_state == _State::SPIN || isBeingHeld) {
+				if (_state == _State::SPIN || isBeingHeld) {
 					koopa->SetHealth(0);
 					koopa->SetScale({ 1.0f, -1.0f });
-					koopa->SetVelocity({ 0.0f, -_jumpSpeed });
+					koopa->SetVelocity({ _runSpeed * koopa->GetNormal().x, -_jumpSpeed });
 
 					_health = 0;
 					tookDamage = true;
 					_scale.y = -1.0f;
+					_velocity.x = _runSpeed * koopa->GetNormal().x;
 					_velocity.y = -_jumpSpeed;
+				}
+				else {
+					if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
 				}
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
-			//Ignore
+		case GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
+			{
+				PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(eventEntity);
+				if (_state == _State::SPIN) {
+					piranaPlant->TakeDamage();
+				}
+				else {
+					if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
+			{
+				BoomerBro* boomerBro = dynamic_cast<BoomerBro*>(eventEntity);
+				if (_state == _State::SPIN) {
+					boomerBro->TakeDamage();
+				}
+				else {
+					if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
+			_scale.y = -1.0f;
+			_velocity.x = _runSpeed * eventEntity->GetNormal().x;
+			_velocity.y = -_bounceSpeed;
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_COIN:
+			{
+				Coin* coin = dynamic_cast<Coin*>(eventEntity);
+				//Is brick
+				if (coin->GetHealth() == 3) {
+					if (_state == _State::SPIN) {
+						coin->SetHealth(-1);
+					}
+					else {
+						if (eventNormal.x != 0.0f) {
+							_normal.x = -_normal.x;
+						}
+					}
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+			{
+				QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(eventEntity);
+				if (_state == _State::SPIN) {
+					questionBlock->TakeDamage();
+				}
+				else {
+					if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+			{
+				ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(eventEntity);
+				if (_state == _State::SPIN) {
+					if (shinyBrick->GetExtraData().size() != 3) {
+						shinyBrick->TakeDamage();
+					}
+					else if (shinyBrick->GetHealth() != 3 && shinyBrick->GetExtraData().size() == 3) {
+						shinyBrick->SetHealth(-1);
+					}
+				}
+				else if (_state != _State::SPIN && shinyBrick->GetHealth() != 3 ){
+					if (_position.x <= shinyBrick->GetPosition().x - 5.0f) {
+						_normal.x = -1.0f;
+
+					}
+					else if (_position.x + _hitbox.GetBoxWidth() >= shinyBrick->GetPosition().x + shinyBrick->GetBoxWidth() + 5.0f) {
+						_normal.x = 1.0f;
+					}
+					else if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
+			{
+				PBlock* pBlock = dynamic_cast<PBlock*>(eventEntity);
+				if (_state == _State::SPIN) {
+					pBlock->TakeDamage();
+				}
+				else {
+					if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
+				}
+			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_TILE:
 		case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:
+			if (eventNormal.x != 0.0f) {
+				_normal.x = -_normal.x;
+			}
+			
 			if (_variant == "red") {
 				if (_state != _State::SPIN) {
 					if (_position.x <= eventEntity->GetPosition().x - 5.0f) {
@@ -150,12 +254,6 @@ void Koopa::HandleCollisionResult(
 				}
 			}
 			break;
-		default:
-			if (_state == _State::WALK || _state == _State::SPIN) {
-				if (eventNormal.x != 0.0f) {
-					eventEntity->TakeDamage();
-				}
-			}
 	}
 }
 

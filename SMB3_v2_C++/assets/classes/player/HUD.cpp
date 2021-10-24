@@ -231,8 +231,8 @@ void HUD::Render() {
 	}
 
 	if (_player->_triggeredStageEnd) {
-		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x - 10.0f, _position.y - 130.0f));
-		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 51.0f, _position.y - 122.0f));
+		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x - 10.0f, _position.y - 135.0f));
+		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 52.0f, _position.y - 126.0f));
 	}
 }
 

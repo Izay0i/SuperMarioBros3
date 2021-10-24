@@ -226,7 +226,34 @@ bool Pipeline::CreateBlendState() {
 	return true;
 }
 
+bool Pipeline::PipCreateFont(int fontHeight) {
+	HRESULT hResult = D3DX10CreateFontA(
+		GlobalUtil::directDevice, 
+		fontHeight, 
+		0, 
+		FW_DONTCARE, 
+		1, 
+		FALSE, 
+		DEFAULT_CHARSET, 
+		OUT_DEFAULT_PRECIS, 
+		DEFAULT_QUALITY, 
+		DEFAULT_PITCH | FF_DONTCARE, 
+		"Time News Roman", 
+		&GlobalUtil::font
+	);
+	if (FAILED(hResult)) {
+		OutputDebugStringA("[PIPELINE] Failed to create font\n");
+		return false;
+	}
+
+	return true;
+}
+
 void Pipeline::Release() {
+	if (GlobalUtil::font != nullptr) {
+		GlobalUtil::font->Release();
+	}
+
 	if (_blendState != nullptr) {
 		_blendState->Release();
 	}

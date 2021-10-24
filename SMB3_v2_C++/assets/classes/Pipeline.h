@@ -41,6 +41,9 @@ public:
 	bool CreateViewport(unsigned int, unsigned int);
 	bool CreateRasterizerState();
 	bool CreateBlendState();
+	//CreateFont() clashes with CreateFont marco
+	//Font height
+	bool PipCreateFont(int);
 
 	void Release();
 };

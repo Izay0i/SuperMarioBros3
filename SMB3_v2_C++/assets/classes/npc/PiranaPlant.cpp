@@ -93,17 +93,11 @@ void PiranaPlant::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventEntity == nullptr) {
-		return;
-	}
-
 	switch (eventEntity->GetObjectType()) {
 		case GameObjectType::GAMEOBJECT_TYPE_MARIO:
 			eventEntity->TakeDamage();
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
-		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
-			OutputDebugStringA("Tail?\n");
 			TakeDamage();
 			break;
 	}

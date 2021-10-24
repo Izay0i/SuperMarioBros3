@@ -21,55 +21,8 @@ ScorePopUp::ScorePopUp(Player* player) {
 ScorePopUp::~ScorePopUp() {}
 
 void ScorePopUp::GetEntity(Entity* entity) {
-	//This is a bit confusing so I'll break it down for you
-	//The point/score system works in a peculiar way
-	//An empty brick gives 10 points, a non-empty brick gives 50 points and spawns an item
-	//Coins give 50 points each
-	//Red mushroom, leaf 1000 points
-	//Green mushroom gives 10000 points but only adds up the player's lives, not the total score
-	//Chaining enemies by stomping them or attacking them with tail or shell or fireballs gives 100, 200, 400, etc points
-	//If the player touches the ground, the chain is broken and resets back to 100 points
-	//Here I assume default is objectType >= GOOMBA
-	//An index is used to get the current score, everytime the player defeats an enemy and is not on ground, the index increments
-	//'till _index < _scores.size() - 1 where it stays until the player touches the ground
-	//_score variable is used to display the current score the object emits
-	switch (entity->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
-			_score = entity->GetExtraData().empty() ? _scores.front() : _scores.at(2);
-			_player->_score += _score;
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_COIN:
-			_score = entity->GetHealth() == 1 ? _scores.at(1) : _scores.at(2);
-			_player->_score += _score;
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
-			_score = _scores.at(6);
-			_player->_score += _score;
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
-			_score = _scores.back();
-			_player->_lives += 1;
-			break;
-		default:
-			_score = _scores.at(_index);
-
-			if (_player->_isOnGround) {
-				_player->_score += _scores.at(2);
-			}
-			else {
-				if (_index < _scores.size() - 1) {
-					++_index;
-				}
-
-				if (_index < _scores.size() - 1) {
-					_player->_score += _scores.at(_index);
-				}
-				else {
-					_player->_lives += 1;
-				}
-			}
-	}
+	//TODO: Fix this system
+	_score = 100;
 }
 
 bool ScorePopUp::IsFloating() const {

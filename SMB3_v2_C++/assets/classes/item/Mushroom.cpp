@@ -62,11 +62,27 @@ void Mushroom::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventEntity == nullptr) {
-		return;
-	}
-
 	switch (eventEntity->GetObjectType()) {
+		case GameObjectType::GAMEOBJECT_TYPE_COIN:
+			//Is brick
+			if (eventEntity->GetHealth() == 3) {
+				if (eventNormal.x != 0.0f) {
+					_normal.x = -_normal.x;
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+			//Is not coim
+			if (eventEntity->GetHealth() != 3) {
+				if (eventNormal.x != 0.0f) {
+					_normal.x = -_normal.x;
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+		case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 		case GameObjectType::GAMEOBJECT_TYPE_TILE:
 			if (eventNormal.x != 0.0f) {
 				_normal.x = -_normal.x;

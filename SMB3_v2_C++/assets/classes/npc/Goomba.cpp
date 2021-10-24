@@ -84,10 +84,19 @@ void Goomba::HandleCollisionResult(
 
 	switch (eventEntity->GetObjectType()) {
 		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
-			TakeDamage();
 			_animationName = _variant == "red" ? "RedWalk" : "YellowWalk";
 			_scale.y = -1.0f;
 			_velocity.y = -_bounceSpeed;
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
+		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+		case GameObjectType::GAMEOBJECT_TYPE_TILE:
+			if (eventNormal.x != 0.0f) {
+				_normal.x = -_normal.x;
+			}
 			break;
 	}
 }

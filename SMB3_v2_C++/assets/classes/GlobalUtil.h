@@ -22,6 +22,11 @@ namespace GlobalUtil {
 	//Mainly used in the Game and Sprite class
 	extern ID3D10Device* directDevice;
 	extern ID3DX10Sprite* spriteHandler;
+	//For debugging
+	extern ID3DX10Font* font;
+
+	extern void GetFontRect(LPCSTR, RECT*);
+	extern void WriteTextToScreen(LPCSTR, RECT*, UINT, D3DXCOLOR);
 
 	extern std::vector<std::string> SplitStr(std::string, std::string = "\t");
 

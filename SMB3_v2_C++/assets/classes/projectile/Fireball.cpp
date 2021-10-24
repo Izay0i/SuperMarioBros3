@@ -1,5 +1,6 @@
 #include "../Entity.h"
 #include "Fireball.h"
+#include "../EntityList.h"
 
 Texture* Fireball::_fireballTexture = nullptr;
 
@@ -56,7 +57,7 @@ void Fireball::HandleStates() {
 			_velocity.x = _runSpeed * _normal.x;
 			break;
 		case _State::EXPLODE:
-			_velocity = { 0, 0 };
+			_velocity = { 0.0f, 0.0f };
 
 			if (_health == 0 && !IsRemoved()) {
 				StartRemoveTimer();
@@ -75,28 +76,48 @@ void Fireball::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventEntity == nullptr) {
-		return;
-	}
-
-	if (_objectType == GameObjectType::GAMEOBJECT_TYPE_PFIREBALL) {
-		if (eventNormal.y == -1.0f) {
-			_velocity.y = -_bounceSpeed;
-		}
-	}
-	else if (_objectType == GameObjectType::GAMEOBJECT_TYPE_VFIREBALL) {
-		minTime = { 1.0f, 1.0f };
-		offset = normal = relativeDistance = { 0, 0 };
-	}
-
 	switch (_objectType) {
 		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
+			if (eventNormal.y == -1.0f) {
+				_velocity.y = -_bounceSpeed;
+			}
+
 			switch (eventEntity->GetObjectType()) {
 				case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
 					TakeDamage();
 					break;
+				case GameObjectType::GAMEOBJECT_TYPE_COIN:
+					{
+						Coin* coin = dynamic_cast<Coin*>(eventEntity);
+						if (coin->GetHealth() == 3 && eventNormal.x != 0.0f) {
+							coin->SetHealth(-1);
+							TakeDamage();
+						}
+					}
+					break;
 				case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+					{
+						QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(eventEntity);
+						if (eventNormal.x != 0.0f) {
+							questionBlock->TakeDamage();
+							TakeDamage();
+						}
+					}
+					break;
 				case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+					{
+						ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(eventEntity);
+						if (eventNormal.x != 0.0f) {
+							if (shinyBrick->GetExtraData().size() != 3) {
+								shinyBrick->TakeDamage();
+							}
+							else if (shinyBrick->GetHealth() != 3 && shinyBrick->GetExtraData().size() == 3) {
+								shinyBrick->SetHealth(-1);
+							}
+						}
+						TakeDamage();
+					}
+					break;
 				case GameObjectType::GAMEOBJECT_TYPE_TILE:
 					if (eventNormal.x != 0.0f) {
 						TakeDamage();
@@ -108,16 +129,19 @@ void Fireball::HandleCollisionResult(
 				case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
 				case GameObjectType::GAMEOBJECT_TYPE_FLOWER:
 				case GameObjectType::GAMEOBJECT_TYPE_STAR:
-				case GameObjectType::GAMEOBJECT_TYPE_COIN:
 				case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
 				case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:
 					//Pokemon Black & White, Black 2 & White 2 stories were the peak of the franchise, change my mind
 					break;
 				default:
 					eventEntity->TakeDamage();
+					TakeDamage();
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+			minTime = { 1.0f, 1.0f };
+			offset = normal = relativeDistance = { 0.0f, 0.0f };
+			
 			switch (eventEntity->GetObjectType()) {
 				case GameObjectType::GAMEOBJECT_TYPE_MARIO:
 					eventEntity->TakeDamage();

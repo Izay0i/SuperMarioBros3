@@ -94,23 +94,7 @@ void BoomerBro::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventEntity == nullptr) {
-		return;
-	}
-
 	switch (eventEntity->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
-		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
-			{
-				Koopa* koopa = dynamic_cast<Koopa*>(eventEntity);
-				koopa->SetHealth(0);
-				koopa->SetScale({ koopa->GetScale().x, -1.0f });
-				koopa->SetVelocity({ 0.0f, -_bounceSpeed });
-
-				TakeDamage();
-				_velocity.y = -_bounceSpeed;
-			}
-			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
 			TakeDamage();

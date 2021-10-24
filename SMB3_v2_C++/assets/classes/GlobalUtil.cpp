@@ -3,6 +3,26 @@
 namespace GlobalUtil {
 	ID3D10Device* directDevice = nullptr;
 	ID3DX10Sprite* spriteHandler = nullptr;
+	ID3DX10Font* font = nullptr;
+
+	void GetFontRect(LPCSTR text, RECT* rect) {
+		//Using DT_CALCRECT causes the rect to be determined
+		//But not to be drawn
+		font->DrawTextA(
+			spriteHandler, 
+			text, 
+			-1, 
+			rect, 
+			DT_CALCRECT, 
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
+		);
+	}
+
+	void WriteTextToScreen(LPCSTR text, RECT* rect, UINT format, D3DXCOLOR fontColor) {
+		SetRectEmpty(rect);
+		GetFontRect(text, rect);
+		font->DrawTextA(spriteHandler, text, -1, rect, format, fontColor);
+	}
 
 	std::vector<std::string> SplitStr(std::string line, std::string delimeter) {
 		std::vector<std::string> tokens;

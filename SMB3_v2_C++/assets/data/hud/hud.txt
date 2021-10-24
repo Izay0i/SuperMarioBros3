@@ -9,8 +9,8 @@ CardFlower	25	145	49	173	1	0
 
 CardStar	50	145	74	173	1	0
 
-PButton	10	175	26	183	2	50
-PButton	10	185	26	193
+PButton	10	175	36	183	2	50
+PButton	10	185	36	193
 
 Arrow	1	175	9	183	1	0
 
