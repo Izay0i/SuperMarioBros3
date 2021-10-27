@@ -74,7 +74,7 @@ void Koopa::HandleStates() {
 			_velocity.x = -_runSpeed * _normal.x * 6.0f;
 			break;
 		case _State::DIE:
-			_velocity.x = 0.0f;
+			//_velocity.x = 0.0f;
 			_isOnGround = false;
 
 			if (_health == 0 && !IsRemoved()) {
@@ -137,7 +137,7 @@ void Koopa::HandleCollisionResult(
 				}
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
 		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 			{
 				PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(eventEntity);
@@ -151,11 +151,12 @@ void Koopa::HandleCollisionResult(
 				}
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
 			{
 				BoomerBro* boomerBro = dynamic_cast<BoomerBro*>(eventEntity);
 				if (_state == _State::SPIN) {
 					boomerBro->TakeDamage();
+					boomerBro->SetVelocity({ 0.0f, -_jumpSpeed });
 				}
 				else {
 					if (eventNormal.x != 0.0f) {
@@ -174,13 +175,12 @@ void Koopa::HandleCollisionResult(
 				Coin* coin = dynamic_cast<Coin*>(eventEntity);
 				//Is brick
 				if (coin->GetHealth() == 3) {
+					if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
+					
 					if (_state == _State::SPIN) {
 						coin->SetHealth(-1);
-					}
-					else {
-						if (eventNormal.x != 0.0f) {
-							_normal.x = -_normal.x;
-						}
 					}
 				}
 			}
@@ -188,28 +188,33 @@ void Koopa::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 			{
 				QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(eventEntity);
+				if (eventNormal.x != 0.0f) {
+					_normal.x = -_normal.x;
+				}
+				
 				if (_state == _State::SPIN) {
 					questionBlock->TakeDamage();
-				}
-				else {
-					if (eventNormal.x != 0.0f) {
-						_normal.x = -_normal.x;
-					}
 				}
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 			{
 				ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(eventEntity);
+				if (shinyBrick->GetHealth() != 3 && eventNormal.x != 0.0f) {
+					_normal.x = -_normal.x;
+				}
+				
 				if (_state == _State::SPIN) {
+					//Has items
 					if (shinyBrick->GetExtraData().size() != 3) {
 						shinyBrick->TakeDamage();
 					}
+					//Is empty
 					else if (shinyBrick->GetHealth() != 3 && shinyBrick->GetExtraData().size() == 3) {
 						shinyBrick->SetHealth(-1);
 					}
 				}
-				else if (_state != _State::SPIN && shinyBrick->GetHealth() != 3 ){
+				else if (_state != _State::SPIN && shinyBrick->GetHealth() != 3){
 					if (_position.x <= shinyBrick->GetPosition().x - 5.0f) {
 						_normal.x = -1.0f;
 
@@ -217,22 +222,18 @@ void Koopa::HandleCollisionResult(
 					else if (_position.x + _hitbox.GetBoxWidth() >= shinyBrick->GetPosition().x + shinyBrick->GetBoxWidth() + 5.0f) {
 						_normal.x = 1.0f;
 					}
-					else if (eventNormal.x != 0.0f) {
-						_normal.x = -_normal.x;
-					}
 				}
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 			{
 				PBlock* pBlock = dynamic_cast<PBlock*>(eventEntity);
+				if (eventNormal.x != 0.0f) {
+					_normal.x = -_normal.x;
+				}
+				
 				if (_state == _State::SPIN) {
 					pBlock->TakeDamage();
-				}
-				else {
-					if (eventNormal.x != 0.0f) {
-						_normal.x = -_normal.x;
-					}
 				}
 			}
 			break;
@@ -294,7 +295,7 @@ void Koopa::Render() {
 			}
 			break;
 		case _State::SPIN:
-			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellSpin" : "GreenShellSpin", _position);
+			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellSpin" : "GreenShellSpin", _position, _scale);
 			break;
 		case _State::DIE:
 			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellIdle" : "GreenShellIdle", _position, _scale);

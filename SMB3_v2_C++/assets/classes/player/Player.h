@@ -52,6 +52,7 @@ private:
 
 	bool _triggeredStageEnd;
 	bool _wentIntoPipe;
+	bool _isInSecret;
 	bool _isCrouching;
 	//Can be interpreted as holding an entity or pressing the K key
 	bool _isHolding;
@@ -106,6 +107,7 @@ public:
 
 	bool TriggeredStageEnd() const;
 	bool WentIntoPipe() const;
+	bool IsInSecret() const;
 	bool IsFlying() const;
 	bool IsInPipe() const;
 	bool IsAttacking() const;

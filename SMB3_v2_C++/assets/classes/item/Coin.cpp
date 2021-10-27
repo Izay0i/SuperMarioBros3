@@ -78,7 +78,7 @@ void Coin::Update(
 	HandleStates();
 	if (_state == _State::PUSHEDFROMBLOCK) {
 		Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
-		_velocity.y += _gravity * deltaTime;
+		//_velocity.y += _gravity * deltaTime;
 		_position += _distance;
 	}
 }

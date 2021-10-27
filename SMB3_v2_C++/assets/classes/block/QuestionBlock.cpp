@@ -110,11 +110,7 @@ void QuestionBlock::HandleCollisionResult(
 	D3DXVECTOR2& minTime, 
 	D3DXVECTOR2& offset, 
 	D3DXVECTOR2& normal, 
-	D3DXVECTOR2& relativeDistance) 
-{
-	Entity* eventEntity = result->entity;
-	D3DXVECTOR2 eventNormal = result->normal;
-}
+	D3DXVECTOR2& relativeDistance) {}
 
 void QuestionBlock::Update(
 	DWORD deltaTime, 

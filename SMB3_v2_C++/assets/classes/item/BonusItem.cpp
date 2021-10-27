@@ -17,7 +17,7 @@ BonusItem::BonusItem() {
 	_possibleItems = {
 		GameObjectType::GAMEOBJECT_TYPE_STAR,
 		GameObjectType::GAMEOBJECT_TYPE_FLOWER,
-		GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM
+		GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM
 	};
 
 	isPassThroughable = true;
@@ -79,7 +79,7 @@ void BonusItem::Render() {
 			{
 				std::string animationName = "Shroom";
 				switch (_currentItem) {
-					case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+					case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 						animationName = "Shroom";
 						break;
 					case GameObjectType::GAMEOBJECT_TYPE_FLOWER:

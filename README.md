@@ -1,30 +1,48 @@
 # Super Mario Bros. 3 Demo v2.0 (WIP)
 
-![Preview 1](Previews/preview_1.jpg)
+![Intro](Previews/preview_1.jpg)
 
 ## Installation
 Only do this if the project isn't running.
 + Download VS2019 [here](https://visualstudio.microsoft.com/vs/)
-+ Linker > Input > Additional Dependencies: `d3d10.lib;dxguid.lib;dinput8.lib;`
-+ Tools > NuGet Package Manager > Package Manager Console and paste this in `Install-Package Microsoft.DXSDK.D3DX -Version 9.29.952.8`
++ Linker > Input > Additional Dependencies:
+`d3d10.lib;dxguid.lib;dinput8.lib;`
++ Tools > NuGet Package Manager > Package Manager Console and paste this in
+`Install-Package Microsoft.DXSDK.D3DX -Version 9.29.952.8`
 + [***IMPORTANT***] Configuration: `Active(Debug)`, Platform: `Win32`
 
 ## Controls
 Mesen default keyboard controls:
-|Key          |Action                |
-|-------------|----------------------|
-|<kbd>U</kbd> |Select (intro)        |
-|<kbd>I</kbd> |Start (intro)         |
-|<kbd>A</kbd> |Move left             |
-|<kbd>D</kbd> |Move right            |
-|<kbd>S</kbd> |Crouch/Duck           |
-|<kbd>J</kbd> |Attack/Hold shell/Run |
-|<kbd>K</kbd> |Jump/Select (map)     |
+|Key            |Action                  |
+|---------------|------------------------|
+|<kbd>Esc</kbd> |Exit application        |
+Intro only:
+|<kbd>U</kbd>   |Select                  |
+|<kbd>I</kbd>   |Start                   |
+Map only:
+|<kbd>W</kbd>   |Move up                 |
+|<kbd>A</kbd>   |Move left               |
+|<kbd>S</kbd>   |Move down               |
+|<kbd>D</kbd>   |Move right              |
+|<kbd>K</kbd>   |Select                  |
+Stage only:
+|<kbd>W</kbd>   |Enter pipe              |
+|<kbd>A</kbd>   |Move left               |
+|<kbd>S</kbd>   |Crouch/Enter pipe       |
+|<kbd>D</kbd>   |Move right              |
+|<kbd>J</kbd>   |Throw/Attack/Hold shell |
+|<kbd>K</kbd>   |Run/Fly/Jump/Float down |
+Debug only:
+|<kbd>1</kbd>   |Set form to `Small`     |
+|<kbd>2</kbd>   |Set form to `Big`       |
+|<kbd>3</kbd>   |Set form to `Fire`      |
+|<kbd>4</kbd>   |Set form to `Raccoon`   |
 
-## Scenes Available
+## Scenes available
 + Intro
 + Overworld map
 + Stage 1-1
++ S̯̭̝̯̜͉̮̭ͦ̔̋ͥ̀ę̥̩ͫ̃c̺̖͇̼͚̞̩̍ͦ̆̐͘r̛͍̗̙̰̞̻͒̾̊e͎͚͇̚͟t̤̰͎̲̙̩͛̎̕
 
 ## Credits
 + 125scratch, Jermungandr for the Mario & Luigi sprites.

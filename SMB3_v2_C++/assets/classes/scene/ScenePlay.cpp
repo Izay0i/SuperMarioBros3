@@ -36,7 +36,7 @@ void ScenePlay::OnKeyDown(int keyCode) {
 }
 
 void ScenePlay::UpdateCameraPosition() {
-	unsigned int index = _player->WentIntoPipe() ? 1 : 0;
+	unsigned int index = _player->WentIntoPipe();
 	RECTF cameraBound = _cameraInstance->GetCameraBound(index);
 	_player->SetUpVector(_cameraInstance->GetUpVector(index));
 	D3DXVECTOR2 cameraPosition = _cameraInstance->GetPosition();
@@ -59,6 +59,10 @@ void ScenePlay::UpdateCameraPosition() {
 		cameraPosition.x = cameraBound.right - Game::GetInstance()->GetWindowWidth();
 	}
 
+	//Wait what
+	//All I did was copy my old code
+	//Why is it not working the way it should be
+	//WTF
 	cameraPosition.y -= Game::GetInstance()->GetWindowHeight() / 2.25f;
 	if (_player->IsFlying() || _player->GetPosition().y < _sceneHeight * 0.3f) {
 		if (cameraPosition.y < cameraBound.top) {
@@ -135,7 +139,7 @@ void ScenePlay::Update(DWORD deltaTime) {
 						}
 					}
 					break;
-				case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+				case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
 				case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 					{
 						PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(entity);
@@ -161,8 +165,8 @@ void ScenePlay::Update(DWORD deltaTime) {
 					{
 						Tail* tail = dynamic_cast<Tail*>(entity);
 						tail->SetPosition({
-							_player->GetPosition().x - _player->GetBoxWidth(),
-							_player->IsAttacking() ? _player->GetPosition().y + 11.0f : -32.0f
+							_player->GetPosition().x, 
+							_player->IsAttacking() ? _player->GetPosition().y + 2.0f : 0.0f
 							}
 						);
 					}

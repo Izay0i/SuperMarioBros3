@@ -28,7 +28,7 @@ void SceneIntro::_IntroScript() {
 	if (time >= 0 && time < 8000) {
 		for (auto it = _entities.begin(); it != _entities.end(); ++it) {
 			Entity* entity = *it;
-			if (entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM) {
+			if (entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM) {
 				Mushroom* mushroom = dynamic_cast<Mushroom*>(entity);
 				mushroom->SetVelocity({ 0.0f, mushroom->GetVelocity().y });
 			}

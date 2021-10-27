@@ -95,9 +95,8 @@ void BoomerBro::HandleCollisionResult(
 	D3DXVECTOR2 eventNormal = result->normal;
 
 	switch (eventEntity->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
+		case GameObjectType::GAMEOBJECT_TYPE_PLAYERFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
-			TakeDamage();
 			_velocity.y = -_bounceSpeed;
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:

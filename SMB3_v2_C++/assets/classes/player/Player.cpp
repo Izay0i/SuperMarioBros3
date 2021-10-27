@@ -169,7 +169,7 @@ Player::Player() {
 	_gravity = 0.0025f;
 	_acceleration = 0.5f;
 
-	_health = 2;
+	_health = 4;
 
 	_lives = 3;
 	_coins = 0;
@@ -221,6 +221,10 @@ bool Player::TriggeredStageEnd() const {
 
 bool Player::WentIntoPipe() const {
 	return _wentIntoPipe;
+}
+
+bool Player::IsInSecret() const {
+	return _isInSecret;
 }
 
 bool Player::IsFlying() const {
@@ -483,7 +487,7 @@ void Player::HandleCollisionResult(
 				}
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
 		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 			{
 				PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(eventEntity);
@@ -493,7 +497,7 @@ void Player::HandleCollisionResult(
 				}
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
 			{
 				BoomerBro* boomerBro = dynamic_cast<BoomerBro*>(eventEntity);
 				if (eventNormal.y == -1.0f) {
@@ -517,7 +521,7 @@ void Player::HandleCollisionResult(
 	//----------------------------------------------------------------------------
 	//PROJECTILES
 	//----------------------------------------------------------------------------
-		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+		case GameObjectType::GAMEOBJECT_TYPE_VENUSFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:
 			TakeDamage();
 			break;
@@ -537,6 +541,8 @@ void Player::HandleCollisionResult(
 				}
 				else {
 					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
+						_isInSecret = !_isInSecret;
+
 						if (eventNormal.y == 1.0f && Device::IsKeyDown(DIK_W)) {
 							_normal.y = -1.0f;
 						}
@@ -564,19 +570,19 @@ void Player::HandleCollisionResult(
 	//----------------------------------------------------------------------------
 	//Items
 	//----------------------------------------------------------------------------
-		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 			{
 				Mushroom* mushroom = dynamic_cast<Mushroom*>(eventEntity);
 				mushroom->TakeDamage();
 				switch (mushroom->GetObjectType()) {
-					case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+					case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 						if (_health <= 1) {
 							_health = 2;
 							_position.y -= GetBoxHeight();
 						}
 						break;
-					case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+					case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 						//Stub
 						break;
 				}

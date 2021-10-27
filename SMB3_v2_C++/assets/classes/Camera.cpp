@@ -40,8 +40,8 @@ void Camera::AddUpVector(float upVector) {
 
 RECTF Camera::GetViewport() const {
 	RECTF viewport;
-	viewport.left = _position.x - GlobalUtil::SCREEN_WIDTH * 0.2f;
-	viewport.top = _position.y - GlobalUtil::SCREEN_HEIGHT * 0.2f;
+	viewport.left = _position.x - GlobalUtil::SCREEN_WIDTH * 0.1f;
+	viewport.top = _position.y - GlobalUtil::SCREEN_HEIGHT * 0.1f;
 	viewport.right = _position.x + GlobalUtil::SCREEN_WIDTH * 1.2f;
 	viewport.bottom = _position.y + GlobalUtil::SCREEN_HEIGHT * 1.2f;
 	return viewport;

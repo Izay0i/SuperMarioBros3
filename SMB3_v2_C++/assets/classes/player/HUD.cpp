@@ -42,7 +42,7 @@ void HUD::_ParseItems() {
 	_items.clear();	
 	for (const auto& item : playerItems) {
 		switch (item) {
-			case GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+			case GameObject::GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 				_items.emplace_back("CardShroom");
 				break;
 			case GameObject::GameObjectType::GAMEOBJECT_TYPE_FLOWER:
@@ -130,7 +130,7 @@ void HUD::_ParseSceneEnd() {
 
 	GameObject::GameObjectType lastItem = playerItems.back();
 	switch (lastItem) {
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 			_animationName = "CardShroom";
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_FLOWER:

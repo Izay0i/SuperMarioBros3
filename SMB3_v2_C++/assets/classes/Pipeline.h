@@ -41,9 +41,9 @@ public:
 	bool CreateViewport(unsigned int, unsigned int);
 	bool CreateRasterizerState();
 	bool CreateBlendState();
-	//CreateFont() clashes with CreateFont marco
-	//Font height
-	bool PipCreateFont(int);
+	//CreateFont() clashes with CreateFont macro
+	//Font name, font size, bold style, italic style
+	bool PipCreateFont(std::string, int, bool = false, bool = false);
 
 	void Release();
 };

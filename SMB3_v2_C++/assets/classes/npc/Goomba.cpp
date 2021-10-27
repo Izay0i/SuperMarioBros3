@@ -74,28 +74,50 @@ void Goomba::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (eventEntity == nullptr) {
-		return;
-	}
-
 	if (eventNormal.y == -1.0f) {
 		_isOnGround = true;
 	}
 
 	switch (eventEntity->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
-			_animationName = _variant == "red" ? "RedWalk" : "YellowWalk";
-			_scale.y = -1.0f;
-			_velocity.y = -_bounceSpeed;
-			break;
 		case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
-		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
-		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
-		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
-		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:		
+		case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
+		case GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
+		case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
+		case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 		case GameObjectType::GAMEOBJECT_TYPE_TILE:
 			if (eventNormal.x != 0.0f) {
 				_normal.x = -_normal.x;
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
+			if (eventEntity->GetHealth() == 1) {
+				_animationName = _animationName = _variant == "red" ? "RedWalk" : "YellowWalk";
+			}
+			else {
+				if (eventNormal.x != 0.0f) {
+					_normal.x = -_normal.x;
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_COIN:
+			//Is brick
+			if (eventEntity->GetHealth() == 3) {
+				if (eventNormal.x != 0.0f) {
+					_normal.x = -_normal.x;
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+			//Is not coin
+			if (eventEntity->GetHealth() != 3) {
+				if (eventNormal.x != 0.0f) {
+					_normal.x = -_normal.x;
+				}
 			}
 			break;
 	}
@@ -114,7 +136,7 @@ void Goomba::Update(
 void Goomba::Render() {
 	switch (_state) {
 		case _State::FLY:
-			_animatedSprite.PlaySpriteAnimation(_isOnGround ? "RedWingIdle" : "RedWingActive", { _position.x, _position.y - 8.0f });
+			_animatedSprite.PlaySpriteAnimation(_isOnGround ? "RedWingIdle" : "RedWingActive", _position);
 			break;
 		case _State::WALK:
 			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedWalk" : "YellowWalk", _position);

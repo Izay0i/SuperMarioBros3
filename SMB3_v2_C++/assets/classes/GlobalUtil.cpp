@@ -19,7 +19,6 @@ namespace GlobalUtil {
 	}
 
 	void WriteTextToScreen(LPCSTR text, RECT* rect, UINT format, D3DXCOLOR fontColor) {
-		SetRectEmpty(rect);
 		GetFontRect(text, rect);
 		font->DrawTextA(spriteHandler, text, -1, rect, format, fontColor);
 	}

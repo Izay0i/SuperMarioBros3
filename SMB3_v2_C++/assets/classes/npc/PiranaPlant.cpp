@@ -88,20 +88,7 @@ void PiranaPlant::HandleCollisionResult(
 	D3DXVECTOR2& minTime, 
 	D3DXVECTOR2& offset, 
 	D3DXVECTOR2& normal, 
-	D3DXVECTOR2& relativeDistance) 
-{
-	Entity* eventEntity = result->entity;
-	D3DXVECTOR2 eventNormal = result->normal;
-
-	switch (eventEntity->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_MARIO:
-			eventEntity->TakeDamage();
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
-			TakeDamage();
-			break;
-	}
-}
+	D3DXVECTOR2& relativeDistance) {}
 
 void PiranaPlant::Update(
 	DWORD deltaTime,

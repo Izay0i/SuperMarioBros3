@@ -226,19 +226,19 @@ bool Pipeline::CreateBlendState() {
 	return true;
 }
 
-bool Pipeline::PipCreateFont(int fontHeight) {
+bool Pipeline::PipCreateFont(std::string fontName, int fontSize, bool isBold, bool isItalic) {
 	HRESULT hResult = D3DX10CreateFontA(
 		GlobalUtil::directDevice, 
-		fontHeight, 
+		fontSize, 
 		0, 
-		FW_DONTCARE, 
+		isBold ? FW_BOLD : FW_DONTCARE, 
 		1, 
-		FALSE, 
+		isItalic, 
 		DEFAULT_CHARSET, 
 		OUT_DEFAULT_PRECIS, 
 		DEFAULT_QUALITY, 
 		DEFAULT_PITCH | FF_DONTCARE, 
-		"Time News Roman", 
+		fontName.c_str(), 
 		&GlobalUtil::font
 	);
 	if (FAILED(hResult)) {

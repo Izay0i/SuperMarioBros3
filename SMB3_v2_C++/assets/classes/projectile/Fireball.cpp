@@ -46,7 +46,7 @@ void Fireball::ParseData(
 	}
 	Entity::ParseData(dataPath, texture, extraData);
 
-	_runSpeed = _objectType == GameObjectType::GAMEOBJECT_TYPE_PFIREBALL ? 0.2f : 0.05f;
+	_runSpeed = _objectType == GameObjectType::GAMEOBJECT_TYPE_PLAYERFIREBALL ? 0.2f : 0.05f;
 }
 
 void Fireball::HandleStates() {
@@ -77,13 +77,13 @@ void Fireball::HandleCollisionResult(
 	D3DXVECTOR2 eventNormal = result->normal;
 
 	switch (_objectType) {
-		case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
+		case GameObjectType::GAMEOBJECT_TYPE_PLAYERFIREBALL:
 			if (eventNormal.y == -1.0f) {
 				_velocity.y = -_bounceSpeed;
 			}
 
 			switch (eventEntity->GetObjectType()) {
-				case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+				case GameObjectType::GAMEOBJECT_TYPE_VENUSFIREBALL:
 					TakeDamage();
 					break;
 				case GameObjectType::GAMEOBJECT_TYPE_COIN:
@@ -108,14 +108,25 @@ void Fireball::HandleCollisionResult(
 					{
 						ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(eventEntity);
 						if (eventNormal.x != 0.0f) {
+							//Has items
 							if (shinyBrick->GetExtraData().size() != 3) {
 								shinyBrick->TakeDamage();
 							}
+							//Is empty
 							else if (shinyBrick->GetHealth() != 3 && shinyBrick->GetExtraData().size() == 3) {
 								shinyBrick->SetHealth(-1);
 							}
+							TakeDamage();
 						}
-						TakeDamage();
+					}
+					break;
+				case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
+					{
+						PBlock* pBlock = dynamic_cast<PBlock*>(eventEntity);
+						if (eventNormal.x != 0.0f) {
+							pBlock->TakeDamage();
+							TakeDamage();
+						}
 					}
 					break;
 				case GameObjectType::GAMEOBJECT_TYPE_TILE:
@@ -125,8 +136,9 @@ void Fireball::HandleCollisionResult(
 					break;
 				//Ignore these entities
 				case GameObjectType::GAMEOBJECT_TYPE_MARIO:
-				case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-				case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+				case GameObjectType::GAMEOBJECT_TYPE_LUIGI:
+				case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
+				case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 				case GameObjectType::GAMEOBJECT_TYPE_FLOWER:
 				case GameObjectType::GAMEOBJECT_TYPE_STAR:
 				case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
@@ -138,15 +150,12 @@ void Fireball::HandleCollisionResult(
 					TakeDamage();
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+		case GameObjectType::GAMEOBJECT_TYPE_VENUSFIREBALL:
 			minTime = { 1.0f, 1.0f };
 			offset = normal = relativeDistance = { 0.0f, 0.0f };
 			
 			switch (eventEntity->GetObjectType()) {
-				case GameObjectType::GAMEOBJECT_TYPE_MARIO:
-					eventEntity->TakeDamage();
-					break;
-				case GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
+				case GameObjectType::GAMEOBJECT_TYPE_PLAYERFIREBALL:
 					TakeDamage();
 					break;
 			}
@@ -168,7 +177,7 @@ void Fireball::Update(
 	HandleStates();
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 	
-	if (_objectType == GameObjectType::GAMEOBJECT_TYPE_VFIREBALL) {
+	if (_objectType == GameObjectType::GAMEOBJECT_TYPE_VENUSFIREBALL) {
 		_velocity.y = -_travelSpeed * _normal.y * deltaTime;
 	}
 }

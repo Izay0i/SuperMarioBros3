@@ -2,7 +2,30 @@
 #include "Tail.h"
 #include "../EntityList.h"
 
-void Tail::_ParseSprites(std::string) {}
+Texture* Tail::_tailTexture = nullptr;
+
+void Tail::_ParseSprites(std::string line) {
+	_animatedSprite.ParseSprites(line, _tailTexture);
+}
+
+Tail::Tail() {
+	_bounceSpeed = 0.23f;
+
+	isPassThroughable = true;
+}
+
+Tail::~Tail() {}
+
+void Tail::ParseData(
+	std::string dataPath, 
+	Texture*& texture, 
+	std::vector<std::string> extraData) 
+{
+	if (_tailTexture == nullptr) {
+		_tailTexture = texture;
+	}
+	Entity::ParseData(dataPath, texture, extraData);
+}
 
 void Tail::HandleStates() {}
 
@@ -21,7 +44,9 @@ void Tail::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
 			{
 				Goomba* goomba = dynamic_cast<Goomba*>(eventEntity);
-				goomba->TakeDamage();
+				goomba->SetHealth(0);
+				goomba->SetScale({ 1.0f, -1.0f });
+				goomba->SetVelocity({ 0.0f, -_bounceSpeed });
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
@@ -31,14 +56,14 @@ void Tail::HandleCollisionResult(
 				koopa->TakeDamage();
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
 		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 			{
 				PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(eventEntity);
 				piranaPlant->TakeDamage();
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
 			{
 				BoomerBro* boomerBro = dynamic_cast<BoomerBro*>(eventEntity);
 				boomerBro->TakeDamage();
@@ -62,10 +87,11 @@ void Tail::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 			{
 				ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(eventEntity);
+				//Has items
 				if (shinyBrick->GetExtraData().size() != 3) {
 					shinyBrick->TakeDamage();
 				}
-				//Is not coin
+				//Is empty
 				else if (shinyBrick->GetHealth() != 3 && shinyBrick->GetExtraData().size() == 3) {
 					shinyBrick->SetHealth(-1);
 				}
@@ -89,6 +115,11 @@ void Tail::Update(
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 }
 
+void Tail::Render() {
+	_animatedSprite.PlaySpriteAnimation("Tail", _position);
+}
+
 void Tail::Release() {
-	
+	_animatedSprite.Release();
+	_tailTexture = nullptr;
 }

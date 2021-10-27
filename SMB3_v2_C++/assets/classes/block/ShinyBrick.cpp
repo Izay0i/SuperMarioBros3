@@ -38,7 +38,7 @@ Entity* ShinyBrick::SpawnItem() {
 	);
 
 	switch (item->GetObjectType()) {
-		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() / 3.0f });
 			dynamic_cast<Mushroom*>(item)->StartEmergeTimer();
 			break;

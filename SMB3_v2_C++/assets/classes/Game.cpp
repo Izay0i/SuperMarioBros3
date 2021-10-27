@@ -246,8 +246,8 @@ void Game::_Render() {
 
 	/*char debug[100];
 	sprintf_s(debug, "D3DX_SDK_VERSION: %d", D3DX10_SDK_VERSION);
-	RECT rect;
-	GlobalUtil::WriteTextToScreen(debug, &rect, DT_LEFT, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));*/
+	RECT rect{};
+	GlobalUtil::WriteTextToScreen(debug, &rect, DT_LEFT, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));*/
 
 	//RGBA
 	float newBlendFactor[4] = { 0.0f };
@@ -381,7 +381,7 @@ bool Game::InitGame(HWND hWND) {
 		return false;
 	}
 
-	if (!_pipelineInstance->PipCreateFont(15)) {
+	if (!_pipelineInstance->PipCreateFont("Time News Roman", 15, true, true)) {
 		return false;
 	}
 

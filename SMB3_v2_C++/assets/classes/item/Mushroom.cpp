@@ -65,22 +65,19 @@ void Mushroom::HandleCollisionResult(
 	switch (eventEntity->GetObjectType()) {
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			//Is brick
-			if (eventEntity->GetHealth() == 3) {
-				if (eventNormal.x != 0.0f) {
-					_normal.x = -_normal.x;
-				}
+			if (eventEntity->GetHealth() == 3 && eventNormal.x != 0.0f) {
+				_normal.x = -_normal.x;
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 			//Is not coim
-			if (eventEntity->GetHealth() != 3) {
-				if (eventNormal.x != 0.0f) {
-					_normal.x = -_normal.x;
-				}
+			if (eventEntity->GetHealth() != 3 && eventNormal.x != 0.0f) {
+				_normal.x = -_normal.x;
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_FLOWER:
 		case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 		case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 		case GameObjectType::GAMEOBJECT_TYPE_TILE:
@@ -115,10 +112,10 @@ void Mushroom::Update(
 
 void Mushroom::Render() {
 	switch (_objectType) {
-		case GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 			_animatedSprite.PlaySpriteAnimation("RedShroom", _position, _scale);
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 			_animatedSprite.PlaySpriteAnimation("GreenShroom", _position, _scale);
 			break;
 	}

@@ -199,13 +199,13 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
 			entity = new Parakoopa;
 			break;
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRAPLANT:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
 			entity = new PiranaPlant;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 			entity = new VenusPlant;
 			break;
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERBRO:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
 			entity = new BoomerBro;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL:
@@ -217,7 +217,7 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
 			//entity = new MovingPlatform;
 			break;
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 			entity = new Mushroom;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LEAF:
@@ -471,16 +471,16 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 
 	switch (objectType) {
 		//Projectiles
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PFIREBALL:
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VFIREBALL:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PLAYERFIREBALL:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSFIREBALL:
 			entity = new Fireball;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERANG:
 			entity = new Boomerang;
 			break;
 		//Items
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_RMUSHROOM:
-		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GMUSHROOM:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 			entity = new Mushroom;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LEAF:
