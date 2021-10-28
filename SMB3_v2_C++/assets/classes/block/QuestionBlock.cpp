@@ -72,7 +72,6 @@ Entity* QuestionBlock::SpawnItem(int currentHealth) {
 			break;
 	}
 
-	tookDamage = false;
 	_extraData.clear();
 
 	return item;

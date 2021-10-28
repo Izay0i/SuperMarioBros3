@@ -83,6 +83,14 @@ void Fireball::HandleCollisionResult(
 			}
 
 			switch (eventEntity->GetObjectType()) {
+				case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
+				case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
+				case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+				case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+					eventEntity->SetHealth(0);
+					eventEntity->SetScale({ 1.0f, -1.0f });
+					eventEntity->SetVelocity({ 0.0f, -_bounceSpeed });
+					break;
 				case GameObjectType::GAMEOBJECT_TYPE_VENUSFIREBALL:
 					TakeDamage();
 					break;

@@ -74,7 +74,6 @@ void Koopa::HandleStates() {
 			_velocity.x = -_runSpeed * _normal.x * 6.0f;
 			break;
 		case _State::DIE:
-			//_velocity.x = 0.0f;
 			_isOnGround = false;
 
 			if (_health == 0 && !IsRemoved()) {

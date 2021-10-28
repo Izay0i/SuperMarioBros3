@@ -10,7 +10,31 @@ void Player::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _playerTexture);
 }
 
-void Player::_HandleMovement() {
+void Player::_HandleCurrencies() {
+	if (_lives > _MAX_LIVES) {
+		_lives = _MAX_LIVES;
+	}
+
+	if (_coins > _MAX_COINS) {
+		_coins = _MAX_COINS;
+	}
+
+	if (_score > _MAX_SCORE) {
+		_score = _MAX_SCORE;
+	}
+}
+
+void Player::_HandleMovementMap() {
+	if (abs(_position.x - _lastPos.x) >= _MAX_TRAVEL_DISTANCE || abs(_position.y - _lastPos.y) >= _MAX_TRAVEL_DISTANCE) {
+		_velocity = { 0.0f, 0.0f };
+		_lastPos = _position;
+		if (_mapNodePos.x != 0.0f && _mapNodePos.y != 0.0f) {
+			_position = _mapNodePos;
+		}
+	}
+}
+
+void Player::_HandleMovementGame() {
 	if (_isOnGround) {
 		_gravity = 0.0025f;
 	}
@@ -84,81 +108,6 @@ void Player::_HandleMovement() {
 	}
 }
 
-void Player::_OnKeyUpMap(int keyCode) {
-	//Stub
-}
-
-void Player::_OnKeyUpGame(int keyCode) {
-	switch (keyCode) {
-		case DIK_S:
-			_isCrouching = false;
-
-			if (_health > 1 && _isOnGround && !IsInPipe()) {
-				_isOnGround = false;
-				_position.y -= GetBoxHeight(1);
-			}
-			break;
-		case DIK_J:
-			_isHolding = false;
-			break;
-	}
-}
-
-void Player::_OnKeyDownMap(int keyCode) {
-	switch (keyCode) {
-		case DIK_W:
-			_velocity.y = -0.08f;
-			break;
-		case DIK_A:
-			_velocity.x = -0.08f;
-			break;
-		case DIK_S:
-			_velocity.y = 0.08f;
-			break;
-		case DIK_D:
-			_velocity.x = 0.08f;
-			break;
-	}
-}
-
-void Player::_OnKeyDownGame(int keyCode) {
-	switch (keyCode) {
-		case DIK_A:
-			_normal.x = -1.0f;
-			break;
-		case DIK_D:
-			_normal.x = 1.0f;
-			break;
-		case DIK_S:
-			_isCrouching = true;
-			break;
-		case DIK_J:
-			_isHolding = true;
-			//Fireball attack
-			if (_health == 3 && !_isCrouching) {
-				if (_fireballsCount < _FIREBALLS_LIMIT) {
-					SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnFireball());
-					++_fireballsCount;
-
-					if (_fireballsCount == _FIREBALLS_LIMIT) {
-						StartFireballCoolDownTimer();
-					}
-				}
-			}
-
-			//Tail attack
-			if (_health == 4 && !IsAttacking()) {
-				StartAttackTimer();
-			}
-			break;
-		case DIK_K:
-			SlowFall();
-			RunFly();
-			Jump();
-			break;
-	}
-}
-
 Player::Player() {
 	_scale = D3DXVECTOR2(-1.0f, 1.0f);
 	_renderPriority = 0;
@@ -223,10 +172,6 @@ bool Player::WentIntoPipe() const {
 	return _wentIntoPipe;
 }
 
-bool Player::IsInSecret() const {
-	return _isInSecret;
-}
-
 bool Player::IsFlying() const {
 	return _flyStart != 0;
 }
@@ -269,16 +214,10 @@ void Player::StartInvulnerableTimer() {
 
 void Player::HandleStates() {
 	if (isInMap) {	
-		if (abs(_position.x - _lastPos.x) >= _MAX_TRAVEL_DISTANCE || abs(_position.y - _lastPos.y) >= _MAX_TRAVEL_DISTANCE) {
-			_velocity = { 0.0f, 0.0f };
-			_lastPos = _position;
-			if (_mapNodePos.x != 0.0f && _mapNodePos.y != 0.0f) {
-				_position = _mapNodePos;
-			}
-		}
+		_HandleMovementMap();
 	}
 	else {
-		_HandleMovement();
+		_HandleMovementGame();
 	}
 
 	PlayerState* currentState = _playerState->HandleStates();
@@ -288,21 +227,78 @@ void Player::HandleStates() {
 	}
 }
 
-void Player::OnKeyUp(int keyCode) {
-	if (isInMap) {
-		_OnKeyUpMap(keyCode);
-	}
-	else {
-		_OnKeyUpGame(keyCode);
+void Player::OnKeyUpMap(int keyCode) {
+	//Stub
+}
+
+void Player::OnKeyUpGame(int keyCode) {
+	switch (keyCode) {
+		case DIK_S:
+			_isCrouching = false;
+
+			if (_health > 1 && _isOnGround && !IsInPipe()) {
+				_isOnGround = false;
+				_position.y -= GetBoxHeight(1);
+			}
+			break;
+		case DIK_J:
+			_isHolding = false;
+			break;
 	}
 }
 
-void Player::OnKeyDown(int keyCode) {
-	if (isInMap) {
-		_OnKeyDownMap(keyCode);
+void Player::OnKeyDownMap(int keyCode) {
+	switch (keyCode) {
+		case DIK_W:
+			_velocity.y = -0.08f;
+			break;
+		case DIK_A:
+			_velocity.x = -0.08f;
+			break;
+		case DIK_S:
+			_velocity.y = 0.08f;
+			break;
+		case DIK_D:
+			_velocity.x = 0.08f;
+			break;
 	}
-	else {
-		_OnKeyDownGame(keyCode);
+}
+
+void Player::OnKeyDownGame(int keyCode) {
+	switch (keyCode) {
+		case DIK_A:
+			_normal.x = -1.0f;
+			break;
+		case DIK_D:
+			_normal.x = 1.0f;
+			break;
+		case DIK_S:
+			_isCrouching = true;
+			break;
+		case DIK_J:
+			_isHolding = true;
+			//Fireball attack
+			if (_health == 3 && !_isCrouching) {
+				if (_fireballsCount < _FIREBALLS_LIMIT) {
+					SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnFireball());
+					++_fireballsCount;
+
+					if (_fireballsCount == _FIREBALLS_LIMIT) {
+						StartFireballCoolDownTimer();
+					}
+				}
+			}
+
+			//Tail attack
+			if (_health == 4 && !IsAttacking()) {
+				StartAttackTimer();
+			}
+			break;
+		case DIK_K:
+			SlowFall();
+			RunFly();
+			Jump();
+			break;
 	}
 }
 
@@ -541,8 +537,6 @@ void Player::HandleCollisionResult(
 				}
 				else {
 					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
-						_isInSecret = !_isInSecret;
-
 						if (eventNormal.y == 1.0f && Device::IsKeyDown(DIK_W)) {
 							_normal.y = -1.0f;
 						}
@@ -678,6 +672,8 @@ void Player::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
+	_HandleCurrencies();
+
 	//To show the whole kicking animation
 	if (_isNextToShell && GetTickCount64() % 500 == 0) {
 		_isNextToShell = false;
@@ -756,8 +752,8 @@ void Player::Update(
 	
 		if (_isHolding) {
 			D3DXVECTOR2 offset;
-			offset.x = IsInPipe() ? 0.0f : 10.0f;
-			offset.y = _health == 1 ? 11.0f : 2.0f;
+			offset.x = IsInPipe() ? 0.0f : 12.0f;
+			offset.y = _health == 1 ? 2.0f : -4.0f;
 
 			_heldEntity->SetPosition({ _position.x + offset.x * _normal.x, _position.y - offset.y });
 		}

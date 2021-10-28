@@ -57,8 +57,6 @@ Entity* ShinyBrick::SpawnItem() {
 		_extraData.clear();
 	}
 
-	tookDamage = false;
-
 	return item;
 }
 

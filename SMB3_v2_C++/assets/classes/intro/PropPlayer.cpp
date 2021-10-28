@@ -76,7 +76,7 @@ void PropPlayer::Jump() {
 }
 
 void PropPlayer::SlowFall() {
-	_velocity.y *= 0.56f;
+	_velocity.y *= 0.74f;
 }
 
 void PropPlayer::Update(

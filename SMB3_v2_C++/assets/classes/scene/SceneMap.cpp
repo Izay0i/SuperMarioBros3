@@ -31,7 +31,7 @@ void SceneMap::OnKeyDown(int keyCode) {
 			break;
 	}
 
-	_player->OnKeyDown(keyCode);
+	_player->OnKeyDownMap(keyCode);
 }
 
 void SceneMap::LoadScene() {

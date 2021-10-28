@@ -52,7 +52,6 @@ private:
 
 	bool _triggeredStageEnd;
 	bool _wentIntoPipe;
-	bool _isInSecret;
 	bool _isCrouching;
 	//Can be interpreted as holding an entity or pressing the K key
 	bool _isHolding;
@@ -87,11 +86,10 @@ private:
 	DWORD _invulnerableTime;
 
 	void _ParseSprites(std::string) override;
-	void _HandleMovement();
-	void _OnKeyUpMap(int);
-	void _OnKeyUpGame(int);
-	void _OnKeyDownMap(int);
-	void _OnKeyDownGame(int);
+	//Lives, coins, score
+	void _HandleCurrencies();
+	void _HandleMovementMap();
+	void _HandleMovementGame();
 
 public:
 	bool isInMap;
@@ -107,7 +105,6 @@ public:
 
 	bool TriggeredStageEnd() const;
 	bool WentIntoPipe() const;
-	bool IsInSecret() const;
 	bool IsFlying() const;
 	bool IsInPipe() const;
 	bool IsAttacking() const;
@@ -121,8 +118,10 @@ public:
 	void StartInvulnerableTimer();
 
 	void HandleStates() override;
-	void OnKeyUp(int);
-	void OnKeyDown(int);
+	void OnKeyUpMap(int);
+	void OnKeyUpGame(int);
+	void OnKeyDownMap(int);
+	void OnKeyDownGame(int);
 
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 

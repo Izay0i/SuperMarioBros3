@@ -94,6 +94,7 @@ void Goomba::HandleCollisionResult(
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
 		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PLAYERFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
 			if (eventEntity->GetHealth() == 1) {
 				_animationName = _animationName = _variant == "red" ? "RedWalk" : "YellowWalk";
@@ -136,7 +137,7 @@ void Goomba::Update(
 void Goomba::Render() {
 	switch (_state) {
 		case _State::FLY:
-			_animatedSprite.PlaySpriteAnimation(_isOnGround ? "RedWingIdle" : "RedWingActive", _position);
+			_animatedSprite.PlaySpriteAnimation(_isOnGround ? "RedWingIdle" : "RedWingActive", { _position.x, _position.y - 4.0f });
 			break;
 		case _State::WALK:
 			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedWalk" : "YellowWalk", _position);

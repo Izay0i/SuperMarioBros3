@@ -2,11 +2,6 @@
 256	224
 [/]
 
-#In ms
-[SCENETIME]
-60000
-[/]
-
 [BGCOLOR]
 0	0	0
 [/]
@@ -62,7 +57,7 @@
 508	assets\data\npc\koopa.txt	2	-242	134
 
 #Koopa shell
-509	assets\data\npc\koopa.txt	2	115	-5900
+509	assets\data\npc\koopa.txt	2	115	-32
 
 #Normal koopa
 510	assets\data\npc\koopa.txt	2	-50	134

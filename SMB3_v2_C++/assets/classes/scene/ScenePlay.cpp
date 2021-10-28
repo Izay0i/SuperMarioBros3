@@ -13,7 +13,7 @@ void ScenePlay::HandleStates() {
 }
 
 void ScenePlay::OnKeyUp(int keyCode) {
-	_player->OnKeyUp(keyCode);
+	_player->OnKeyUpGame(keyCode);
 }
 
 void ScenePlay::OnKeyDown(int keyCode) {
@@ -32,7 +32,7 @@ void ScenePlay::OnKeyDown(int keyCode) {
 			break;
 	}
 
-	_player->OnKeyDown(keyCode);
+	_player->OnKeyDownGame(keyCode);
 }
 
 void ScenePlay::UpdateCameraPosition() {
@@ -59,12 +59,8 @@ void ScenePlay::UpdateCameraPosition() {
 		cameraPosition.x = cameraBound.right - Game::GetInstance()->GetWindowWidth();
 	}
 
-	//Wait what
-	//All I did was copy my old code
-	//Why is it not working the way it should be
-	//WTF
 	cameraPosition.y -= Game::GetInstance()->GetWindowHeight() / 2.25f;
-	if (_player->IsFlying() || _player->GetPosition().y < _sceneHeight * 0.3f) {
+	if (_player->WentIntoPipe() || _player->IsFlying() || _player->GetPosition().y < _sceneHeight * 0.3f) {
 		if (cameraPosition.y < cameraBound.top) {
 			cameraPosition.y = cameraBound.top;
 		}
@@ -102,13 +98,6 @@ void ScenePlay::Update(DWORD deltaTime) {
 			entity->Update(deltaTime, &_entities, &_tiles, _grid);
 
 			//Entities events
-			if (entity->tookDamage) {
-				_scorePopUp->GetEntity(entity);
-				_scorePopUp->SetPosition(entity->GetPosition());
-				_scorePopUp->StartFloatTimer();
-				//entity->tookDamage = false;
-			}
-
 			switch (entity->GetObjectType()) {
 				case GameObject::GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
 					{
@@ -211,6 +200,12 @@ void ScenePlay::Update(DWORD deltaTime) {
 					break;
 			}
 
+			if (entity->tookDamage) {
+				_scorePopUp->GetEntity(entity);
+				_scorePopUp->SetPosition(entity->GetPosition());
+				_scorePopUp->StartFloatTimer();
+			}
+
 			if (_grid != nullptr) {
 				Cell* newCell = _grid->GetCell(entity->GetPosition());
 				if (newCell != entity->ownerCell) {
@@ -248,14 +243,14 @@ void ScenePlay::Update(DWORD deltaTime) {
 		}
 	}
 
+	_scorePopUp->Update(deltaTime);
+
 	_hud->Update(_sceneTime);
 	_hud->SetPosition({
 		_cameraInstance->GetPosition().x + 134.0f,
 		_cameraInstance->GetPosition().y + 161.0f 
 		}
 	);
-
-	_scorePopUp->Update(deltaTime);
 }
 
 void ScenePlay::Render() {
@@ -268,10 +263,10 @@ void ScenePlay::Render() {
 
 		_entities.at(i)->Render();
 	}
+	
+	_scorePopUp->Render();
 
 	_hud->Render();
-
-	_scorePopUp->Render();
 }
 
 void ScenePlay::Release() {

@@ -21,8 +21,71 @@ ScorePopUp::ScorePopUp(Player* player) {
 ScorePopUp::~ScorePopUp() {}
 
 void ScorePopUp::GetEntity(Entity* entity) {
-	//TODO: Fix this system
-	_score = 100;
+	switch (entity->GetObjectType()) {
+		//1000 points each
+		case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
+		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
+			_score = _scores.at(6);
+			_player->_score += _score;
+			break;
+		//1-UP
+		case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
+			_score = _scores.back();
+			_player->_lives += 1;
+			break;
+		//50 points each
+		case GameObjectType::GAMEOBJECT_TYPE_COIN:
+			_score = _scores.at(1);
+			_player->_score += _score;
+			_player->_coins += 1;
+			break;
+		//10 for empty, 50 for non-empty
+		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
+			//Is empty;
+			if (entity->GetExtraData().size() == 3) {
+				_score = _scores.front();
+			}
+			//Is not empty
+			else if (entity->GetExtraData().size() != 3) {
+				_score = _scores.at(1);
+			}
+			//Is coin
+			else if (entity->GetHealth() == 3) {
+				_player->_coins += 1;
+			}
+			_player->_score += _score;
+			break;
+		//100+ each time the player hits an npc and is in the air
+		//Caps at 10000 == 1-UP
+		case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
+		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
+			if (_index == _scores.size() - 1) {
+				_score = _scores.back();
+				_player->_lives += 1;
+			}
+			else {
+				_score = _scores.at(_index);
+				if (_player->_isOnGround) {
+					_index = 2;
+				}
+				else {
+					++_index;
+				}
+				_player->_score += _score;
+			}
+			break;
+		//Everything else 10 points each
+		default:
+			_score = _scores.front();
+			_player->_score += _score;
+	}
+
+	entity->tookDamage = false;
 }
 
 bool ScorePopUp::IsFloating() const {
@@ -65,7 +128,9 @@ void ScorePopUp::Update(
 }
 
 void ScorePopUp::Render() {
-	_animatedSprite.PlaySpriteAnimation(std::to_string(_score), _position);
+	if (_score >= _scores.at(2)) {
+		_animatedSprite.PlaySpriteAnimation(std::to_string(_score), _position);
+	}
 }
 
 void ScorePopUp::Release() {

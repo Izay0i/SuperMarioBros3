@@ -10,7 +10,7 @@
 #Left	top	right	bottom	up_vector
 [CAMERABOUNDS]
 0	-8	2808	465	1
-1968	464	2479	689	1
+1968	456	2479	689	1
 [/]
 
 [BGCOLOR]
@@ -31,9 +31,9 @@
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
 [ENTITYDATA]
 #Player											OBJ_ID	FILE_PATH				texID
-#0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
+0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	1952	368
-0	assets\data\player\mario.txt	2	2256	80
+#0	assets\data\player\mario.txt	2	2256	80
 
 #NPC
 #Goomba
@@ -155,8 +155,8 @@
 777	1536	416	64	16
 #Floor tile 560x16
 777	1680	416	560	16
-#Floor tile 560x16
-777	2256	416	560	16
+#Floor tile 560x16 (999 in width)
+777	2256	416	999	16
 
 #Pipe 1 32x48
 777	352	368	32	48
