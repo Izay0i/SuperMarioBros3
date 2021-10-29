@@ -70,13 +70,8 @@ void ScorePopUp::GetEntity(Entity* entity) {
 			}
 			else {
 				_score = _scores.at(_index);
-				if (_player->_isOnGround) {
-					_index = 2;
-				}
-				else {
-					++_index;
-				}
 				_player->_score += _score;
+				++_index;
 			}
 			break;
 		//Everything else 10 points each
@@ -117,6 +112,11 @@ void ScorePopUp::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
+	//Resets the score back to 100 when the player hits the ground
+	if (_player->_isOnGround) {
+		_index = 2;
+	}
+
 	if (IsFloating() && GetTickCount64() - _floatStart > _floatTime) {
 		_floatStart = 0;
 		_position = { -1.0f, -1.0f };

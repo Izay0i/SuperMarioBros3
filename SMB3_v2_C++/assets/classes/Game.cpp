@@ -1,6 +1,8 @@
 #include "GlobalUtil.h"
 #include "Game.h"
 #include "Pipeline.h"
+#include "audio/AudioService.h"
+#include "audio/SFMLAudio.h"
 
 HWND Game::_hWND = nullptr;
 HWND Game::_contentHWND = nullptr;
@@ -266,6 +268,9 @@ Game::Game() {
 }
 
 Game::~Game() {
+	AudioService::GetAudio().StopAll();
+	AudioService::GetAudio().Release();
+
 	if (_pipelineInstance != nullptr) {
 		_pipelineInstance->Release();
 	}
@@ -384,6 +389,9 @@ bool Game::InitGame(HWND hWND) {
 	if (!_pipelineInstance->PipCreateFont("Time News Roman", 15, true, true)) {
 		return false;
 	}
+
+	//Audio
+	AudioService::SetAudio(new SFMLAudio);
 
 	return true;
 }

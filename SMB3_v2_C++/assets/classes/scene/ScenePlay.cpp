@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "ScenePlay.h"
 #include "../EntityList.h"
+#include "../audio/AudioService.h"
 
 ScenePlay::ScenePlay(SceneType sceneID, std::string path) : Scene(sceneID, path) {}
 
@@ -33,6 +34,12 @@ void ScenePlay::OnKeyDown(int keyCode) {
 	}
 
 	_player->OnKeyDownGame(keyCode);
+}
+
+void ScenePlay::LoadScene() {
+	Scene::LoadScene();
+
+	AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_mainThemeID), true);
 }
 
 void ScenePlay::UpdateCameraPosition() {
@@ -273,6 +280,8 @@ void ScenePlay::Release() {
 	char debug[100];
 	sprintf_s(debug, "[SCENE] Unloading scene with ID: %d\n", _sceneID);
 	OutputDebugStringA(debug);
+
+	AudioService::GetAudio().StopAll();
 
 	_background->Release();
 	delete _background;

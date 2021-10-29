@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "SceneIntro.h"
 #include "../EntityList.h"
+#include "../audio/AudioService.h"
 
 SceneIntro::SceneIntro(SceneType sceneID, std::string path) : Scene(sceneID, path) {}
 
@@ -39,6 +40,8 @@ void SceneIntro::LoadScene() {
 		}
 		entity->SetScale({ 0.0f, 0.0f });
 	}
+
+	AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_INTRO);
 }
 
 void SceneIntro::Update(DWORD deltaTime) {
@@ -447,6 +450,8 @@ void SceneIntro::Release() {
 	char debug[100];
 	sprintf_s(debug, "[SCENE] Unloading scene with ID: %d\n", _sceneID);
 	OutputDebugStringA(debug);
+
+	AudioService::GetAudio().StopAll();
 
 	if (_background != nullptr) {
 		_background->Release();

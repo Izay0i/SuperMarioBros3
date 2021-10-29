@@ -178,7 +178,7 @@ void Koopa::HandleCollisionResult(
 						_normal.x = -_normal.x;
 					}
 					
-					if (_state == _State::SPIN) {
+					if (_state == _State::SPIN && eventNormal.x != 0.0f) {
 						coin->SetHealth(-1);
 					}
 				}
@@ -191,7 +191,7 @@ void Koopa::HandleCollisionResult(
 					_normal.x = -_normal.x;
 				}
 				
-				if (_state == _State::SPIN) {
+				if (_state == _State::SPIN && eventNormal.x != 0.0f) {
 					questionBlock->TakeDamage();
 				}
 			}
@@ -203,7 +203,7 @@ void Koopa::HandleCollisionResult(
 					_normal.x = -_normal.x;
 				}
 				
-				if (_state == _State::SPIN) {
+				if (_state == _State::SPIN && eventNormal.x != 0.0f) {
 					//Has items
 					if (shinyBrick->GetExtraData().size() != 3) {
 						shinyBrick->TakeDamage();

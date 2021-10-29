@@ -1,0 +1,157 @@
+[SCENESIZE]
+224	152
+[/]
+
+[BGCOLOR]
+0	0	0
+[/]
+
+[TEXTURES]
+0	assets\textures\map.png	224	163	216
+1	assets\textures\player.png	224	163	216
+2	assets\textures\hud.png	224	163	216
+[/]
+
+[ENTITYDATA]
+#Player
+0	assets\data\player\mario.txt	1	32	44
+
+#Map
+#Portal
+198	assets\data\npc\portal.txt	0	64	12	11
+198	assets\data\npc\portal.txt	0	160	44	14
+#Start
+198	assets\data\npc\portal.txt	0	32	44	0
+
+198	assets\data\npc\portal.txt	0	64	44	0
+198	assets\data\npc\portal.txt	0	96	12	0
+198	assets\data\npc\portal.txt	0	128	12	0
+198	assets\data\npc\portal.txt	0	160	12	0
+198	assets\data\npc\portal.txt	0	192	12	0
+198	assets\data\npc\portal.txt	0	192	44	0
+198	assets\data\npc\portal.txt	0	128	44	0
+198	assets\data\npc\portal.txt	0	128	76	0
+198	assets\data\npc\portal.txt	0	96	76	0
+198	assets\data\npc\portal.txt	0	64	76	0
+198	assets\data\npc\portal.txt	0	64	108	0
+198	assets\data\npc\portal.txt	0	64	140	0
+198	assets\data\npc\portal.txt	0	96	140	0
+198	assets\data\npc\portal.txt	0	128	140	0
+198	assets\data\npc\portal.txt	0	128	108	0
+198	assets\data\npc\portal.txt	0	96	108	0
+198	assets\data\npc\portal.txt	0	160	108	0
+198	assets\data\npc\portal.txt	0	192	108	0
+
+#Cactus
+#Pattern
+#CCC
+#CCC
+400	assets\data\map\cactus.txt	0	16	13
+400	assets\data\map\cactus.txt	0	32	13
+400	assets\data\map\cactus.txt	0	48	13
+400	assets\data\map\cactus.txt	0	16	29
+400	assets\data\map\cactus.txt	0	32	29
+400	assets\data\map\cactus.txt	0	48	29
+#CCC
+#CCC
+#CCC
+400	assets\data\map\cactus.txt	0	80	29
+400	assets\data\map\cactus.txt	0	96	29
+400	assets\data\map\cactus.txt	0	112	29
+400	assets\data\map\cactus.txt	0	80	45
+400	assets\data\map\cactus.txt	0	96	45
+400	assets\data\map\cactus.txt	0	112	45
+400	assets\data\map\cactus.txt	0	80	61
+400	assets\data\map\cactus.txt	0	96	61
+400	assets\data\map\cactus.txt	0	112	61
+#CCC
+400	assets\data\map\cactus.txt	0	144	29
+400	assets\data\map\cactus.txt	0	160	29
+400	assets\data\map\cactus.txt	0	176	29
+#CCC
+#CCC
+#C
+400	assets\data\map\cactus.txt	0	16	61
+400	assets\data\map\cactus.txt	0	32	61
+400	assets\data\map\cactus.txt	0	48	61
+400	assets\data\map\cactus.txt	0	16	77
+400	assets\data\map\cactus.txt	0	32	77
+400	assets\data\map\cactus.txt	0	48	77
+400	assets\data\map\cactus.txt	0	16	93
+#CCC
+400	assets\data\map\cactus.txt	0	96	93
+400	assets\data\map\cactus.txt	0	112	93
+400	assets\data\map\cactus.txt	0	128	93
+#CC
+400	assets\data\map\cactus.txt	0	144	77
+400	assets\data\map\cactus.txt	0	160	77
+#C
+#C
+#C
+#C
+400	assets\data\map\cactus.txt	0	208	13
+400	assets\data\map\cactus.txt	0	208	29
+400	assets\data\map\cactus.txt	0	208	45
+400	assets\data\map\cactus.txt	0	208	61
+#CCCC
+400	assets\data\map\cactus.txt	0	144	61
+400	assets\data\map\cactus.txt	0	160	61
+400	assets\data\map\cactus.txt	0	176	61
+400	assets\data\map\cactus.txt	0	192	61
+#C
+#C
+#C
+#C
+#C
+#C
+#C
+#C
+#C
+400	assets\data\map\cactus.txt	0	224	13
+400	assets\data\map\cactus.txt	0	224	29
+400	assets\data\map\cactus.txt	0	224	45
+400	assets\data\map\cactus.txt	0	224	61
+400	assets\data\map\cactus.txt	0	224	77
+400	assets\data\map\cactus.txt	0	224	93
+400	assets\data\map\cactus.txt	0	224	109
+400	assets\data\map\cactus.txt	0	224	125
+400	assets\data\map\cactus.txt	0	224	141
+
+#Help text
+401	assets\data\map\help.txt	0	208	92
+
+#Hammer bro
+402	assets\data\map\hammerbro.txt	0	157	109
+[/]
+
+[TILEDATA]
+777	16	44	16	16
+777	4	-3	60	47
+777	64	-3	188	15
+777	80	28	48	48
+777	144	28	48	16
+777	208	12	44	167
+777	16	60	48	119
+777	144	60	64	32
+777	80	92	128	16
+777	64	156	188	23
+777	80	92	16	48
+777	80	124	48	16
+777	144	124	108	32
+[/]
+
+[GRID]
+
+[/]
+
+[HUD]
+assets\data\hud\hud.txt	2
+[/]
+
+[BACKGROUND]
+#texID
+0
+#Left	top	right	bottom	X	Y
+#Map
+10	10	244	172	120	81
+[/]

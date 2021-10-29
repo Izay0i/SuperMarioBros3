@@ -9,6 +9,8 @@ public:
 	void OnKeyUp(int) override;
 	void OnKeyDown(int) override;
 
+	void LoadScene() override;
+
 	void UpdateCameraPosition() override;
 
 	void Update(DWORD) override;

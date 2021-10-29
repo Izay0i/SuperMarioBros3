@@ -1,6 +1,7 @@
 #include "../SceneManager.h"
 #include "Scene.h"
 #include "SceneMap.h"
+#include "../audio/AudioService.h"
 
 SceneMap::SceneMap(SceneType sceneID, std::string path) : Scene(sceneID, path) {}
 
@@ -26,6 +27,8 @@ void SceneMap::OnKeyDown(int keyCode) {
 			break;
 		case DIK_K:
 			if (_player->GetNextSceneID() != 0) {
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPSTART);
+
 				SceneManager::GetInstance()->ChangeScene(_player->GetNextSceneID());
 			}
 			break;
@@ -43,6 +46,8 @@ void SceneMap::LoadScene() {
 		Entity* entity = *it;
 		entity->SetGravity(0.0f);
 	}
+
+	AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAP, true);
 }
 
 void SceneMap::Update(DWORD deltaTime) {
@@ -81,6 +86,8 @@ void SceneMap::Release() {
 	char debug[100];
 	sprintf_s(debug, "[SCENE] Unloading scene with ID: %d\n", _sceneID);
 	OutputDebugStringA(debug);
+
+	AudioService::GetAudio().StopAll();
 
 	_background->Release();
 	delete _background;

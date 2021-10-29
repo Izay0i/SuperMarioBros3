@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "state/IdleState.h"
 #include "../EntityList.h"
+#include "../audio/AudioService.h"
 
 Texture* Player::_playerTexture = nullptr;
 
@@ -262,6 +263,8 @@ void Player::OnKeyDownMap(int keyCode) {
 			_velocity.x = 0.08f;
 			break;
 	}
+
+	AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
 }
 
 void Player::OnKeyDownGame(int keyCode) {
@@ -427,6 +430,8 @@ void Player::HandleCollisionResult(
 					if (goomba->GetHealth() > 0) {
 						goomba->TakeDamage();
 						_velocity.y = -_bounceSpeed;
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
 					}
 				}
 				else if (eventNormal.y == 1.0f || eventNormal.x != 0.0f) {
@@ -448,6 +453,8 @@ void Player::HandleCollisionResult(
 
 					if (koopa->GetHealth() != 1) {
 						koopa->TakeDamage();
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
 					}
 					else if (koopa->GetHealth() == 1) {
 						koopa->SetHealth(2);
@@ -460,6 +467,8 @@ void Player::HandleCollisionResult(
 					}
 					else if (koopa->GetHealth() == 2) {
 						koopa->TakeDamage();
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
 					}
 				}
 				else if (eventNormal.x != 0.0f) {
@@ -474,6 +483,8 @@ void Player::HandleCollisionResult(
 							_isNextToShell = true;
 							koopa->TakeDamage();
 							koopa->SetNormal({ -_normal.x, koopa->GetNormal().y });
+
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 						}
 					}
 					else {
@@ -500,6 +511,8 @@ void Player::HandleCollisionResult(
 					if (boomerBro->GetHealth() > 0) {
 						boomerBro->TakeDamage();
 						_velocity.y = -_bounceSpeed;
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
 					}
 				}
 				else if (eventNormal.y == 1.0f || eventNormal.x != 0.0f) {
@@ -547,6 +560,8 @@ void Player::HandleCollisionResult(
 						if (!IsInPipe()) {
 							StartInPipeTimer();
 							_destination = portal->GetDestination();
+
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_PIPE);
 						}
 					}
 				}
@@ -577,7 +592,7 @@ void Player::HandleCollisionResult(
 						}
 						break;
 					case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
-						//Stub
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_1UP);
 						break;
 				}
 			}
@@ -595,6 +610,8 @@ void Player::HandleCollisionResult(
 				Coin* coin = dynamic_cast<Coin*>(eventEntity);
 				if (coin->GetHealth() == 1) {
 					coin->TakeDamage();
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
 				}
 				//Is brick
 				else if (coin->GetHealth() == 3) {
@@ -613,6 +630,9 @@ void Player::HandleCollisionResult(
 				}
 
 				_triggeredStageEnd = true;
+
+				AudioService::GetAudio().StopAll();
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_STAGE_END);
 			}
 			break;
 	//----------------------------------------------------------------------------
@@ -627,6 +647,8 @@ void Player::HandleCollisionResult(
 					QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(eventEntity);
 					if (eventNormal.y == 1.0f) {
 						questionBlock->TakeDamage();
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 					}
 				}
 				break;
@@ -638,16 +660,22 @@ void Player::HandleCollisionResult(
 							if (shinyBrick->GetExtraData().size() == 3) {
 								if (_health > 1) {
 									shinyBrick->SetHealth(-1);
+
+									AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BLOCKBREAK);
 								}
 							}
 							else {
 								shinyBrick->TakeDamage();
 							}
+
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 						}
 					}
 					//Is coin
 					else if (shinyBrick->GetHealth() == 3) {
 						shinyBrick->SetHealth(-2);
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
 					}
 				}
 				break;
@@ -726,6 +754,8 @@ void Player::Update(
 			_position = _destination;
 			_isOnGround = false;
 			_normal.y *= _upVector;
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_PIPE);
 		}
 	}
 

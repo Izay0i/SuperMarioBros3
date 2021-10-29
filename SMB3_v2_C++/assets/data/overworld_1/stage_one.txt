@@ -1,3 +1,8 @@
+#ID for the theme
+[MAINTHEME]
+2
+[/]
+
 [SCENESIZE]
 2816	656
 [/]

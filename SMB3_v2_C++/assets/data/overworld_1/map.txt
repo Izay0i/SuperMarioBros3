@@ -140,10 +140,6 @@
 777	144	124	108	32
 [/]
 
-[GRID]
-
-[/]
-
 [HUD]
 assets\data\hud\hud.txt	2
 [/]

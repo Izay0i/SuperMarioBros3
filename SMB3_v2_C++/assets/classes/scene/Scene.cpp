@@ -81,6 +81,16 @@ Texture* Scene::_LoadTexture(LPCWSTR filePath) {
 	return new Texture(texture, spriteTextureSRView);
 }
 
+void Scene::_ParseMainTheme(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
+
+	if (tokens.size() < 1) {
+		return;
+	}
+
+	_mainThemeID = std::stoul(tokens.at(0));
+}
+
 void Scene::_ParseSceneSize(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
@@ -551,6 +561,11 @@ void Scene::LoadScene() {
 			continue;
 		}
 
+		if (line == "[MAINTHEME]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_MAINTHEME;
+			continue;
+		}
+
 		if (line == "[SCENESIZE]") {
 			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_SCENESIZE;
 			continue;
@@ -607,6 +622,9 @@ void Scene::LoadScene() {
 		}
 
 		switch (sceneFileSection) {
+			case _SceneFileSection::SCENEFILE_SECTION_MAINTHEME:
+				_ParseMainTheme(line);
+				break;
 			case _SceneFileSection::SCENEFILE_SECTION_SCENESIZE:
 				_ParseSceneSize(line);
 				break;

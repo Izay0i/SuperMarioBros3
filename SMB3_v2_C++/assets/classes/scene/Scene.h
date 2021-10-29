@@ -32,6 +32,7 @@ public:
 protected:
 	enum class _SceneFileSection {
 		SCENEFILE_SECTION_UNKNOWN,
+		SCENEFILE_SECTION_MAINTHEME,
 		SCENEFILE_SECTION_SCENESIZE,
 		SCENEFILE_SECTION_SCENETIME,
 		SCENEFILE_SECTION_CAMERABOUNDS,
@@ -48,6 +49,7 @@ protected:
 	SceneType _sceneID;
 	unsigned int _sceneWidth;
 	unsigned int _sceneHeight;
+	unsigned int _mainThemeID;
 
 	std::string _filePath;
 	std::vector<Entity*> _entities;
@@ -83,6 +85,7 @@ protected:
 	//Load textures and pass them to the game objects in the scene
 	Texture* _LoadTexture(LPCWSTR);
 
+	void _ParseMainTheme(std::string);
 	void _ParseSceneSize(std::string);
 	void _ParseSceneTime(std::string);
 	void _ParseCameraBounds(std::string);

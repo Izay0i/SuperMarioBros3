@@ -1,3 +1,8 @@
+#ID for the theme
+[MAINTHEME]
+2
+[/]
+
 [SCENESIZE]
 2816	656
 [/]
@@ -7,9 +12,10 @@
 300
 [/]
 
+#Left	top	right	bottom	up_vector
 [CAMERABOUNDS]
-0	-8	2808	465
-1968	464	2479	689
+0	-8	2808	465	1
+1968	456	2479	689	1
 [/]
 
 [BGCOLOR]
@@ -55,11 +61,11 @@
 #Pirana plant
 104	assets\data\npc\piranaplant.txt	4	1800	400	green
 #Venus plant
-105	assets\data\npc\venusplant.txt	4	360	384	red	108	assets\data\projectile\fireball.txt	7
+105	assets\data\npc\venusplant.txt	4	360	383	red	108	assets\data\projectile\fireball.txt	7
 105	assets\data\npc\venusplant.txt	4	1864	384	green	108	assets\data\projectile\fireball.txt	7
 
 #Tail
-197	assets\data\player\tail.txt	2	0	-32
+197	assets\data\player\tail.txt	2	0	0
 
 #Portal								#destination
 198	assets\data\npc\portal.txt	0	2264	107	2101	468
@@ -154,8 +160,8 @@
 777	1536	416	64	16
 #Floor tile 560x16
 777	1680	416	560	16
-#Floor tile 560x16
-777	2256	416	560	16
+#Floor tile 560x16 (999 in width)
+777	2256	416	999	16
 
 #Pipe 1 32x48
 777	352	368	32	48
