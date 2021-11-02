@@ -60,11 +60,15 @@ void Player::_HandleMovementGame() {
 		if (_normal.x == -1) {
 			if (Device::IsKeyDown(DIK_D)) {
 				_acceleration = 0.0499f;
+
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SKID);
 			}
 		}
 		else if (_normal.x == 1) {
 			if (Device::IsKeyDown(DIK_A)) {
 				_acceleration = 0.0499f;
+
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SKID);
 			}
 		}
 	}
@@ -136,7 +140,7 @@ Player::Player() {
 	_inPipeTime = 2000;
 	_attackTime = 300;
 	_fireballCoolDownTime = 2500;
-	_invulnerableTime = 3000;
+	_invulnerableTime = 1000;
 
 	_playerState = new IdleState(this);
 
@@ -263,8 +267,6 @@ void Player::OnKeyDownMap(int keyCode) {
 			_velocity.x = 0.08f;
 			break;
 	}
-
-	AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
 }
 
 void Player::OnKeyDownGame(int keyCode) {
@@ -289,6 +291,8 @@ void Player::OnKeyDownGame(int keyCode) {
 					if (_fireballsCount == _FIREBALLS_LIMIT) {
 						StartFireballCoolDownTimer();
 					}
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_FIREBALL);
 				}
 			}
 
@@ -318,13 +322,19 @@ void Player::ParseData(
 
 void Player::TakeDamage() {
 	if (!IsInvulnerable()) {
+		_originalVel = { _velocity.x, -_bounceSpeed };
+
 		StartInvulnerableTimer();
 
 		if (_health > 2) {
 			_health = 2;
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TRANSFORM);
 		}
 		else {
 			--_health;
+
+			AudioService::GetAudio().PlayAudio(_health == 0 ? AudioType::AUDIO_TYPE_DEATH : AudioType::AUDIO_TYPE_PIPE);
 		}
 	}
 }
@@ -343,6 +353,8 @@ void Player::Jump() {
 	if (_isOnGround) {
 		_velocity.y = -_jumpSpeed;
 		_isOnGround = false;
+
+		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_JUMP);
 	}
 }
 
@@ -362,6 +374,8 @@ void Player::RunFly() {
 void Player::SlowFall() {
 	if (_health == 4 && !_isOnGround) {
 		_velocity.y *= 0.2f;
+
+		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TAILATTACK, false);
 	}
 }
 
@@ -388,7 +402,7 @@ void Player::HandleCollisionResult(
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
-	if (IsInPipe()) {
+	if (IsInPipe() || IsInvulnerable()) {
 		minTime = { 1.0f, 1.0f };
 		offset = normal = { 0.0f, 0.0f };
 		return;
@@ -468,7 +482,7 @@ void Player::HandleCollisionResult(
 					else if (koopa->GetHealth() == 2) {
 						koopa->TakeDamage();
 
-						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 					}
 				}
 				else if (eventNormal.x != 0.0f) {
@@ -589,6 +603,8 @@ void Player::HandleCollisionResult(
 						if (_health <= 1) {
 							_health = 2;
 							_position.y -= GetBoxHeight();
+
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
 						}
 						break;
 					case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
@@ -602,6 +618,13 @@ void Player::HandleCollisionResult(
 				Leaf* leaf = dynamic_cast<Leaf*>(eventEntity);
 				leaf->TakeDamage();
 				
+				if (_health == 2) {
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TRANSFORM);
+				}
+				else {
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
+				}
+
 				_health = 4;
 			}
 			break;
@@ -685,6 +708,8 @@ void Player::HandleCollisionResult(
 					if (eventNormal.y == -1.0f) {
 						pBlock->TakeDamage();
 						_velocity.y = -_bounceSpeed;
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
 					}
 				}
 				break;
@@ -733,6 +758,8 @@ void Player::Update(
 
 	if (IsInvulnerable() && GetTickCount64() - _invulnerableStart > _invulnerableTime) {
 		_invulnerableStart = 0;
+
+		_velocity = _originalVel;
 	}
 	//----------------------------------------------------------------------------
 	//TIMERS
@@ -756,6 +783,20 @@ void Player::Update(
 			_normal.y *= _upVector;
 
 			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_PIPE);
+		}
+	}
+
+	if (IsInvulnerable()) {
+		//Freeze the player
+		_velocity = { 0.0f, 0.0f };
+
+		//Death bounce
+		if (_health == 0 && GetTickCount64() - _invulnerableStart >= _invulnerableTime * 0.82f) {
+			_isOnGround = false;
+			_isHolding = false;
+
+			_velocity.y = -_bounceSpeed;
+			_gravity = 0.0010f;
 		}
 	}
 

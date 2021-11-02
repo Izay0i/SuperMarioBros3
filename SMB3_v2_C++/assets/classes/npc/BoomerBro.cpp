@@ -3,6 +3,7 @@
 #include "Koopa.h"
 #include "BoomerBro.h"
 #include "../projectile/Boomerang.h"
+#include "../audio/AudioService.h"
 
 Texture* BoomerBro::_boomerTexture = nullptr;
 
@@ -50,6 +51,9 @@ Boomerang* BoomerBro::SpawnBoomerang() {
 	);
 	boomerang->SetNormal({ _normal.x, 0 });
 	boomerang->SetPosition({ _position.x + 5.0f, _position.y + 10.0f });
+
+	AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BOOMERANG);
+
 	return boomerang;
 }
 

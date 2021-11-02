@@ -35,23 +35,25 @@ void ScorePopUp::GetEntity(Entity* entity) {
 			break;
 		//50 points each
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
-			_score = _scores.at(1);
+			_score = entity->GetHealth() == -1 ? _scores.at(2) : _scores.at(2);
 			_player->_score += _score;
 			_player->_coins += 1;
 			break;
 		//10 for empty, 50 for non-empty
 		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
-			//Is empty;
 			if (entity->GetExtraData().size() == 3) {
-				_score = _scores.front();
+				//Is coin
+				if (entity->GetHealth() == 3) {
+					_player->_coins += 1;
+				}
+				//Is empty;
+				else {
+					_score = _scores.front();
+				}
 			}
 			//Is not empty
 			else if (entity->GetExtraData().size() != 3) {
 				_score = _scores.at(1);
-			}
-			//Is coin
-			else if (entity->GetHealth() == 3) {
-				_player->_coins += 1;
 			}
 			_player->_score += _score;
 			break;
@@ -79,8 +81,6 @@ void ScorePopUp::GetEntity(Entity* entity) {
 			_score = _scores.front();
 			_player->_score += _score;
 	}
-
-	entity->tookDamage = false;
 }
 
 bool ScorePopUp::IsFloating() const {

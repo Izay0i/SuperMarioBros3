@@ -3,7 +3,9 @@
 #include "SceneMap.h"
 #include "../audio/AudioService.h"
 
-SceneMap::SceneMap(SceneType sceneID, std::string path) : Scene(sceneID, path) {}
+SceneMap::SceneMap(SceneType sceneID, std::string path) : Scene(sceneID, path) {
+	_toSceneTime = 1200;
+}
 
 SceneMap::~SceneMap() {}
 
@@ -25,11 +27,20 @@ void SceneMap::OnKeyDown(int keyCode) {
 		case DIK_4:
 			_player->SetHealth(4);
 			break;
+		case DIK_W:
+		case DIK_A:
+		case DIK_S:
+		case DIK_D:
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
+			break;
 		case DIK_K:
 			if (_player->GetNextSceneID() != 0) {
-				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPSTART);
+				if (!IsTransitioningToScene()) {
+					StartToSceneTimer();
 
-				SceneManager::GetInstance()->ChangeScene(_player->GetNextSceneID());
+					AudioService::GetAudio().StopAll();
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_LEVELSTART);
+				}
 			}
 			break;
 	}
@@ -70,6 +81,15 @@ void SceneMap::Update(DWORD deltaTime) {
 		_cameraInstance->GetPosition().y + 177.0f 
 		}
 	);
+
+	if (IsTransitioningToScene()) {
+		_player->SetVelocity({ 0.0f, 0.0f });
+
+		if (GetTickCount64() - _toSceneStart > _toSceneTime) {
+			_toSceneStart = 0;
+			SceneManager::GetInstance()->ChangeScene(_player->GetNextSceneID());
+		}
+	}
 }
 
 void SceneMap::Render() {

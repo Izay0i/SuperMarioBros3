@@ -12,11 +12,17 @@ private:
 
 	_State _state;
 
+	DWORD _popUpStart;
+	DWORD _popUpTime;
+
 	void _ParseSprites(std::string) override;
 
 public:
 	Coin();
 	~Coin();
+
+	bool IsPoppedUp() const;
+	void StartPopUpTimer();
 
 	RECTF GetBoundingBox(int = 0) const override;
 

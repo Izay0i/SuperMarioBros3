@@ -219,7 +219,7 @@ void Entity::Update(
 		}
 
 		_position.x += _distance.x * minTime.x + normal.x * offset.x;
-		_position.y += _distance.y * minTime.y + normal.y * offset.y;
+		_position.y += _distance.y * minTime.y + (normal.y == -1.0f ? (normal.y * offset.y) : 0.0f);
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {
@@ -233,12 +233,14 @@ CollisionEvent* Entity::SweptAABBEx(Entity*& entity) {
 	D3DXVECTOR2 normal;
 	float time;
 
+	movingEntity = this->GetBoundingBox();
+	D3DXVECTOR2 movingDistance = this->GetVelocity() * static_cast<float>(_deltaTime);
+
 	staticEntity = entity->GetBoundingBox();
-	D3DXVECTOR2 staticVeloctity = entity->GetVelocity();
-	D3DXVECTOR2 staticDistance = staticVeloctity * static_cast<float>(_deltaTime);
+	D3DXVECTOR2 staticDistance = entity->GetVelocity() * static_cast<float>(_deltaTime);
+	
 	D3DXVECTOR2 relativeDistance = this->_distance - staticDistance;
 
-	movingEntity = this->GetBoundingBox();
 	SweptAABB(movingEntity, staticEntity, relativeDistance, normal, time);
 
 	if (entity->GetObjectType() == GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM) {

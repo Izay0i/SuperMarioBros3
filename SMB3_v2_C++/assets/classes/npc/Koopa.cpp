@@ -1,6 +1,7 @@
 #include "../Entity.h"
 #include "Koopa.h"
 #include "../EntityList.h"
+#include "../audio/AudioService.h"
 
 Texture* Koopa::_koopaTexture = nullptr;
 
@@ -106,6 +107,8 @@ void Koopa::HandleCollisionResult(
 					goomba->SetHealth(0);
 					goomba->SetScale({ 1.0f, -1.0f });
 					goomba->SetVelocity({ 0.0f, -_jumpSpeed });
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 				}
 				else {
 					if (eventNormal.x != 0.0f) {
@@ -128,6 +131,8 @@ void Koopa::HandleCollisionResult(
 					_scale.y = -1.0f;
 					_velocity.x = _runSpeed * koopa->GetNormal().x;
 					_velocity.y = -_jumpSpeed;
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 				}
 				else {
 					if (eventNormal.x != 0.0f) {
@@ -142,6 +147,8 @@ void Koopa::HandleCollisionResult(
 				PiranaPlant* piranaPlant = dynamic_cast<PiranaPlant*>(eventEntity);
 				if (_state == _State::SPIN) {
 					piranaPlant->TakeDamage();
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 				}
 				else {
 					if (eventNormal.x != 0.0f) {
@@ -156,6 +163,8 @@ void Koopa::HandleCollisionResult(
 				if (_state == _State::SPIN) {
 					boomerBro->TakeDamage();
 					boomerBro->SetVelocity({ 0.0f, -_jumpSpeed });
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 				}
 				else {
 					if (eventNormal.x != 0.0f) {
@@ -193,6 +202,8 @@ void Koopa::HandleCollisionResult(
 				
 				if (_state == _State::SPIN && eventNormal.x != 0.0f) {
 					questionBlock->TakeDamage();
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 				}
 			}
 			break;
@@ -207,10 +218,14 @@ void Koopa::HandleCollisionResult(
 					//Has items
 					if (shinyBrick->GetExtraData().size() != 3) {
 						shinyBrick->TakeDamage();
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 					}
 					//Is empty
 					else if (shinyBrick->GetHealth() != 3 && shinyBrick->GetExtraData().size() == 3) {
 						shinyBrick->SetHealth(-1);
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BLOCKBREAK);
 					}
 				}
 				else if (_state != _State::SPIN && shinyBrick->GetHealth() != 3){
@@ -233,15 +248,13 @@ void Koopa::HandleCollisionResult(
 				
 				if (_state == _State::SPIN) {
 					pBlock->TakeDamage();
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
 				}
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_TILE:
-		case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:
-			if (eventNormal.x != 0.0f) {
-				_normal.x = -_normal.x;
-			}
-			
+		case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:	
 			if (_variant == "red") {
 				if (_state != _State::SPIN) {
 					if (_position.x <= eventEntity->GetPosition().x - 5.0f) {
@@ -252,6 +265,12 @@ void Koopa::HandleCollisionResult(
 						_normal.x = 1.0f;
 					}
 				}
+			}
+
+			if (eventNormal.x != 0.0f) {
+				_normal.x = -_normal.x;
+
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 			}
 			break;
 	}

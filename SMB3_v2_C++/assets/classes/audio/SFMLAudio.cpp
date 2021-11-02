@@ -9,18 +9,23 @@
 void SFMLAudio::AddAudio(AudioType type, std::string fileName) {
 	sf::SoundBuffer buffer;
 	if (!buffer.loadFromFile(fileName)) {
-		OutputDebugStringA("[SFML Audio] Failed to load sound file to buffer\n");
+		char debug[100];
+		sprintf_s(debug, "[SFML Audio] Failed to load sound file to buffer: %s\n", fileName.c_str());
+		OutputDebugStringA(debug);
 		return;
 	}
-	SoundStruct soundStruct;
-	soundStruct.buffer = std::move(buffer);
-	_audioMap.emplace(std::make_pair(type, std::move(soundStruct)));
+
+	SoundStruct s;
+	s.buffer = std::move(buffer);
+	_audioMap.emplace(std::make_pair(type, s));
+	_audioMap.at(type).sound.setBuffer(_audioMap.at(type).buffer);
 }
 
 void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_INTRO, "assets\\audio\\songs\\Intro.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_MAP, "assets\\audio\\songs\\GrassLand.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_1_1, "assets\\audio\\songs\\LevelTheme1.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_STAGE_SECRETAREA, "assets\\audio\\songs\\SecretArea.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_HURRY, "assets\\audio\\songs\\HurryUp.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_END, "assets\\audio\\songs\\LevelClear.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_1UP, "assets\\audio\\sfx\\1UP.ogg");
@@ -34,18 +39,20 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_LEVELSTART, "assets\\audio\\sfx\\Level Start.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_MAPMOVE, "assets\\audio\\sfx\\Map Move.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_MAPSTART, "assets\\audio\\sfx\\Map Start.ogg");
-	AddAudio(AudioType::AUDIO_TYPE_JUMP, "assets\\audio\\sfx\\Mario Jump.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_JUMP, "assets\\audio\\sfx\\Jump.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_PIPE, "assets\\audio\\sfx\\Pipe.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_POWERUP, "assets\\audio\\sfx\\Powerup.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_SKID, "assets\\audio\\sfx\\Skid.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_SQUISH, "assets\\audio\\sfx\\Squish.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_TRANSFORM, "assets\\audio\\sfx\\Transformation.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_MUSHROOMAPPEARS, "assets\\audio\\sfx\\Mushroom Appears.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_TAILATTACK, "assets\\audio\\sfx\\Tail Attack.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_PMETER, "assets\\audio\\sfx\\PMeter.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_THWOMP, "assets\\audio\\sfx\\Thwomp.ogg");
 }
 
-void SFMLAudio::PlayAudio(AudioType type, bool isLooping, float pitch, float volume) {
-	//WTF SFML???
-	_audioMap.at(type).sound.setBuffer(_audioMap.at(type).buffer);
-	_audioMap.at(type).sound.setLoop(isLooping);
+void SFMLAudio::PlayAudio(AudioType type, bool loop, float pitch, float volume) {
+	_audioMap.at(type).sound.setLoop(loop);
 	_audioMap.at(type).sound.setPitch(pitch);
 	_audioMap.at(type).sound.setVolume(volume);
 	_audioMap.at(type).sound.play();
@@ -66,5 +73,7 @@ void SFMLAudio::StopAll() {
 }
 
 void SFMLAudio::Release() {
+	StopAll();
+
 	_audioMap.clear();
 }

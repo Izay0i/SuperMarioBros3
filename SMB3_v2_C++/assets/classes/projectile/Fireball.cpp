@@ -1,6 +1,7 @@
 #include "../Entity.h"
 #include "Fireball.h"
 #include "../EntityList.h"
+#include "../audio/AudioService.h"
 
 Texture* Fireball::_fireballTexture = nullptr;
 
@@ -90,6 +91,8 @@ void Fireball::HandleCollisionResult(
 					eventEntity->SetHealth(0);
 					eventEntity->SetScale({ 1.0f, -1.0f });
 					eventEntity->SetVelocity({ 0.0f, -_bounceSpeed });
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 					break;
 				case GameObjectType::GAMEOBJECT_TYPE_VENUSFIREBALL:
 					TakeDamage();
@@ -109,6 +112,8 @@ void Fireball::HandleCollisionResult(
 						if (eventNormal.x != 0.0f) {
 							questionBlock->TakeDamage();
 							TakeDamage();
+
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 						}
 					}
 					break;
@@ -119,10 +124,14 @@ void Fireball::HandleCollisionResult(
 							//Has items
 							if (shinyBrick->GetExtraData().size() != 3) {
 								shinyBrick->TakeDamage();
+
+								AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 							}
 							//Is empty
 							else if (shinyBrick->GetHealth() != 3 && shinyBrick->GetExtraData().size() == 3) {
 								shinyBrick->SetHealth(-1);
+
+								AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BLOCKBREAK);
 							}
 							TakeDamage();
 						}
@@ -134,6 +143,8 @@ void Fireball::HandleCollisionResult(
 						if (eventNormal.x != 0.0f) {
 							pBlock->TakeDamage();
 							TakeDamage();
+
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
 						}
 					}
 					break;

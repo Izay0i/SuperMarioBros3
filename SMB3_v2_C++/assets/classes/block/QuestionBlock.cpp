@@ -4,6 +4,7 @@
 #include "../item/Leaf.h"
 #include "../item/Coin.h"
 #include "QuestionBlock.h"
+#include "../audio/AudioService.h"
 
 Texture* QuestionBlock::_questionTexture = nullptr;
 
@@ -45,8 +46,11 @@ Entity* QuestionBlock::SpawnItem(int currentHealth) {
 				_extraData.at(2)
 			);
 			item->SetHealth(2);
-			item->SetVelocity({ 0.0f, -0.20f });
+			item->SetVelocity({ 0.0f, -0.16f });
 			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
+			dynamic_cast<Coin*>(item)->StartPopUpTimer();
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
 			break;
 		case 6:
 			if (currentHealth >= 2) {
@@ -68,6 +72,8 @@ Entity* QuestionBlock::SpawnItem(int currentHealth) {
 				);
 				item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() / 3.0f });
 				dynamic_cast<Mushroom*>(item)->StartEmergeTimer();
+
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MUSHROOMAPPEARS);
 			}
 			break;
 	}

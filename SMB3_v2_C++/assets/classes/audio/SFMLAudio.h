@@ -1,5 +1,7 @@
 #pragma once
 
+#include <deque>
+
 #include <SFML/Audio.hpp>
 
 struct SoundStruct {

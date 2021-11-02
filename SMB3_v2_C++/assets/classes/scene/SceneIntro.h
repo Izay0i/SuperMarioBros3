@@ -2,6 +2,9 @@
 
 //Hard-coding galore
 class SceneIntro : public Scene {
+private:
+	DWORD _introTimeStart;
+
 public:
 	SceneIntro(SceneType, std::string);
 	~SceneIntro();

@@ -268,7 +268,6 @@ Game::Game() {
 }
 
 Game::~Game() {
-	AudioService::GetAudio().StopAll();
 	AudioService::GetAudio().Release();
 
 	if (_pipelineInstance != nullptr) {

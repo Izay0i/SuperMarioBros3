@@ -8,10 +8,10 @@ void Mushroom::_ParseSprites(std::string line) {
 }
 
 Mushroom::Mushroom() {
-	_renderPriority = 2;
+	_renderPriority = 4;
 	_removeTime = 50;
 
-	_runSpeed = 0.002f;
+	_runSpeed = 0.06f;
 	_jumpSpeed = 0.2f;
 	_gravity = 0.002f;
 
@@ -95,19 +95,19 @@ void Mushroom::Update(
 	Grid* grid) 
 {
 	if (IsEmerging() && GetTickCount64() - _emergeStart > _emergeTime) {
-		_renderPriority = 1;
+		_renderPriority = 2;
 		_emergeStart = 0;
+	}
+
+	if (IsEmerging()) {
+		_velocity.y = -0.018f;
+	}
+	else {
+		_velocity.x = -_runSpeed * _normal.x;
 	}
 
 	HandleStates();
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
-
-	if (IsEmerging()) {
-		_velocity.y -= 0.00005f * deltaTime;
-	}
-	else {
-		_velocity.x = -_runSpeed * _normal.x * deltaTime;
-	}
 }
 
 void Mushroom::Render() {

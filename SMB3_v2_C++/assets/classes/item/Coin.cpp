@@ -13,10 +13,20 @@ Coin::Coin() {
 
 	_gravity = 0.0005f;
 
+	_popUpTime = 700;
+
 	isPassThroughable = true;
 }
 
 Coin::~Coin() {}
+
+bool Coin::IsPoppedUp() const {
+	return _popUpStart != 0;
+}
+
+void Coin::StartPopUpTimer() {
+	_popUpStart = static_cast<DWORD>(GetTickCount64());
+}
 
 RECTF Coin::GetBoundingBox(int index) const {
 	return _health <= 0 || _health == 2 ? RECTF() : GameObject::GetBoundingBox();
@@ -54,15 +64,7 @@ void Coin::HandleCollisionResult(
 	D3DXVECTOR2& minTime, 
 	D3DXVECTOR2& offset, 
 	D3DXVECTOR2& normal, 
-	D3DXVECTOR2& relativeDistance) 
-{
-	Entity* eventEntity = result->entity;
-	D3DXVECTOR2 eventNormal = result->normal;
-
-	if (eventNormal.y == -1.0f) {
-		_health = -1;
-	}
-}
+	D3DXVECTOR2& relativeDistance) {}
 
 void Coin::Update(
 	DWORD deltaTime, 
@@ -75,10 +77,16 @@ void Coin::Update(
 		_removeStart = 0;
 	}
 	
+	if (IsPoppedUp() && GetTickCount64() - _popUpStart > _popUpTime) {
+		_popUpStart = 0;
+
+		tookDamage = true;
+		_health = -1;
+	}
+
 	HandleStates();
 	if (_state == _State::PUSHEDFROMBLOCK) {
 		Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
-		//_velocity.y += _gravity * deltaTime;
 		_position += _distance;
 	}
 }

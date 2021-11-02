@@ -23,12 +23,21 @@ void ScenePlay::OnKeyDown(int keyCode) {
 			_player->SetHealth(1);
 			break;
 		case DIK_2:
+			if (_player->GetHealth() == 1) {
+				_player->SetPosition({ _player->GetPosition().x, _player->GetPosition().y - _player->GetBoxHeight(1) });
+			}
 			_player->SetHealth(2);
 			break;
 		case DIK_3:
+			if (_player->GetHealth() == 1) {
+				_player->SetPosition({ _player->GetPosition().x, _player->GetPosition().y - _player->GetBoxHeight(1) });
+			}
 			_player->SetHealth(3);
 			break;
 		case DIK_4:
+			if (_player->GetHealth() == 1) {
+				_player->SetPosition({ _player->GetPosition().x, _player->GetPosition().y - _player->GetBoxHeight(1) });
+			}
 			_player->SetHealth(4);
 			break;
 	}
@@ -54,6 +63,10 @@ void ScenePlay::UpdateCameraPosition() {
 		}
 		else if (_player->GetPosition().x + _player->GetBoxWidth() > _sceneWidth) {
 			_player->SetPosition({ _sceneWidth - _player->GetBoxWidth(), _player->GetPosition().y });
+		}
+
+		if (_player->GetPosition().y < cameraPosition.y) {
+			_player->SetPosition({ _player->GetPosition().x, cameraPosition.y });
 		}
 	}
 
@@ -96,7 +109,10 @@ void ScenePlay::Update(DWORD deltaTime) {
 		}
 	}
 
-	if (_player->GetHealth() > 0) {
+	if (_player->GetHealth() == 0 || _player->IsInvulnerable()) {
+		_player->Update(deltaTime, &_entities, &_tiles, _grid);
+	}
+	else if (_player->GetHealth() > 0 && !_player->IsInvulnerable()) {
 		//Range-based loop, for_each, iterators will all be invalidated if an element is either removed or inserted
 		//And the container has to do a reallocation
 		for (unsigned int i = 0; i < _entities.size(); ++i) {
@@ -167,6 +183,21 @@ void ScenePlay::Update(DWORD deltaTime) {
 						);
 					}
 					break;
+				case GameObject::GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
+				case GameObject::GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
+					{
+						Mushroom* mushroom = dynamic_cast<Mushroom*>(entity);
+						if (mushroom->IsEmerging()) {
+							//Mario is on the right side
+							if (mushroom->GetPosition().x - _player->GetPosition().x < 0.0f) {
+								mushroom->SetNormal({ 1.0f, 1.0f });
+							}
+							else {
+								mushroom->SetNormal({ -1.0f, 1.0f });
+							}
+						}
+					}
+					break;
 				case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 					{
 						QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(entity);
@@ -211,6 +242,8 @@ void ScenePlay::Update(DWORD deltaTime) {
 				_scorePopUp->GetEntity(entity);
 				_scorePopUp->SetPosition(entity->GetPosition());
 				_scorePopUp->StartFloatTimer();
+
+				entity->tookDamage = false;
 			}
 
 			if (_grid != nullptr) {
@@ -235,6 +268,15 @@ void ScenePlay::Update(DWORD deltaTime) {
 
 	UpdateCameraPosition();
 
+	_scorePopUp->Update(deltaTime);
+
+	_hud->Update(_sceneTime);
+	_hud->SetPosition({
+		_cameraInstance->GetPosition().x + 134.0f,
+		_cameraInstance->GetPosition().y + 161.0f 
+		}
+	);
+
 	if (_player->TriggeredStageEnd() || _player->GetHealth() == 0 || _sceneTime == 0) {
 		//Warp back to map				
 		if (!IsTransitioningToScene()) {
@@ -244,31 +286,22 @@ void ScenePlay::Update(DWORD deltaTime) {
 		if (IsTransitioningToScene() && GetTickCount64() - _toSceneStart > _toSceneTime) {
 			_toSceneStart = 0;
 			SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_TYPE_MAP));
-			//Prematurely end the loop to avoid nullptr on some objects
-			//No an elegant solution, could possibly move those objects above the loop
 			return;
 		}
 	}
-
-	_scorePopUp->Update(deltaTime);
-
-	_hud->Update(_sceneTime);
-	_hud->SetPosition({
-		_cameraInstance->GetPosition().x + 134.0f,
-		_cameraInstance->GetPosition().y + 161.0f 
-		}
-	);
 }
 
 void ScenePlay::Render() {
 	_background->Render();
 
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
-		if (!_entities.at(i)->IsActive()) {
+		Entity* entity = _entities.at(i);
+		
+		if (!entity->IsActive()) {
 			continue;
 		}
 
-		_entities.at(i)->Render();
+		entity->Render();
 	}
 	
 	_scorePopUp->Render();

@@ -4,7 +4,9 @@
 #include "../EntityList.h"
 #include "../audio/AudioService.h"
 
-SceneIntro::SceneIntro(SceneType sceneID, std::string path) : Scene(sceneID, path) {}
+SceneIntro::SceneIntro(SceneType sceneID, std::string path) : Scene(sceneID, path) {
+	_toSceneTime = 1200;
+}
 
 SceneIntro::~SceneIntro() {}
 
@@ -12,10 +14,17 @@ void SceneIntro::OnKeyDown(int keyCode) {
 	switch (keyCode) {
 		case DIK_U:
 			_selectText->isMultiplayer = !_selectText->isMultiplayer;
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
 			break;
 		case DIK_I:
 			if (_selectText->GetScale() == D3DXVECTOR2(1.0f, 1.0f)) {
-				SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_TYPE_MAP));
+				if (!IsTransitioningToScene()) {
+					StartToSceneTimer();
+
+					AudioService::GetAudio().StopAll();
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
+				}
 			}
 			break;
 	}
@@ -23,7 +32,7 @@ void SceneIntro::OnKeyDown(int keyCode) {
 
 void SceneIntro::LoadScene() {
 	Scene::LoadScene();
-	_toSceneStart = static_cast<DWORD>(GetTickCount64());
+	_introTimeStart = static_cast<DWORD>(GetTickCount64());
 
 	for (auto it = _entities.begin(); it != _entities.end(); ++it) {
 		Entity* entity = *it;
@@ -47,7 +56,7 @@ void SceneIntro::LoadScene() {
 void SceneIntro::Update(DWORD deltaTime) {
 	//Now's your chance to be a [[BIG SHOT]]
 	const DWORD INTRO_TIME = 60000;
-	DWORD time = static_cast<DWORD>(GetTickCount64()) - _toSceneStart;
+	DWORD time = static_cast<DWORD>(GetTickCount64()) - _introTimeStart;
 	if (time >= 6000 && time < 7812) {
 		const D3DXCOLOR BG_COLOR = { 252 / 255.0f, 216 / 255.0f, 168 / 255.0f, 1.0f };
 		_backgroundColor = BG_COLOR;
@@ -436,6 +445,11 @@ void SceneIntro::Update(DWORD deltaTime) {
 		entity->Update(deltaTime, &_entities, &_tiles);
 	}
 	std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
+
+	if (IsTransitioningToScene() && GetTickCount64() - _toSceneStart > _toSceneTime) {
+		_toSceneStart = 0;
+		SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_TYPE_MAP));
+	}
 }
 
 void SceneIntro::Render() {

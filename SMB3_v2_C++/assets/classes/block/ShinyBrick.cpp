@@ -1,9 +1,11 @@
 #include "../SceneManager.h"
 #include "../Entity.h"
 #include "../item/Mushroom.h"
+#include "../item/Coin.h"
 #include "PBlock.h"
 #include "../effect/BrickDebris.h"
 #include "ShinyBrick.h"
+#include "../audio/AudioService.h"
 
 Texture* ShinyBrick::_brickTexture = nullptr;
 
@@ -41,11 +43,16 @@ Entity* ShinyBrick::SpawnItem() {
 		case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() / 3.0f });
 			dynamic_cast<Mushroom*>(item)->StartEmergeTimer();
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MUSHROOMAPPEARS);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			item->SetHealth(2);
-			item->SetVelocity({ 0.0f, -0.2f });
+			item->SetVelocity({ 0.0f, -0.16f });
 			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
+			dynamic_cast<Coin*>(item)->StartPopUpTimer();
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
@@ -91,11 +98,13 @@ void ShinyBrick::TakeDamage() {
 	}
 
 	if (_itemCount > 0) {
+		tookDamage = true;
+	}
+
+	if (_state != _State::PUSHED) {
 		if (_position.y >= _originalPos.y - _MAX_Y_OFFSET) {
 			_velocity.y = -_jumpSpeed;
 		}
-
-		tookDamage = true;
 	}
 }
 

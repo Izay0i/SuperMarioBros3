@@ -68,6 +68,8 @@ private:
 	D3DXVECTOR2 _mapNodePos;
 	D3DXVECTOR2 _destination;
 
+	D3DXVECTOR2 _originalVel;
+
 	DWORD _flyStart;
 	DWORD _flyTime;
 
