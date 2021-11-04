@@ -25,6 +25,63 @@ void Player::_HandleCurrencies() {
 	}
 }
 
+void Player::_HanldeStageEnd() {
+	if (_triggeredStageEnd) {
+		_isHolding = false;
+		
+		if (_sceneRemainingTime > 0) {
+			for (unsigned int i = 0; i < _sceneRemainingTime; ++i) {
+				_score += 50;
+			}
+			_sceneRemainingTime = 0;
+		}
+		
+	}
+}
+
+void Player::_HandleBonusItems() {
+	if (_bonusItems.empty()) {
+		return;
+	}
+
+	unsigned int shroomCards = 0;
+	unsigned int flowerCards = 0;
+	unsigned int starCards = 0;
+
+	for (auto& item : _bonusItems) {
+		switch (item) {
+			case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
+				++shroomCards;
+				break;
+			case GameObjectType::GAMEOBJECT_TYPE_FLOWER:
+				++flowerCards;
+				break;
+			case GameObjectType::GAMEOBJECT_TYPE_STAR:
+				++starCards;
+				break;
+		}
+	}
+
+	if (_bonusItems.size() == 3) {
+		if (shroomCards == 3) {
+			_lives += 2;
+		}
+		else if (flowerCards == 3) {
+			_lives += 3;
+		}
+		else if (starCards == 3) {
+			_lives += 5;
+		}
+		else {
+			_lives += 1;
+		}
+		
+		_bonusItems.clear();
+
+		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_1UP);
+	}
+}
+
 void Player::_HandleMovementMap() {
 	if (abs(_position.x - _lastPos.x) >= _MAX_TRAVEL_DISTANCE || abs(_position.y - _lastPos.y) >= _MAX_TRAVEL_DISTANCE) {
 		_velocity = { 0.0f, 0.0f };
@@ -159,6 +216,10 @@ RECTF Player::GetBoundingBox(int index) const {
 
 Entity* Player::GetHeldEntity() const {
 	return _heldEntity;
+}
+
+void Player::GetSceneRemainingTime(unsigned int sceneTime) {
+	_sceneRemainingTime = sceneTime;
 }
 
 void Player::SetUpVector(float upVector) {
@@ -334,7 +395,14 @@ void Player::TakeDamage() {
 		else {
 			--_health;
 
-			AudioService::GetAudio().PlayAudio(_health == 0 ? AudioType::AUDIO_TYPE_DEATH : AudioType::AUDIO_TYPE_PIPE);
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_PIPE);
+
+			if (_health < 1) {
+				--_lives;
+
+				AudioService::GetAudio().StopAll();
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_DEATH);
+			}
 		}
 	}
 }
@@ -364,9 +432,11 @@ void Player::RunFly() {
 			if (_isOnGround && !IsFlying()) {
 				_isOnGround = false;
 				StartFlyTimer();
+
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_PMETER, true);
 			}
 			
-			_velocity.y = -_jumpSpeed * 0.8f;
+			_velocity.y = -_jumpSpeed * 0.66f;
 		}
 	}
 }
@@ -403,8 +473,10 @@ void Player::HandleCollisionResult(
 	D3DXVECTOR2 eventNormal = result->normal;
 
 	if (IsInPipe() || IsInvulnerable()) {
-		minTime = { 1.0f, 1.0f };
-		offset = normal = { 0.0f, 0.0f };
+		if (IsInPipe()) {
+			minTime = { 1.0f, 1.0f };
+			offset = normal = { 0.0f, 0.0f };
+		}
 		return;
 	}
 
@@ -591,7 +663,7 @@ void Player::HandleCollisionResult(
 	//----------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------
-	//Items
+	//ITEMS
 	//----------------------------------------------------------------------------
 		case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 		case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
@@ -600,12 +672,18 @@ void Player::HandleCollisionResult(
 				mushroom->TakeDamage();
 				switch (mushroom->GetObjectType()) {
 					case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
-						if (_health <= 1) {
+						if (_health == 1) {
 							_health = 2;
 							_position.y -= GetBoxHeight();
 
-							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
+							if (!IsInvulnerable()) {
+								_originalVel = _velocity;
+
+								StartInvulnerableTimer();
+							}
 						}
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
 						break;
 					case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_1UP);
@@ -617,15 +695,28 @@ void Player::HandleCollisionResult(
 			{
 				Leaf* leaf = dynamic_cast<Leaf*>(eventEntity);
 				leaf->TakeDamage();
-				
-				if (_health == 2) {
-					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TRANSFORM);
-				}
-				else {
+
+				if (_health == 4) {
 					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
 				}
+				else {
+					if (_health == 1) {
+						_health = 2;
+					
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
+					}
+					else {
+						_health = 4;
+					
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TRANSFORM);
+					}
 
-				_health = 4;
+					if (!IsInvulnerable()) {
+						_originalVel = _velocity;
+
+						StartInvulnerableTimer();
+					}
+				}				
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
@@ -659,11 +750,11 @@ void Player::HandleCollisionResult(
 			}
 			break;
 	//----------------------------------------------------------------------------
-	//Items
+	//ITEMS
 	//----------------------------------------------------------------------------
 
 	//----------------------------------------------------------------------------
-	//Animated blocks
+	//ANIMATED BLOCKS
 	//----------------------------------------------------------------------------
 			case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 				{
@@ -714,8 +805,13 @@ void Player::HandleCollisionResult(
 				}
 				break;
 	//----------------------------------------------------------------------------
-	//Animated blocks
+	//ANIMATED BLOCKS
 	//----------------------------------------------------------------------------
+			case GameObjectType::GAMEOBJECT_TYPE_ONEHITPLATFORM:
+				_position.y = 999.0f;
+				_health = 1;
+				TakeDamage();
+				break;
 	}
 }
 
@@ -726,21 +822,16 @@ void Player::Update(
 	Grid* grid) 
 {
 	_HandleCurrencies();
-
-	//To show the whole kicking animation
-	if (_isNextToShell && GetTickCount64() % 500 == 0) {
-		_isNextToShell = false;
-	}
-
-	if (_isCrouching || IsAttacking()) {
-		_velocity.x = 0.0f;
-	}
+	_HanldeStageEnd();
+	_HandleBonusItems();
 
 	//----------------------------------------------------------------------------
 	//TIMERS
 	//----------------------------------------------------------------------------
 	if (_health != 4 || (IsFlying() && GetTickCount64() - _flyStart > _flyTime)) {
 		_flyStart = 0;
+
+		AudioService::GetAudio().StopAudio(AudioType::AUDIO_TYPE_PMETER);
 	}
 
 	if (IsInPipe() && GetTickCount64() - _inPipeStart > _inPipeTime) {
@@ -764,6 +855,15 @@ void Player::Update(
 	//----------------------------------------------------------------------------
 	//TIMERS
 	//----------------------------------------------------------------------------
+
+	//To show the whole kicking animation
+	if (_isNextToShell && GetTickCount64() % 500 == 0) {
+		_isNextToShell = false;
+	}
+
+	if (_isCrouching || IsAttacking()) {
+		_velocity.x = 0.0f;
+	}
 
 	if (_triggeredStageEnd) {
 		MoveRight();

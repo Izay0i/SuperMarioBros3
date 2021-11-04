@@ -3,11 +3,7 @@
 #include "IdleState.h"
 #include "WagState.h"
 
-WagState::WagState(Player* player) {
-	if (_player == nullptr) {
-		_player = player;
-	}
-}
+WagState::WagState(Player* player) : PlayerState(player) {}
 
 PlayerState* WagState::HandleStates() {
 	if (!_player->IsAttacking()) {

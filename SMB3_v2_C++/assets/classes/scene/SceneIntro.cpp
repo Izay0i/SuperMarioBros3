@@ -376,12 +376,12 @@ void SceneIntro::Update(DWORD deltaTime) {
 					
 					if (time >= 7812 && time < 8062) {
 						shell->SetVelocity({ shell->GetVelocity().x, -0.04f });
-						shell->animationName = "GreenShellSpin";
+						shell->animationName = "ShellSpin";
 					}
 
 					if (time >= 8062 && time < 8250) {
 						shell->SetVelocity({ -0.02f, shell->GetVelocity().y });
-						shell->animationName = "GreenShellIdle";
+						shell->animationName = "ShellIdle";
 					}
 
 					if (time >= 9000 && time < 9875) {
@@ -390,23 +390,23 @@ void SceneIntro::Update(DWORD deltaTime) {
 
 					if (time >= 12212 && time < 12500) {
 						shell->SetVelocity({ 0.18f, shell->GetVelocity().y });
-						shell->animationName = "GreenShellSpin";
+						shell->animationName = "ShellSpin";
 					}
 
 					if (time >= 14000 && time < 14562) {
 						shell->SetVelocity({ 0.0f, 0.0f });
-						shell->animationName = "GreenShellIdle";
+						shell->animationName = "ShellIdle";
 						shell->SetPosition({ _propLuigi->GetPosition().x - 12.0f, _propLuigi->GetPosition().y + 4.0f });
 					}
 
 					if (time >= 15187 && time < 15400) {
 						shell->SetVelocity({ -0.18f, shell->GetVelocity().y });
-						shell->animationName = "GreenShellSpin";
+						shell->animationName = "ShellSpin";
 					}
 
 					if (time >= 16175 && time < 16375) {
 						shell->SetVelocity({ 0.0f, 0.0f });
-						shell->animationName = "GreenShellIdle";
+						shell->animationName = "ShellIdle";
 					}
 
 					if (time >= 16725 && time < 17683) {
@@ -415,7 +415,7 @@ void SceneIntro::Update(DWORD deltaTime) {
 
 					if (time >= 17683 && time < 17783) {
 						shell->SetVelocity({ 0.18f, shell->GetVelocity().y });
-						shell->animationName = "GreenShellSpin";
+						shell->animationName = "ShellSpin";
 					}
 
 					if (time >= 19575 && time < 19675) {

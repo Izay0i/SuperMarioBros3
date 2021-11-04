@@ -18,6 +18,8 @@ private:
 	void _ParseSprites(std::string) override;
 
 public:
+	bool hasEnded;
+
 	PBlock();
 	~PBlock();
 	

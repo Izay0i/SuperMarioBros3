@@ -1,0 +1,16 @@
+[SPRITES]
+Die	85	0	101	16	1	0
+
+Walk	51	0	67	16	2	100
+Walk	68	0	84	16
+
+WingIdle	136	68	156	92	2	100
+WingIdle	157	68	177	92
+
+WingActive	178	68	198	92	2	100
+WingActive	199	68	219	92
+[/]
+
+[HITBOXES]
+-7	-7	14	14
+[/]

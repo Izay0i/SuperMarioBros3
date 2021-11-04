@@ -2,10 +2,13 @@
 
 Player* PlayerState::_player = nullptr;
 
-void PlayerState::_OnEntry() {
+void PlayerState::_OnTransform() {
 	switch (_player->_health) {
+		case 1:
+			_player->_animatedSprite.PlaySpriteAnimation("ShrinkDown", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale);
+			break;
 		case 2:
-			_player->_animatedSprite.PlaySpriteAnimation("GrowUp", _player->_position, _player->_scale);
+			_player->_animatedSprite.PlaySpriteAnimation("GrowUp", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale);
 			break;
 		case 3:
 		case 4:
@@ -14,14 +17,10 @@ void PlayerState::_OnEntry() {
 	}
 }
 
-void PlayerState::_OnExit() {
-	switch (_player->_health) {
-		case 1:
-			_player->_animatedSprite.PlaySpriteAnimation("ShrinkDown", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale);
-			break;
-		case 2:
-			_player->_animatedSprite.PlaySpriteAnimation("SmokePuff", _player->_position);
-			break;
+PlayerState::PlayerState(Player* player) {
+	if (_player == nullptr) {
+		_player = player;
+		_currentHealth = _player->_health;
 	}
 }
 
@@ -31,35 +30,13 @@ void PlayerState::Update(DWORD) {
 	if (_player->isInMap && GetTickCount64() % 50 == 0) {		
 		_player->_scale.x = -_player->_scale.x;
 	}
-	
-	if (_player->IsInvulnerable()) {
-		_currentHealth = _player->_health;
-	}
 
-	switch (_player->_health) {
-		case 1:
-			_form = _Form::SMALL;
-			break;
-		case 2:
-			_form = _Form::BIG;
-			break;
-		case 3:
-			_form = _Form::FIRE;
-			break;
-		case 4:
-			_form = _Form::RACCOON;
-			break;
-	}
+	_form = static_cast<_Form>(_player->_health);
 }
 
 void PlayerState::Render() {
 	if (_player->IsInvulnerable()) {
-		if (_currentHealth > _player->_health) {
-			_OnEntry();
-		}
-		else {
-			_OnExit();
-		}
+		_OnTransform();
 	}
 
 	if (_player->_health == 0) {

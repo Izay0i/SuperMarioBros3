@@ -1,6 +1,7 @@
 #include "../Entity.h"
 #include "Tail.h"
 #include "../EntityList.h"
+#include "../audio/AudioService.h"
 
 Texture* Tail::_tailTexture = nullptr;
 
@@ -44,17 +45,25 @@ void Tail::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
 			{
 				Goomba* goomba = dynamic_cast<Goomba*>(eventEntity);
+				goomba->animationName = "Walk";
 				goomba->SetHealth(0);
 				goomba->SetScale({ 1.0f, -1.0f });
 				goomba->SetVelocity({ 0.0f, -_bounceSpeed });
 			}
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
 		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
 			{
 				Koopa* koopa = dynamic_cast<Koopa*>(eventEntity);
-				koopa->TakeDamage();
+				koopa->SetHealth(2);
+				koopa->StartRetractTimer();
+				koopa->SetScale({ 1.0f, -1.0f });
+				koopa->SetVelocity({ 0.0f, -_bounceSpeed });
 			}
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
 		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
@@ -68,6 +77,8 @@ void Tail::HandleCollisionResult(
 				BoomerBro* boomerBro = dynamic_cast<BoomerBro*>(eventEntity);
 				boomerBro->TakeDamage();
 			}
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			{
@@ -83,6 +94,8 @@ void Tail::HandleCollisionResult(
 				QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(eventEntity);
 				questionBlock->TakeDamage();
 			}
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 			{
@@ -90,10 +103,14 @@ void Tail::HandleCollisionResult(
 				//Has items
 				if (shinyBrick->GetExtraData().size() != 3) {
 					shinyBrick->TakeDamage();
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 				}
 				//Is empty
 				else if (shinyBrick->GetHealth() != 3 && shinyBrick->GetExtraData().size() == 3) {
 					shinyBrick->SetHealth(-1);
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BLOCKBREAK);
 				}
 			}
 			break;
@@ -102,6 +119,8 @@ void Tail::HandleCollisionResult(
 				PBlock* pBlock = dynamic_cast<PBlock*>(eventEntity);
 				pBlock->TakeDamage();
 			}
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
 			break;
 	}
 }

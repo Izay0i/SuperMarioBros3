@@ -9,12 +9,7 @@
 #include "ThrowState.h"
 #include "WagState.h"
 
-IdleState::IdleState(Player* player) {
-	if (_player == nullptr) {
-		_player = player;
-		_currentHealth = _player->_health;
-	}
-}
+IdleState::IdleState(Player* player) : PlayerState(player) {}
 
 PlayerState* IdleState::HandleStates() {
 	if (_player->isInMap) {

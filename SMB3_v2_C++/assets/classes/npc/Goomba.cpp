@@ -15,7 +15,7 @@ Goomba::Goomba() {
 	_bounceSpeed = 0.23f;
 	_gravity = 0.002f;
 	
-	_variant = "yellow";
+	_variant = "red";
 	_state = _State::WALK;
 }
 
@@ -38,7 +38,8 @@ void Goomba::ParseData(
 	if (_extraData.size() == 1) {
 		_variant = _extraData.front();
 	}
-	_animationName = _variant == "red" ? "RedDie" : "YellowDie";
+	
+	animationName = "Die";
 }
 
 void Goomba::HandleStates() {
@@ -50,11 +51,11 @@ void Goomba::HandleStates() {
 			_velocity.x = -_runSpeed * _normal.x;
 			break;
 		case _State::DIE:
-			_velocity.x = 0;
+			_velocity.x = 0.0f;
 			_isOnGround = false;
 			
-			if (_animationName == "YellowDie" || _animationName == "RedDie") {
-				_velocity.y = 0;
+			if (_scale.y != -1.0f) {
+				_velocity.y = 0.0f;
 			}
 
 			if (_health == 0 && !IsRemoved()) {
@@ -97,7 +98,7 @@ void Goomba::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_PLAYERFIREBALL:
 		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
 			if (eventEntity->GetHealth() == 1) {
-				_animationName = _animationName = _variant == "red" ? "RedWalk" : "YellowWalk";
+				animationName = "Walk";
 			}
 			else {
 				if (eventNormal.x != 0.0f) {
@@ -137,13 +138,13 @@ void Goomba::Update(
 void Goomba::Render() {
 	switch (_state) {
 		case _State::FLY:
-			_animatedSprite.PlaySpriteAnimation(_isOnGround ? "RedWingIdle" : "RedWingActive", { _position.x, _position.y - 4.0f });
+			_animatedSprite.PlaySpriteAnimation(_isOnGround ? "WingIdle" : "WingActive", { _position.x, _position.y - 4.0f });
 			break;
 		case _State::WALK:
-			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedWalk" : "YellowWalk", _position);
+			_animatedSprite.PlaySpriteAnimation("Walk", _position);
 			break;
 		case _State::DIE:
-			_animatedSprite.PlaySpriteAnimation(_animationName, _position, _scale);
+			_animatedSprite.PlaySpriteAnimation(animationName, _position, _scale);
 			break;
 	}
 }

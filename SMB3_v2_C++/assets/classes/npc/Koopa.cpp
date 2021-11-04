@@ -18,7 +18,7 @@ Koopa::Koopa() {
 	_jumpSpeed = 0.22f;
 	_gravity = 0.001f;
 
-	_variant = "green";
+	_variant = "red";
 	_state = _State::WALK;
 	_retractTime = 8000;
 }
@@ -104,6 +104,7 @@ void Koopa::HandleCollisionResult(
 			{
 				Goomba* goomba = dynamic_cast<Goomba*>(eventEntity);
 				if (_state == _State::SPIN) {
+					goomba->animationName = "Walk";
 					goomba->SetHealth(0);
 					goomba->SetScale({ 1.0f, -1.0f });
 					goomba->SetVelocity({ 0.0f, -_jumpSpeed });
@@ -173,11 +174,6 @@ void Koopa::HandleCollisionResult(
 				}
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_TAIL:
-			_scale.y = -1.0f;
-			_velocity.x = _runSpeed * eventEntity->GetNormal().x;
-			_velocity.y = -_bounceSpeed;
-			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			{
 				Coin* coin = dynamic_cast<Coin*>(eventEntity);
@@ -195,16 +191,16 @@ void Koopa::HandleCollisionResult(
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 			{
-				QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(eventEntity);
-				if (eventNormal.x != 0.0f) {
-					_normal.x = -_normal.x;
-				}
-				
+				QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(eventEntity);				
 				if (_state == _State::SPIN && eventNormal.x != 0.0f) {
 					questionBlock->TakeDamage();
 
 					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 				}
+			}
+
+			if (eventNormal.x != 0.0f) {
+				_normal.x = -_normal.x;
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
@@ -236,22 +232,29 @@ void Koopa::HandleCollisionResult(
 					else if (_position.x + _hitbox.GetBoxWidth() >= shinyBrick->GetPosition().x + shinyBrick->GetBoxWidth() + 5.0f) {
 						_normal.x = 1.0f;
 					}
+
+					if (eventNormal.x != 0.0f) {
+						_normal.x = -_normal.x;
+					}
 				}
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 			{
 				PBlock* pBlock = dynamic_cast<PBlock*>(eventEntity);
-				if (eventNormal.x != 0.0f) {
-					_normal.x = -_normal.x;
-				}
-				
 				if (_state == _State::SPIN) {
 					pBlock->TakeDamage();
 
 					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
 				}
 			}
+
+			if (eventNormal.x != 0.0f) {
+				_normal.x = -_normal.x;
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_ONEHITPLATFORM:
+			_position.y = 999.0f;
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_TILE:
 		case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:	
@@ -270,7 +273,9 @@ void Koopa::HandleCollisionResult(
 			if (eventNormal.x != 0.0f) {
 				_normal.x = -_normal.x;
 
-				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
+				if (_state == _State::SPIN) {
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
+				}
 			}
 			break;
 	}
@@ -300,23 +305,23 @@ void Koopa::Update(
 void Koopa::Render() {
 	switch (_state) {
 		case _State::FLY:
-			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedFly" : "GreenFly", _position, { _normal.x, _scale.y });
+			_animatedSprite.PlaySpriteAnimation("Fly", _position, { _normal.x, _scale.y });
 			break;
 		case _State::WALK:
-			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedWalk" : "GreenWalk", _position, { _normal.x, _scale.y });
+			_animatedSprite.PlaySpriteAnimation("Walk", _position, { _normal.x, _scale.y });
 			break;
 		case _State::RETRACT:
-			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellIdle" : "GreenShellIdle", _position, _scale);
+			_animatedSprite.PlaySpriteAnimation("ShellIdle", _position, _scale);
 
 			if (GetTickCount64() - _retractStart > _retractTime * 0.75f) {
-				_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellWake" : "GreenShellWake", _position, _scale);
+				_animatedSprite.PlaySpriteAnimation("ShellWake", _position, _scale);
 			}
 			break;
 		case _State::SPIN:
-			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellSpin" : "GreenShellSpin", _position, _scale);
+			_animatedSprite.PlaySpriteAnimation("ShellSpin", _position, _scale);
 			break;
 		case _State::DIE:
-			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedShellIdle" : "GreenShellIdle", _position, _scale);
+			_animatedSprite.PlaySpriteAnimation("ShellIdle", _position, _scale);
 			break;
 	}
 }

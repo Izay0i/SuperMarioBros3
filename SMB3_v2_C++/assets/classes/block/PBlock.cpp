@@ -65,6 +65,8 @@ void PBlock::Update(
 
 	if (IsActivated() && GetTickCount64() - _activateStart > _activateTime) {
 		_activateStart = 0;
+
+		hasEnded = true;
 	}
 	
 	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {

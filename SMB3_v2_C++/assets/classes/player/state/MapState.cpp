@@ -2,11 +2,7 @@
 #include "MapState.h"
 #include "IdleState.h"
 
-MapState::MapState(Player* player) {
-	if (_player == nullptr) {
-		_player = player;
-	}
-}
+MapState::MapState(Player* player) : PlayerState(player) {}
 
 PlayerState* MapState::HandleStates() {
 	if (!_player->isInMap) {

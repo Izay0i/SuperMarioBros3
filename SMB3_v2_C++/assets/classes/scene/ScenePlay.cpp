@@ -48,7 +48,7 @@ void ScenePlay::OnKeyDown(int keyCode) {
 void ScenePlay::LoadScene() {
 	Scene::LoadScene();
 
-	AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_mainThemeID), true);
+	AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_currentThemeID), true);
 }
 
 void ScenePlay::UpdateCameraPosition() {
@@ -65,7 +65,7 @@ void ScenePlay::UpdateCameraPosition() {
 			_player->SetPosition({ _sceneWidth - _player->GetBoxWidth(), _player->GetPosition().y });
 		}
 
-		if (_player->GetPosition().y < cameraPosition.y) {
+		if (_player->GetPosition().y < cameraBound.top) {
 			_player->SetPosition({ _player->GetPosition().x, cameraPosition.y });
 		}
 	}
@@ -107,6 +107,40 @@ void ScenePlay::Update(DWORD deltaTime) {
 		if (_sceneTime > 0 && GetTickCount64() % 1000 == 0) {
 			--_sceneTime;
 		}
+	}
+
+	if (_sceneTime == 0 && !_player->TriggeredStageEnd() && _player->GetHealth() != 0) {
+		_player->SetHealth(1);
+		_player->TakeDamage();
+	}
+
+	if (_sceneTime == _NEAR_TIME_LIMIT && !_isInHurry) {
+		_isInHurry = true;
+		_hurryUp = true;
+
+		AudioService::GetAudio().StopAll();
+		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_STAGE_HURRY);
+	}
+	
+	if (_isInHurry && _hurryUp) {
+		_hurryUp = false;
+
+		AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_currentThemeID), true, 1.06f);
+	}
+
+	if (_player->IsInPipe()) {
+		if (_player->WentIntoPipe() && !_isInSecret) {
+			_isInSecret = true;
+
+			AudioService::GetAudio().StopAudio(static_cast<AudioType>(_currentThemeID));
+			AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_GetNextThemeID()), true);
+		}
+		else if (!_player->WentIntoPipe() && _isInSecret) {
+			_isInSecret = false;
+
+			AudioService::GetAudio().StopAudio(static_cast<AudioType>(_currentThemeID));
+			AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_GetNextThemeID()), true);
+		}	
 	}
 
 	if (_player->GetHealth() == 0 || _player->IsInvulnerable()) {
@@ -236,6 +270,21 @@ void ScenePlay::Update(DWORD deltaTime) {
 						}
 					}
 					break;
+				case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
+					{
+						PBlock* pBlock = dynamic_cast<PBlock*>(entity);
+						if (pBlock->IsActivated() && pBlock->tookDamage) {
+							AudioService::GetAudio().StopAudio(static_cast<AudioType>(_currentThemeID));
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_STAGE_PCOIN);
+						}
+						else if (pBlock->hasEnded) {
+							pBlock->hasEnded = false;
+
+							AudioService::GetAudio().StopAudio(AudioType::AUDIO_TYPE_STAGE_PCOIN);
+							AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_currentThemeID), true);
+						}
+					}
+					break;
 			}
 
 			if (entity->tookDamage) {
@@ -281,12 +330,15 @@ void ScenePlay::Update(DWORD deltaTime) {
 		//Warp back to map				
 		if (!IsTransitioningToScene()) {
 			StartToSceneTimer();
+
+			_player->GetSceneRemainingTime(_sceneTime);
+
+			_sceneTime = 0;
 		}
 
 		if (IsTransitioningToScene() && GetTickCount64() - _toSceneStart > _toSceneTime) {
 			_toSceneStart = 0;
 			SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_TYPE_MAP));
-			return;
 		}
 	}
 }

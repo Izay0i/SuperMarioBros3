@@ -6,6 +6,7 @@ enum class AudioType {
 	AUDIO_TYPE_MAP,
 	AUDIO_TYPE_STAGE_1_1,
 	AUDIO_TYPE_STAGE_SECRETAREA,
+	AUDIO_TYPE_STAGE_PCOIN,
 	AUDIO_TYPE_STAGE_HURRY,
 	AUDIO_TYPE_STAGE_END,
 	//Effects
@@ -41,6 +42,8 @@ public:
 	virtual ~Audio() {}
 
 	virtual void Initialize() = 0;
+
+	virtual bool IsAudioPausedOrStopped(AudioType) const { return false; }
 
 	//Type, loop, pitch, volume
 	virtual void PlayAudio(AudioType, bool = false, float = 1.0f, float = 100.0f) = 0;

@@ -4,11 +4,7 @@
 #include "FallState.h"
 #include "WagState.h"
 
-FallState::FallState(Player* player) {
-	if (_player == nullptr) {
-		_player = player;
-	}
-}
+FallState::FallState(Player* player) : PlayerState(player) {}
 
 PlayerState* FallState::HandleStates() {
 	if (_player->_isOnGround) {

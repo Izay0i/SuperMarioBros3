@@ -4,11 +4,7 @@
 #include "FallState.h"
 #include "WagState.h"
 
-JumpState::JumpState(Player* player) {
-	if (_player == nullptr) {
-		_player = player;
-	}
-}
+JumpState::JumpState(Player* player) : PlayerState(player) {}
 
 PlayerState* JumpState::HandleStates() {
 	if (_player->_velocity.y > 0.0f) {

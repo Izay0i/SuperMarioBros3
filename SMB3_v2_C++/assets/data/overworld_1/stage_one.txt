@@ -1,6 +1,6 @@
 #ID for the theme
-[MAINTHEME]
-2
+[MAINTHEMES]
+2	3
 [/]
 
 [SCENESIZE]
@@ -23,40 +23,40 @@
 [/]
 
 [TEXTURES]
-0	assets\textures\tileset.png	224	163	216
-1	assets\textures\map.png	224	163	216
-2	assets\textures\player.png	224	163	216
-3	assets\textures\hud.png	224	163	216
-4	assets\textures\enemies.png	224	163	216
-5	assets\textures\items.png	224	163	216
-6	assets\textures\particles.png	224	163	216
-7	assets\textures\projectiles.png	224	163	216
+0	assets\textures\tileset.png
+1	assets\textures\map.png
+2	assets\textures\player.png
+3	assets\textures\hud.png
+4	assets\textures\enemies.png
+5	assets\textures\items.png
+6	assets\textures\particles.png
+7	assets\textures\projectiles.png
 [/]
 
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
 [ENTITYDATA]
 #Player											OBJ_ID	FILE_PATH				texID
 0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
-#0	assets\data\player\mario.txt	2	1952	368
-#0	assets\data\player\mario.txt	2	2256	80
+#0	assets\data\player\mario.txt	2	1952	368	107	assets\data\projectile\fireball.txt	7
+#0	assets\data\player\mario.txt	2	2256	80	107	assets\data\projectile\fireball.txt	7
 
 #NPC
 #Goomba
-100	assets\data\npc\goomba.txt	4	224	400	yellow
-100	assets\data\npc\goomba.txt	4	528	400	yellow
-100	assets\data\npc\goomba.txt	4	832	384	yellow
-100	assets\data\npc\goomba.txt	4	880	384	yellow
+100	assets\data\npc\goomba_yellow.txt	4	224	400	yellow
+100	assets\data\npc\goomba_yellow.txt	4	528	400	yellow
+100	assets\data\npc\goomba_yellow.txt	4	832	384	yellow
+100	assets\data\npc\goomba_yellow.txt	4	880	384	yellow
 #Paragoomba
-101	assets\data\npc\goomba.txt	4	946	384	red
+101	assets\data\npc\goomba_red.txt	4	946	384	red
 
 #Koopa
-102	assets\data\npc\koopa.txt	4	576	352	red
-102	assets\data\npc\koopa.txt	4	1472	384	green
-102	assets\data\npc\koopa.txt	4	2096	352	red
+102	assets\data\npc\koopa_red.txt	4	576	352	red
+102	assets\data\npc\koopa_green.txt	4	1472	384	green
+102	assets\data\npc\koopa_red.txt	4	2096	352	red
 #Parakoopa
-103	assets\data\npc\koopa.txt	4	1328	288	green
-103	assets\data\npc\koopa.txt	4	1376	288	green
-103	assets\data\npc\koopa.txt	4	1424	288	green
+103	assets\data\npc\koopa_green.txt	4	1328	288	green
+103	assets\data\npc\koopa_green.txt	4	1376	288	green
+103	assets\data\npc\koopa_green.txt	4	1424	288	green
 
 #Pirana plant
 104	assets\data\npc\piranaplant.txt	4	1800	400	green
@@ -150,6 +150,9 @@
 
 #objID	x	y	width	height
 [TILEDATA]
+#One hit platform	16x16
+666	2240	440	16	16
+
 #Floor tile 624x16
 777	0	416	624	16
 #Floor tile 464x32

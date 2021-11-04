@@ -1,6 +1,5 @@
 #include "../Game.h"
 #include "HUD.h"
-#include "../audio/AudioService.h"
 
 Texture* HUD::_hudTexture = nullptr;
 

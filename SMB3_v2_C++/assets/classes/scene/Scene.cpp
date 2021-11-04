@@ -40,6 +40,30 @@ bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
 	return false;
 }
 
+unsigned int Scene::_GetNextThemeID() {
+	//This wasn't the result I sought after
+	//I needed something that could loop back to the first element when the container overflows
+	/*auto it = std::find_if(
+		_mainThemeIDs.begin(), 
+		_mainThemeIDs.end(), 
+		[&](unsigned int ID) {
+			return ID == _currentThemeID;
+		}
+	);
+
+	return *(std::next(it, 1));*/
+
+	auto it = std::find(_mainThemeIDs.begin(), _mainThemeIDs.end(), _currentThemeID);
+	++it;
+
+	if (it >= _mainThemeIDs.end()) {
+		it = _mainThemeIDs.begin();
+	}
+
+	_currentThemeID = *it;
+	return _currentThemeID;
+}
+
 Texture* Scene::_LoadTexture(LPCWSTR filePath) {
 	ID3D10Resource* resource = nullptr;
 	ID3D10Texture2D* texture = nullptr;
@@ -81,14 +105,17 @@ Texture* Scene::_LoadTexture(LPCWSTR filePath) {
 	return new Texture(texture, spriteTextureSRView);
 }
 
-void Scene::_ParseMainTheme(std::string line) {
+void Scene::_ParseMainThemes(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
 	if (tokens.size() < 1) {
 		return;
 	}
 
-	_mainThemeID = std::stoul(tokens.at(0));
+	for (auto& token : tokens) {
+		_mainThemeIDs.emplace_back(std::stoul(token));
+	}
+	_currentThemeID = _mainThemeIDs.front();
 }
 
 void Scene::_ParseSceneSize(std::string line) {
@@ -147,15 +174,11 @@ void Scene::_ParseBackgroundColor(std::string line) {
 void Scene::_ParseTextures(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
-	if (tokens.size() < 5) {
+	if (tokens.size() < 2) {
 		return;
 	}
 
 	unsigned int textureID = std::stoul(tokens.at(0));
-
-	float r = std::stof(tokens.at(2)) / 255.0f;
-	float g = std::stof(tokens.at(3)) / 255.0f;
-	float b = std::stof(tokens.at(4)) / 255.0f;
 	
 	Texture* texture = _LoadTexture(GlobalUtil::ToLPCWSTR(tokens.at(1)));
 	_textureMap.insert(std::make_pair(textureID, texture));
@@ -561,8 +584,8 @@ void Scene::LoadScene() {
 			continue;
 		}
 
-		if (line == "[MAINTHEME]") {
-			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_MAINTHEME;
+		if (line == "[MAINTHEMES]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_MAINTHEMES;
 			continue;
 		}
 
@@ -622,8 +645,8 @@ void Scene::LoadScene() {
 		}
 
 		switch (sceneFileSection) {
-			case _SceneFileSection::SCENEFILE_SECTION_MAINTHEME:
-				_ParseMainTheme(line);
+			case _SceneFileSection::SCENEFILE_SECTION_MAINTHEMES:
+				_ParseMainThemes(line);
 				break;
 			case _SceneFileSection::SCENEFILE_SECTION_SCENESIZE:
 				_ParseSceneSize(line);

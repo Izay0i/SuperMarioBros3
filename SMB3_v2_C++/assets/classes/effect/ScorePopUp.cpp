@@ -35,7 +35,7 @@ void ScorePopUp::GetEntity(Entity* entity) {
 			break;
 		//50 points each
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
-			_score = entity->GetHealth() == -1 ? _scores.at(2) : _scores.at(2);
+			_score = entity->GetHealth() == -1 ? _scores.at(2) : _scores.at(1);
 			_player->_score += _score;
 			_player->_coins += 1;
 			break;

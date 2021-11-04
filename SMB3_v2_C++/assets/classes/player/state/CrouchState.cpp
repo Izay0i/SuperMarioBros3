@@ -3,11 +3,7 @@
 #include "IdleState.h"
 #include "CrouchState.h"
 
-CrouchState::CrouchState(Player* player) {
-	if (_player == nullptr) {
-		_player = player;
-	}
-}
+CrouchState::CrouchState(Player* player) : PlayerState(player) {}
 
 PlayerState* CrouchState::HandleStates() {
 	if (!_player->_isCrouching) {

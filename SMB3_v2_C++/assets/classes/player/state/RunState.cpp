@@ -7,11 +7,7 @@
 #include "CrouchState.h"
 #include "WagState.h"
 
-RunState::RunState(Player* player) {
-	if (_player == nullptr) {
-		_player = player;
-	}
-}
+RunState::RunState(Player* player) : PlayerState(player) {}
 
 PlayerState* RunState::HandleStates() {
 	if (_player->_velocity.x == 0.0f && !_player->_triggeredStageEnd) {

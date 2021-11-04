@@ -1,0 +1,21 @@
+[SPRITES]
+ShellIdle	34	17	50	33	1	0
+
+ShellWake	34	17	50	33	2	50
+ShellWake	34	34	50	50
+
+ShellSpin	0	51	16	67	3	50
+ShellSpin	17	51	33	67
+ShellSpin	34	51	50	67
+
+Walk	0	17	16	47	2	100
+Walk	17	17	33	47
+
+Fly	68	68	84	100	2	100
+Fly	85	68	101	100
+[/]
+
+[HITBOXES]
+-7	-14	14	28
+-7	-7	14	14
+[/]

@@ -6,10 +6,10 @@ class Player;
 class PlayerState {
 protected:
 	enum class _Form {
-		SMALL,
-		BIG,
-		FIRE,
-		RACCOON,
+		SMALL = 1,
+		BIG = 2,
+		FIRE = 3,
+		RACCOON = 4,
 
 		Trickster,
 		Swordmaster,
@@ -24,10 +24,10 @@ protected:
 
 	_Form _form;
 
-	void _OnEntry();
-	void _OnExit();
+	void _OnTransform();
 
 public:
+	PlayerState(Player*);
 	virtual ~PlayerState();
 	
 	virtual PlayerState* HandleStates() = 0;

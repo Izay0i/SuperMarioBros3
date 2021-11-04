@@ -2,6 +2,9 @@
 
 ![Intro](Previews/preview_1.jpg)
 
+## Requirements
+Windows 10 32-bit or above.
+
 ## Installation
 Only do this if the project isn't running.
 + Download VS2019 [here](https://visualstudio.microsoft.com/vs/)
@@ -43,13 +46,8 @@ Only a few inputs supported, not mappable.
 + S̯̭̝̯̜͉̮̭ͦ̔̋ͥ̀ę̥̩ͫ̃c̺̖͇̼͚̞̩̍ͦ̆̐͘r̛͍̗̙̰̞̻͒̾̊e͎͚͇̚͟t̤̰͎̲̙̩͛̎̕
 
 ## Credits
-+ 125scratch, Jermungandr for the Mario & Luigi sprites.
-+ Fleepa, Superjustinbros for the enemies sprites.
-+ JigglyPuffGirl for the goal roulette sprites.
-+ Malak for the world 1 map tileset.
-+ DarkBowser100, Watcher for the HUD & font sprites.
-+ Fleepa for misc. sprites.
-+ rotodisco for the stage tileset.
++ The Spriter Resources contributors for the ripped sprites.
++ The Sound Resources and The Mushroom Kingdom for the ripped audio.
 
 ## That's all
 ![Adios](Previews/dante_adios.gif)

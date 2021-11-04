@@ -46,6 +46,7 @@ private:
 	//Default is 2
 	unsigned int _fireballsCount;
 	unsigned int _nextSceneID;
+	unsigned int _sceneRemainingTime;
 
 	//Determines whether the player goes up or down in the pipe
 	float _upVector;
@@ -62,7 +63,7 @@ private:
 
 	PlayerState* _playerState;
 
-	std::vector<GameObject::GameObjectType> _bonusItems;
+	std::vector<GameObjectType> _bonusItems;
 
 	D3DXVECTOR2 _lastPos;
 	D3DXVECTOR2 _mapNodePos;
@@ -90,6 +91,9 @@ private:
 	void _ParseSprites(std::string) override;
 	//Lives, coins, score
 	void _HandleCurrencies();
+	void _HanldeStageEnd();
+	void _HandleBonusItems();
+
 	void _HandleMovementMap();
 	void _HandleMovementGame();
 
@@ -102,7 +106,9 @@ public:
 	unsigned int GetNextSceneID() const;
 	RECTF GetBoundingBox(int = 0) const override;
 	Entity* GetHeldEntity() const;
-	
+
+	void GetSceneRemainingTime(unsigned int);
+
 	void SetUpVector(float);
 
 	bool TriggeredStageEnd() const;

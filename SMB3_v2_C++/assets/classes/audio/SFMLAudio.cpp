@@ -26,6 +26,7 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_MAP, "assets\\audio\\songs\\GrassLand.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_1_1, "assets\\audio\\songs\\LevelTheme1.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_SECRETAREA, "assets\\audio\\songs\\SecretArea.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_STAGE_PCOIN, "assets\\audio\\songs\\PCoin.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_HURRY, "assets\\audio\\songs\\HurryUp.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_END, "assets\\audio\\songs\\LevelClear.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_1UP, "assets\\audio\\sfx\\1UP.ogg");
@@ -51,7 +52,12 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_THWOMP, "assets\\audio\\sfx\\Thwomp.ogg");
 }
 
-void SFMLAudio::PlayAudio(AudioType type, bool loop, float pitch, float volume) {
+bool SFMLAudio::IsAudioPausedOrStopped(AudioType type) const {
+	auto status = _audioMap.at(type).sound.getStatus();
+	return (status == sf::Sound::Paused || status == sf::Sound::Stopped);
+}
+
+void SFMLAudio::PlayAudio(AudioType type, bool loop, float pitch, float volume) {	
 	_audioMap.at(type).sound.setLoop(loop);
 	_audioMap.at(type).sound.setPitch(pitch);
 	_audioMap.at(type).sound.setVolume(volume);

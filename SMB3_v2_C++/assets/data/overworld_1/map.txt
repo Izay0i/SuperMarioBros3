@@ -7,9 +7,9 @@
 [/]
 
 [TEXTURES]
-0	assets\textures\map.png	224	163	216
-1	assets\textures\player.png	224	163	216
-2	assets\textures\hud.png	224	163	216
+0	assets\textures\map.png
+1	assets\textures\player.png
+2	assets\textures\hud.png
 [/]
 
 [ENTITYDATA]

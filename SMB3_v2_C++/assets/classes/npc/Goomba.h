@@ -17,6 +17,8 @@ protected:
 	void _ParseSprites(std::string) override;
 
 public:
+	std::string animationName;
+
 	Goomba();
 	virtual ~Goomba();
 
