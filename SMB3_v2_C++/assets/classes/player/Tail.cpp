@@ -135,7 +135,7 @@ void Tail::Update(
 }
 
 void Tail::Render() {
-	_animatedSprite.PlaySpriteAnimation("Tail", _position);
+	//_animatedSprite.PlaySpriteAnimation("Tail", _position);
 }
 
 void Tail::Release() {

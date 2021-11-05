@@ -109,9 +109,13 @@ void ScenePlay::Update(DWORD deltaTime) {
 		}
 	}
 
-	if (_sceneTime == 0 && !_player->TriggeredStageEnd() && _player->GetHealth() != 0) {
-		_player->SetHealth(1);
-		_player->TakeDamage();
+	if ((_sceneTime == 0 && !_player->TriggeredStageEnd() && _player->GetHealth() != 0) || 
+		_player->GetPosition().y > _sceneHeight) 
+	{
+		if (_player->GetHealth() != 0) {
+			_player->SetHealth(1);
+			_player->TakeDamage();
+		}
 	}
 
 	if (_sceneTime == _NEAR_TIME_LIMIT && !_isInHurry) {
@@ -321,10 +325,12 @@ void ScenePlay::Update(DWORD deltaTime) {
 
 	_hud->Update(_sceneTime);
 	_hud->SetPosition({
-		_cameraInstance->GetPosition().x + 134.0f,
-		_cameraInstance->GetPosition().y + 161.0f 
+		floor(_cameraInstance->GetPosition().x) + 134.0f,
+		floor(_cameraInstance->GetPosition().y) + 161.0f 
 		}
 	);
+
+	_background->Update(_cameraInstance->GetViewport());
 
 	if (_player->TriggeredStageEnd() || _player->GetHealth() == 0 || _sceneTime == 0) {
 		//Warp back to map				
@@ -344,12 +350,29 @@ void ScenePlay::Update(DWORD deltaTime) {
 }
 
 void ScenePlay::Render() {
+	//It just works
+	for (unsigned int i = 0; i < _entities.size(); ++i) {
+		Entity* entity = _entities.at(i);
+
+		if (!(!entity->IsActive() ||
+			dynamic_cast<PiranaPlant*>(entity) ||
+			_player->IsInPipe())) 
+		{
+			continue;
+		}
+
+		entity->Render();
+	}
+	
 	_background->Render();
 
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		Entity* entity = _entities.at(i);
 		
-		if (!entity->IsActive()) {
+		if (!entity->IsActive() || 
+			dynamic_cast<PiranaPlant*>(entity) || 
+			_player->IsInPipe()) 
+		{
 			continue;
 		}
 

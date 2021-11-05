@@ -9,8 +9,9 @@ void PropNormalKoopa::_ParseSprites(std::string line) {
 
 PropNormalKoopa::PropNormalKoopa() {
 	_renderPriority = 1;
-
 	_runSpeed = 0.03f;
+
+	isPassThroughable = true;
 }
 
 PropNormalKoopa::~PropNormalKoopa() {}
@@ -46,7 +47,7 @@ void PropNormalKoopa::Update(
 }
 
 void PropNormalKoopa::Render() {
-	_animatedSprite.PlaySpriteAnimation("GreenWalk", _position, _scale);
+	_animatedSprite.PlaySpriteAnimation("Walk", _position, _scale);
 }
 
 void PropNormalKoopa::Release() {

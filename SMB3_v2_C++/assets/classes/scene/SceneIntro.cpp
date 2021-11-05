@@ -79,6 +79,10 @@ void SceneIntro::Update(DWORD deltaTime) {
 			case GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
 				{
 					Goomba* goomba = dynamic_cast<Goomba*>(entity);
+					if (time >= 0 && time < 5800) {
+						goomba->SetVelocity({ 0.0f, 0.0f });
+					}
+					
 					if (time >= 0 && time < 9875) {
 						goomba->SetNormal({ 0.0f, 1.0f });
 					}
@@ -95,8 +99,17 @@ void SceneIntro::Update(DWORD deltaTime) {
 			case GameObject::GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 				{
 					Mushroom* mushroom = dynamic_cast<Mushroom*>(entity);
-					if (time >= 0 && time < 8000) {
-						mushroom->SetVelocity({ 0.0f, mushroom->GetVelocity().y });
+					if (time >= 0 && time < 5700) {
+						mushroom->SetNormal({ 0.0f, 1.0f });
+						mushroom->SetVelocity({ 0.0f, 0.0f });
+					}
+
+					if (time >= 6200 && time < 6800) {
+						mushroom->SetNormal({ 1.0f, 1.0f });
+					}
+
+					if (time >= 6800 && time < INTRO_TIME) {
+						mushroom->SetPosition({ 500.0f, 500.0f });
 					}
 				}
 				break;
@@ -105,6 +118,14 @@ void SceneIntro::Update(DWORD deltaTime) {
 					Leaf* leaf = dynamic_cast<Leaf*>(entity);
 					if (time >= 9700 && time < 9850) {
 						leaf->SetPosition({ 500.0f, 500.0f });
+					}
+				}
+				break;
+			case GameObject::GameObjectType::GAMEOBJECT_TYPE_STAR:
+				{
+					Star* star = dynamic_cast<Star*>(entity);
+					if (time >= 0 && time < 7200) {
+						star->SetVelocity({ 0.0f, 0.0f });
 					}
 				}
 				break;
@@ -119,6 +140,14 @@ void SceneIntro::Update(DWORD deltaTime) {
 			case GameObject::GameObjectType::GAMEOBJECT_TYPE_SELECT:
 				if (time >= 28437 && time < INTRO_TIME) {
 					_selectText->SetScale({ 1.0f, 1.0f });
+				}
+				break;
+			case GameObject::GameObjectType::GAMEOBJECT_TYPE_BUZZYBEETLE:
+				{
+					BuzzyBeetle* buzzyBeetle = dynamic_cast<BuzzyBeetle*>(entity);
+					if (time >= 0 && time < 7400) {
+						buzzyBeetle->SetVelocity({ 0.0f, 0.0f });
+					}
 				}
 				break;
 			case GameObject::GameObjectType::GAMEOBJECT_TYPE_PROPMARIO:
@@ -453,7 +482,7 @@ void SceneIntro::Update(DWORD deltaTime) {
 }
 
 void SceneIntro::Render() {
-	_background->Render();
+	_background->BruteForceRender();
 
 	for (auto it = _entities.begin(); it != _entities.end(); ++it) {
 		(*it)->Render();

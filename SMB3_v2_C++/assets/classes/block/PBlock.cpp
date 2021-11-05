@@ -10,7 +10,7 @@ void PBlock::_ParseSprites(std::string line) {
 }
 
 PBlock::PBlock() {
-	_renderPriority = 3;
+	_renderPriority = 4;
 	_health = 2;
 	_activateTime = 5000;
 }

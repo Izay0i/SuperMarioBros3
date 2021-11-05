@@ -8,8 +8,10 @@ void PropFastKoopa::_ParseSprites(std::string line){
 }
 
 PropFastKoopa::PropFastKoopa(){
-	_renderPriority = 2;
+	_renderPriority = 1;
 	_runSpeed = 0.08f;
+
+	isPassThroughable = true;
 }
 
 PropFastKoopa::~PropFastKoopa() {}
@@ -45,7 +47,7 @@ void PropFastKoopa::Update(
 }
 
 void PropFastKoopa::Render() {
-	_animatedSprite.PlaySpriteAnimation("GreenWalk", _position, _scale);
+	_animatedSprite.PlaySpriteAnimation("Walk", _position, _scale);
 }
 
 void PropFastKoopa::Release() {

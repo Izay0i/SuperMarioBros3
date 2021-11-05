@@ -12,7 +12,7 @@ PropKoopaShell::PropKoopaShell() {
 
 	_gravity = 0.0002f;
 
-	animationName = "GreenShellIdle";
+	animationName = "ShellIdle";
 }
 
 PropKoopaShell::~PropKoopaShell() {}

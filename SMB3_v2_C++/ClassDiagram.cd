@@ -1,256 +1,522 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="AnimatedSprite" Collapsed="true">
-    <Position X="28.5" Y="0.5" Width="1.5" />
+    <Position X="85.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAIBAAAAAAAAAAAABAQAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
       <FileName>assets\classes\AnimatedSprite.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Background" Collapsed="true">
-    <Position X="3.5" Y="1.75" Width="1.5" />
+  <Class Name="Audio" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAwAAAAAAAAAAAAgAAAAAAAAAAABAgABAAAAA=</HashCode>
+      <HashCode>AAAAAAAgAAAAAQBEAAAAAAMAAAAAAAAAAAAAABAAIAA=</HashCode>
+      <FileName>assets\classes\audio\Audio.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioService" Collapsed="true">
+    <Position X="87.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAQAAABAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>assets\classes\audio\AudioService.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NullAudio" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAQAEAAAAAAIAAAAAAAAAAAAAABAAIAA=</HashCode>
+      <FileName>assets\classes\audio\NullAudio.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SFMLAudio" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACgAAAAAQBEAAAAAAIAAAAAAAAAACAAABAAIAA=</HashCode>
+      <FileName>assets\classes\audio\SFMLAudio.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Background" Collapsed="true">
+    <Position X="83" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAwQAAAAAAAAAAAgAgAEAAAAAAQBEgABACAAA=</HashCode>
       <FileName>assets\classes\Background.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Camera" Collapsed="true">
-    <Position X="5.75" Y="1.75" Width="1.5" />
+  <Class Name="PBlock" Collapsed="true">
+    <Position X="71.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQiAiBAAAAAAAAAQAAAAAEABAAQAAAAAiAAABIAIAA=</HashCode>
+      <HashCode>BAQhAAAgAAAAAAWAAAAACABgIAAIACAAAFAAgBAAAAA=</HashCode>
+      <FileName>assets\classes\block\PBlock.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Portal" Collapsed="true">
+    <Position X="6.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAQAAAACEAAAAAAAAAAAAAACAAABAAQhABAAA=</HashCode>
+      <FileName>assets\classes\block\Portal.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestionBlock" Collapsed="true">
+    <Position X="17.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAIBAAAEAAAEACAAgIAAAAiAAABAAkBAAIAA=</HashCode>
+      <FileName>assets\classes\block\QuestionBlock.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShinyBrick" Collapsed="true">
+    <Position X="29" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQhAAAAAABAAAEAAAEACAAgIIAAQyAAABAAkBAAAAA=</HashCode>
+      <FileName>assets\classes\block\ShinyBrick.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera" Collapsed="true">
+    <Position X="4.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQiAiBACAAgAAAAQAAAAAEABAAQAAAABiAAABIAIAA=</HashCode>
       <FileName>assets\classes\Camera.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Entity" Collapsed="true">
-    <Position X="17" Y="1.75" Width="1.5" />
+  <Class Name="BrickDebris" Collapsed="true">
+    <Position X="42.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EBRhAAAAAAECAkWCAFBBAAAAECAgAAEIAAAgg2AgAKA=</HashCode>
+      <HashCode>AAQhAAAAAAAAAAEAAAAAAAAgAgAAAiAAABAAABAAEAA=</HashCode>
+      <FileName>assets\classes\effect\BrickDebris.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScorePopUp" Collapsed="true">
+    <Position X="49.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAACAAAxEBAAAhDAAAAEAgACAAABAAAFAAAAA=</HashCode>
+      <FileName>assets\classes\effect\ScorePopUp.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Entity" Collapsed="true">
+    <Position X="43.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EBRhAACAAAEIAGUAAFBBAAAAECwAACEIBAAgg2AEAKA=</HashCode>
       <FileName>assets\classes\Entity.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Game" Collapsed="true">
-    <Position X="32" Y="0.5" Width="1.5" />
+    <Position X="85.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IgZAAAEAAAgAAoSAAIAAwAAgDoiAAAEIgAgAEACIIQQ=</HashCode>
+      <HashCode>ohZAAAkAAMgAEoSAAIAAwAAgDgiAAAEIgAgAkAAIIQQ=</HashCode>
       <FileName>assets\classes\Game.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameObject" Collapsed="true">
-    <Position X="14.75" Y="0.5" Width="1.5" />
+    <Position X="43.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABQCAADEACKAAEASEoAAACAgAAIAAkgEJDIAopICICA=</HashCode>
+      <HashCode>ABQCAADEACKAAEASFoAACCAgAAIAAkgEJDIAopICICA=</HashCode>
       <FileName>assets\classes\GameObject.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Device" Collapsed="true">
-    <Position X="30.25" Y="0.5" Width="1.5" />
+    <Position X="89" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BIAAAAEAAQAAAgAAAAEBQAAABAAAAAAAkAAASBAAAAA=</HashCode>
       <FileName>assets\classes\Device.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Hitbox" Collapsed="true">
-    <Position X="30.25" Y="1.5" Width="1.5" />
+    <Position X="89" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAAAQAAAAAAAAACAAAAAAAgAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AIAAAQAAAAADAAACAAAAAAAgAAAAAgAAAAAAAAAAAAA=</HashCode>
       <FileName>assets\classes\Hitbox.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="BoomerBro" Collapsed="true">
-    <Position X="8" Y="3.25" Width="1.5" />
+  <Class Name="BuzzyBeetle" Collapsed="true">
+    <Position X="62.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQhAAAAAAhAAAMAAAEACAAgAQAAAiACABEAkDAAEAA=</HashCode>
+      <HashCode>AAQhCAIAAAAAAAEAAAAAAEAgAAAAACAAABAAABAAAAA=</HashCode>
+      <FileName>assets\classes\intro\BuzzyBeetle.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Curtain" Collapsed="true">
+    <Position X="74" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAAAAAMAAAAAAAAgAAAAACCAEJAAAJAQAQA=</HashCode>
+      <FileName>assets\classes\intro\Curtain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameIcon" Collapsed="true">
+    <Position X="8.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAAAAAEAAAAAAAAgAAAAICAAABAAABAAAAA=</HashCode>
+      <FileName>assets\classes\intro\GameIcon.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameLogo" Collapsed="true">
+    <Position X="20" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwhIAACIACAAAEAAAAAAAAgAAAIACEAABAAABAAAAA=</HashCode>
+      <FileName>assets\classes\intro\GameLogo.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PropFastKoopa" Collapsed="true">
+    <Position X="31.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAAAAAEABAQAAAAgAABAACAAABAAABAAAAA=</HashCode>
+      <FileName>assets\classes\intro\PropFastKoopa.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PropKoopaShell" Collapsed="true">
+    <Position X="35.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAAAAAEAAAAAAAAhAAAAACAAAhAQABgAAAA=</HashCode>
+      <FileName>assets\classes\intro\PropKoopaShell.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PropNormalKoopa" Collapsed="true">
+    <Position X="44.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAACAAEAAAAAAAAgAAAAACAAABAAARgAAAA=</HashCode>
+      <FileName>assets\classes\intro\PropNormalKoopa.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PropPlant" Collapsed="true">
+    <Position X="51.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAABAAEAAAAAAAAgAgAAACAAABABABAAAAA=</HashCode>
+      <FileName>assets\classes\intro\PropPlant.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PropPlayer" Collapsed="true">
+    <Position X="56" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQhEAAAAgEAAAEAAAAgAAAgAAgAACAIQhEBABAAgAA=</HashCode>
+      <FileName>assets\classes\intro\PropPlayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SelectText" Collapsed="true">
+    <Position X="65" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQhAAAAAAAAAAEAAAQCAAAgAAAAACAAABAAABQAAAA=</HashCode>
+      <FileName>assets\classes\intro\SelectText.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BonusItem" Collapsed="true">
+    <Position X="76.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAACAAAAAAAEEAAgACCAgAAAAACAAABABABAABAA=</HashCode>
+      <FileName>assets\classes\item\BonusItem.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Coin" Collapsed="true">
+    <Position X="11" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQhAAAAAAAAAAEAAAAADAAgAAAACCAAQREAgBAEAAA=</HashCode>
+      <FileName>assets\classes\item\Coin.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Leaf" Collapsed="true">
+    <Position X="22.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAAAAAEAEAAAAAAgAAAAACAAABACCBAAAAA=</HashCode>
+      <FileName>assets\classes\item\Leaf.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mushroom" Collapsed="true">
+    <Position X="33.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQhAEAAAAAAAAEkAAAEAAAgAAQAACAgABAAABAAAAA=</HashCode>
+      <FileName>assets\classes\item\Mushroom.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Star" Collapsed="true">
+    <Position X="38" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAACAAAAAAAEAAAAAAAAAAAAAQCAAgBAAABAAAAA=</HashCode>
+      <FileName>assets\classes\item\Star.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cactus" Collapsed="true">
+    <Position X="47" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAAAAAEAAAAAAAAgAAAAACAAABAAABAAAAA=</HashCode>
+      <FileName>assets\classes\map\Cactus.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HammerBro" Collapsed="true">
+    <Position X="53.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAAAAAEAAAAAAAAgAAAAAiAAABAAEBAAgAA=</HashCode>
+      <FileName>assets\classes\map\HammerBro.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HelpText" Collapsed="true">
+    <Position X="58.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAAAAAEAAAAAAAAAAAAAACACABAAABAAAAA=</HashCode>
+      <FileName>assets\classes\map\HelpText.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BoomerBro" Collapsed="true">
+    <Position X="67.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhAAAAAAgAAAMAAAEACAAgAAAAAiACABEAkDAAEAA=</HashCode>
       <FileName>assets\classes\npc\BoomerBro.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Goomba" Collapsed="true">
-    <Position X="12.5" Y="3.25" Width="1.5" />
+    <Position X="78.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABQhAAEAAAAAAAEAAAAACAAgAAAAAiAAABAAADAAAQA=</HashCode>
+      <HashCode>AAQhAAEAAAAAAAEAAAAACAAgAAAAAiAAAhAAADAAAQA=</HashCode>
       <FileName>assets\classes\npc\Goomba.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Koopa" Collapsed="true">
-    <Position X="17" Y="3.25" Width="1.5" />
+    <Position X="13.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABQhAAAAAAAAAAEAAAAACAwgAAAAACEAABAAgBAMQAA=</HashCode>
       <FileName>assets\classes\npc\Koopa.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Paragoomba" Collapsed="true">
-    <Position X="12.5" Y="4.75" Width="1.5" />
+    <Position X="78.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQQABAQABCAAAAQAAAAAAAAEAAAAAAAAAAAAAAABAAA=</HashCode>
       <FileName>assets\classes\npc\Paragoomba.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Parakoopa" Collapsed="true">
-    <Position X="17" Y="4.75" Width="1.5" />
+    <Position X="13.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAQAAAQAAAAAAAAAAAAQAAAgAAAAAAEAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAQAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>assets\classes\npc\Parakoopa.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PiranaPlant" Collapsed="true">
-    <Position X="21.5" Y="3.25" Width="1.5" />
+    <Position X="40.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABQhCAASAABAAAEAAAAACAwgAQAAAiEAABAAkBABAAA=</HashCode>
+      <HashCode>ABQhCAASAABAAAEAAAAACACoAAEAAiAAABAAkBABAAA=</HashCode>
       <FileName>assets\classes\npc\PiranaPlant.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VenusPlant" Collapsed="true">
-    <Position X="10.25" Y="3.25" Width="1.5" />
+    <Position X="40.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQhAAAAAAAAAAAAAAAAAAAAAAAAACAAABAAABAAAAA=</HashCode>
+      <HashCode>AAQAAAIAAAAAAAAAAAAAAAAAAAAAQAABABAAAAAAAAA=</HashCode>
       <FileName>assets\classes\npc\VenusPlant.h</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="Pipeline" Collapsed="true">
+    <Position X="85.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AICQCQUWEAAAAAAQAAAAAACABCAAEEEAAgBAgFAACiM=</HashCode>
+      <FileName>assets\classes\Pipeline.h</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="HUD" Collapsed="true">
-    <Position X="14.75" Y="3.25" Width="1.5" />
+    <Position X="60.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CQYhAAAABAAAkgkAgEAACQAgAjAAACAAgBAACDAAAAA=</HashCode>
       <FileName>assets\classes\player\HUD.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Player" Collapsed="true">
-    <Position X="19.25" Y="3.25" Width="1.5" />
+    <Position X="69.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQhEAAACjiYAoGARgUAgRAxAQIAQGFo1hAAi7EDElA=</HashCode>
+      <HashCode>ACQhEQBAKjlJRqHgRgXCxxIxAQgAQGFo1hAAi7EDEtA=</HashCode>
       <FileName>assets\classes\player\Player.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CrouchState" Collapsed="true">
-    <Position X="7.5" Y="7.75" Width="1.5" />
+    <Position X="17" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAgAABAAAAAAAAA=</HashCode>
       <FileName>assets\classes\player\state\CrouchState.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FallState" Collapsed="true">
-    <Position X="12" Y="7.75" Width="1.5" />
+    <Position X="1.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgIAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>assets\classes\player\state\FallState.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="IdleState" Collapsed="true">
-    <Position X="16.5" Y="7.75" Width="1.5" />
+    <Position X="3.5" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAABAAAAAA=</HashCode>
       <FileName>assets\classes\player\state\IdleState.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="JumpState" Collapsed="true">
-    <Position X="3" Y="7.75" Width="1.5" />
+    <Position X="5.75" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>assets\classes\player\state\JumpState.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="PlayerState" Collapsed="true">
-    <Position X="9.75" Y="6.5" Width="1.5" />
+  <Class Name="MapState" Collapsed="true">
+    <Position X="8" Y="7.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQgAAAAAAAFAAAAAAAACDAAAAAAAAAAABAAABAABAA=</HashCode>
+      <HashCode>AAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>assets\classes\player\state\MapState.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerState" Collapsed="true">
+    <Position X="9" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgABAAAAABAAAAAAAACBAAEAAAAAAAABAAABAABAA=</HashCode>
       <FileName>assets\classes\player\state\PlayerState.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="RunState" Collapsed="true">
-    <Position X="5.25" Y="7.75" Width="1.5" />
+    <Position X="10.25" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>assets\classes\player\state\RunState.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ThrowState" Collapsed="true">
-    <Position X="9.75" Y="7.75" Width="1.5" />
+    <Position X="12.5" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAQAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>assets\classes\player\state\ThrowState.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="WagState" Collapsed="true">
-    <Position X="14.25" Y="7.75" Width="1.5" />
+    <Position X="14.75" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAAAAAAAAAAAAQAAAAAAAAAABAAAAAAAAA=</HashCode>
       <FileName>assets\classes\player\state\WagState.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Tail" Collapsed="true">
-    <Position X="23.75" Y="3.25" Width="1.5" />
+    <Position X="80.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQhAAAAABAAAAAAAAAACAAAEAAIACAAAAACABAAAAA=</HashCode>
+      <HashCode>AAQhAAAAAAAAAAEAAABAAAAAAAAIACAAABACABAAAAA=</HashCode>
       <FileName>assets\classes\player\Tail.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Scene" Collapsed="true">
-    <Position X="32" Y="1.5" Width="1.5" />
+  <Class Name="Boomerang" Collapsed="true">
+    <Position X="15.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AjQioCqAAIDIEABiwIACgQBKQAIQAAAiEDAAARBAIEA=</HashCode>
-      <FileName>assets\classes\Scene.h</FileName>
+      <HashCode>AAQhAAABAAAAAAEAAAAAAAAAAQAAAiAAABAAEBAAAAA=</HashCode>
+      <FileName>assets\classes\projectile\Boomerang.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Fireball" Collapsed="true">
+    <Position X="24.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQhAAAAEAAAAgMAAAAADABgAAAAACACABAQABAAAAA=</HashCode>
+      <FileName>assets\classes\projectile\Fireball.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene" Collapsed="true">
+    <Position X="3" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AjUiIIrCAIDIQABg4JACiIBKQBIQAIECEBAAAxJQAMA=</HashCode>
+      <FileName>assets\classes\scene\Scene.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SceneManager" Collapsed="true">
-    <Position X="28.5" Y="2.5" Width="1.5" />
+    <Position X="87.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAgABAAAEAgAAAAAAAABAAAAAAAgAAAEBAAAgQ=</HashCode>
+      <HashCode>AAAAAAAgABAAAEAgAAAAAAAABAAAAACAgAAAEBAAAgQ=</HashCode>
       <FileName>assets\classes\SceneManager.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Grid" Collapsed="true">
-    <Position X="28.5" Y="1.5" Width="1.5" />
+  <Class Name="SceneIntro" Collapsed="true">
+    <Position X="0.75" Y="10.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAgAAABAIAAUBAAAAAAAAAAAAAAAAAIAAABAAIYE=</HashCode>
+      <HashCode>AAQAAAAQAAAAAAAAAAAACAAAAAIAAAAAABAAQBAAAAA=</HashCode>
+      <FileName>assets\classes\scene\SceneIntro.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneMap" Collapsed="true">
+    <Position X="3" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAAAAAAAAEAAAAACAAAAAIAAAAAABAAARAAAAA=</HashCode>
+      <FileName>assets\classes\scene\SceneMap.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScenePlay" Collapsed="true">
+    <Position X="5.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgQAAAAACAAAAAEAAACCABAgIAAAAAEBAAABIAAAA=</HashCode>
+      <FileName>assets\classes\scene\ScenePlay.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Grid" Collapsed="true">
+    <Position X="87.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAABAIAAUBAAABAAAAAAAAAAAAAIAAABAAAIA=</HashCode>
       <FileName>assets\classes\spatial\Grid.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Sprite" Collapsed="true">
-    <Position X="30.25" Y="2.5" Width="1.5" />
+    <Position X="89" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAEAAAIAAAAAAAAAAgABQAEARABAAARAAAAI=</HashCode>
+      <HashCode>AAAAAAAAAUAAAIAAAAAAAAAAAEBQAEARABEAARACAAI=</HashCode>
       <FileName>assets\classes\Sprite.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Tile" Collapsed="true">
-    <Position X="26" Y="3.25" Width="1.5" />
+    <Position X="26.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIAhAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAABAAAAA=</HashCode>
       <FileName>assets\classes\Tile.h</FileName>
     </TypeIdentifier>
   </Class>
+  <Struct Name="SoundStruct" Collapsed="true">
+    <Position X="87.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAABAAAAAAAA=</HashCode>
+      <FileName>assets\classes\audio\SFMLAudio.h</FileName>
+    </TypeIdentifier>
+  </Struct>
   <Struct Name="CollisionEvent" Collapsed="true">
-    <Position X="3.5" Y="10.5" Width="1.5" />
+    <Position X="1.5" Y="13.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEABABAAAAAABAAAAAAAACgAAEAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>assets\classes\GameObject.h</FileName>
     </TypeIdentifier>
   </Struct>
   <Struct Name="RectFloat" Collapsed="true">
-    <Position X="3.5" Y="4.5" Width="1.5" />
+    <Position X="9.5" Y="10.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAABAAAAAAAAgAAAAIAAAAAIAAAAAAgAA=</HashCode>
       <FileName>assets\classes\GlobalUtil.h</FileName>
     </TypeIdentifier>
   </Struct>
+  <Struct Name="Texture" Collapsed="true">
+    <Position X="89" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAQAAAAAAAAAAAAgAAAAIAABAAAAg=</HashCode>
+      <FileName>assets\classes\GlobalUtil.h</FileName>
+    </TypeIdentifier>
+  </Struct>
   <Struct Name="Cell" Collapsed="true">
-    <Position X="28.5" Y="3.75" Width="1.5" />
+    <Position X="85.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AEAAAAAAAAAAAAAAAIAAAAAAAAAAAQAAAAAAAAABAAA=</HashCode>
       <FileName>assets\classes\spatial\Grid.h</FileName>
     </TypeIdentifier>
   </Struct>
   <Typedef Name="LPCOLLISIONEVENT" Collapsed="true">
-    <Position X="3.5" Y="12.5" Width="1.5" />
+    <Position X="1.5" Y="15.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>assets\classes\GameObject.h</FileName>
     </TypeIdentifier>
   </Typedef>
   <Typedef Name="RECTF" Collapsed="true">
-    <Position X="0.5" Y="4.5" Width="1.5" />
+    <Position X="9.5" Y="12.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>assets\classes\GlobalUtil.h</FileName>
     </TypeIdentifier>
   </Typedef>
-  <Font Name="Segoe UI" Size="9" />
+  <Enum Name="AudioType" Collapsed="true">
+    <Position X="85.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABEQAAERAAAIYAIgKIAhFQABACJAAACgQAIAABBBAE=</HashCode>
+      <FileName>assets\classes\audio\Audio.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Arial" Size="9.75" />
 </ClassDiagram>

@@ -1,20 +1,23 @@
 # Super Mario Bros. 3 Demo v2.0 (WIP)
 
-![Intro](Previews/preview_1.jpg)
+![Intro](Previews/preview_1.png)
 
 ## Requirements
-Windows 10 32-bit or above.
++ OS: Windows® 10 32-bit+
++ Processor: 1.8GHz+
++ Memory: 512 MB+
++ Graphics: Intergrated graphics
++ DirectX: Version 10
 
 ## Installation
 Only do this if the project isn't running.
 + Download VS2019 [here](https://visualstudio.microsoft.com/vs/)
 + Linker > Input > Additional Dependencies:\
-`d3d10.lib;dxguid.lib;dinput8.lib;`
+`d3d10.lib;d3dcompiler.lib;dxguid.lib;dinput8.lib;`
 + Tools > NuGet Package Manager > Package Manager Console and paste this in\
 `Install-Package Microsoft.DXSDK.D3DX -Version 9.29.952.8`
-+ SFML [here](https://www.sfml-dev.org/download.php) 
-(Note: By the time I was writing this, the IDE version may have changed and the binaries may not be compatible with the project anymore, and if so, follow the instructions on SFML website.)
-+ [***IMPORTANT***] Configuration: `Active(Debug)`, Platform: `Win32` or `x86`
++ Download SFML [here](https://www.sfml-dev.org/download.php) and follow [the instructions](https://www.sfml-dev.org/tutorials/2.5/start-vc.php)
++ [***IMPORTANT***] Configuration: `Active(Debug)`, Platform: `Win32`
 
 ## Controls
 Only a few inputs supported, not mappable.
@@ -46,8 +49,11 @@ Only a few inputs supported, not mappable.
 + S̯̭̝̯̜͉̮̭ͦ̔̋ͥ̀ę̥̩ͫ̃c̺̖͇̼͚̞̩̍ͦ̆̐͘r̛͍̗̙̰̞̻͒̾̊e͎͚͇̚͟t̤̰͎̲̙̩͛̎̕
 
 ## Credits
-+ The Spriter Resources contributors for the ripped sprites.
-+ The Sound Resources and The Mushroom Kingdom for the ripped audio.
++ [The Spriter Resources](https://www.spriters-resource.com/nes/supermariobros3/)
++ [The Sound Resources](https://www.sounds-resource.com/nes/smb3/)
++ [The Mushroom Kingdom](https://themushroomkingdom.net/media/smb3/wav)
++ [khinsider](https://downloads.khinsider.com/game-soundtracks/album/super-mario-bros.-3)
++ [nesmaps](https://nesmaps.com/maps/SuperMarioBrothers3/SuperMarioBrothers3.html)
 
 ## That's all
 ![Adios](Previews/dante_adios.gif)

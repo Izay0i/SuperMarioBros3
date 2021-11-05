@@ -59,16 +59,16 @@
 103	assets\data\npc\koopa_green.txt	4	1424	288	green
 
 #Pirana plant
-104	assets\data\npc\piranaplant.txt	4	1800	400	green
+104	assets\data\npc\piranaplant.txt	4	1800	406	green
 #Venus plant
 105	assets\data\npc\venusplant.txt	4	360	383	red	108	assets\data\projectile\fireball.txt	7
-105	assets\data\npc\venusplant.txt	4	1864	384	green	108	assets\data\projectile\fireball.txt	7
+105	assets\data\npc\venusplant.txt	4	1864	390	green	108	assets\data\projectile\fireball.txt	7
 
 #Tail
 197	assets\data\player\tail.txt	2	0	0
 
 #Portal								#destination
-198	assets\data\npc\portal.txt	0	2264	107	2101	468
+198	assets\data\npc\portal.txt	0	2264	107	2104	468
 198	assets\data\npc\portal.txt	0	2328	485	2328	396
 
 #Item

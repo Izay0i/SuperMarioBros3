@@ -93,7 +93,7 @@ void SceneMap::Update(DWORD deltaTime) {
 }
 
 void SceneMap::Render() {
-	_background->Render();
+	_background->BruteForceRender();
 
 	for (auto it = _entities.begin(); it != _entities.end(); ++it) {
 		(*it)->Render();

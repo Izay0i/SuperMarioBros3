@@ -12,7 +12,7 @@ BuzzyBeetle::BuzzyBeetle() {
 
 	_bounceSpeed = 0.3f;
 
-	_gravity = 0.0002f;
+	_gravity = 0.002f;
 }
 
 BuzzyBeetle::~BuzzyBeetle() {}

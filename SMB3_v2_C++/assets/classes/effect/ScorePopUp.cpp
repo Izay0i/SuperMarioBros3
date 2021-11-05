@@ -43,7 +43,7 @@ void ScorePopUp::GetEntity(Entity* entity) {
 		case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 			if (entity->GetExtraData().size() == 3) {
 				//Is coin
-				if (entity->GetHealth() == 3) {
+				if (entity->GetHealth() == -2) {
 					_player->_coins += 1;
 				}
 				//Is empty;

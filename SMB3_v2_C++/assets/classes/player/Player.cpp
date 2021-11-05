@@ -383,7 +383,7 @@ void Player::ParseData(
 
 void Player::TakeDamage() {
 	if (!IsInvulnerable()) {
-		_originalVel = { _velocity.x, -_bounceSpeed };
+		_originalVel = { _velocity.x, _isOnGround ? _velocity.y : -_bounceSpeed };
 
 		StartInvulnerableTimer();
 
@@ -686,7 +686,7 @@ void Player::HandleCollisionResult(
 						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
 						break;
 					case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
-						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_1UP);
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_1UPGLITCH);
 						break;
 				}
 			}
@@ -788,6 +788,8 @@ void Player::HandleCollisionResult(
 					//Is coin
 					else if (shinyBrick->GetHealth() == 3) {
 						shinyBrick->SetHealth(-2);
+						
+						_coins += 1;
 
 						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
 					}
@@ -924,7 +926,7 @@ void Player::Update(
 		if (_isHolding) {
 			D3DXVECTOR2 offset;
 			offset.x = IsInPipe() ? 0.0f : 12.0f;
-			offset.y = _health == 1 ? 2.0f : -4.0f;
+			offset.y = _health == 1 ? 2.0f : -3.0f;
 
 			_heldEntity->SetPosition({ _position.x + offset.x * _normal.x, _position.y - offset.y });
 		}

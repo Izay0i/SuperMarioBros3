@@ -19,16 +19,16 @@
 #GG
 [ENTITYDATA]
 #Goomba
-100	assets\data\npc\goomba_yellow.txt	2	80	-58000
+100	assets\data\npc\goomba_yellow.txt	2	80	-16
 
 #Mushroom
-200	assets\data\item\redshroom.txt	3	30	-62000
+200	assets\data\item\redshroom.txt	3	40	0
 
 #Leaf
 202	assets\data\item\leaf.txt	3	115	-190
 
 #Star
-204	assets\data\item\star.txt	3	200	-60000
+204	assets\data\item\star.txt	3	200	-16
 
 #Logo
 500	assets\data\intro\logo.txt	0	115	-60
@@ -47,7 +47,7 @@
 504	assets\data\intro\propplant_right.txt	0	220	100
 
 #Buzzy
-505	assets\data\intro\buzzybeetle.txt	0	175	-8000
+505	assets\data\intro\buzzybeetle.txt	0	175	-16
 
 #Prop player
 506	assets\data\player\mario.txt	1	240	125
