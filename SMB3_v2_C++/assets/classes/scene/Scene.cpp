@@ -283,6 +283,12 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_HAMMERBRO:
 			entity = new HammerBro;
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_DIALGA:
+			entity = new Dialga;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PALKIA:
+			entity = new Palkia;
+			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LOGO:
 			entity = new GameLogo;
 			break;

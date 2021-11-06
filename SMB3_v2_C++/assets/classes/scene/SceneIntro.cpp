@@ -477,7 +477,7 @@ void SceneIntro::Update(DWORD deltaTime) {
 
 	if (IsTransitioningToScene() && GetTickCount64() - _toSceneStart > _toSceneTime) {
 		_toSceneStart = 0;
-		SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(SceneType::SCENE_TYPE_MAP));
+		SceneManager::GetInstance()->ChangeScene(static_cast<unsigned int>(_selectText->isMultiplayer ? SceneType::SCENE_TYPE_SECRET : SceneType::SCENE_TYPE_MAP));
 	}
 }
 

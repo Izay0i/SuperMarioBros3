@@ -4,7 +4,7 @@
 
 ## Requirements
 + OS: Windows® 10 32-bit+
-+ Processor: 1.8GHz+
++ Processor: 1.2GHz+
 + Memory: 512 MB+
 + Graphics: Intergrated graphics
 + DirectX: Version 10
@@ -54,6 +54,7 @@ Only a few inputs supported, not mappable.
 + [The Mushroom Kingdom](https://themushroomkingdom.net/media/smb3/wav)
 + [khinsider](https://downloads.khinsider.com/game-soundtracks/album/super-mario-bros.-3)
 + [nesmaps](https://nesmaps.com/maps/SuperMarioBrothers3/SuperMarioBrothers3.html)
++ [NovaWare (Kousaku-P)](https://youtu.be/2CxNhRCKiJA)
 
 ## That's all
 ![Adios](Previews/dante_adios.gif)

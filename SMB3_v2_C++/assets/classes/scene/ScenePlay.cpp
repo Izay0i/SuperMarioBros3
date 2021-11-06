@@ -310,10 +310,11 @@ void ScenePlay::Update(DWORD deltaTime) {
 			if (!_IsEntityAliveAndIB(entity)) {
 				if (_grid != nullptr) {
 					_grid->RemoveEntity(entity);
-				}
-				delete entity;
 
-				_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
+					_removedEntities.emplace_back(entity);
+
+					_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
+				}
 			}
 		}
 		std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
@@ -410,6 +411,12 @@ void ScenePlay::Release() {
 		delete tile;
 	}
 	_tiles.clear();
+
+	for (unsigned int i = 0; i < _removedEntities.size(); ++i) {
+		_removedEntities.at(i)->Release();
+		delete _removedEntities.at(i);
+	}
+	_removedEntities.clear();
 
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		_entities.at(i)->Release();

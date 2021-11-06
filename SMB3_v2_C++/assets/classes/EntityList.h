@@ -28,6 +28,9 @@
 #include "map/HelpText.h"
 #include "map/HammerBro.h"
 
+#include "secret/Dialga.h"
+#include "secret/Palkia.h"
+
 #include "intro/GameLogo.h"
 #include "intro/GameIcon.h"
 #include "intro/SelectText.h"

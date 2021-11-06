@@ -60,7 +60,7 @@ Entity* QuestionBlock::SpawnItem(int currentHealth) {
 					_extraData.at(4),
 					_extraData.at(5)
 				);
-				item->SetVelocity({ 0.0f, -0.38f });
+				item->SetVelocity({ 0.0f, -0.88f });
 				item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
 			}
 			else {

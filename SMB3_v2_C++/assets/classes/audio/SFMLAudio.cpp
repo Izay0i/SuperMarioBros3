@@ -29,6 +29,7 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_PCOIN, "assets\\audio\\songs\\PCoin.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_HURRY, "assets\\audio\\songs\\HurryUp.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_END, "assets\\audio\\songs\\LevelClear.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_UNIVERSE, "assets\\audio\\songs\\Creation.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_1UP, "assets\\audio\\sfx\\1UP.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_1UPGLITCH, "assets\\audio\\sfx\\1UpGlitch.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_BLOCKBREAK, "assets\\audio\\sfx\\Block Break.ogg");
@@ -51,6 +52,8 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_TAILATTACK, "assets\\audio\\sfx\\Tail Attack.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_PMETER, "assets\\audio\\sfx\\PMeter.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_THWOMP, "assets\\audio\\sfx\\Thwomp.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_TIME, "assets\\audio\\sfx\\Time.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_SPACE, "assets\\audio\\sfx\\Space.ogg");
 }
 
 bool SFMLAudio::IsAudioPausedOrStopped(AudioType type) const {

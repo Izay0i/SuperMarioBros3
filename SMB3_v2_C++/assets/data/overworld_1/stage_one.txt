@@ -151,7 +151,7 @@
 #objID	x	y	width	height
 [TILEDATA]
 #One hit platform	16x16
-666	2240	440	16	16
+666	1968	448	512	16
 
 #Floor tile 624x16
 777	0	416	624	16

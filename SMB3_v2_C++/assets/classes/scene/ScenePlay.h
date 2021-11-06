@@ -11,6 +11,8 @@ private:
 	//Again, I blame sf::SoundSource::Status not working
 	bool _isInSecret;
 
+	std::vector<Entity*> _removedEntities;
+
 public:
 	ScenePlay(SceneType, std::string);
 	~ScenePlay();

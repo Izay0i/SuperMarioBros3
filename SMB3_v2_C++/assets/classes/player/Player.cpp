@@ -686,7 +686,7 @@ void Player::HandleCollisionResult(
 						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
 						break;
 					case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
-						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_1UPGLITCH);
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_1UP);
 						break;
 				}
 			}
