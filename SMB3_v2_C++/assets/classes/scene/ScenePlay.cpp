@@ -5,9 +5,20 @@
 #include "../EntityList.h"
 #include "../audio/AudioService.h"
 
-ScenePlay::ScenePlay(SceneType sceneID, std::string path) : Scene(sceneID, path) {}
+ScenePlay::ScenePlay(SceneType sceneID, std::string path) : Scene(sceneID, path) {
+	_hurryUpTime = 3000;
+	_pitch = 1.0f;
+}
 
 ScenePlay::~ScenePlay() {}
+
+bool ScenePlay::IsInHurry() const {
+	return _hurryUpStart != 0;
+}
+
+void ScenePlay::StartHurryingUpTimer() {
+	_hurryUpStart = static_cast<DWORD>(GetTickCount64());
+}
 
 void ScenePlay::HandleStates() {
 	_player->HandleStates();
@@ -122,14 +133,21 @@ void ScenePlay::Update(DWORD deltaTime) {
 		_isInHurry = true;
 		_hurryUp = true;
 
+		StartHurryingUpTimer();
+
 		AudioService::GetAudio().StopAll();
 		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_STAGE_HURRY);
 	}
 	
 	if (_isInHurry && _hurryUp) {
 		_hurryUp = false;
+		_pitch = 1.04f;
+	}
 
-		AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_currentThemeID), true, 1.06f);
+	if (IsInHurry() && GetTickCount64() - _hurryUpStart > _hurryUpTime) {
+		_hurryUpStart = 0;
+
+		AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_currentThemeID), true, _pitch);
 	}
 
 	if (_player->IsInPipe()) {
@@ -137,13 +155,13 @@ void ScenePlay::Update(DWORD deltaTime) {
 			_isInSecret = true;
 
 			AudioService::GetAudio().StopAudio(static_cast<AudioType>(_currentThemeID));
-			AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_GetNextThemeID()), true);
+			AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_GetNextThemeID()), true, _pitch);
 		}
 		else if (!_player->WentIntoPipe() && _isInSecret) {
 			_isInSecret = false;
 
 			AudioService::GetAudio().StopAudio(static_cast<AudioType>(_currentThemeID));
-			AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_GetNextThemeID()), true);
+			AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_GetNextThemeID()), true, _pitch);
 		}	
 	}
 
@@ -285,7 +303,7 @@ void ScenePlay::Update(DWORD deltaTime) {
 							pBlock->hasEnded = false;
 
 							AudioService::GetAudio().StopAudio(AudioType::AUDIO_TYPE_STAGE_PCOIN);
-							AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_currentThemeID), true);
+							AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_currentThemeID), true, _pitch);
 						}
 					}
 					break;

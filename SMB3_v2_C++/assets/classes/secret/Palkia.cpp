@@ -9,7 +9,7 @@ void Palkia::_ParseSprites(std::string line) {
 }
 
 Palkia::Palkia() {
-	AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SPACE);
+	_cryTime = 500;
 }
 
 Palkia::~Palkia() {}
@@ -23,13 +23,21 @@ void Palkia::ParseData(
 		_palkiaTexture = texture;
 	}
 	Entity::ParseData(dataPath, texture, extraData);
+
+	_cryStart = static_cast<DWORD>(GetTickCount64());
 }
 
 void Palkia::HandleStates() {}
 
 void Palkia::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
-void Palkia::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {}
+void Palkia::Update(DWORD, std::vector<Entity*>*, std::vector<Entity*>*, Grid*) {
+	if (_cryStart != 0 && GetTickCount64() - _cryStart > _cryTime) {
+		_cryStart = 0;
+		
+		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SPACE);
+	}
+}
 
 void Palkia::Render(){
 	_animatedSprite.PlaySpriteAnimation("Palkia", _position);

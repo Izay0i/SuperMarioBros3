@@ -937,6 +937,8 @@ void Player::Update(
 			_heldEntity->SetNormal({ -_normal.x, 0.0f });
 			_heldEntity->isBeingHeld = false;
 			_heldEntity = nullptr;
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 		}
 	}
 }

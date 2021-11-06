@@ -44,8 +44,6 @@ public:
 
 	virtual void Initialize() = 0;
 
-	virtual bool IsAudioPausedOrStopped(AudioType) const { return false; }
-
 	//Type, loop, pitch, volume
 	virtual void PlayAudio(AudioType, bool = false, float = 1.0f, float = 100.0f) = 0;
 	virtual void PauseAudio(AudioType) = 0;

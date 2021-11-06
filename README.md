@@ -55,6 +55,7 @@ Only a few inputs supported, not mappable.
 + [khinsider](https://downloads.khinsider.com/game-soundtracks/album/super-mario-bros.-3)
 + [nesmaps](https://nesmaps.com/maps/SuperMarioBrothers3/SuperMarioBrothers3.html)
 + [NovaWare (Kousaku-P)](https://youtu.be/2CxNhRCKiJA)
++ [SilvaGunner](https://youtu.be/rr9QBe5GLEk)
 
 ## That's all
 ![Adios](Previews/dante_adios.gif)

@@ -56,11 +56,6 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_SPACE, "assets\\audio\\sfx\\Space.ogg");
 }
 
-bool SFMLAudio::IsAudioPausedOrStopped(AudioType type) const {
-	auto status = _audioMap.at(type).sound.getStatus();
-	return (status == sf::Sound::Paused || status == sf::Sound::Stopped);
-}
-
 void SFMLAudio::PlayAudio(AudioType type, bool loop, float pitch, float volume) {	
 	_audioMap.at(type).sound.setLoop(loop);
 	_audioMap.at(type).sound.setPitch(pitch);

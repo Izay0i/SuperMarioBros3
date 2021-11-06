@@ -4,6 +4,9 @@ class Palkia : public Entity {
 private:
 	static Texture* _palkiaTexture;
 
+	DWORD _cryStart;
+	DWORD _cryTime;
+
 	void _ParseSprites(std::string) override;
 
 public:
