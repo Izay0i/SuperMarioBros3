@@ -3,6 +3,11 @@ Fireball	0	0	8	16	4	50
 Fireball	10	0	18	16
 Fireball	20	0	28	16
 Fireball	30	0	38	16
+
+Explode	40	0	56	16	4	100
+Explode	58	0	74	16
+Explode	76	0	92	16
+Explode	94	0	110	16
 [/]
 
 [HITBOXES]

@@ -71,16 +71,30 @@ void Grid::AddEntity(Entity* entity) {
 	Cell* newCell = GetCell(entity->GetPosition());
 	newCell->entities.emplace_back(entity);
 	entity->ownerCell = newCell;
+	entity->cellIndex = newCell->entities.size() - 1;
 }
 
 void Grid::AddEntity(Entity* entity, Cell* newCell) {
 	newCell->entities.emplace_back(entity);
 	entity->ownerCell = newCell;
+	entity->cellIndex = newCell->entities.size() - 1;
 }
 
 void Grid::RemoveEntity(Entity* entity) {
+	//Vector swap & pop vs erase-remove
+	//constant time vs linear time
+	//O(1) vs O(n)
 	std::vector<Entity*>& entities = entity->ownerCell->entities;
-	entities.erase(std::remove(entities.begin(), entities.end(), entity), entities.end());
+	//Vector swap
+	entities.at(entity->cellIndex) = entities.back();
+	entities.pop_back();
+
+	//Update the index
+	if (static_cast<size_t>(entity->cellIndex) < entities.size()) {
+		entities.at(entity->cellIndex)->cellIndex = entity->cellIndex;
+	}
+
+	entity->cellIndex = -1;
 	entity->ownerCell = nullptr;
 }
 

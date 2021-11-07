@@ -59,7 +59,6 @@ private:
 	bool _isNextToShell;
 
 	Entity* _heldEntity;
-	Entity* _touchedEntity;
 
 	PlayerState* _playerState;
 

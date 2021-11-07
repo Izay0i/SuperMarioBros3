@@ -202,7 +202,14 @@ void Fireball::Update(
 }
 
 void Fireball::Render() {
-	_animatedSprite.PlaySpriteAnimation("Fireball", _position);
+	switch (_state) {
+		case _State::BOUNCE:
+			_animatedSprite.PlaySpriteAnimation("Fireball", _position, { _normal.x, 1.0f });
+			break;
+		case _State::EXPLODE:
+			_animatedSprite.PlaySpriteAnimation("Explode", _position);
+			break;
+	}
 }
 
 void Fireball::Release() {

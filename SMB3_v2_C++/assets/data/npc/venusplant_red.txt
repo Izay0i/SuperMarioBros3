@@ -1,0 +1,20 @@
+[SPRITES]
+OpenDown	136	33	152	65	1	0
+
+OpenUp	170	33	186	65	1	0
+
+ChompDown	136	33	152	65	2	100
+ChompDown	153	33	169	65
+
+ChompUp	170	33	186	65	2	100
+ChompUp	187	33	203	65
+
+Explode	204	0	220	16	4	100
+Explode	204	17	220	33
+Explode	204	34	220	50
+Explode	204	51	220	67
+[/]
+
+[HITBOXES]
+-8	-16	16	32
+[/]

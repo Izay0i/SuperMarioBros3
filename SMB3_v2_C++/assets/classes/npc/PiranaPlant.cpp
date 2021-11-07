@@ -11,8 +11,7 @@ PiranaPlant::PiranaPlant() {
 	_renderPriority = 1;
 	_runSpeed = 0.02f;
 	_gravity = 0.0f;
-
-	_variant = "green";
+	
 	_coolDownTime = 500;
 	_state = _State::BITE;
 }
@@ -50,10 +49,6 @@ void PiranaPlant::ParseData(
 		_piranaTexture = texture;
 	}
 	Entity::ParseData(dataPath, texture, extraData);
-
-	if (!_extraData.empty()) {
-		_variant = _extraData.front();
-	}
 }
 
 void PiranaPlant::TakeDamage() {
@@ -129,10 +124,10 @@ void PiranaPlant::Update(
 void PiranaPlant::Render() {
 	switch (_state) {
 		case _State::BITE:
-			_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedChomp" : "GreenChomp", _position);
+			_animatedSprite.PlaySpriteAnimation("Chomp", _position);
 			break;
 		case _State::DIE:
-
+			_animatedSprite.PlaySpriteAnimation("Explode", _position);
 			break;
 	}
 }

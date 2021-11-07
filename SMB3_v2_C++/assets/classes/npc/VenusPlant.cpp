@@ -14,9 +14,9 @@ Fireball* VenusPlant::SpawnFireball() {
 	//This is madness
 	Fireball* fireball = dynamic_cast<Fireball*>(
 		SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
+			_extraData.at(0), 
 			_extraData.at(1), 
-			_extraData.at(2), 
-			_extraData.at(3)
+			_extraData.at(2)
 		)
 	);
 	fireball->SetNormal({ -_scale.x, _normal.x });
@@ -49,24 +49,24 @@ void VenusPlant::Render() {
 			//Looking up
 			if (_normal.x == 1.0f) {
 				if (IsOnCoolDown() && GetTickCount64() - _coolDownStart > _coolDownTime * 0.6f) {
-					_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedOpenUp" : "GreenOpenUp", _position, _scale);
+					_animatedSprite.PlaySpriteAnimation("OpenUp", _position, _scale);
 				}
 				else {
-					_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedChompUp" : "GreenChompUp", _position, _scale);
+					_animatedSprite.PlaySpriteAnimation("ChompUp", _position, _scale);
 				}
 			}
 			//Looking down
 			else if (_normal.x == -1.0f) {
 				if (IsOnCoolDown() && GetTickCount64() - _coolDownStart > _coolDownTime * 0.6f) {
-					_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedOpenDown" : "GreenOpenDown", _position, _scale);
+					_animatedSprite.PlaySpriteAnimation("OpenDown", _position, _scale);
 				}
 				else {
-					_animatedSprite.PlaySpriteAnimation(_variant == "red" ? "RedChompDown" : "GreenChompDown", _position, _scale);
+					_animatedSprite.PlaySpriteAnimation("ChompDown", _position, _scale);
 				}
 			}
 			break;
 		case _State::DIE:
-
+			_animatedSprite.PlaySpriteAnimation("Explode", _position);
 			break;
 	}
 }

@@ -10,6 +10,7 @@ void Tail::_ParseSprites(std::string line) {
 }
 
 Tail::Tail() {
+	_renderPriority = 0;
 	_bounceSpeed = 0.23f;
 
 	isPassThroughable = true;
@@ -39,6 +40,18 @@ void Tail::HandleCollisionResult(
 {
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
+
+	switch (eventEntity->GetObjectType()) {
+		case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAGOOMBA:
+		case GameObjectType::GAMEOBJECT_TYPE_KOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PARAKOOPA:
+		case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
+		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
+			_touchedEntity = eventEntity;
+			break;
+	}
 
 	switch (eventEntity->GetObjectType()) {
 		case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
@@ -131,11 +144,19 @@ void Tail::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
+	if (_touchedEntity != nullptr && GetTickCount64() % 500 == 0) {
+		_touchedEntity = nullptr;
+	}
+
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 }
 
 void Tail::Render() {
 	//_animatedSprite.PlaySpriteAnimation("Tail", _position);
+
+	if (_touchedEntity != nullptr) {
+		_animatedSprite.PlaySpriteAnimation("Spark", _touchedEntity->GetPosition());
+	}
 }
 
 void Tail::Release() {

@@ -45,6 +45,8 @@ protected:
 public:
 	bool tookDamage;
 	bool isBeingHeld;
+
+	int cellIndex;
 	Cell* ownerCell;
 
 	static bool CompareRenderPriority(Entity*&, Entity*&);

@@ -325,6 +325,14 @@ void ScenePlay::Update(DWORD deltaTime) {
 				}
 			}
 
+			//I manage to bring down the time complexity from O(n^3) to O(n^2)
+			//Reason is how the grid system handles removal
+			//Instead of using std::erase(std::remove()) which takes O(n)
+			//I use vector swap & pop
+			//Since vector insertion and removal from the front and back is constant time O(1)
+			//But I can't remove this bottom line here to bring it down to O(n)
+			//For some reason the particles won't render if I try to remove them outside of the loop
+			//Faster machines may handle O(n^2) complexity but slower ones will definitely have some trouble
 			if (!_IsEntityAliveAndIB(entity)) {
 				if (_grid != nullptr) {
 					_grid->RemoveEntity(entity);

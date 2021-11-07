@@ -191,7 +191,6 @@ Player::Player() {
 	_upVector = 1.0f;
 
 	_heldEntity = nullptr;
-	_touchedEntity = nullptr;
 
 	_flyTime = 6000;
 	_inPipeTime = 2000;

@@ -4,6 +4,8 @@ class Tail : public Entity {
 private:
 	static Texture* _tailTexture;
 
+	Entity* _touchedEntity;
+
 	void _ParseSprites(std::string) override;
 
 public:

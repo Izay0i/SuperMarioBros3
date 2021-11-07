@@ -1,5 +1,8 @@
 [SPRITES]
 Tail	305	0	333	4	1	0
+
+Spark	364	66	380	82	2	100
+Spark	382	66	398	82
 [/]
 
 [HITBOXES]

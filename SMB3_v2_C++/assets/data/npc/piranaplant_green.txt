@@ -1,0 +1,13 @@
+[SPRITES]
+Chomp	102	0	118	32	2	100
+Chomp	119	0	135	32
+
+Explode	204	0	220	16	4	100
+Explode	204	17	220	33
+Explode	204	34	220	50
+Explode	204	51	220	67
+[/]
+
+[HITBOXES]
+-8	-16	16	32
+[/]
