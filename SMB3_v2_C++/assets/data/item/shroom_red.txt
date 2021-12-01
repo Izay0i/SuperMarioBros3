@@ -1,5 +1,5 @@
 [SPRITES]
-GreenShroom	51	0	67	16	1	0
+Shroom	34	0	50	16	1	0
 [/]
 
 [HITBOXES]

@@ -48,7 +48,6 @@ Entity* ShinyBrick::SpawnItem() {
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			item->SetHealth(2);
-			item->SetVelocity({ 0.0f, -0.16f });
 			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
 			dynamic_cast<Coin*>(item)->StartPopUpTimer();
 

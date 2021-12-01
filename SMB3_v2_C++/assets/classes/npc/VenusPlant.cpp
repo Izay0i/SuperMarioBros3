@@ -40,10 +40,6 @@ void VenusPlant::Update(
 }
 
 void VenusPlant::Render() {
-	if (!_isActive) {
-		return;
-	}
-
 	switch (_state) {
 		case _State::BITE:
 			//Looking up

@@ -1,0 +1,6 @@
+[SPRITES]
+LavaPool	238	102	254	118	4	100
+LavaPool	238	119	254	135
+LavaPool	238	136	254	152
+LavaPool	238	153	254	169
+[/]

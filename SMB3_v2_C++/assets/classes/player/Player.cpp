@@ -194,7 +194,7 @@ Player::Player() {
 
 	_flyTime = 6000;
 	_inPipeTime = 2000;
-	_attackTime = 300;
+	_attackTime = 100;
 	_fireballCoolDownTime = 2500;
 	_invulnerableTime = 1000;
 
@@ -654,7 +654,7 @@ void Player::HandleCollisionResult(
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_MOVINGPLATFORM:
 			{
-				
+				//Stub
 			}
 			break;
 	//----------------------------------------------------------------------------
@@ -716,6 +716,34 @@ void Player::HandleCollisionResult(
 						StartInvulnerableTimer();
 					}
 				}				
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_FLOWER:
+			{
+				Flower* flower = dynamic_cast<Flower*>(eventEntity);
+				flower->TakeDamage();
+
+				if (_health == 3) {
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
+				}
+				else {
+					if (_health == 1) {
+						_health = 2;
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
+					}
+					else {
+						_health = 3;
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TRANSFORM);
+					}
+
+					if (!IsInvulnerable()) {
+						_originalVel = _velocity;
+
+						StartInvulnerableTimer();
+					}
+				}
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
@@ -813,6 +841,13 @@ void Player::HandleCollisionResult(
 				_health = 1;
 				TakeDamage();
 				break;
+			case GameObjectType::GAMEOBJECT_TYPE_TILE:
+				if (eventNormal.x != 0.0f) {
+					if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
+						//AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
+					}
+				}
+				break;
 	}
 }
 
@@ -862,7 +897,7 @@ void Player::Update(
 		_isNextToShell = false;
 	}
 
-	if (_isCrouching || IsAttacking()) {
+	if (_isCrouching) {
 		_velocity.x = 0.0f;
 	}
 

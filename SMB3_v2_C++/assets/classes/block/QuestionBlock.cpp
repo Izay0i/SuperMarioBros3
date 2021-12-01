@@ -2,6 +2,7 @@
 #include "../Entity.h"
 #include "../item/Mushroom.h"
 #include "../item/Leaf.h"
+#include "../item/Flower.h"
 #include "../item/Coin.h"
 #include "QuestionBlock.h"
 #include "../audio/AudioService.h"
@@ -46,22 +47,27 @@ Entity* QuestionBlock::SpawnItem(int currentHealth) {
 				_extraData.at(2)
 			);
 			item->SetHealth(2);
-			item->SetVelocity({ 0.0f, -0.16f });
 			item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
 			dynamic_cast<Coin*>(item)->StartPopUpTimer();
 
 			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
 			break;
 		case 6:
+			//Cannot think of a more elegant solution, too tired
 			if (currentHealth >= 2) {
-				//Leaf
+				//Transformation item
 				item = SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
 					_extraData.at(3),
 					_extraData.at(4),
 					_extraData.at(5)
 				);
-				item->SetVelocity({ 0.0f, -0.88f });
 				item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() });
+
+				//Edge case for flower
+				if (item->GetObjectType() == GameObjectType::GAMEOBJECT_TYPE_FLOWER) {
+					item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() / 3.0f });
+					dynamic_cast<Flower*>(item)->StartEmergeTimer();
+				}
 			}
 			else {
 				//Mushroom

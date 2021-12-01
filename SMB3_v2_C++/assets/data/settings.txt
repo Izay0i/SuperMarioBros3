@@ -3,7 +3,7 @@
 #Luigi: Well I want yours too
 
 [SETTINGS]
-default	0
+default	11
 [/]
 
 [SCENES]
@@ -13,6 +13,5 @@ default	0
 #World 1
 10	assets\data\overworld_1\map.txt
 11	assets\data\overworld_1\stage_one.txt
-#Third scene to be announced
-#1?	assets\data\overworld_1\stage_?.txt
+18	assets\data\overworld_1\stage_fortress.txt
 [/]

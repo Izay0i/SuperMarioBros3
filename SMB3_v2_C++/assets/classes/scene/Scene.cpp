@@ -241,6 +241,15 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
 			entity = new BoomerBro;
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PODOBOO:
+			entity = new Podoboo;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_DRYBONES:
+			entity = new DryBones;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_ROTODISC:
+			//entity = new Rotodisc;
+			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL:
 			entity = new Tail;
 			break;
@@ -274,6 +283,12 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
 			entity = new PBlock;
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LAVAPOOL:
+			entity = new LavaPool;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_DOOR:
+			//entity = new Door;
+			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_CACTUS:
 			entity = new Cactus;
 			break;
@@ -288,6 +303,9 @@ void Scene::_ParseEntityData(std::string line) {
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PALKIA:
 			entity = new Palkia;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GIRATINA:
+			//entity = new Giratina;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LOGO:
 			entity = new GameLogo;
@@ -336,6 +354,12 @@ void Scene::_ParseEntityData(std::string line) {
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PROPNORMALKOOPA:
 			entity = new PropNormalKoopa;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
+			//entity = new FortressBoss;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING:
+			//entity = new MovingCeiling;
 			break;
 	}
 
@@ -525,8 +549,14 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LEAF:
 			entity = new Leaf;
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_FLOWER:
+			entity = new Flower;
+			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_COIN:
 			entity = new Coin;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_ORB:
+			//entity = new Orb;
 			break;
 		//Animated blocks
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:
@@ -535,6 +565,9 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 		//Effects
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BRICKEFFECT:
 			entity = new BrickDebris;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_ORBEFFECT:
+			//entity = new OrbEffect;
 			break;
 	}
 

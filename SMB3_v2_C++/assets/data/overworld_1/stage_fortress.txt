@@ -1,0 +1,121 @@
+[MAINTHEMES]
+4
+[/]
+
+[SCENESIZE]
+2560	784
+[/]
+
+[SCENETIME]
+300
+[/]
+
+[CAMERABOUNDS]
+0	-8	2560	320	1
+1824	352	2560	784	1
+[/]
+
+[BGCOLOR]
+0	0	0
+[/]
+
+[TEXTURES]
+0	assets\textures\tileset.png
+1	assets\textures\map.png
+2	assets\textures\player.png
+3	assets\textures\hud.png
+4	assets\textures\enemies.png
+5	assets\textures\items.png
+6	assets\textures\particles.png
+7	assets\textures\projectiles.png
+8	assets\textures\bosses.png
+[/]
+
+[ENTITYDATA]
+#UINT	STRING	UINT	FLOAT	FLOAT	#EXTRA_DATA(ANY)
+#Player											OBJ_ID	FILE_PATH				texID
+0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
+
+#NPC
+#Podoboo
+110	assets\data\projectile\podoboo.txt	7	288	272
+110	assets\data\projectile\podoboo.txt	7	384	272
+110	assets\data\projectile\podoboo.txt	7	496	272
+110	assets\data\projectile\podoboo.txt	7	624	272
+110	assets\data\projectile\podoboo.txt	7	1296	272
+110	assets\data\projectile\podoboo.txt	7	1328	272
+110	assets\data\projectile\podoboo.txt	7	1504	272
+
+#Dry bones
+111	assets\data\npc\drybones.txt	4	1712	256
+
+#Rotodisc
+112	assets\data\npc\rotodisc.txt	4	850	243
+112	assets\data\npc\rotodisc.txt	4	1092	216
+112	assets\data\npc\rotodisc.txt	4	1417	224
+
+#Mini boss
+700	assets\data\bosses\fortress_boss.txt	8	2512	256
+
+#Animated block
+#Question block
+300	assets\data\block\questionblock_red.txt	0	576	208	200	assets\data\item\shroom_red_b.txt	5	203	assets\data\item\flower.txt	5
+300	assets\data\block\questionblock_red.txt	0	1568	240	200	assets\data\item\shroom_red_b.txt	5	202	assets\data\item\leaf_red.txt	5
+
+#Lava pool
+303	assets\data\block\lavapool.txt	0	272	304
+303	assets\data\block\lavapool.txt	0	288	304
+303	assets\data\block\lavapool.txt	0	304	304
+
+303	assets\data\block\lavapool.txt	0	384	304
+303	assets\data\block\lavapool.txt	0	400	304
+
+303	assets\data\block\lavapool.txt	0	480	304
+303	assets\data\block\lavapool.txt	0	496	304
+303	assets\data\block\lavapool.txt	0	512	304
+303	assets\data\block\lavapool.txt	0	528	304
+303	assets\data\block\lavapool.txt	0	544	304
+303	assets\data\block\lavapool.txt	0	560	304
+303	assets\data\block\lavapool.txt	0	576	304
+303	assets\data\block\lavapool.txt	0	592	304
+303	assets\data\block\lavapool.txt	0	608	304
+303	assets\data\block\lavapool.txt	0	624	304
+303	assets\data\block\lavapool.txt	0	640	304
+303	assets\data\block\lavapool.txt	0	656	304
+
+303	assets\data\block\lavapool.txt	0	1296	304
+303	assets\data\block\lavapool.txt	0	1312	304
+303	assets\data\block\lavapool.txt	0	1328	304
+303	assets\data\block\lavapool.txt	0	1344	304
+
+303	assets\data\block\lavapool.txt	0	1392	304
+303	assets\data\block\lavapool.txt	0	1408	304
+303	assets\data\block\lavapool.txt	0	1424	304
+
+303	assets\data\block\lavapool.txt	0	1488	304
+303	assets\data\block\lavapool.txt	0	1504	304
+303	assets\data\block\lavapool.txt	0	1520	304
+#Door
+304	assets\data\block\door.txt	0	1744	272	1984	720
+304	assets\data\block\door.txt	0	2432	736	1968	256
+
+[/]
+
+[TILEDATA]
+#UINT	FLOAT	FLOAT	FLOAT	FLOAT
+[/]
+
+[HUD]
+assets\data\hud\hud.txt	3
+[/]
+
+[MAINEFFECT]
+600	assets\data\effect\score.txt	6
+[/]
+
+[BACKGROUND]
+#texID
+0
+#Left	top	right	bottom	X	Y
+
+[/]

@@ -1,10 +1,11 @@
 [SPRITES]
-Tail	305	0	333	4	1	0
+Tail	305	0	335	4	1	0
 
+#This one sparks joy
 Spark	364	66	380	82	2	100
 Spark	382	66	398	82
 [/]
 
 [HITBOXES]
--17	-3	28	4
+-15	-2	30	4
 [/]

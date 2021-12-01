@@ -31,7 +31,7 @@ Only a few inputs supported, not mappable.
 |           |<kbd>S</kbd>   |Move down               |
 |           |<kbd>D</kbd>   |Move right              |
 |           |<kbd>K</kbd>   |Select                  |
-|Stage only |<kbd>W</kbd>   |Enter pipe              |
+|Stage only |<kbd>W</kbd>   |Enter pipe/door         |
 |           |<kbd>A</kbd>   |Move left               |
 |           |<kbd>S</kbd>   |Crouch/Enter pipe       |
 |           |<kbd>D</kbd>   |Move right              |
@@ -46,6 +46,7 @@ Only a few inputs supported, not mappable.
 + Intro
 + Overworld map
 + Stage 1-1
++ Stage mini fortress
 + S̯̭̝̯̜͉̮̭ͦ̔̋ͥ̀ę̥̩ͫ̃c̺̖͇̼͚̞̩̍ͦ̆̐͘r̛͍̗̙̰̞̻͒̾̊e͎͚͇̚͟t̤̰͎̲̙̩͛̎̕
 
 ## Credits

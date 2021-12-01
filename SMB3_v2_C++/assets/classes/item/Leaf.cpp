@@ -18,6 +18,9 @@ Leaf::Leaf() {
 	_gravity = 0.001f;
 
 	isPassThroughable = true;
+
+	const float BOUNCE_VALUE = 0.88f;
+	_velocity.y = -BOUNCE_VALUE;
 }
 
 Leaf::~Leaf() {}

@@ -1,0 +1,15 @@
+[SPRITES]
+Podoboo	68	17	84	33	3	100
+Podoboo	85	17	101	33
+Podoboo	102	17	118	33
+
+Splash	112	0	128	16	5	100
+Splash	130	0	146	16
+Splash	148	0	164	16
+Splash	166	0	182	16
+Splash	184	0	200	16
+[/]
+
+[HITBOXES]
+-8	-8	16	16
+[/]

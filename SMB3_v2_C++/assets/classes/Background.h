@@ -22,7 +22,7 @@ public:
 
 	void AddSprite(RECT, D3DXVECTOR2);
 
-	void Update(RECTF);
+	void Update();
 	void Render() override;
 	//Renders everything to the screen, disregarding the camera's viewport
 	void BruteForceRender();

@@ -36,9 +36,9 @@
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
 [ENTITYDATA]
 #Player											OBJ_ID	FILE_PATH				texID
-#0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
+0	assets\data\player\mario.txt	2	25	384	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	1952	368	107	assets\data\projectile\fireball.txt	7
-0	assets\data\player\mario.txt	2	2256	80	107	assets\data\projectile\fireball.txt	7
+#0	assets\data\player\mario.txt	2	2256	80	107	assets\data\projectile\fireball.txt	7
 
 #NPC
 #Goomba
@@ -118,14 +118,14 @@
 300	assets\data\block\questionblock.txt	0	176	352	205	assets\data\item\coin.txt	5
 300	assets\data\block\questionblock.txt	0	192	352	205	assets\data\item\coin.txt	5
 300	assets\data\block\questionblock.txt	0	224	304	205	assets\data\item\coin.txt	5
-300	assets\data\block\questionblock.txt	0	240	304	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+300	assets\data\block\questionblock.txt	0	240	304	200	assets\data\item\shroom_red.txt	5	202	assets\data\item\leaf.txt	5
 300	assets\data\block\questionblock.txt	0	416	320	205	assets\data\item\coin.txt	5
-300	assets\data\block\questionblock.txt	0	656	384	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+300	assets\data\block\questionblock.txt	0	656	384	200	assets\data\item\shroom_red.txt	5	202	assets\data\item\leaf.txt	5
 300	assets\data\block\questionblock.txt	0	704	352	205	assets\data\item\coin.txt	5
-300	assets\data\block\questionblock.txt	0	1472	368	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+300	assets\data\block\questionblock.txt	0	1472	368	200	assets\data\item\shroom_red.txt	5	202	assets\data\item\leaf.txt	5
 
 #Shiny brick															quantity
-301	assets\data\block\brickblock.txt	0	1440	128	601	assets\data\effect\brick.txt	6	201	assets\data\item\greenshroom.txt	5	1
+301	assets\data\block\brickblock.txt	0	1440	128	601	assets\data\effect\brick.txt	6	201	assets\data\item\shroom_green.txt	5	1
 301	assets\data\block\brickblock.txt	0	2032	368	601	assets\data\effect\brick.txt	6	302	assets\data\block\pblock.txt	0	1
 
 301	assets\data\block\brickblock.txt	0	1984	368	601	assets\data\effect\brick.txt	6

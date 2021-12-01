@@ -234,11 +234,12 @@ CollisionEvent* Entity::SweptAABBEx(Entity*& entity) {
 	float time;
 
 	movingEntity = this->GetBoundingBox();
-	//D3DXVECTOR2 movingDistance = this->GetVelocity() * static_cast<float>(_deltaTime);
 
 	staticEntity = entity->GetBoundingBox();
-	D3DXVECTOR2 staticDistance = entity->GetVelocity() * static_cast<float>(_deltaTime);
-	
+	D3DXVECTOR2 staticDistance = entity->GetDistance();
+
+	//_distance is already calculated
+	//See GameObject::Update
 	D3DXVECTOR2 relativeDistance = this->_distance - staticDistance;
 
 	SweptAABB(movingEntity, staticEntity, relativeDistance, normal, time);

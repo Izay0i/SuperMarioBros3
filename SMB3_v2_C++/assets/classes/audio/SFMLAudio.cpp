@@ -26,10 +26,13 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_MAP, "assets\\audio\\songs\\GrassLand.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_1_1, "assets\\audio\\songs\\LevelTheme1.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_SECRETAREA, "assets\\audio\\songs\\SecretArea.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_STAGE_FORTRESS, "assets\\audio\\songs\\MiniFortress.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_PCOIN, "assets\\audio\\songs\\PCoin.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_HURRY, "assets\\audio\\songs\\HurryUp.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_END, "assets\\audio\\songs\\LevelClear.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_UNIVERSE, "assets\\audio\\songs\\Creation.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_BATTLE_MINIBOSS, "assets\\audio\\battles\\MiniBoss.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_BATTLE_CLEAR, "assets\\audio\\battles\\BossClear.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_1UP, "assets\\audio\\sfx\\1UP.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_1UPGLITCH, "assets\\audio\\sfx\\1UpGlitch.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_BLOCKBREAK, "assets\\audio\\sfx\\Block Break.ogg");

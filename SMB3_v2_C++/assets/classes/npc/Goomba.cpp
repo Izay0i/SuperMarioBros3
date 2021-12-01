@@ -17,6 +17,8 @@ Goomba::Goomba() {
 	
 	_variant = "red";
 	_state = _State::WALK;
+
+	animationName = "Die";
 }
 
 Goomba::~Goomba() {}
@@ -38,8 +40,6 @@ void Goomba::ParseData(
 	if (_extraData.size() == 1) {
 		_variant = _extraData.front();
 	}
-	
-	animationName = "Die";
 }
 
 void Goomba::HandleStates() {

@@ -151,12 +151,12 @@ int main() {
 
     std::cout << xCells << '\t' << yCells << std::endl;
 
-    /*unsigned int width = 80;
+    unsigned int width = 80;
     unsigned int height = 96;
     unsigned int offset = 16;
     unsigned int starting_x = 2496;
     unsigned int starting_y = 320;
-    char format[] = "197\t51\t213\t67\t%u\t%u\n";
+    char format[] = "214\t34\t230\t50\t%u\t%u\n";
     char debug[100];
 
     for (unsigned int i = 0; i < width; i += offset) {
@@ -164,7 +164,7 @@ int main() {
             sprintf_s(debug, format, starting_x + i, starting_y + j);
             OutputDebugStringA(debug);
         }
-    }*/
+    }
 
     return 0;
 }

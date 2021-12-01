@@ -12,6 +12,9 @@ public:
 	Tail();
 	~Tail();
 
+	bool IsOverlapped(Entity*);
+	void HandleUnresponsiveCollisions(std::vector<Entity*>*);
+
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;

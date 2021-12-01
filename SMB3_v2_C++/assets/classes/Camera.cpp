@@ -39,11 +39,13 @@ void Camera::AddUpVector(float upVector) {
 }
 
 RECTF Camera::GetViewport() const {
+	const RECTF REGION_OFFSET(0.1f, 0.9f, 1.2f, 1.2f);
+
 	RECTF viewport;
-	viewport.left = _position.x - GlobalUtil::SCREEN_WIDTH * 0.1f;
-	viewport.top = _position.y - GlobalUtil::SCREEN_HEIGHT * 0.1f;
-	viewport.right = _position.x + GlobalUtil::SCREEN_WIDTH * 1.2f;
-	viewport.bottom = _position.y + GlobalUtil::SCREEN_HEIGHT * 1.2f;
+	viewport.left = _position.x - GlobalUtil::SCREEN_WIDTH * REGION_OFFSET.left;
+	viewport.top = _position.y - GlobalUtil::SCREEN_HEIGHT * REGION_OFFSET.top;
+	viewport.right = _position.x + GlobalUtil::SCREEN_WIDTH * REGION_OFFSET.right;
+	viewport.bottom = _position.y + GlobalUtil::SCREEN_HEIGHT * REGION_OFFSET.bottom;
 	return viewport;
 }
 
@@ -56,10 +58,10 @@ void Camera::AddCameraBound(RECTF cameraBound) {
 }
 
 void Camera::Update(DWORD deltaTime, std::vector<GameObject*>* collidableObjects) {
-	/*_position.y = 15.0f;
+	_position.y = 15.0f;
 	_velocity.x = 0.035f;
 	GameObject::Update(deltaTime);
-	_position += _distance;*/
+	_position += _distance;
 }
 
 void Camera::Release() {

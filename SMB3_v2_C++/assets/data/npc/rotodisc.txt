@@ -1,0 +1,10 @@
+[SPRITES]
+Rotodisc	0	93	16	109	4	25
+Rotodisc	17	93	33	109
+Rotodisc	34	93	50	109
+Rotodisc	51	93	67	109
+[/]
+
+[HITBOXES]
+-8	-8	16	16
+[/]

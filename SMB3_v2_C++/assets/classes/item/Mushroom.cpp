@@ -111,14 +111,7 @@ void Mushroom::Update(
 }
 
 void Mushroom::Render() {
-	switch (_objectType) {
-		case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
-			_animatedSprite.PlaySpriteAnimation("RedShroom", _position, _scale);
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
-			_animatedSprite.PlaySpriteAnimation("GreenShroom", _position, _scale);
-			break;
-	}
+	_animatedSprite.PlaySpriteAnimation("Shroom", _position, _scale);
 }
 
 void Mushroom::Release() {

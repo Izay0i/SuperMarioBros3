@@ -7,22 +7,30 @@
 #include "npc/PiranaPlant.h"
 #include "npc/VenusPlant.h"
 #include "npc/BoomerBro.h"
+#include "npc/DryBones.h"
+//#incldue "npc/Rotodisc.h"
 
 #include "projectile/Fireball.h"
 #include "projectile/Boomerang.h"
+#include "projectile/Podoboo.h"
 
+//#include "npc/MovingCeiling.h"
 #include "player/Tail.h"
 
 #include "item/Mushroom.h"
 #include "item/Leaf.h"
+#include "item/Flower.h"
 #include "item/Star.h"
 #include "item/Coin.h"
 #include "item/BonusItem.h"
+//#include "item/Orb.h"
 
 #include "block/Portal.h"
 #include "block/QuestionBlock.h"
 #include "block/ShinyBrick.h"
 #include "block/PBlock.h"
+#include "block/LavaPool.h"
+//#include "block/Door.h"
 
 #include "map/Cactus.h"
 #include "map/HelpText.h"
@@ -30,6 +38,7 @@
 
 #include "secret/Dialga.h"
 #include "secret/Palkia.h"
+//#include "secret/Giratina.h"
 
 #include "intro/GameLogo.h"
 #include "intro/GameIcon.h"
@@ -43,3 +52,6 @@
 #include "intro/PropNormalKoopa.h"
 
 #include "effect/BrickDebris.h"
+//#include "effect/OrbEffect.h"
+
+//#include "boss/FortressBoss.h"

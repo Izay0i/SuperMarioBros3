@@ -22,7 +22,7 @@
 100	assets\data\npc\goomba_yellow.txt	2	80	-16
 
 #Mushroom
-200	assets\data\item\redshroom.txt	3	40	0
+200	assets\data\item\shroom_red.txt	3	40	0
 
 #Leaf
 202	assets\data\item\leaf.txt	3	115	-190

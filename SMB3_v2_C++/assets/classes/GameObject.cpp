@@ -123,10 +123,10 @@ void GameObject::SweptAABB(
 
 	//Broad phase test
 	RECTF box;
-	box.left = distance.x > 0 ? movingObject.left : movingObject.left + distance.x;
-	box.top = distance.y > 0 ? movingObject.top : movingObject.top + distance.y;
-	box.right = distance.x > 0 ? movingObject.right + distance.x : movingObject.right;
-	box.bottom = distance.y > 0 ? movingObject.bottom + distance.y : movingObject.bottom;
+	box.left = distance.x > 0 ? movingObject.left : (movingObject.left + distance.x);
+	box.top = distance.y > 0 ? movingObject.top : (movingObject.top + distance.y);
+	box.right = distance.x > 0 ? (movingObject.right + distance.x) : movingObject.right;
+	box.bottom = distance.y > 0 ? (movingObject.bottom + distance.y) : movingObject.bottom;
 
 	if (box.right < staticObject.left ||
 		box.left > staticObject.right ||

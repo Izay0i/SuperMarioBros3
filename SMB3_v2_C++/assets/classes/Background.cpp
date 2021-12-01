@@ -47,11 +47,11 @@ void Background::AddSprite(RECT spriteBound, D3DXVECTOR2 position) {
 	_sprites.emplace_back(std::make_pair(spriteBound, position));
 }
 
-void Background::Update(RECTF viewport) {
+void Background::Update() {
 	_activeSprites.clear();
 
 	for (const auto& sprite : _sprites) {
-		if (_IsInViewport(sprite, viewport)) {
+		if (_IsInViewport(sprite, Camera::GetInstance()->GetViewport())) {
 			_activeSprites.emplace_back(sprite);
 		}
 	}

@@ -234,7 +234,7 @@ void ScenePlay::Update(DWORD deltaTime) {
 						Tail* tail = dynamic_cast<Tail*>(entity);
 						tail->SetPosition({
 							_player->GetPosition().x, 
-							_player->IsAttacking() ? _player->GetPosition().y + 2.0f : 0.0f
+							_player->IsAttacking() ? _player->GetPosition().y + 4.0f : 0.0f
 							}
 						);
 					}
@@ -357,7 +357,7 @@ void ScenePlay::Update(DWORD deltaTime) {
 		}
 	);
 
-	_background->Update(_cameraInstance->GetViewport());
+	_background->Update();
 
 	if (_player->TriggeredStageEnd() || _player->GetHealth() == 0 || _sceneTime == 0) {
 		//Warp back to map				

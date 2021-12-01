@@ -25,6 +25,7 @@ void ScorePopUp::GetEntity(Entity* entity) {
 		//1000 points each
 		case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 		case GameObjectType::GAMEOBJECT_TYPE_LEAF:
+		case GameObjectType::GAMEOBJECT_TYPE_FLOWER:
 			_score = _scores.at(6);
 			_player->_score += _score;
 			break;

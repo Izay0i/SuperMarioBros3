@@ -26,6 +26,9 @@ bool Coin::IsPoppedUp() const {
 
 void Coin::StartPopUpTimer() {
 	_popUpStart = static_cast<DWORD>(GetTickCount64());
+
+	const float BOUNCE_VALUE = 0.16f;
+	_velocity.y = -BOUNCE_VALUE;
 }
 
 RECTF Coin::GetBoundingBox(int index) const {
