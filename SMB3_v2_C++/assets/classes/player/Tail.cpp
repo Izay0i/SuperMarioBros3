@@ -34,13 +34,17 @@ bool Tail::IsOverlapped(Entity* entity) {
 
 	D3DXVECTOR2 boxSize = { _hitbox.GetBoxWidth(), _hitbox.GetBoxHeight() };
 	D3DXVECTOR2 entityBoxSize = { entity->GetBoxWidth(), entity->GetBoxHeight() };
-	return (abs(_position.x - entity->GetPosition().x) < abs((boxSize.x + entityBoxSize.x) / 2.0f)) && 
+	return (abs(_position.x - entity->GetPosition().x) < abs((boxSize.x + entityBoxSize.x) / 2.0f)) &&
 		(abs(_position.y - entity->GetPosition().y) < abs((boxSize.y + entityBoxSize.y) / 2.0f));
 }
 
 void Tail::HandleUnresponsiveCollisions(std::vector<Entity*>* entities) {
 	for (unsigned int i = 0; i < entities->size(); ++i) {
 		Entity* entity = entities->at(i);
+		if (!entity->IsActive()) {
+			continue;
+		}
+
 		if (IsOverlapped(entity)) {
 			switch (entity->GetObjectType()) {
 				case GameObjectType::GAMEOBJECT_TYPE_GOOMBA:
@@ -50,6 +54,8 @@ void Tail::HandleUnresponsiveCollisions(std::vector<Entity*>* entities) {
 				case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
 				case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 				case GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
+				case GameObjectType::GAMEOBJECT_TYPE_DRYBONES:
+				case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
 					_touchedEntity = entity;
 					break;
 			}
@@ -93,6 +99,19 @@ void Tail::HandleUnresponsiveCollisions(std::vector<Entity*>* entities) {
 					}
 
 					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
+					break;
+				case GameObjectType::GAMEOBJECT_TYPE_DRYBONES:
+					{
+						DryBones* dryBones = dynamic_cast<DryBones*>(entity);
+						dryBones->TakeDamage();
+					}
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
+					break;
+				case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
+					{
+						
+					}
 					break;
 				case GameObjectType::GAMEOBJECT_TYPE_COIN:
 					{

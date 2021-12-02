@@ -8,7 +8,7 @@
 #include "npc/VenusPlant.h"
 #include "npc/BoomerBro.h"
 #include "npc/DryBones.h"
-//#incldue "npc/Rotodisc.h"
+#include "npc/Rotodisc.h"
 
 #include "projectile/Fireball.h"
 #include "projectile/Boomerang.h"
@@ -30,7 +30,7 @@
 #include "block/ShinyBrick.h"
 #include "block/PBlock.h"
 #include "block/LavaPool.h"
-//#include "block/Door.h"
+#include "block/Door.h"
 
 #include "map/Cactus.h"
 #include "map/HelpText.h"

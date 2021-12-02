@@ -151,6 +151,7 @@
     <ClCompile Include="assets\classes\audio\NullAudio.cpp" />
     <ClCompile Include="assets\classes\audio\SFMLAudio.cpp" />
     <ClCompile Include="assets\classes\Background.cpp" />
+    <ClCompile Include="assets\classes\block\Door.cpp" />
     <ClCompile Include="assets\classes\block\LavaPool.cpp" />
     <ClCompile Include="assets\classes\block\PBlock.cpp" />
     <ClCompile Include="assets\classes\block\Portal.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="assets\classes\npc\Paragoomba.cpp" />
     <ClCompile Include="assets\classes\npc\Parakoopa.cpp" />
     <ClCompile Include="assets\classes\npc\PiranaPlant.cpp" />
+    <ClCompile Include="assets\classes\npc\Rotodisc.cpp" />
     <ClCompile Include="assets\classes\npc\VenusPlant.cpp" />
     <ClCompile Include="assets\classes\Pipeline.cpp" />
     <ClCompile Include="assets\classes\player\HUD.cpp" />
@@ -206,6 +208,7 @@
     <ClCompile Include="assets\classes\player\Tail.cpp" />
     <ClCompile Include="assets\classes\projectile\Boomerang.cpp" />
     <ClCompile Include="assets\classes\projectile\Fireball.cpp" />
+    <ClCompile Include="assets\classes\projectile\Podoboo.cpp" />
     <ClCompile Include="assets\classes\scene\Scene.cpp" />
     <ClCompile Include="assets\classes\scene\SceneIntro.cpp" />
     <ClCompile Include="assets\classes\scene\SceneMap.cpp" />
@@ -226,6 +229,7 @@
     <ClInclude Include="assets\classes\audio\NullAudio.h" />
     <ClInclude Include="assets\classes\audio\SFMLAudio.h" />
     <ClInclude Include="assets\classes\Background.h" />
+    <ClInclude Include="assets\classes\block\Door.h" />
     <ClInclude Include="assets\classes\block\LavaPool.h" />
     <ClInclude Include="assets\classes\block\PBlock.h" />
     <ClInclude Include="assets\classes\block\Portal.h" />
@@ -267,6 +271,7 @@
     <ClInclude Include="assets\classes\npc\Paragoomba.h" />
     <ClInclude Include="assets\classes\npc\Parakoopa.h" />
     <ClInclude Include="assets\classes\npc\PiranaPlant.h" />
+    <ClInclude Include="assets\classes\npc\Rotodisc.h" />
     <ClInclude Include="assets\classes\npc\VenusPlant.h" />
     <ClInclude Include="assets\classes\Pipeline.h" />
     <ClInclude Include="assets\classes\player\HUD.h" />
@@ -283,6 +288,7 @@
     <ClInclude Include="assets\classes\player\Tail.h" />
     <ClInclude Include="assets\classes\projectile\Boomerang.h" />
     <ClInclude Include="assets\classes\projectile\Fireball.h" />
+    <ClInclude Include="assets\classes\projectile\Podoboo.h" />
     <ClInclude Include="assets\classes\scene\Scene.h" />
     <ClInclude Include="assets\classes\SceneManager.h" />
     <ClInclude Include="assets\classes\scene\SceneIntro.h" />

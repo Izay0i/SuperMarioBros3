@@ -194,7 +194,7 @@ Player::Player() {
 
 	_flyTime = 6000;
 	_inPipeTime = 2000;
-	_attackTime = 100;
+	_attackTime = 150;
 	_fireballCoolDownTime = 2500;
 	_invulnerableTime = 1000;
 
@@ -359,6 +359,8 @@ void Player::OnKeyDownGame(int keyCode) {
 			//Tail attack
 			if (_health == 4 && !IsAttacking()) {
 				StartAttackTimer();
+
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TAILATTACK);
 			}
 			break;
 		case DIK_K:
@@ -608,6 +610,48 @@ void Player::HandleCollisionResult(
 				}
 			}
 			break;
+		case GameObjectType::GAMEOBJECT_TYPE_PODOBOO:
+			{
+				Podoboo* podoboo = dynamic_cast<Podoboo*>(eventEntity);
+				TakeDamage();
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_DRYBONES:
+			{
+				DryBones* dryBones = dynamic_cast<DryBones*>(eventEntity);
+				if (eventNormal.y == -1.0f) {
+					if (dryBones->GetHealth() == 3) {
+						_velocity.y = -_bounceSpeed;
+
+						dryBones->TakeDamage();
+
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
+					}
+				}
+				else if (eventNormal.y == 1.0f) {
+					if (dryBones->GetHealth() == 3) {
+						TakeDamage();
+						_velocity.y = -_bounceSpeed;
+
+						dryBones->SetNormal({ -dryBones->GetNormal().x, dryBones->GetNormal().y });
+					}
+				}
+				else if (eventNormal.x != 0.0f) {
+					if (dryBones->GetHealth() == 3) {
+						TakeDamage();
+						_velocity.y = -_bounceSpeed;
+
+						dryBones->SetNormal({ -dryBones->GetNormal().x, dryBones->GetNormal().y });
+					}
+				}
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_ROTODISC:
+			{
+				Rotodisc* rotodisc = dynamic_cast<Rotodisc*>(eventEntity);
+				TakeDamage();
+			}
+			break;
 	//----------------------------------------------------------------------------
 	//NPCs
 	//----------------------------------------------------------------------------
@@ -830,6 +874,25 @@ void Player::HandleCollisionResult(
 						_velocity.y = -_bounceSpeed;
 
 						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
+					}
+				}
+				break;
+			case GameObjectType::GAMEOBJECT_TYPE_LAVAPOOL:
+				{
+					LavaPool* lavaPool = dynamic_cast<LavaPool*>(eventEntity);
+					if (eventNormal.x != 0.0f || eventNormal.y != 0.0f) {
+						_health = 1;
+						TakeDamage();
+					}
+				}
+				break;
+			case GameObjectType::GAMEOBJECT_TYPE_DOOR:
+				{
+					Door* door = dynamic_cast<Door*>(eventEntity);
+					if (Device::IsKeyDown(DIK_W)) {
+						_position = door->GetDestination();
+
+						_wentIntoPipe = !_wentIntoPipe;
 					}
 				}
 				break;

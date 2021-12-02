@@ -8,7 +8,7 @@ void Door::_ParseSprites(std::string line) {
 }
 
 Door::Door() {
-	_renderPriority = 1;
+	_renderPriority = 2;
 
 	_runSpeed = 0.22f;
 
@@ -16,6 +16,10 @@ Door::Door() {
 }
 
 Door::~Door() {}
+
+D3DXVECTOR2 Door::GetDestination() const {
+	return _destination;
+}
 
 void Door::ParseData(
 	std::string dataPath, 
@@ -32,8 +36,6 @@ void Door::ParseData(
 		_destination.y = std::stof(_extraData.at(1));
 	}
 }
-
-void Door::TakeDamage() {}
 
 void Door::HandleStates() {}
 

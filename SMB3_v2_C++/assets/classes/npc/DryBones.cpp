@@ -30,6 +30,10 @@ void DryBones::StartLimboTimer() {
 	_limboStart = static_cast<DWORD>(GetTickCount64());
 }
 
+RECTF DryBones::GetBoundingBox(int index) const {
+	return _health < 3 ? RECTF() : GameObject::GetBoundingBox();
+}
+
 void DryBones::ParseData(
 	std::string dataPath, 
 	Texture*& texture, 
@@ -42,7 +46,7 @@ void DryBones::ParseData(
 }
 
 void DryBones::TakeDamage() {
-	if (_health >= 2) {
+	if (_health == 3) {
 		--_health;
 		tookDamage = true;
 		StartLimboTimer();
@@ -52,11 +56,12 @@ void DryBones::TakeDamage() {
 void DryBones::HandleStates() {
 	_state = static_cast<_State>(_health);
 
-	isPassThroughable = _state != _State::WALK;
-
 	switch (_state) {
 		case _State::WALK:
 			_velocity.x = -_runSpeed * _normal.x;
+			break;
+		case _State::LIMBO:
+			_velocity = { 0.0f, 0.0f };
 			break;
 	}
 }
@@ -103,13 +108,14 @@ void DryBones::Update(
 void DryBones::Render() {
 	switch (_state) {
 		case _State::WALK:
-			_animatedSprite.PlaySpriteAnimation("Walk", _position, _scale);
+			_animatedSprite.PlaySpriteAnimation("Walk", _position, { _normal.x, _scale.y });
 			break;
 		case _State::LIMBO:
-			_animatedSprite.PlaySpriteAnimation("Die", _position, _scale);
-
-			if (GetTickCount64() - _limboStart > _limboTime * 0.98f) {
-				_animatedSprite.PlaySpriteAnimation("Revive", _position, _scale);
+			if (GetTickCount64() - _limboStart > _limboTime * 0.95f) {
+				_animatedSprite.PlaySpriteAnimation("Revive", { _position.x, _position.y + 6.0f }, { _normal.x, _scale.y });
+			}
+			else {
+				_animatedSprite.PlaySpriteAnimation("Die", { _position.x, _position.y + 6.0f }, { _normal.x, _scale.y });
 			}
 			break;
 	}

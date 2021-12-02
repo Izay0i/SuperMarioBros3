@@ -23,6 +23,8 @@ public:
 	bool IsInLimbo() const;
 	void StartLimboTimer();
 
+	RECTF GetBoundingBox(int = 0) const override;
+
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 
 	void TakeDamage() override;

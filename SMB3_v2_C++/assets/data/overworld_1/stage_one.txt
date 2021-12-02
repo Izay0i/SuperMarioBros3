@@ -12,6 +12,11 @@
 300
 [/]
 
+#Float (Specify the value to lock the camera in place when posy > sceneHeight * value)
+[CAMERALOCKVALUE]
+0.3
+[/]
+
 #Left	top	right	bottom	up_vector
 [CAMERABOUNDS]
 0	-8	2808	465	1
@@ -150,7 +155,7 @@
 
 #objID	x	y	width	height
 [TILEDATA]
-#One hit platform	16x16
+#One hit platform	512x16
 666	1968	448	512	16
 
 #Floor tile 624x16

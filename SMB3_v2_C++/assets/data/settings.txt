@@ -3,7 +3,7 @@
 #Luigi: Well I want yours too
 
 [SETTINGS]
-default	11
+default	18
 [/]
 
 [SCENES]

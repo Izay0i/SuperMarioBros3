@@ -231,6 +231,15 @@
     <ClCompile Include="assets\classes\npc\DryBones.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\classes\projectile\Podoboo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\block\Door.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\npc\Rotodisc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\classes\GlobalUtil.h">
@@ -450,6 +459,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\npc\DryBones.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\projectile\Podoboo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\block\Door.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\npc\Rotodisc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

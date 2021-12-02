@@ -67,6 +67,8 @@ Entity* QuestionBlock::SpawnItem(int currentHealth) {
 				if (item->GetObjectType() == GameObjectType::GAMEOBJECT_TYPE_FLOWER) {
 					item->SetPosition({ _originalPos.x, _originalPos.y - item->GetBoxHeight() / 3.0f });
 					dynamic_cast<Flower*>(item)->StartEmergeTimer();
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MUSHROOMAPPEARS);
 				}
 			}
 			else {

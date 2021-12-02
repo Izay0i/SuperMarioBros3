@@ -1,18 +1,25 @@
 #pragma once
 
-class Door : public Entity {
+class Rotodisc : public Entity {
 private:
-	static Texture* _doorTexture;
+	static Texture* _rotoTexture;
 
-	D3DXVECTOR2 _destination;
+	//Clockwise: -1, Counter-clockwise: 1
+	int _direction;
+
+	float _radius;
+	//I can be your angle or yuor devil
+	float _angle;
+	
+	DWORD _roundTripTime;
+
+	D3DXVECTOR2 _centerPoint;
 
 	void _ParseSprites(std::string) override;
 
 public:
-	Door();
-	~Door();
-
-	D3DXVECTOR2 GetDestination() const;
+	Rotodisc();
+	~Rotodisc();
 
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 

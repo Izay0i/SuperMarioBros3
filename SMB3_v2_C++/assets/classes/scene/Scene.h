@@ -36,6 +36,7 @@ protected:
 		SCENEFILE_SECTION_MAINTHEMES,
 		SCENEFILE_SECTION_SCENESIZE,
 		SCENEFILE_SECTION_SCENETIME,
+		SCENEFILE_SECTION_CAMERALOCKVALUE,
 		SCENEFILE_SECTION_CAMERABOUNDS,
 		SCENEFILE_SECTION_BGCOLOR,
 		SCENEFILE_SECTION_TEXTURES,
@@ -51,6 +52,8 @@ protected:
 	unsigned int _sceneWidth;
 	unsigned int _sceneHeight;
 	unsigned int _currentThemeID;
+
+	float _lockValue;
 
 	std::vector<unsigned int> _mainThemeIDs;
 
@@ -93,6 +96,7 @@ protected:
 	void _ParseMainThemes(std::string);
 	void _ParseSceneSize(std::string);
 	void _ParseSceneTime(std::string);
+	void _ParseCameraLockValue(std::string);
 	void _ParseCameraBounds(std::string);
 	void _ParseBackgroundColor(std::string);
 	void _ParseTextures(std::string);

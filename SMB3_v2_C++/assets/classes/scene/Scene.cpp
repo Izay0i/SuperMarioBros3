@@ -139,6 +139,16 @@ void Scene::_ParseSceneTime(std::string line) {
 	_sceneTime = std::stoul(tokens.at(0));
 }
 
+void Scene::_ParseCameraLockValue(std::string line) {
+	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
+
+	if (tokens.empty()) {
+		return;
+	}
+
+	_lockValue = std::stof(tokens.at(0));
+}
+
 void Scene::_ParseCameraBounds(std::string line) {
 	std::vector<std::string> tokens = GlobalUtil::SplitStr(line);
 
@@ -248,7 +258,7 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new DryBones;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_ROTODISC:
-			//entity = new Rotodisc;
+			entity = new Rotodisc;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL:
 			entity = new Tail;
@@ -287,7 +297,7 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new LavaPool;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_DOOR:
-			//entity = new Door;
+			entity = new Door;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_CACTUS:
 			entity = new Cactus;
@@ -638,6 +648,11 @@ void Scene::LoadScene() {
 			continue;
 		}
 
+		if (line == "[CAMERALOCKVALUE]") {
+			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_CAMERALOCKVALUE;
+			continue;
+		}
+
 		if (line == "[CAMERABOUNDS]") {
 			sceneFileSection = _SceneFileSection::SCENEFILE_SECTION_CAMERABOUNDS;
 			continue;
@@ -692,6 +707,9 @@ void Scene::LoadScene() {
 				break;
 			case _SceneFileSection::SCENEFILE_SECTION_SCENETIME:
 				_ParseSceneTime(line);
+				break;
+			case _SceneFileSection::SCENEFILE_SECTION_CAMERALOCKVALUE:
+				_ParseCameraLockValue(line);
 				break;
 			case _SceneFileSection::SCENEFILE_SECTION_CAMERABOUNDS:
 				_ParseCameraBounds(line);

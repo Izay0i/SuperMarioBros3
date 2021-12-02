@@ -3,15 +3,15 @@
 
 Texture* Podoboo::_podTexture = nullptr;
 
-void Podoboo::_ParseSprites(std::string)
-{
+void Podoboo::_ParseSprites(std::string line) {
+	_animatedSprite.ParseSprites(line, _podTexture);
 }
 
 Podoboo::Podoboo() {
 	_renderPriority = 1;
 
-	_jumpSpeed = 0.22f;
-	_gravity = 0.22f;
+	_jumpSpeed = 0.32f;
+	_gravity = 0.02f;
 
 	_inactiveTime = 2000;
 
@@ -48,8 +48,6 @@ void Podoboo::ParseData(
 	Entity::ParseData(dataPath, texture, extraData);
 }
 
-void Podoboo::TakeDamage() {}
-
 void Podoboo::HandleStates() {}
 
 void Podoboo::HandleCollisionResult(
@@ -64,7 +62,9 @@ void Podoboo::HandleCollisionResult(
 
 	switch (eventEntity->GetObjectType()) {
 		case GameObjectType::GAMEOBJECT_TYPE_LAVAPOOL:
-			StartInactiveTimer();
+			if (!IsInactive()) {
+				//StartInactiveTimer();
+			}
 			break;
 	}
 }
@@ -80,12 +80,13 @@ void Podoboo::Update(
 	}
 	
 	if (IsInactive()) {
-		_gravity = 0.0f;
+		_velocity.y = 0.0f;
 	}
 
 	if (IsInactive() && GetTickCount64() - _inactiveStart > _inactiveTime) {
 		_scale.y = 1.0f;
-		_gravity = 0.22f;
+		_gravity = 0.02f;
+		_position.y -= _hitbox.GetBoxHeight() * 2;
 		_velocity.y = -_jumpSpeed;
 		_inactiveStart = 0;
 	}

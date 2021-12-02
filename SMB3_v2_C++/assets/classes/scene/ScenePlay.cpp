@@ -91,7 +91,7 @@ void ScenePlay::UpdateCameraPosition() {
 	}
 
 	cameraPosition.y -= Game::GetInstance()->GetWindowHeight() / 2.25f;
-	if (_player->WentIntoPipe() || _player->IsFlying() || _player->GetPosition().y < _sceneHeight * 0.3f) {
+	if (_player->WentIntoPipe() || _player->IsFlying() || _player->GetPosition().y < _sceneHeight * _lockValue) {
 		if (cameraPosition.y < cameraBound.top) {
 			cameraPosition.y = cameraBound.top;
 		}
@@ -226,6 +226,20 @@ void ScenePlay::Update(DWORD deltaTime) {
 						}
 						else {
 							piranaPlant->SetNormal({ 1.0f, piranaPlant->GetNormal().y });
+						}
+					}
+					break;
+				case GameObject::GameObjectType::GAMEOBJECT_TYPE_DRYBONES:
+					{
+						DryBones* dryBones = dynamic_cast<DryBones*>(entity);
+						if (dryBones->GetHealth() == 2) {
+							//Mario is on the right side
+							if (dryBones->GetPosition().x - _player->GetPosition().x < 0.0f) {
+								dryBones->SetNormal({ -1.0f, 0.0f });
+							}
+							else {
+								dryBones->SetNormal({ 1.0f, 0.0f });
+							}
 						}
 					}
 					break;
