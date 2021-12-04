@@ -75,6 +75,7 @@ public:
 	virtual void HandleStates() = 0;
 	//Event results, min time, offset, normal, relative distance
 	virtual void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) = 0;
+	virtual void HandleOverlap(Entity*);
 	//Delta time, collidable entities, collidable tiles, grid
 	virtual void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr);
 

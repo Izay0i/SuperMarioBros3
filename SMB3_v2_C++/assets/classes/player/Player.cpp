@@ -628,28 +628,12 @@ void Player::HandleCollisionResult(
 						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
 					}
 				}
-				else if (eventNormal.y == 1.0f) {
+				else if (eventNormal.x != 0.0f || eventNormal.y == 1.0f) {
 					if (dryBones->GetHealth() == 3) {
 						TakeDamage();
 						_velocity.y = -_bounceSpeed;
-
-						dryBones->SetNormal({ -dryBones->GetNormal().x, dryBones->GetNormal().y });
 					}
 				}
-				else if (eventNormal.x != 0.0f) {
-					if (dryBones->GetHealth() == 3) {
-						TakeDamage();
-						_velocity.y = -_bounceSpeed;
-
-						dryBones->SetNormal({ -dryBones->GetNormal().x, dryBones->GetNormal().y });
-					}
-				}
-			}
-			break;
-		case GameObjectType::GAMEOBJECT_TYPE_ROTODISC:
-			{
-				Rotodisc* rotodisc = dynamic_cast<Rotodisc*>(eventEntity);
-				TakeDamage();
 			}
 			break;
 	//----------------------------------------------------------------------------
@@ -911,6 +895,22 @@ void Player::HandleCollisionResult(
 					}
 				}
 				break;
+			case GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING:
+				if (eventNormal.y == 1.0f) {
+					OutputDebugStringA("Ceiling\n");
+				}
+				break;
+	}
+}
+
+void Player::HandleOverlap(Entity* entity) {
+	switch (entity->GetObjectType()) {
+		case GameObjectType::GAMEOBJECT_TYPE_ROTODISC:
+			{
+				Rotodisc* rotodisc = dynamic_cast<Rotodisc*>(entity);
+				TakeDamage();
+			}
+			break;
 	}
 }
 
@@ -960,7 +960,7 @@ void Player::Update(
 		_isNextToShell = false;
 	}
 
-	if (_isCrouching) {
+	if (_health <= 0 || _isCrouching) {
 		_velocity.x = 0.0f;
 	}
 
@@ -986,16 +986,19 @@ void Player::Update(
 	}
 
 	if (IsInvulnerable()) {
-		//Freeze the player
-		_velocity = { 0.0f, 0.0f };
+		if (GetTickCount64() - _invulnerableStart >= _invulnerableTime * 0.82f) {
+			//Death bounce
+			if (_health <= 0) {
+				_isOnGround = false;
+				_isHolding = false;
 
-		//Death bounce
-		if (_health == 0 && GetTickCount64() - _invulnerableStart >= _invulnerableTime * 0.82f) {
-			_isOnGround = false;
-			_isHolding = false;
-
-			_velocity.y = -_bounceSpeed;
-			_gravity = 0.0010f;
+				_velocity.y = -_bounceSpeed;
+				_gravity = 0.0010f;
+			}
+		}
+		else {
+			//Freeze the player
+			_velocity = { 0.0f, 0.0f };
 		}
 	}
 

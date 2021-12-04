@@ -240,6 +240,12 @@
     <ClCompile Include="assets\classes\npc\Rotodisc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\classes\boss\FortressBoss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\npc\MovingCeiling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\classes\GlobalUtil.h">
@@ -468,6 +474,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\npc\Rotodisc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\boss\FortressBoss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\npc\MovingCeiling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

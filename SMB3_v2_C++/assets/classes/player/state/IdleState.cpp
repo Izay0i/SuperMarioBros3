@@ -51,13 +51,13 @@ void IdleState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("Front", _player->_position);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("Kick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("Kick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("HoldIdle", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("HoldIdle", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("Idle", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("Idle", _player->_position, _player->_scale, _alpha);
 			}
 			break;
 		case _Form::BIG:
@@ -65,13 +65,13 @@ void IdleState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("BigFront", _player->_position);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("BigKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("BigHoldIdle", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigHoldIdle", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("BigIdle", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigIdle", _player->_position, _player->_scale, _alpha);
 			}
 			break;
 		case _Form::FIRE:
@@ -79,13 +79,13 @@ void IdleState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("FireFront", _player->_position);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("FireKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("FireHoldIdle", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireHoldIdle", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("FireIdle", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireIdle", _player->_position, _player->_scale, _alpha);
 			}
 			break;
 		case _Form::RACCOON:
@@ -93,13 +93,13 @@ void IdleState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacHoldIdle", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacHoldIdle", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("RacIdle", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacIdle", _player->_position, _player->_scale, _alpha);
 			}
 			break;
 	}

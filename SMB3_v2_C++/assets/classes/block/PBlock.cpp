@@ -70,20 +70,21 @@ void PBlock::Update(
 	}
 	
 	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
-		if (collidableEntities->at(i)->GetHealth() <= 0) {
+		Entity* entity = collidableEntities->at(i);
+		if (!entity->IsActive() || entity->GetHealth() <= 0) {
 			continue;
 		}
 		
-		switch (collidableEntities->at(i)->GetObjectType()) {
+		switch (entity->GetObjectType()) {
 			case GameObjectType::GAMEOBJECT_TYPE_COIN:
 				{
-					Coin* coin = dynamic_cast<Coin*>(collidableEntities->at(i));
+					Coin* coin = dynamic_cast<Coin*>(entity);
 					coin->SetHealth(IsActivated() ? 3 : 1);
 				}
 				break;
 			case GameObjectType::GAMEOBJECT_TYPE_SHINYBRICK:
 				{
-					ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(collidableEntities->at(i));
+					ShinyBrick* shinyBrick = dynamic_cast<ShinyBrick*>(entity);
 					if (shinyBrick->GetExtraData().size() == 3) {
 						shinyBrick->SetHealth(IsActivated() ? 3 : 2);
 					}

@@ -18,9 +18,10 @@ bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {
 }
 
 bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
-	//Ignore the player and tail
+	//Ignore the player and tail, and ceiling
 	if (entity->GetObjectType() < GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA || 
-		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL) 
+		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL || 
+		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING) 
 	{
 		return  true;
 	}
@@ -369,7 +370,7 @@ void Scene::_ParseEntityData(std::string line) {
 			//entity = new FortressBoss;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING:
-			//entity = new MovingCeiling;
+			entity = new MovingCeiling;
 			break;
 	}
 

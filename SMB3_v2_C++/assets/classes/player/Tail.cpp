@@ -20,28 +20,11 @@ Tail::Tail() {
 
 Tail::~Tail() {}
 
-bool Tail::IsOverlapped(Entity* entity) {
-	/*
-	* boxSize		entityBoxSize
-	* x,y			x,y
-	* |----|		|----|
-	* |    |		|    |
-	* |----|		|----|
-	* Overlap if half of the sum of two hitboxes is greater than the positions of the entities
-	* Use paint to visualise
-	* Edge to edge detection+
-	*/
-
-	D3DXVECTOR2 boxSize = { _hitbox.GetBoxWidth(), _hitbox.GetBoxHeight() };
-	D3DXVECTOR2 entityBoxSize = { entity->GetBoxWidth(), entity->GetBoxHeight() };
-	return (abs(_position.x - entity->GetPosition().x) < abs((boxSize.x + entityBoxSize.x) / 2.0f)) &&
-		(abs(_position.y - entity->GetPosition().y) < abs((boxSize.y + entityBoxSize.y) / 2.0f));
-}
-
+//Yeah don't ask why, even I have no clue why this works but the other doesn't
 void Tail::HandleUnresponsiveCollisions(std::vector<Entity*>* entities) {
 	for (unsigned int i = 0; i < entities->size(); ++i) {
 		Entity* entity = entities->at(i);
-		if (!entity->IsActive()) {
+		if (entity == this || !entity->IsActive()) {
 			continue;
 		}
 
@@ -110,7 +93,7 @@ void Tail::HandleUnresponsiveCollisions(std::vector<Entity*>* entities) {
 					break;
 				case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
 					{
-						
+
 					}
 					break;
 				case GameObjectType::GAMEOBJECT_TYPE_COIN:
@@ -186,7 +169,7 @@ void Tail::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	if (_touchedEntity != nullptr && GetTickCount64() % 500 == 0) {
+	if (_touchedEntity != nullptr && GetTickCount64() % 200 == 0) {
 		_touchedEntity = nullptr;
 	}
 

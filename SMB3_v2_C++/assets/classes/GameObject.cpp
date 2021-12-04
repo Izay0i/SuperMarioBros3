@@ -19,6 +19,24 @@ bool GameObject::IsActive() const {
 	return _isActive;
 }
 
+bool GameObject::IsOverlapped(GameObject* object) const {
+	/*
+	* boxSize		entityBoxSize
+	* x,y			x,y
+	* |----|		|----|
+	* |    |		|    |
+	* |----|		|----|
+	* Overlap if half of the sum of two hitboxes is greater than the positions of the entities
+	* Use paint to visualise
+	* Edge to edge detection+
+	*/
+
+	D3DXVECTOR2 boxSize = { _hitbox.GetBoxWidth(), _hitbox.GetBoxHeight() };
+	D3DXVECTOR2 entityBoxSize = { object->GetBoxWidth(), object->GetBoxHeight() };
+	return (abs(_position.x - object->GetPosition().x) < abs((boxSize.x + entityBoxSize.x) / 2.0f)) &&
+		(abs(_position.y - object->GetPosition().y) < abs((boxSize.y + entityBoxSize.y) / 2.0f));
+}
+
 void GameObject::SetOjectType(GameObjectType objectType) {
 	_objectType = objectType;
 }

@@ -9,10 +9,7 @@ void Podoboo::_ParseSprites(std::string line) {
 
 Podoboo::Podoboo() {
 	_renderPriority = 1;
-
-	_jumpSpeed = 0.32f;
-	_gravity = 0.02f;
-
+	_runSpeed = 0.2f;
 	_inactiveTime = 2000;
 
 	isPassThroughable = true;
@@ -63,7 +60,7 @@ void Podoboo::HandleCollisionResult(
 	switch (eventEntity->GetObjectType()) {
 		case GameObjectType::GAMEOBJECT_TYPE_LAVAPOOL:
 			if (!IsInactive()) {
-				//StartInactiveTimer();
+				StartInactiveTimer();
 			}
 			break;
 	}
@@ -75,19 +72,25 @@ void Podoboo::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	if (_position.y <= _originalPos.y + _MAX_HEIGHT) {
-		_scale.y = -1.0f;
-	}
-	
 	if (IsInactive()) {
 		_velocity.y = 0.0f;
 	}
+	else {
+		if (_position.y <= _originalPos.y - _MAX_HEIGHT) {
+			_velocity.y = _runSpeed;
+			_scale.y = -1.0f;
+		}
+
+		if (_position.y >= _originalPos.y) {
+			_velocity.y = -_runSpeed;
+			_scale.y = 1.0f;
+		}
+	}
 
 	if (IsInactive() && GetTickCount64() - _inactiveStart > _inactiveTime) {
+		_velocity.y = -_runSpeed;
 		_scale.y = 1.0f;
-		_gravity = 0.02f;
-		_position.y -= _hitbox.GetBoxHeight() * 2;
-		_velocity.y = -_jumpSpeed;
+		_position.y = _originalPos.y - _OFFSET;
 		_inactiveStart = 0;
 	}
 
@@ -95,10 +98,13 @@ void Podoboo::Update(
 }
 
 void Podoboo::Render() {
-	if (IsInactive()) {
+	if (IsInactive() && 
+		(GetTickCount64() - _inactiveStart <= _inactiveTime * 0.22f || 
+			GetTickCount64() - _inactiveStart >= _inactiveTime * 0.92f)) 
+	{
 		_animatedSprite.PlaySpriteAnimation("Splash", _position);
 	}
-	else {
+	else if (!IsInactive()) {
 		_animatedSprite.PlaySpriteAnimation("Podoboo", _position, _scale);
 	}
 }

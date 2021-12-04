@@ -4,7 +4,7 @@ class Rotodisc : public Entity {
 private:
 	static Texture* _rotoTexture;
 
-	//Clockwise: -1, Counter-clockwise: 1
+	//Clockwise: -1, Counterclockwise: 1
 	int _direction;
 
 	float _radius;

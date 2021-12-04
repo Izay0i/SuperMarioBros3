@@ -67,6 +67,23 @@ void ScorePopUp::GetEntity(Entity* entity) {
 		case GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT:
 		case GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT:
 		case GameObjectType::GAMEOBJECT_TYPE_BOOMERANGBRO:
+		case GameObjectType::GAMEOBJECT_TYPE_DRYBONES:
+			if (_index == _scores.size() - 1) {
+				_score = _scores.back();
+				_player->_lives += 1;
+			}
+			else {
+				_score = _scores.at(_index);
+				_player->_score += _score;
+				++_index;
+			}
+			break;
+		//1000, 2000, 4000
+		case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
+			if (_index < 6) {
+				_index = 6;
+			}
+
 			if (_index == _scores.size() - 1) {
 				_score = _scores.back();
 				_player->_lives += 1;

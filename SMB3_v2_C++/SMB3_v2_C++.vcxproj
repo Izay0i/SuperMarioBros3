@@ -156,6 +156,7 @@
     <ClCompile Include="assets\classes\block\PBlock.cpp" />
     <ClCompile Include="assets\classes\block\Portal.cpp" />
     <ClCompile Include="assets\classes\block\ShinyBrick.cpp" />
+    <ClCompile Include="assets\classes\boss\FortressBoss.cpp" />
     <ClCompile Include="assets\classes\Camera.cpp" />
     <ClCompile Include="assets\classes\effect\BrickDebris.cpp" />
     <ClCompile Include="assets\classes\effect\ScorePopUp.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="assets\classes\npc\DryBones.cpp" />
     <ClCompile Include="assets\classes\npc\Goomba.cpp" />
     <ClCompile Include="assets\classes\npc\Koopa.cpp" />
+    <ClCompile Include="assets\classes\npc\MovingCeiling.cpp" />
     <ClCompile Include="assets\classes\npc\Paragoomba.cpp" />
     <ClCompile Include="assets\classes\npc\Parakoopa.cpp" />
     <ClCompile Include="assets\classes\npc\PiranaPlant.cpp" />
@@ -235,6 +237,7 @@
     <ClInclude Include="assets\classes\block\Portal.h" />
     <ClInclude Include="assets\classes\block\QuestionBlock.h" />
     <ClInclude Include="assets\classes\block\ShinyBrick.h" />
+    <ClInclude Include="assets\classes\boss\FortressBoss.h" />
     <ClInclude Include="assets\classes\Camera.h" />
     <ClInclude Include="assets\classes\effect\BrickDebris.h" />
     <ClInclude Include="assets\classes\effect\ScorePopUp.h" />
@@ -268,6 +271,7 @@
     <ClInclude Include="assets\classes\npc\DryBones.h" />
     <ClInclude Include="assets\classes\npc\Goomba.h" />
     <ClInclude Include="assets\classes\npc\Koopa.h" />
+    <ClInclude Include="assets\classes\npc\MovingCeiling.h" />
     <ClInclude Include="assets\classes\npc\Paragoomba.h" />
     <ClInclude Include="assets\classes\npc\Parakoopa.h" />
     <ClInclude Include="assets\classes\npc\PiranaPlant.h" />

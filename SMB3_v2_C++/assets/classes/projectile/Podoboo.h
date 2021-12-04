@@ -4,7 +4,8 @@ class Podoboo : public Entity {
 private:
 	static Texture* _podTexture;
 
-	const float _MAX_HEIGHT = 16.0f;
+	const float _OFFSET = 16.0f;
+	const float _MAX_HEIGHT = 112.0f;
 
 	D3DXVECTOR2 _originalPos;
 

@@ -1,3 +1,5 @@
+#include <random>
+
 #include "PlayerState.h"
 
 Player* PlayerState::_player = nullptr;
@@ -29,6 +31,17 @@ PlayerState::~PlayerState() {}
 void PlayerState::Update(DWORD) {
 	if (_player->isInMap && GetTickCount64() % 50 == 0) {		
 		_player->_scale.x = -_player->_scale.x;
+	}
+
+	if (_player->IsInvulnerable()) {
+		std::random_device device;
+		std::mt19937 rng(device());
+		std::uniform_int_distribution<std::mt19937::result_type> dist(63, 128);
+
+		_alpha = dist(rng);
+	}
+	else {
+		_alpha = 255;
 	}
 
 	_form = static_cast<_Form>(_player->_health);

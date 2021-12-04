@@ -235,10 +235,10 @@ void ScenePlay::Update(DWORD deltaTime) {
 						if (dryBones->GetHealth() == 2) {
 							//Mario is on the right side
 							if (dryBones->GetPosition().x - _player->GetPosition().x < 0.0f) {
-								dryBones->SetNormal({ -1.0f, 0.0f });
+								dryBones->SetScale({ -1.0f, dryBones->GetScale().y });
 							}
 							else {
-								dryBones->SetNormal({ 1.0f, 0.0f });
+								dryBones->SetScale({ 1.0f, dryBones->GetScale().y });
 							}
 						}
 					}
@@ -351,10 +351,10 @@ void ScenePlay::Update(DWORD deltaTime) {
 				if (_grid != nullptr) {
 					_grid->RemoveEntity(entity);
 
-					_removedEntities.emplace_back(entity);
-
 					_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
 				}
+
+				_removedEntities.emplace_back(entity);
 			}
 		}
 		std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);

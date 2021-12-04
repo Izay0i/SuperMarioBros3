@@ -29,16 +29,16 @@ void FallState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("Front", _player->_position);
 			}
 			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_heldEntity == nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("SuperJump", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("SuperJump", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("Kick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("Kick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("HoldJump", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("HoldJump", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("Jump", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("Jump", _player->_position, _player->_scale, _alpha);
 			}
 			break;
 		case _Form::BIG:
@@ -46,16 +46,16 @@ void FallState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("BigFront", _player->_position);
 			}
 			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_heldEntity == nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("BigSuperFall", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigSuperFall", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("BigKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("BigHoldJump", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigHoldJump", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("BigFall", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigFall", _player->_position, _player->_scale, _alpha);
 			}
 			break;
 		case _Form::FIRE:
@@ -63,16 +63,16 @@ void FallState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("FireFront", _player->_position);
 			}
 			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_heldEntity == nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("FireSuperFall", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireSuperFall", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("FireKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("FireHoldJump", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireHoldJump", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("FireFall", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireFall", _player->_position, _player->_scale, _alpha);
 			}
 			break;
 		case _Form::RACCOON:
@@ -80,24 +80,24 @@ void FallState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 			}
 			else if (_player->_heldEntity == nullptr && !_player->IsFlying() && Device::IsKeyDown(DIK_K)) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacWagFall", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacWagFall", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity == nullptr && _player->IsFlying()) {
 				if (Device::IsKeyDown(DIK_K)) {
-					_player->_animatedSprite.PlaySpriteAnimation("RacWagSuperFall", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("RacWagSuperFall", _player->_position, _player->_scale, _alpha);
 				}
 				else {
-					_player->_animatedSprite.PlaySpriteAnimation("RacSuperFall", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("RacSuperFall", _player->_position, _player->_scale, _alpha);
 				}
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacHoldJump", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacHoldJump", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("RacFall", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacFall", _player->_position, _player->_scale, _alpha);
 			}
 			break;
 	}

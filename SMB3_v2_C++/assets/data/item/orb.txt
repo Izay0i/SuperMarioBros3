@@ -1,5 +1,5 @@
 [SPRITES]
-Orb	204	0	220	16	1	0
+Orb	119	0	135	16	1	0
 [/]
 
 [HITBOXES]

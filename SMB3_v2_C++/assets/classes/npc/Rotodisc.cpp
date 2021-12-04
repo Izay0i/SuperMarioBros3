@@ -16,7 +16,7 @@ Rotodisc::Rotodisc() {
 	_direction = 1;
 	_radius = 46.0f;
 	_angle = 1.0f;
-	_roundTripTime = 6;
+	_roundTripTime = 5;
 
 	isPassThroughable = true;
 }

@@ -18,6 +18,6 @@ void WagState::Render() {
 		_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 	}
 	else if (_player->IsAttacking()) {
-		_player->_animatedSprite.PlaySpriteAnimation("RacWag", _player->_position, D3DXVECTOR2(_player->_normal.x, 1.0f));
+		_player->_animatedSprite.PlaySpriteAnimation("RacWag", _player->_position, D3DXVECTOR2(_player->_normal.x, 1.0f), _alpha);
 	}
 }

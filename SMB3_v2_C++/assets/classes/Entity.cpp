@@ -123,6 +123,8 @@ void Entity::TakeDamage() {
 	}
 }
 
+void Entity::HandleOverlap(Entity* entity) {}
+
 void Entity::Update(
 	DWORD deltaTime, 
 	std::vector<Entity*>* collidableEntities, 
@@ -220,6 +222,17 @@ void Entity::Update(
 
 		_position.x += _distance.x * minTime.x + normal.x * offset.x;
 		_position.y += _distance.y * minTime.y + (normal.y == -1.0f ? (normal.y * offset.y) : 0.0f);
+
+		for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
+			Entity* entity = collidableEntities->at(i);
+			if (entity == this || !entity->IsActive()) {
+				continue;
+			}
+
+			if (IsOverlapped(entity)) {
+				HandleOverlap(entity);
+			}
+		}
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {

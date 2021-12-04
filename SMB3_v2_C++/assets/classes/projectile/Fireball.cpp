@@ -95,6 +95,7 @@ void Fireball::HandleCollisionResult(
 					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 					break;
 				case GameObjectType::GAMEOBJECT_TYPE_VENUSFIREBALL:
+				case GameObjectType::GAMEOBJECT_TYPE_DRYBONES:
 					TakeDamage();
 					break;
 				case GameObjectType::GAMEOBJECT_TYPE_COIN:
@@ -156,6 +157,7 @@ void Fireball::HandleCollisionResult(
 				//Ignore these entities
 				case GameObjectType::GAMEOBJECT_TYPE_MARIO:
 				case GameObjectType::GAMEOBJECT_TYPE_LUIGI:
+				case GameObjectType::GAMEOBJECT_TYPE_ROTODISC:
 				case GameObjectType::GAMEOBJECT_TYPE_REDMUSHROOM:
 				case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
 				case GameObjectType::GAMEOBJECT_TYPE_FLOWER:

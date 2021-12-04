@@ -41,20 +41,20 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("Front", _player->_position);
 			}
 			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_isOnGround && _player->_heldEntity == nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("SuperRun", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("SuperRun", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("Kick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("Kick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("HoldRun", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("HoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
 				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
-					_player->_animatedSprite.PlaySpriteAnimation("Skid", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("Skid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
-					_player->_animatedSprite.PlaySpriteAnimation("Run", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("Run", _player->_position, _player->_scale, _alpha);
 				}
 			}
 			break;
@@ -63,20 +63,20 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("BigFront", _player->_position);
 			}
 			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_isOnGround && _player->_heldEntity == nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("BigSuperRun", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigSuperRun", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("BigKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("BigHoldRun", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("BigHoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
 				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
-					_player->_animatedSprite.PlaySpriteAnimation("BigSkid", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("BigSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
-					_player->_animatedSprite.PlaySpriteAnimation("BigRun", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("BigRun", _player->_position, _player->_scale, _alpha);
 				}
 			}
 			break;
@@ -85,20 +85,20 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("FireFront", _player->_position);
 			}
 			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_isOnGround && _player->_heldEntity == nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("FireSuperRun", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireSuperRun", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("FireKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("FireHoldRun", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("FireHoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
 				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
-					_player->_animatedSprite.PlaySpriteAnimation("FireSkid", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("FireSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
-					_player->_animatedSprite.PlaySpriteAnimation("FireRun", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("FireRun", _player->_position, _player->_scale, _alpha);
 				}
 			}
 			break;
@@ -107,20 +107,20 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 			}
 			else if (_player->_acceleration >= _player->_ACCEL_THRESHOLD && _player->_isOnGround && _player->_heldEntity == nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacSuperRun", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacSuperRun", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacKick", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacKick", _player->_position, _player->_scale, _alpha);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacHoldRun", _player->_position, _player->_scale);
+				_player->_animatedSprite.PlaySpriteAnimation("RacHoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
 				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
-					_player->_animatedSprite.PlaySpriteAnimation("RacSkid", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("RacSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
-					_player->_animatedSprite.PlaySpriteAnimation("RacRun", _player->_position, _player->_scale);
+					_player->_animatedSprite.PlaySpriteAnimation("RacRun", _player->_position, _player->_scale, _alpha);
 				}
 			}
 			break;

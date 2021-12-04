@@ -20,6 +20,7 @@ protected:
 
 	static Player* _player;
 
+	unsigned int _alpha;
 	int _currentHealth;
 
 	_Form _form;

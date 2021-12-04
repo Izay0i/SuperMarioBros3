@@ -14,7 +14,7 @@
 #include "projectile/Boomerang.h"
 #include "projectile/Podoboo.h"
 
-//#include "npc/MovingCeiling.h"
+#include "npc/MovingCeiling.h"
 #include "player/Tail.h"
 
 #include "item/Mushroom.h"
@@ -54,4 +54,4 @@
 #include "effect/BrickDebris.h"
 //#include "effect/OrbEffect.h"
 
-//#include "boss/FortressBoss.h"
+#include "boss/FortressBoss.h"

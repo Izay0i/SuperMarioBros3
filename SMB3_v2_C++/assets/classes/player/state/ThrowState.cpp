@@ -18,6 +18,6 @@ void ThrowState::Render() {
 		_player->_animatedSprite.PlaySpriteAnimation("FireFront", _player->_position);
 	}
 	else {
-		_player->_animatedSprite.PlaySpriteAnimation("FireThrow", _player->_position, _player->_scale);
+		_player->_animatedSprite.PlaySpriteAnimation("FireThrow", _player->_position, _player->_scale, _alpha);
 	}
 }

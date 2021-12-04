@@ -97,6 +97,7 @@ void DryBones::Update(
 {
 	if (IsInLimbo() && GetTickCount64() - _limboStart > _limboTime) {
 		_health = 3;
+		_normal.x *= _scale.x;
 		_position.y -= _hitbox.GetBoxHeight();
 		_limboStart = 0;
 	}

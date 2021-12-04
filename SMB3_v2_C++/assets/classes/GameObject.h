@@ -150,6 +150,8 @@ public:
 	void SetActive(bool);
 	bool IsActive() const;
 
+	bool IsOverlapped(GameObject*) const;
+
 	void SetOjectType(GameObjectType);
 	GameObjectType GetObjectType() const;
 

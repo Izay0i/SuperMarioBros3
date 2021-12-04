@@ -144,6 +144,7 @@ public:
 	Fireball* SpawnFireball();
 
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
+	void HandleOverlap(Entity*) override;
 
 	void Update(DWORD, std::vector<Entity*>* = nullptr, std::vector<Entity*>* = nullptr, Grid* = nullptr) override;
 	void Render() override;
