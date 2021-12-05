@@ -12,7 +12,7 @@ void PBlock::_ParseSprites(std::string line) {
 PBlock::PBlock() {
 	_renderPriority = 4;
 	_health = 2;
-	_activateTime = 5000;
+	_activateTime = 8000;
 }
 
 PBlock::~PBlock() {}
@@ -71,12 +71,9 @@ void PBlock::Update(
 	
 	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
 		Entity* entity = collidableEntities->at(i);
-		if (!entity->IsActive() || entity->GetHealth() <= 0) {
-			continue;
-		}
-		
-		switch (entity->GetObjectType()) {
-			case GameObjectType::GAMEOBJECT_TYPE_COIN:
+		if (entity->IsActive() && entity->GetHealth() > 0) {
+			switch (entity->GetObjectType()) {
+				case GameObjectType::GAMEOBJECT_TYPE_COIN:
 				{
 					Coin* coin = dynamic_cast<Coin*>(entity);
 					coin->SetHealth(IsActivated() ? 3 : 1);
@@ -90,6 +87,7 @@ void PBlock::Update(
 					}
 				}
 				break;
+			}
 		}
 	}
 }

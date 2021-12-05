@@ -230,7 +230,7 @@ void HUD::Render() {
 		));
 	}
 
-	if (_player->_triggeredStageEnd) {
+	if (_player->_triggeredStageEnd && !_player->_hasBossItem) {
 		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x - 10.0f, _position.y - 135.0f));
 		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 52.0f, _position.y - 126.0f));
 	}

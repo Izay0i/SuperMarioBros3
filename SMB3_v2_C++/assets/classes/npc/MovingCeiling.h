@@ -11,6 +11,8 @@ private:
 	static Texture* _ceilingTexture;
 	static D3DX10_SPRITE _sprite;
 
+	const float _MAX_HEIGHT = 113.0f;
+
 	const unsigned int _SPRITE_WIDTH = 16;
 	const unsigned int _SPRITE_HEIGHT = 16;
 
@@ -32,6 +34,8 @@ private:
 	void _ScaleSprite(const RECT&);
 
 public:
+	bool isMoving;
+
 	MovingCeiling();
 	~MovingCeiling();
 
@@ -39,6 +43,8 @@ public:
 	void StartIdleTimer();
 
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
+
+	void TakeDamage() override;
 
 	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;

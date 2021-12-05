@@ -23,7 +23,7 @@
 #include "item/Star.h"
 #include "item/Coin.h"
 #include "item/BonusItem.h"
-//#include "item/Orb.h"
+#include "item/Orb.h"
 
 #include "block/Portal.h"
 #include "block/QuestionBlock.h"
@@ -31,6 +31,7 @@
 #include "block/PBlock.h"
 #include "block/LavaPool.h"
 #include "block/Door.h"
+#include "block/Trigger.h"
 
 #include "map/Cactus.h"
 #include "map/HelpText.h"

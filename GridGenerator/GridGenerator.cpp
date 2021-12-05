@@ -151,12 +151,12 @@ int main() {
 
     std::cout << xCells << '\t' << yCells << std::endl;
 
-    /*unsigned int width = 272;
-    unsigned int height = 16;
+    /*unsigned int width = 240;
+    unsigned int height = 32;
     unsigned int offset = 16;
-    unsigned int starting_x = 1696;
-    unsigned int starting_y = 608;
-    char format[] = "204\t0\t220\t16\t%u\t%u\n";
+    unsigned int starting_x = 1856;
+    unsigned int starting_y = 752;
+    char format[] = "231\t34\t247\t50\t%u\t%u\n";
     char debug[100];
 
     for (unsigned int i = 0; i < width; i += offset) {

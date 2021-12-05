@@ -1,5 +1,6 @@
 #include "../GlobalUtil.h"
 #include "../Game.h"
+#include "../audio/AudioService.h"
 #include "../Camera.h"
 #include "../Entity.h"
 #include "MovingCeiling.h"
@@ -72,6 +73,8 @@ void MovingCeiling::_ScaleSprite(const RECT& spriteBound) {
 MovingCeiling::MovingCeiling() {
 	_renderPriority = 1;
 	_runSpeed = 0.02f;
+
+	_idleTime = 500;
 }
 
 MovingCeiling::~MovingCeiling() {}
@@ -133,6 +136,8 @@ void MovingCeiling::ParseData(
 	readFile.close();
 }
 
+void MovingCeiling::TakeDamage() {}
+
 void MovingCeiling::HandleStates() {}
 
 void MovingCeiling::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
@@ -143,18 +148,42 @@ void MovingCeiling::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	_velocity.x = 0.0f;
-	_velocity.y = _runSpeed;
-	
-	_activeSprites.clear();
+	if (isMoving) {
+		_position.x = _originalPos.x;
+		
+		if (!IsIdling()) {
+			if (_position.y < _originalPos.y) {
+				StartIdleTimer();
+				_position.y = _originalPos.y;
+				_normal.y = 1.0f;
+			}
+			else if (_position.y > _originalPos.y + _MAX_HEIGHT) {
+				StartIdleTimer();
+				_position.y = _originalPos.y + _MAX_HEIGHT;
+				_normal.y = -1.0f;
 
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
+			}
+
+			_velocity.y = _runSpeed * _normal.y;
+		}
+		else {
+			_velocity.y = 0.0f;
+		}
+	}
+	
+	if (IsIdling() && GetTickCount64() - _idleStart > _idleTime) {
+		_idleStart = 0;
+	}
+
+	_activeSprites.clear();
 	for (const auto& sprite : _sprites) {
 		if (_IsInViewport(sprite, Camera::GetInstance()->GetViewport())) {
 			_activeSprites.emplace_back(sprite);
 		}
 	}
 	
-	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
+	Entity::Update(deltaTime);
 }
 
 void MovingCeiling::Render() {
@@ -178,5 +207,8 @@ void MovingCeiling::Render() {
 
 void MovingCeiling::Release() {
 	_animatedSprite.Release();
+	_activeSprites.clear();
+	_sprites.clear();
+	_sprite.pTexture = nullptr;
 	_ceilingTexture = nullptr;
 }

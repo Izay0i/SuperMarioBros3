@@ -246,6 +246,30 @@
     <ClCompile Include="assets\classes\npc\MovingCeiling.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\classes\item\Orb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\boss\state\BossState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\boss\state\BossIdleState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\boss\state\BossRunState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\boss\state\BossJumpState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\boss\state\BossHurtState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\boss\state\BossAttackState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\block\Trigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\classes\GlobalUtil.h">
@@ -480,6 +504,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\npc\MovingCeiling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\item\Orb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\boss\state\BossState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\boss\state\BossIdleState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\boss\state\BossRunState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\boss\state\BossJumpState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\boss\state\BossHurtState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\boss\state\BossAttackState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\block\Trigger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,7 @@
 [SPRITES]
 Orb	119	0	135	16	1	0
+
+Pokeball	136	0	152	16	1	0
 [/]
 
 [HITBOXES]

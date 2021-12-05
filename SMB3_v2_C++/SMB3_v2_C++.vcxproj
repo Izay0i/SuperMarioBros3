@@ -156,7 +156,14 @@
     <ClCompile Include="assets\classes\block\PBlock.cpp" />
     <ClCompile Include="assets\classes\block\Portal.cpp" />
     <ClCompile Include="assets\classes\block\ShinyBrick.cpp" />
+    <ClCompile Include="assets\classes\block\Trigger.cpp" />
     <ClCompile Include="assets\classes\boss\FortressBoss.cpp" />
+    <ClCompile Include="assets\classes\boss\state\BossAttackState.cpp" />
+    <ClCompile Include="assets\classes\boss\state\BossHurtState.cpp" />
+    <ClCompile Include="assets\classes\boss\state\BossIdleState.cpp" />
+    <ClCompile Include="assets\classes\boss\state\BossJumpState.cpp" />
+    <ClCompile Include="assets\classes\boss\state\BossRunState.cpp" />
+    <ClCompile Include="assets\classes\boss\state\BossState.cpp" />
     <ClCompile Include="assets\classes\Camera.cpp" />
     <ClCompile Include="assets\classes\effect\BrickDebris.cpp" />
     <ClCompile Include="assets\classes\effect\ScorePopUp.cpp" />
@@ -181,6 +188,7 @@
     <ClCompile Include="assets\classes\item\Flower.cpp" />
     <ClCompile Include="assets\classes\item\Leaf.cpp" />
     <ClCompile Include="assets\classes\item\Mushroom.cpp" />
+    <ClCompile Include="assets\classes\item\Orb.cpp" />
     <ClCompile Include="assets\classes\item\Star.cpp" />
     <ClCompile Include="assets\classes\map\Cactus.cpp" />
     <ClCompile Include="assets\classes\map\HammerBro.cpp" />
@@ -237,7 +245,14 @@
     <ClInclude Include="assets\classes\block\Portal.h" />
     <ClInclude Include="assets\classes\block\QuestionBlock.h" />
     <ClInclude Include="assets\classes\block\ShinyBrick.h" />
+    <ClInclude Include="assets\classes\block\Trigger.h" />
     <ClInclude Include="assets\classes\boss\FortressBoss.h" />
+    <ClInclude Include="assets\classes\boss\state\BossAttackState.h" />
+    <ClInclude Include="assets\classes\boss\state\BossHurtState.h" />
+    <ClInclude Include="assets\classes\boss\state\BossIdleState.h" />
+    <ClInclude Include="assets\classes\boss\state\BossJumpState.h" />
+    <ClInclude Include="assets\classes\boss\state\BossRunState.h" />
+    <ClInclude Include="assets\classes\boss\state\BossState.h" />
     <ClInclude Include="assets\classes\Camera.h" />
     <ClInclude Include="assets\classes\effect\BrickDebris.h" />
     <ClInclude Include="assets\classes\effect\ScorePopUp.h" />
@@ -263,6 +278,7 @@
     <ClInclude Include="assets\classes\item\Leaf.h" />
     <ClInclude Include="assets\classes\item\Mushroom.h" />
     <ClInclude Include="assets\classes\EntityList.h" />
+    <ClInclude Include="assets\classes\item\Orb.h" />
     <ClInclude Include="assets\classes\item\Star.h" />
     <ClInclude Include="assets\classes\map\Cactus.h" />
     <ClInclude Include="assets\classes\map\HammerBro.h" />

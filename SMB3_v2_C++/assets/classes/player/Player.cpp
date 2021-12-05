@@ -26,7 +26,8 @@ void Player::_HandleCurrencies() {
 }
 
 void Player::_HanldeStageEnd() {
-	if (_triggeredStageEnd) {
+	if (_triggeredStageEnd && !_hasBossItem) {
+		_acceleration = _MIN_ACCEL;
 		_isHolding = false;
 		
 		if (_sceneRemainingTime > 0) {
@@ -636,6 +637,17 @@ void Player::HandleCollisionResult(
 				}
 			}
 			break;
+		case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
+			{
+				FortressBoss* fortressBoss = dynamic_cast<FortressBoss*>(eventEntity);
+				if (eventNormal.y == -1.0f) {
+					fortressBoss->TakeDamage();
+					_velocity.y = -_bounceSpeed;
+
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
+				}
+			}
+			break;
 	//----------------------------------------------------------------------------
 	//NPCs
 	//----------------------------------------------------------------------------
@@ -713,7 +725,7 @@ void Player::HandleCollisionResult(
 						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_POWERUP);
 						break;
 					case GameObjectType::GAMEOBJECT_TYPE_GREENMUSHROOM:
-						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_1UP);
+						AudioService::GetAudio().PlayAudio(IsAttacking() ? AudioType::AUDIO_TYPE_1UPGLITCH : AudioType::AUDIO_TYPE_1UP);
 						break;
 				}
 			}
@@ -790,20 +802,6 @@ void Player::HandleCollisionResult(
 				}
 			}
 			break;
-		case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
-			{
-				BonusItem* bonusItem = dynamic_cast<BonusItem*>(eventEntity);
-				if (bonusItem->GetHealth() == 2) {
-					_bonusItems.emplace_back(bonusItem->GetCurrentItem());
-					bonusItem->TakeDamage();
-				}
-
-				_triggeredStageEnd = true;
-
-				AudioService::GetAudio().StopAll();
-				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_STAGE_END);
-			}
-			break;
 	//----------------------------------------------------------------------------
 	//ITEMS
 	//----------------------------------------------------------------------------
@@ -877,12 +875,23 @@ void Player::HandleCollisionResult(
 						_position = door->GetDestination();
 
 						_wentIntoPipe = !_wentIntoPipe;
+						door->canTriggerMovingCeiling = !door->canTriggerMovingCeiling;
 					}
 				}
 				break;
 	//----------------------------------------------------------------------------
 	//ANIMATED BLOCKS
 	//----------------------------------------------------------------------------
+			case GameObjectType::GAMEOBJECT_TYPE_TRIGGER:
+				{
+					Trigger* trigger = dynamic_cast<Trigger*>(eventEntity);
+					trigger->triggered = true;
+					trigger->SetPosition({ 0.0f, 0.0f });
+
+					AudioService::GetAudio().StopAll();
+					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BATTLE_MINIBOSS);
+				}
+				break;
 			case GameObjectType::GAMEOBJECT_TYPE_ONEHITPLATFORM:
 				_position.y = 999.0f;
 				_health = 1;
@@ -897,7 +906,8 @@ void Player::HandleCollisionResult(
 				break;
 			case GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING:
 				if (eventNormal.y == 1.0f) {
-					OutputDebugStringA("Ceiling\n");
+					_health = 1;
+					TakeDamage();
 				}
 				break;
 	}
@@ -909,6 +919,32 @@ void Player::HandleOverlap(Entity* entity) {
 			{
 				Rotodisc* rotodisc = dynamic_cast<Rotodisc*>(entity);
 				TakeDamage();
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
+			{
+				BonusItem* bonusItem = dynamic_cast<BonusItem*>(entity);
+				if (bonusItem->GetHealth() == 2) {
+					_bonusItems.emplace_back(bonusItem->GetCurrentItem());
+					bonusItem->TakeDamage();
+				}
+
+				_triggeredStageEnd = true;
+
+				AudioService::GetAudio().StopAll();
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_STAGE_END);
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_ORB:
+			{
+				Orb* orb = dynamic_cast<Orb*>(entity);
+				orb->TakeDamage();
+
+				_triggeredStageEnd = true;
+				_hasBossItem = true;
+
+				AudioService::GetAudio().StopAll();
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BATTLE_CLEAR);
 			}
 			break;
 	}
@@ -964,7 +1000,7 @@ void Player::Update(
 		_velocity.x = 0.0f;
 	}
 
-	if (_triggeredStageEnd) {
+	if (_triggeredStageEnd && !_hasBossItem) {
 		MoveRight();
 	}
 

@@ -3,7 +3,16 @@
 #include "Scene.h"
 #include "../EntityList.h"
 
-bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {	
+bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {
+	//Ignore the player and tail, door and ceiling
+	if (entity->GetObjectType() < GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA ||
+		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL ||
+		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_DOOR ||
+		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING)
+	{
+		return  true;
+	}
+
 	float entityWidth = entity->GetPosition().x + entity->GetBoxWidth();
 	float entityHeight = entity->GetPosition().y + entity->GetBoxHeight();
 	if (entityWidth >= viewport.left && 
@@ -18,9 +27,10 @@ bool Scene::_IsEntityInViewport(Entity* entity, RECTF viewport) const {
 }
 
 bool Scene::_IsEntityAliveAndIB(Entity* entity) const {
-	//Ignore the player and tail, and ceiling
+	//Ignore the player and tail, door and ceiling
 	if (entity->GetObjectType() < GameObject::GameObjectType::GAMEOBJECT_TYPE_GOOMBA || 
 		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL || 
+		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_DOOR ||
 		entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING) 
 	{
 		return  true;
@@ -285,6 +295,9 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
 			entity = new BonusItem;
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_ORB:
+			entity = new Orb;
+			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 			entity = new QuestionBlock;
 			break;
@@ -367,7 +380,10 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new PropNormalKoopa;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
-			//entity = new FortressBoss;
+			entity = new FortressBoss;
+			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_TRIGGER:
+			entity = new Trigger;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING:
 			entity = new MovingCeiling;
@@ -567,7 +583,7 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 			entity = new Coin;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_ORB:
-			//entity = new Orb;
+			entity = new Orb;
 			break;
 		//Animated blocks
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_PBLOCK:

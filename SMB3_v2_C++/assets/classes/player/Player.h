@@ -52,6 +52,7 @@ private:
 	float _upVector;
 
 	bool _triggeredStageEnd;
+	bool _hasBossItem;
 	bool _wentIntoPipe;
 	bool _isCrouching;
 	//Can be interpreted as holding an entity or pressing the K key

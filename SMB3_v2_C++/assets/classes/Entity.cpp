@@ -140,7 +140,7 @@ void Entity::Update(
 		_removeStart = 0;
 	}
 
-	if (!_isActive && _objectType >= GameObjectType::GAMEOBJECT_TYPE_GOOMBA) {
+	if (!_isActive) {
 		return;
 	}
 	
@@ -149,6 +149,19 @@ void Entity::Update(
 
 	std::vector<LPCOLLISIONEVENT> collisionEvents, eventResults;
 	if (_health > 0) {
+		if (collidableEntities != nullptr) {
+			for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
+				Entity* entity = collidableEntities->at(i);
+				if (entity == this || !entity->IsActive()) {
+					continue;
+				}
+
+				if (IsOverlapped(entity)) {
+					HandleOverlap(entity);
+				}
+			}
+		}
+
 		//Edge case: what if the entity's bounding box is larger than the grid cell size? i.e: tile->_hitbox > grid->_cellsize
 		//Use another collection (collidableTiles) and calculate the collisions
 		//Since tiles themselves are static, as in, they don't update and render every tick, performance wise it's negligible
@@ -222,17 +235,6 @@ void Entity::Update(
 
 		_position.x += _distance.x * minTime.x + normal.x * offset.x;
 		_position.y += _distance.y * minTime.y + (normal.y == -1.0f ? (normal.y * offset.y) : 0.0f);
-
-		for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
-			Entity* entity = collidableEntities->at(i);
-			if (entity == this || !entity->IsActive()) {
-				continue;
-			}
-
-			if (IsOverlapped(entity)) {
-				HandleOverlap(entity);
-			}
-		}
 	}
 
 	for (LPCOLLISIONEVENT event : collisionEvents) {

@@ -5,26 +5,27 @@
 #2: Occasionally jumps
 #3: Runs faster
 [SPRITES]
-Idle	0	0	32	33	1	0
+Idle	0	0	32	34	1	0
 
-GetUp	0	0	32	33	2	50
-GetUp	34	0	66	33
+GetUp	0	0	32	34	2	50
+GetUp	34	0	66	34
 
-Jump	102	0	134	33	1	0
+Jump	102	0	134	34	1	0
 
-Aggro	136	0	168	33	4	100
-Aggro	204	0	236	33
-Aggro	170	0	202	33
-Aggro	238	0	270	33
+Run	136	0	168	34	4	100
+Run	204	0	236	34
+Run	170	0	202	34
+Run	238	0	270	34
 
-Stunned	272	0	304	33	1	0
+Hurt	272	0	304	34	1	0
 
-Dead	306	0	338	33	4	100
-Dead	340	0	372	33
-Dead	374	0	406	33
-Dead	408	0	440	33
+Dead	306	0	338	34	4	100
+Dead	340	0	372	34
+Dead	374	0	406	34
+Dead	408	0	440	34
 [/]
 
 [HITBOXES]
--12	7	28	26
+#-16	-17	32	34
+-14	-9	28	26
 [/]

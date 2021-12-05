@@ -16,8 +16,7 @@
 
 [CAMERABOUNDS]
 0	-8	2544	352	1
-#1504	352	2072	816	1
-0	0	2072	816	1
+1504	352	2072	816	1
 [/]
 
 [BGCOLOR]
@@ -43,7 +42,8 @@
 #0	assets\data\player\mario.txt	2	336	192	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	816	256	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	1536	240	107	assets\data\projectile\fireball.txt	7
-0	assets\data\player\mario.txt	2	1744	256	107	assets\data\projectile\fireball.txt	7
+#0	assets\data\player\mario.txt	2	1744	256	107	assets\data\projectile\fireball.txt	7
+0	assets\data\player\mario.txt	2	2384	256	107	assets\data\projectile\fireball.txt	7
 
 #NPC
 #Podoboo
@@ -65,6 +65,10 @@
 
 #Tail
 197	assets\data\player\tail.txt	2	0	0
+
+#Item
+#Orb
+#207	assets\data\item\orb.txt	5	2416	272
 
 #Animated block
 #Question block
@@ -109,8 +113,11 @@
 304	assets\data\block\door.txt	0	1744	272	1520	720
 304	assets\data\block\door.txt	0	1968	736	1968	256
 
-#Mini boss
-700	assets\data\bosses\fortress_boss.txt	8	2512	256
+#Trigger
+444	assets\data\block\trigger.txt	0	2448	144
+
+#Mini boss													#Item
+700	assets\data\bosses\fortress_boss.txt	8	2512	256	207	assets\data\item\orb.txt	5
 
 #Moving ceiling
 888	assets\data\npc\movingceiling_144x272.txt	0	1504	352
@@ -2434,7 +2441,7 @@ assets\data\hud\hud.txt	3
 231	34	247	50	1760	768
 231	34	247	50	1776	752
 231	34	247	50	1776	768
-#Blue background 128x32
+#Blue background 240x32
 231	34	247	50	1856	752
 231	34	247	50	1856	768
 231	34	247	50	1872	752
@@ -2451,4 +2458,18 @@ assets\data\hud\hud.txt	3
 231	34	247	50	1952	768
 231	34	247	50	1968	752
 231	34	247	50	1968	768
+231	34	247	50	1984	752
+231	34	247	50	1984	768
+231	34	247	50	2000	752
+231	34	247	50	2000	768
+231	34	247	50	2016	752
+231	34	247	50	2016	768
+231	34	247	50	2032	752
+231	34	247	50	2032	768
+231	34	247	50	2048	752
+231	34	247	50	2048	768
+231	34	247	50	2064	752
+231	34	247	50	2064	768
+231	34	247	50	2080	752
+231	34	247	50	2080	768
 [/]

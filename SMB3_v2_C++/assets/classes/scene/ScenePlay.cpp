@@ -1,3 +1,5 @@
+#include <random>
+
 #include "../Game.h"
 #include "../SceneManager.h"
 #include "Scene.h"
@@ -268,6 +270,25 @@ void ScenePlay::Update(DWORD deltaTime) {
 						}
 					}
 					break;
+				case GameObject::GameObjectType::GAMEOBJECT_TYPE_ORB:
+					{
+						const std::vector<D3DXCOLOR> colors = { 
+							D3DXCOLOR(70 / 255.0f, 199 / 255.0f, 78 / 255.0f, 1.0f), //green
+							D3DXCOLOR(142 / 255.0f, 145 / 255.0f, 255 / 255.0f, 1.0f), //purple
+							D3DXCOLOR(255 / 255.0f, 136 / 255.0f, 122 / 255.0f, 1.0f), //orange
+							D3DXCOLOR(255 / 255.0f, 204 / 255.0f, 198 / 255.0f, 1.0f), //peach
+						};
+
+						Orb* orb = dynamic_cast<Orb*>(entity);
+						if (orb->tookDamage) {
+							std::random_device device;
+							std::mt19937 rng(device());
+							std::uniform_int_distribution<std::mt19937::result_type> dist(0, colors.size() - 1);
+
+							_backgroundColor = colors.at(dist(rng));
+						}
+					}
+					break;
 				case GameObject::GameObjectType::GAMEOBJECT_TYPE_QUESTIONBLOCK:
 					{
 						QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(entity);
@@ -318,6 +339,24 @@ void ScenePlay::Update(DWORD deltaTime) {
 
 							AudioService::GetAudio().StopAudio(AudioType::AUDIO_TYPE_STAGE_PCOIN);
 							AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_currentThemeID), true, _pitch);
+						}
+					}
+					break;
+				case GameObject::GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
+					{
+						FortressBoss* fortressBoss = dynamic_cast<FortressBoss*>(entity);
+						if (fortressBoss->GetHealth() > 0) {
+							//Mario is on the right side
+							if (fortressBoss->GetPosition().x - _player->GetPosition().x < 0.0f) {
+								fortressBoss->SetNormal({ 1.0f, 1.0f });
+							}
+							else {
+								fortressBoss->SetNormal({ -1.0f, 1.0f });
+							}
+						}
+						
+						if (fortressBoss->tookDamage && fortressBoss->GetHealth() == 0) {
+							AddEntityToScene(fortressBoss->SpawnOrb());
 						}
 					}
 					break;
@@ -395,8 +434,11 @@ void ScenePlay::Render() {
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
 		Entity* entity = _entities.at(i);
 
-		if (!(!entity->IsActive() ||
-			dynamic_cast<PiranaPlant*>(entity) ||
+		if (!(!entity->IsActive() || 
+			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT || 
+			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT || 
+			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_DOOR || 
+			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING || 
 			_player->IsInPipe())) 
 		{
 			continue;
@@ -411,7 +453,10 @@ void ScenePlay::Render() {
 		Entity* entity = _entities.at(i);
 		
 		if (!entity->IsActive() || 
-			dynamic_cast<PiranaPlant*>(entity) || 
+			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT || 
+			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT || 
+			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_DOOR || 
+			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING || 
 			_player->IsInPipe()) 
 		{
 			continue;

@@ -1,7 +1,9 @@
 #include "../Entity.h"
 #include "Door.h"
+#include "../npc/MovingCeiling.h"
 
 Texture* Door::_doorTexture = nullptr;
+bool Door::canTriggerMovingCeiling;
 
 void Door::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _doorTexture);
@@ -9,13 +11,27 @@ void Door::_ParseSprites(std::string line) {
 
 Door::Door() {
 	_renderPriority = 2;
+	_runSpeed = 0.02f;
 
-	_runSpeed = 0.22f;
+	_idleTime = 500;
 
 	isPassThroughable = true;
 }
 
 Door::~Door() {}
+
+bool Door::IsIdling() const {
+	return _idleStart != 0;
+}
+
+void Door::StartIdleTimer() {
+	_idleStart = static_cast<DWORD>(GetTickCount64());
+}
+
+void Door::SetPosition(D3DXVECTOR2 position) {
+	_position = position;
+	_originalPos = position;
+}
 
 D3DXVECTOR2 Door::GetDestination() const {
 	return _destination;
@@ -47,7 +63,47 @@ void Door::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
+	if (canTriggerMovingCeiling) {
+		_position.x = _originalPos.x;
+
+		if (!IsIdling()) {
+			if (_position.y < _originalPos.y) {
+				StartIdleTimer();
+				_position.y = _originalPos.y;
+				_normal.y = 1.0f;
+			}
+			else if (_position.y > _originalPos.y + 113.0f) {
+				StartIdleTimer();
+				_position.y = _originalPos.y + 113.0f;
+				_normal.y = -1.0f;
+			}
+
+			_velocity.y = _runSpeed * _normal.y;
+		}
+		else {
+			_velocity.y = 0.0f;
+		}
+	}
+
+	if (IsIdling() && GetTickCount64() - _idleStart > _idleTime) {
+		_idleStart = 0;
+	}
+
+	Entity::Update(deltaTime);
+
+	for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
+		Entity* entity = collidableEntities->at(i);
+		if (entity->IsActive() && entity->GetHealth() > 0) {
+			switch (entity->GetObjectType()) {
+				case GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING:
+				{
+					MovingCeiling* movingCeiling = static_cast<MovingCeiling*>(entity);
+					movingCeiling->isMoving = canTriggerMovingCeiling;
+				}
+				break;
+			}
+		}
+	}
 }
 
 void Door::Render() {
@@ -58,4 +114,6 @@ void Door::Render() {
 void Door::Release() {
 	_animatedSprite.Release();
 	_doorTexture = nullptr;
+
+	canTriggerMovingCeiling = false;
 }
