@@ -12,13 +12,11 @@ BrickDebris::BrickDebris() {
 	_health = 0;
 	_gravity = 0.001f;
 	_removeTime = 1000;
+
+	isPassThroughable = true;
 }
 
 BrickDebris::~BrickDebris() {}
-
-RECTF BrickDebris::GetBoundingBox(int index) const {
-	return RECTF();
-}
 
 void BrickDebris::ParseData(
 	std::string dataPath, 

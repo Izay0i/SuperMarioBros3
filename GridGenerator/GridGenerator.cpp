@@ -97,8 +97,8 @@ void ParseEntityData(std::ofstream& outFile, std::string line) {
 }
 
 int main() {
-    std::string file = "stage_one.txt";
-    std::ofstream outputFile("grid_stage_one.txt");
+    std::string file = "stage_fortress.txt";
+    std::ofstream outputFile("grid_stage_fortress.txt");
     outputFile.clear();
 
     std::ifstream readFile;

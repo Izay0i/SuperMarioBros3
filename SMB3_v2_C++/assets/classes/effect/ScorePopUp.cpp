@@ -80,6 +80,8 @@ void ScorePopUp::GetEntity(Entity* entity) {
 			break;
 		//1000, 2000, 4000
 		case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
+			_dontReset = true;
+
 			if (_index < 6) {
 				_index = 6;
 			}
@@ -131,7 +133,7 @@ void ScorePopUp::Update(
 	Grid* grid) 
 {
 	//Resets the score back to 100 when the player hits the ground
-	if (_player->_isOnGround) {
+	if (_player->_isOnGround && !_dontReset) {
 		_index = 2;
 	}
 

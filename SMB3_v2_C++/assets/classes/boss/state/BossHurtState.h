@@ -1,9 +1,6 @@
 #pragma once
 
 class BossHurtState : public BossState {
-private:
-	float _scaleX;
-
 public:
 	BossHurtState(FortressBoss*);
 

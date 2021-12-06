@@ -10,7 +10,7 @@ void Door::_ParseSprites(std::string line) {
 }
 
 Door::Door() {
-	_renderPriority = 2;
+	_renderPriority = 1;
 	_runSpeed = 0.02f;
 
 	_idleTime = 500;

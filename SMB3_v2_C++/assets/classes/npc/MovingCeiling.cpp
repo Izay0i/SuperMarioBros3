@@ -136,8 +136,6 @@ void MovingCeiling::ParseData(
 	readFile.close();
 }
 
-void MovingCeiling::TakeDamage() {}
-
 void MovingCeiling::HandleStates() {}
 
 void MovingCeiling::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}

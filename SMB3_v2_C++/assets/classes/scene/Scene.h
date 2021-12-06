@@ -60,7 +60,7 @@ protected:
 	std::string _filePath;
 	std::vector<Entity*> _entities;
 	std::vector<Entity*> _tiles;
-	
+
 	std::unordered_map<unsigned int, Texture*> _textureMap;
 
 	D3DXCOLOR _backgroundColor;

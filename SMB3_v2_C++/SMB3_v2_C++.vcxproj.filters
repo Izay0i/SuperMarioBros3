@@ -270,6 +270,15 @@
     <ClCompile Include="assets\classes\block\Trigger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\classes\boss\state\BossIntroState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\block\MaskTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\effect\OrbEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="assets\classes\GlobalUtil.h">
@@ -528,6 +537,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\block\Trigger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\boss\state\BossIntroState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\block\MaskTile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\effect\OrbEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

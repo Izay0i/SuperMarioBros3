@@ -32,6 +32,7 @@
 #include "block/LavaPool.h"
 #include "block/Door.h"
 #include "block/Trigger.h"
+#include "block/MaskTile.h"
 
 #include "map/Cactus.h"
 #include "map/HelpText.h"
@@ -53,6 +54,6 @@
 #include "intro/PropNormalKoopa.h"
 
 #include "effect/BrickDebris.h"
-//#include "effect/OrbEffect.h"
+#include "effect/OrbEffect.h"
 
 #include "boss/FortressBoss.h"

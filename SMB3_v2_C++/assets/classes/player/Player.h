@@ -99,6 +99,7 @@ private:
 
 public:
 	bool isInMap;
+	bool lockCameraXAxis;
 
 	Player();
 	~Player();

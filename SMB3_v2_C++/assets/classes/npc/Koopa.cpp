@@ -130,7 +130,7 @@ void Koopa::HandleCollisionResult(
 					_health = 0;
 					tookDamage = true;
 					_scale.y = -1.0f;
-					_velocity.x = _runSpeed * koopa->GetNormal().x;
+					_velocity.x = -_runSpeed * koopa->GetNormal().x;
 					_velocity.y = -_jumpSpeed;
 
 					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);

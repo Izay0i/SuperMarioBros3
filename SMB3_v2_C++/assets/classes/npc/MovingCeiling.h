@@ -44,8 +44,6 @@ public:
 
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 
-	void TakeDamage() override;
-
 	void HandleStates() override;
 	void HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) override;
 

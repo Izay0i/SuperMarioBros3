@@ -3,10 +3,12 @@
 #include "state/BossState.h"
 
 class Orb;
+class OrbEffect;
 class BossState;
 class FortressBoss : public Entity {
 private:
 	friend class BossState;
+	friend class BossIntroState;
 	friend class BossIdleState;
 	friend class BossRunState;
 	friend class BossJumpState;
@@ -16,6 +18,9 @@ private:
 	static Texture* _bossTexture;
 
 	BossState* _bossState;
+
+	DWORD _introStart;
+	DWORD _introTime;
 
 	DWORD _attackStart;
 	DWORD _attackTime;
@@ -34,6 +39,9 @@ public:
 	FortressBoss();
 	~FortressBoss();
 
+	bool IsInIntro() const;
+	void StartIntroTimer();
+
 	bool IsAttacking() const;
 	void StartAttackTimer();
 
@@ -46,6 +54,7 @@ public:
 	RECTF GetBoundingBox(int = 0) const override;
 
 	Orb* SpawnOrb();
+	OrbEffect* SpawnOrbEffect();
 
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 

@@ -12,6 +12,11 @@
 300
 [/]
 
+#Float (Specify the value to lock the camera in place when posy > sceneHeight * value)
+[CAMERALOCKVALUE]
+0.3
+[/]
+
 #Left	top	right	bottom	up_vector
 [CAMERABOUNDS]
 0	-8	2808	465	1
@@ -31,6 +36,7 @@
 5	assets\textures\items.png
 6	assets\textures\particles.png
 7	assets\textures\projectiles.png
+8	assets\textures\masks.png
 [/]
 
 #OBJ_ID	FILE_PATH			texID	X	Y	EXTRA_DATA
@@ -118,14 +124,14 @@
 300	assets\data\block\questionblock.txt	0	176	352	205	assets\data\item\coin.txt	5
 300	assets\data\block\questionblock.txt	0	192	352	205	assets\data\item\coin.txt	5
 300	assets\data\block\questionblock.txt	0	224	304	205	assets\data\item\coin.txt	5
-300	assets\data\block\questionblock.txt	0	240	304	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+300	assets\data\block\questionblock.txt	0	240	304	200	assets\data\item\shroom_red.txt	5	202	assets\data\item\leaf.txt	5
 300	assets\data\block\questionblock.txt	0	416	320	205	assets\data\item\coin.txt	5
-300	assets\data\block\questionblock.txt	0	656	384	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+300	assets\data\block\questionblock.txt	0	656	384	200	assets\data\item\shroom_red.txt	5	202	assets\data\item\leaf.txt	5
 300	assets\data\block\questionblock.txt	0	704	352	205	assets\data\item\coin.txt	5
-300	assets\data\block\questionblock.txt	0	1472	368	200	assets\data\item\redshroom.txt	5	202	assets\data\item\leaf.txt	5
+300	assets\data\block\questionblock.txt	0	1472	368	200	assets\data\item\shroom_red.txt	5	202	assets\data\item\leaf.txt	5
 
 #Shiny brick															quantity
-301	assets\data\block\brickblock.txt	0	1440	128	601	assets\data\effect\brick.txt	6	201	assets\data\item\greenshroom.txt	5	1
+301	assets\data\block\brickblock.txt	0	1440	128	601	assets\data\effect\brick.txt	6	201	assets\data\item\shroom_green.txt	5	1
 301	assets\data\block\brickblock.txt	0	2032	368	601	assets\data\effect\brick.txt	6	302	assets\data\block\pblock.txt	0	1
 
 301	assets\data\block\brickblock.txt	0	1984	368	601	assets\data\effect\brick.txt	6
@@ -146,11 +152,22 @@
 301	assets\data\block\brickblock.txt	0	2048	400	601	assets\data\effect\brick.txt	6
 301	assets\data\block\brickblock.txt	0	2096	400	601	assets\data\effect\brick.txt	6
 301	assets\data\block\brickblock.txt	0	2112	400	601	assets\data\effect\brick.txt	6
+
+#Mask tile
+555	assets\data\mask\greenpipe_long.txt	8	360	384
+555	assets\data\mask\greenpipe_short.txt	8	1800	392
+555	assets\data\mask\greenpipe_long.txt	8	1864	384
+555	assets\data\mask\greenpipe_long.txt	8	2264	128
+555	assets\data\mask\greenpipe_short.txt	8	2328	392
+555	assets\data\mask\ground.txt	8	1800	416
+555	assets\data\mask\ground.txt	8	2328	416
+555	assets\data\mask\blackpipe.txt	8	2104	472
+555	assets\data\mask\blackpipe.txt	8	2328	472
 [/]
 
 #objID	x	y	width	height
 [TILEDATA]
-#One hit platform	16x16
+#One hit platform	512x16
 666	1968	448	512	16
 
 #Floor tile 624x16

@@ -1,6 +1,7 @@
 #include "../SceneManager.h"
 #include "../Entity.h"
 #include "../item/Orb.h"
+#include "../effect/OrbEffect.h"
 #include "FortressBoss.h"
 #include "state/BossIdleState.h"
 
@@ -15,21 +16,29 @@ FortressBoss::FortressBoss() {
 
 	_renderPriority = 1;
 	_health = 3;
+	_removeTime = 3200;
 
-	_runSpeed = 0.06f;
-	_jumpSpeed = 0.15f;
-	_gravity = 0.02f;
+	_runSpeed = 0.08f;
+	_jumpSpeed = 0.04f;
+	_gravity = 0.002f;
 
-	_attackTime = 1000;
+	_introTime = 300;
+	_attackTime = 1200;
 	_coolDownTime = 5000;
 	_invulnerableTime = 3000;
 
 	_bossState = new BossIdleState(this);
-
-	StartCoolDownTimer();
 }
 
 FortressBoss::~FortressBoss() {}
+
+bool FortressBoss::IsInIntro() const {
+	return _introStart != 0;
+}
+
+void FortressBoss::StartIntroTimer() {
+	_introStart = static_cast<DWORD>(GetTickCount64());
+}
 
 bool FortressBoss::IsAttacking() const {
 	return _attackStart != 0;
@@ -60,13 +69,28 @@ RECTF FortressBoss::GetBoundingBox(int) const {
 }
 
 Orb* FortressBoss::SpawnOrb() {
-	Entity* orb = SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
-		_extraData.at(0),
-		_extraData.at(1),
-		_extraData.at(2)
+	Orb* orb = dynamic_cast<Orb*>(
+		SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
+			_extraData.at(0),
+			_extraData.at(1),
+			_extraData.at(2)
+		)
 	);
-	orb->SetPosition(_position);
-	return dynamic_cast<Orb*>(orb);
+	orb->SetPosition({ _position.x, _position.y - GameObject::GetBoxHeight() });
+	return orb;
+}
+
+OrbEffect* FortressBoss::SpawnOrbEffect() {
+	OrbEffect* orbEffect = dynamic_cast<OrbEffect*>(
+		SceneManager::GetInstance()->GetCurrentScene()->CreateEntityFromData(
+			_extraData.at(3),
+			_extraData.at(4),
+			_extraData.at(5)
+		)
+	);
+	orbEffect->SetPosition(_position);
+	orbEffect->StartRemoveTimer();
+	return orbEffect;
 }
 
 void FortressBoss::ParseData(
@@ -85,18 +109,18 @@ void FortressBoss::TakeDamage() {
 		StartRemoveTimer();
 	}
 
-	if (_health > 0) {
-		if (!IsInvulnerable()) {
-			StartInvulnerableTimer();
+	if (commenceBattle && !IsInvulnerable()) {
+		StartInvulnerableTimer();
 
-			--_health;
+		--_health;
 
-			tookDamage = true;
-		}
+		tookDamage = true;
 	}
 }
 
 void FortressBoss::HandleStates() {
+	isPassThroughable = IsInvulnerable();
+
 	BossState* currentState = _bossState->HandleStates();
 	if (currentState != nullptr) {
 		delete _bossState;
@@ -120,7 +144,7 @@ void FortressBoss::HandleCollisionResult(
 				_normal.x = -_normal.x;
 			}
 
-			if (eventNormal.y != 1.0f) {
+			if (eventNormal.y == -1.0f) {
 				_isOnGround = true;
 			}
 			break;
@@ -133,6 +157,10 @@ void FortressBoss::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
+	if (IsInIntro() && GetTickCount64() - _introStart > _introTime) {
+		_introStart = 0;
+	}
+
 	if (IsAttacking() && GetTickCount64() - _attackStart > _attackTime) {
 		_attackStart = 0;
 		StartCoolDownTimer();

@@ -149,6 +149,8 @@ void Fireball::HandleCollisionResult(
 						}
 					}
 					break;
+				case GameObjectType::GAMEOBJECT_TYPE_TRIGGER:
+				case GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING:
 				case GameObjectType::GAMEOBJECT_TYPE_TILE:
 					if (eventNormal.x != 0.0f) {
 						TakeDamage();
@@ -164,6 +166,8 @@ void Fireball::HandleCollisionResult(
 				case GameObjectType::GAMEOBJECT_TYPE_FLOWER:
 				case GameObjectType::GAMEOBJECT_TYPE_STAR:
 				case GameObjectType::GAMEOBJECT_TYPE_BONUSITEM:
+				case GameObjectType::GAMEOBJECT_TYPE_ORB:
+				case GameObjectType::GAMEOBJECT_TYPE_DOOR:
 				case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:
 					//Pokemon Black & White, Black 2 & White 2 stories were the peak of the franchise, change my mind
 					break;

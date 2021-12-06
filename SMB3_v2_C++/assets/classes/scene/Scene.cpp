@@ -385,6 +385,9 @@ void Scene::_ParseEntityData(std::string line) {
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_TRIGGER:
 			entity = new Trigger;
 			break;
+		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MASKTILE:
+			entity = new MaskTile;
+			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING:
 			entity = new MovingCeiling;
 			break;
@@ -594,7 +597,7 @@ Entity* Scene::CreateEntityFromData(std::string objectID, std::string dataPath, 
 			entity = new BrickDebris;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_ORBEFFECT:
-			//entity = new OrbEffect;
+			entity = new OrbEffect;
 			break;
 	}
 

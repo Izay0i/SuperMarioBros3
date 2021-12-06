@@ -84,7 +84,9 @@ void ScenePlay::UpdateCameraPosition() {
 	}
 
 	cameraPosition = _player->GetPosition();
-	cameraPosition.x -= Game::GetInstance()->GetWindowWidth() / 2.25f;
+	if (!_player->lockCameraXAxis) {
+		cameraPosition.x -= Game::GetInstance()->GetWindowWidth() / 2.25f;
+	}
 	if (cameraPosition.x < cameraBound.left) {
 		cameraPosition.x = cameraBound.left;
 	}
@@ -131,6 +133,9 @@ void ScenePlay::Update(DWORD deltaTime) {
 		}
 	}
 
+	//----------------------------------------------------------------------------
+	//SOUNDS
+	//----------------------------------------------------------------------------
 	if (_sceneTime == _NEAR_TIME_LIMIT && !_isInHurry) {
 		_isInHurry = true;
 		_hurryUp = true;
@@ -166,6 +171,9 @@ void ScenePlay::Update(DWORD deltaTime) {
 			AudioService::GetAudio().PlayAudio(static_cast<AudioType>(_GetNextThemeID()), true, _pitch);
 		}	
 	}
+	//----------------------------------------------------------------------------
+	//SOUNDS
+	//----------------------------------------------------------------------------
 
 	if (_player->GetHealth() == 0 || _player->IsInvulnerable()) {
 		_player->Update(deltaTime, &_entities, &_tiles, _grid);
@@ -354,9 +362,59 @@ void ScenePlay::Update(DWORD deltaTime) {
 								fortressBoss->SetNormal({ -1.0f, 1.0f });
 							}
 						}
-						
-						if (fortressBoss->tookDamage && fortressBoss->GetHealth() == 0) {
-							AddEntityToScene(fortressBoss->SpawnOrb());
+
+						if (fortressBoss->GetHealth() <= 0 && !fortressBoss->IsInvulnerable()) {
+							auto orb = fortressBoss->SpawnOrb();
+							orb->SetVelocity({ 0.0f, -0.02f });
+							AddEntityToScene(orb);
+
+							//		*
+							//	*		*
+							//*		o		*
+							//	*		*
+							//		*
+							auto effect = fortressBoss->SpawnOrbEffect();
+							effect->SetNormal({ 0.0f, -1.0f });
+							AddEntityToScene(effect);
+							effect = fortressBoss->SpawnOrbEffect();
+							effect->SetNormal({ -1.0f, -1.0f });
+							effect->SetPosition({ effect->GetPosition().x + 8.0f, effect->GetPosition().y + 8.0f });
+							AddEntityToScene(effect);
+							effect = fortressBoss->SpawnOrbEffect();
+							effect->SetNormal({ 1.0f, -1.0f });
+							effect->SetPosition({ effect->GetPosition().x - 8.0f, effect->GetPosition().y + 8.0f });
+							AddEntityToScene(effect);
+							effect = fortressBoss->SpawnOrbEffect();
+							effect->SetNormal({ -1.0f, 0.0f });
+							AddEntityToScene(effect);
+							effect = fortressBoss->SpawnOrbEffect();
+							effect->SetNormal({ 1.0f, 0.0f });
+							AddEntityToScene(effect);
+							effect = fortressBoss->SpawnOrbEffect();
+							effect->SetNormal({ -1.0f, 1.0f });
+							effect->SetPosition({ effect->GetPosition().x + 8.0f, effect->GetPosition().y - 8.0f });
+							AddEntityToScene(effect);
+							effect = fortressBoss->SpawnOrbEffect();
+							effect->SetNormal({ 1.0f, 1.0f });
+							effect->SetPosition({ effect->GetPosition().x - 8.0f, effect->GetPosition().y - 8.0f });
+							AddEntityToScene(effect);
+							effect = fortressBoss->SpawnOrbEffect();
+							effect->SetNormal({ 0.0f, 1.0f });
+							AddEntityToScene(effect);
+
+							fortressBoss->SetPosition({ fortressBoss->GetPosition().x, static_cast<float>(_sceneHeight) });
+
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
+						}
+					}
+					break;
+				case GameObject::GameObjectType::GAMEOBJECT_TYPE_TRIGGER:
+					{
+						Trigger* trigger = dynamic_cast<Trigger*>(entity);
+						if (trigger->triggered) {
+							trigger->triggered = false;
+
+							_currentThemeID = static_cast<unsigned int>(AudioType::AUDIO_TYPE_BATTLE_MINIBOSS);
 						}
 					}
 					break;
@@ -429,40 +487,14 @@ void ScenePlay::Update(DWORD deltaTime) {
 	}
 }
 
-void ScenePlay::Render() {
-	//It just works
-	for (unsigned int i = 0; i < _entities.size(); ++i) {
-		Entity* entity = _entities.at(i);
-
-		if (!(!entity->IsActive() || 
-			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT || 
-			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT || 
-			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_DOOR || 
-			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING || 
-			_player->IsInPipe())) 
-		{
-			continue;
-		}
-
-		entity->Render();
-	}
-	
+void ScenePlay::Render() {	
 	_background->Render();
 
 	for (unsigned int i = 0; i < _entities.size(); ++i) {
-		Entity* entity = _entities.at(i);
-		
-		if (!entity->IsActive() || 
-			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_PIRANHAPLANT || 
-			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_VENUSPLANT || 
-			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_DOOR || 
-			entity->GetObjectType() == GameObject::GameObjectType::GAMEOBJECT_TYPE_MOVINGCEILING || 
-			_player->IsInPipe()) 
-		{
-			continue;
+		Entity* entity = _entities.at(i);	
+		if (entity->IsActive()) {
+			entity->Render();
 		}
-
-		entity->Render();
 	}
 	
 	_scorePopUp->Render();

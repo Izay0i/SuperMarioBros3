@@ -26,8 +26,11 @@ void Player::_HandleCurrencies() {
 }
 
 void Player::_HanldeStageEnd() {
-	if (_triggeredStageEnd && !_hasBossItem) {
-		_acceleration = _MIN_ACCEL;
+	if (_triggeredStageEnd) {
+		if (!_hasBossItem) {
+			_acceleration = _MIN_ACCEL;
+		}
+
 		_isHolding = false;
 		
 		if (_sceneRemainingTime > 0) {
@@ -640,11 +643,23 @@ void Player::HandleCollisionResult(
 		case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
 			{
 				FortressBoss* fortressBoss = dynamic_cast<FortressBoss*>(eventEntity);
-				if (eventNormal.y == -1.0f) {
-					fortressBoss->TakeDamage();
-					_velocity.y = -_bounceSpeed;
+				if (!(fortressBoss->IsInIntro() || fortressBoss->IsInvulnerable())) {
+					if (eventNormal.y == -1.0f) {
+						if (fortressBoss->GetHealth() == 3 && fortressBoss->IsAttacking()) {
+							TakeDamage();
+						}
+						else {
+							fortressBoss->TakeDamage();
+							_velocity.y = -_bounceSpeed;
 
-					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
+						}
+					}
+					else if (eventNormal.x != 0.0f || eventNormal.y == 1.0f) {
+						if (fortressBoss->GetHealth() > 0) {
+							TakeDamage();
+						}
+					}
 				}
 			}
 			break;
@@ -882,16 +897,6 @@ void Player::HandleCollisionResult(
 	//----------------------------------------------------------------------------
 	//ANIMATED BLOCKS
 	//----------------------------------------------------------------------------
-			case GameObjectType::GAMEOBJECT_TYPE_TRIGGER:
-				{
-					Trigger* trigger = dynamic_cast<Trigger*>(eventEntity);
-					trigger->triggered = true;
-					trigger->SetPosition({ 0.0f, 0.0f });
-
-					AudioService::GetAudio().StopAll();
-					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BATTLE_MINIBOSS);
-				}
-				break;
 			case GameObjectType::GAMEOBJECT_TYPE_ONEHITPLATFORM:
 				_position.y = 999.0f;
 				_health = 1;
@@ -900,7 +905,9 @@ void Player::HandleCollisionResult(
 			case GameObjectType::GAMEOBJECT_TYPE_TILE:
 				if (eventNormal.x != 0.0f) {
 					if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
-						//AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
+						if (GetTickCount64() % 500 == 0) {
+							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
+						}
 					}
 				}
 				break;
@@ -945,6 +952,18 @@ void Player::HandleOverlap(Entity* entity) {
 
 				AudioService::GetAudio().StopAll();
 				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BATTLE_CLEAR);
+			}
+			break;
+		case GameObjectType::GAMEOBJECT_TYPE_TRIGGER:
+			{
+				Trigger* trigger = dynamic_cast<Trigger*>(entity);
+				trigger->triggered = true;
+				trigger->SetPosition({ 0.0f, 0.0f });
+
+				lockCameraXAxis = true;
+
+				AudioService::GetAudio().StopAll();
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BATTLE_MINIBOSS);
 			}
 			break;
 	}

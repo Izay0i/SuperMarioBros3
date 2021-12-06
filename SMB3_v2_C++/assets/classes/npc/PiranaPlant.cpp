@@ -8,7 +8,7 @@ void PiranaPlant::_ParseSprites(std::string line) {
 }
 
 PiranaPlant::PiranaPlant() {
-	_renderPriority = 1;
+	_renderPriority = 2;
 	_runSpeed = 0.02f;
 	_gravity = 0.0f;
 	

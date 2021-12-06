@@ -9,6 +9,8 @@ private:
 	unsigned int _score;
 	std::vector<unsigned int> _scores;
 
+	bool _dontReset;
+
 	Player* _player;
 
 	DWORD _floatStart;

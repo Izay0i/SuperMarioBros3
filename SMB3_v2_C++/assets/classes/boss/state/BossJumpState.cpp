@@ -13,6 +13,7 @@ BossState* BossJumpState::HandleStates() {
 }
 
 void BossJumpState::Update(DWORD) {
+	_fortressBoss->_velocity.x = _fortressBoss->_runSpeed * _fortressBoss->_normal.x;
 	_fortressBoss->_velocity.y = -_fortressBoss->_jumpSpeed;
 }
 

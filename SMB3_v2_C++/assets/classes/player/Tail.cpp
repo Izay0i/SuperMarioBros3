@@ -105,8 +105,11 @@ void Tail::HandleOverlap(Entity* entity) {
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
 			{
-
+				FortressBoss* fortressBoss = dynamic_cast<FortressBoss*>(entity);
+				fortressBoss->TakeDamage();
 			}
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_COIN:
 			{

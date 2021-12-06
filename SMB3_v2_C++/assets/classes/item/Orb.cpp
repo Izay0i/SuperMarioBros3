@@ -9,12 +9,11 @@ void Orb::_ParseSprites(std::string line) {
 
 Orb::Orb() {
 	_renderPriority = 2;
-	_gravity = 0.22f;
+	_removeTime = 50;
+
+	_gravity = 0.001f;
 
 	isPassThroughable = true;
-
-	const float BOUNCE_VALUE = 0.16f;
-	_velocity.y = -BOUNCE_VALUE;
 }
 
 Orb::~Orb() {}
@@ -30,7 +29,11 @@ void Orb::ParseData(
 	Entity::ParseData(dataPath, texture, extraData);
 }
 
-void Orb::HandleStates() {}
+void Orb::HandleStates() {
+	if (_health == 0 && !IsRemoved()) {
+		StartRemoveTimer();
+	}
+}
 
 void Orb::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
@@ -40,6 +43,7 @@ void Orb::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
+	HandleStates();
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 }
 

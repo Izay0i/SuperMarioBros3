@@ -48,7 +48,12 @@ void Leaf::HandleStates() {
 
 void Leaf::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
-void Leaf::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities, std::vector<Entity*>* collidableTiles, Grid* grid) {
+void Leaf::Update(
+	DWORD deltaTime, 
+	std::vector<Entity*>* collidableEntities, 
+	std::vector<Entity*>* collidableTiles, 
+	Grid* grid) 
+{
 	HandleStates();
 	Entity::Update(deltaTime);
 

@@ -152,11 +152,7 @@ void Entity::Update(
 		if (collidableEntities != nullptr) {
 			for (unsigned int i = 0; i < collidableEntities->size(); ++i) {
 				Entity* entity = collidableEntities->at(i);
-				if (entity == this || !entity->IsActive()) {
-					continue;
-				}
-
-				if (IsOverlapped(entity)) {
+				if (entity != this && IsOverlapped(entity)) {
 					HandleOverlap(entity);
 				}
 			}

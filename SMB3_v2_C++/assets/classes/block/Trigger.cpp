@@ -5,7 +5,7 @@
 void Trigger::_ParseSprites(std::string) {}
 
 Trigger::Trigger() {
-	//isPassThroughable = true;
+	isPassThroughable = true;
 }
 
 Trigger::~Trigger() {}
@@ -35,7 +35,11 @@ void Trigger::Update(
 				case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
 					{
 						FortressBoss* fortressBoss = dynamic_cast<FortressBoss*>(entity);
-						fortressBoss->commenceBattle = triggered;
+						if (!fortressBoss->commenceBattle) {
+							fortressBoss->commenceBattle = triggered;
+							fortressBoss->StartIntroTimer();
+							fortressBoss->StartCoolDownTimer();
+						}
 					}
 					break;
 			}

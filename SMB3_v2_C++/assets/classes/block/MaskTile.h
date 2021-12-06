@@ -1,14 +1,14 @@
 #pragma once
 
-class BrickDebris : public Entity {
+class MaskTile : public Entity {
 private:
-	static Texture* _debrisTexture;
+	static Texture* _maskTexture;
 
 	void _ParseSprites(std::string) override;
 
 public:
-	BrickDebris();
-	~BrickDebris();
+	MaskTile();
+	~MaskTile();
 
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 

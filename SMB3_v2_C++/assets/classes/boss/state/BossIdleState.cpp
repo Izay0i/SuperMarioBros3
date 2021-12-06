@@ -1,12 +1,12 @@
 #include "BossState.h"
+#include "BossIntroState.h"
 #include "BossIdleState.h"
-#include "BossJumpState.h"
 
 BossIdleState::BossIdleState(FortressBoss* fortressBoss) : BossState(fortressBoss) {}
 
 BossState* BossIdleState::HandleStates() {
 	if (_fortressBoss->commenceBattle) {
-		return new BossJumpState(_fortressBoss);
+		return new BossIntroState(_fortressBoss);
 	}
 
 	return nullptr;

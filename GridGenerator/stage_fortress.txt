@@ -39,11 +39,11 @@
 [ENTITYDATA]
 #UINT	STRING	UINT	FLOAT	FLOAT	#EXTRA_DATA(ANY)
 #Player											OBJ_ID	FILE_PATH				texID
-0	assets\data\player\mario.txt	2	16	256	107	assets\data\projectile\fireball.txt	7
+#0	assets\data\player\mario.txt	2	16	256	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	336	192	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	816	256	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	1536	240	107	assets\data\projectile\fireball.txt	7
-#0	assets\data\player\mario.txt	2	1744	256	107	assets\data\projectile\fireball.txt	7
+0	assets\data\player\mario.txt	2	1744	256	107	assets\data\projectile\fireball.txt	7
 #0	assets\data\player\mario.txt	2	2384	256	107	assets\data\projectile\fireball.txt	7
 
 #NPC
@@ -115,13 +115,13 @@
 304	assets\data\block\door.txt	0	1968	736	1968	256
 
 #Trigger
-444	assets\data\block\trigger.txt	0	2448	200
+444	assets\data\block\trigger.txt	0	2448	144
 
 #Mask tile
 555	assets\data\mask\bluetile.txt	9	2024	760
 
 #Mini boss													#Item
-700	assets\data\bosses\fortress_boss.txt	8	2512	256	207	assets\data\item\orb.txt	5	604	assets\data\effect\star.txt	6
+700	assets\data\bosses\fortress_boss.txt	8	2512	256	207	assets\data\item\orb.txt	5
 
 #Moving ceiling
 888	assets\data\npc\movingceiling_144x272.txt	0	1504	352
@@ -254,10 +254,6 @@
 
 #Wall 16x144
 777	1984	608	16	144
-[/]
-
-[GRID]
-assets\data\overworld_1\grid\grid_stage_fortress.txt
 [/]
 
 [HUD]

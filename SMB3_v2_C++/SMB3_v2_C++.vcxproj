@@ -153,6 +153,7 @@
     <ClCompile Include="assets\classes\Background.cpp" />
     <ClCompile Include="assets\classes\block\Door.cpp" />
     <ClCompile Include="assets\classes\block\LavaPool.cpp" />
+    <ClCompile Include="assets\classes\block\MaskTile.cpp" />
     <ClCompile Include="assets\classes\block\PBlock.cpp" />
     <ClCompile Include="assets\classes\block\Portal.cpp" />
     <ClCompile Include="assets\classes\block\ShinyBrick.cpp" />
@@ -161,11 +162,13 @@
     <ClCompile Include="assets\classes\boss\state\BossAttackState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossHurtState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossIdleState.cpp" />
+    <ClCompile Include="assets\classes\boss\state\BossIntroState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossJumpState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossRunState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossState.cpp" />
     <ClCompile Include="assets\classes\Camera.cpp" />
     <ClCompile Include="assets\classes\effect\BrickDebris.cpp" />
+    <ClCompile Include="assets\classes\effect\OrbEffect.cpp" />
     <ClCompile Include="assets\classes\effect\ScorePopUp.cpp" />
     <ClCompile Include="assets\classes\Entity.cpp" />
     <ClCompile Include="assets\classes\Game.cpp" />
@@ -241,6 +244,7 @@
     <ClInclude Include="assets\classes\Background.h" />
     <ClInclude Include="assets\classes\block\Door.h" />
     <ClInclude Include="assets\classes\block\LavaPool.h" />
+    <ClInclude Include="assets\classes\block\MaskTile.h" />
     <ClInclude Include="assets\classes\block\PBlock.h" />
     <ClInclude Include="assets\classes\block\Portal.h" />
     <ClInclude Include="assets\classes\block\QuestionBlock.h" />
@@ -250,11 +254,13 @@
     <ClInclude Include="assets\classes\boss\state\BossAttackState.h" />
     <ClInclude Include="assets\classes\boss\state\BossHurtState.h" />
     <ClInclude Include="assets\classes\boss\state\BossIdleState.h" />
+    <ClInclude Include="assets\classes\boss\state\BossIntroState.h" />
     <ClInclude Include="assets\classes\boss\state\BossJumpState.h" />
     <ClInclude Include="assets\classes\boss\state\BossRunState.h" />
     <ClInclude Include="assets\classes\boss\state\BossState.h" />
     <ClInclude Include="assets\classes\Camera.h" />
     <ClInclude Include="assets\classes\effect\BrickDebris.h" />
+    <ClInclude Include="assets\classes\effect\OrbEffect.h" />
     <ClInclude Include="assets\classes\effect\ScorePopUp.h" />
     <ClInclude Include="assets\classes\Entity.h" />
     <ClInclude Include="assets\classes\Game.h" />
