@@ -21,7 +21,10 @@ void BossAttackState::Update(DWORD deltaTime) {
 			_fortressBoss->_velocity.y = -_fortressBoss->_jumpSpeed;
 			break;
 		case 1:
-			_fortressBoss->_velocity.x = _fortressBoss->_runSpeed * _fortressBoss->_normal.x * 2.0f;
+			{
+				const float SPEED_MODIFIER = 2.0f;
+				_fortressBoss->_velocity.x = _fortressBoss->_runSpeed * _fortressBoss->_normal.x * SPEED_MODIFIER;
+			}
 			break;
 	}
 }

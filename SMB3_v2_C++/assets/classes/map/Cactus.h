@@ -7,6 +7,9 @@ private:
 	void _ParseSprites(std::string) override;
 
 public:
+	Cactus();
+	~Cactus();
+
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;
 
 	void HandleStates() override;

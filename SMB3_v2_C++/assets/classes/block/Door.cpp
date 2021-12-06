@@ -72,9 +72,9 @@ void Door::Update(
 				_position.y = _originalPos.y;
 				_normal.y = 1.0f;
 			}
-			else if (_position.y > _originalPos.y + 113.0f) {
+			else if (_position.y > _originalPos.y + _MAX_HEIGHT) {
 				StartIdleTimer();
-				_position.y = _originalPos.y + 113.0f;
+				_position.y = _originalPos.y + _MAX_HEIGHT;
 				_normal.y = -1.0f;
 			}
 

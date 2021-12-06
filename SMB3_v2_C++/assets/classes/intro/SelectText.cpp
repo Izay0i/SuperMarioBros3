@@ -8,7 +8,7 @@ void SelectText::_ParseSprites(std::string line) {
 }
 
 SelectText::SelectText() {
-
+	_renderPriority = 10;
 }
 
 SelectText::~SelectText() {}

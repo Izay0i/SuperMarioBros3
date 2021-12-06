@@ -74,7 +74,7 @@
 197	assets\data\player\tail.txt	2	0	0
 
 #Portal								#destination
-198	assets\data\npc\portal.txt	0	2264	107	2104	468
+198	assets\data\npc\portal.txt	0	2264	108	2104	468
 198	assets\data\npc\portal.txt	0	2328	485	2328	396
 
 #Item

@@ -7,6 +7,12 @@ void Cactus::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _cactusTexture);
 }
 
+Cactus::Cactus() {
+	_renderPriority = 1;
+}
+
+Cactus::~Cactus() {}
+
 void Cactus::ParseData(
 	std::string dataPath, 
 	Texture*& texture, 

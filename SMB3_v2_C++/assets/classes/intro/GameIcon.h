@@ -7,6 +7,9 @@ private:
 	void _ParseSprites(std::string) override;
 
 public:
+	GameIcon();
+	~GameIcon();
+
 	RECTF GetBoundingBox(int = 0) const override;
 
 	void ParseData(std::string, Texture*&, std::vector<std::string> = std::vector<std::string>()) override;

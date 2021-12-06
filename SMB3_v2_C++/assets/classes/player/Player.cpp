@@ -6,6 +6,7 @@
 #include "../audio/AudioService.h"
 
 Texture* Player::_playerTexture = nullptr;
+std::vector<GameObject::GameObjectType> Player::_bonusItems;
 
 void Player::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _playerTexture);
@@ -66,14 +67,15 @@ void Player::_HandleBonusItems() {
 		}
 	}
 
-	if (_bonusItems.size() == 3) {
-		if (shroomCards == 3) {
+	const unsigned int MAX_ITEMS = 3;
+	if (_bonusItems.size() == MAX_ITEMS) {
+		if (shroomCards == MAX_ITEMS) {
 			_lives += 2;
 		}
-		else if (flowerCards == 3) {
+		else if (flowerCards == MAX_ITEMS) {
 			_lives += 3;
 		}
-		else if (starCards == 3) {
+		else if (starCards == MAX_ITEMS) {
 			_lives += 5;
 		}
 		else {
@@ -307,7 +309,7 @@ void Player::OnKeyUpGame(int keyCode) {
 
 			if (_health > 1 && _isOnGround && !IsInPipe()) {
 				_isOnGround = false;
-				_position.y -= GetBoxHeight(1);
+				_position.y -= _CROUCH_HEIGHT_ADJUST;
 			}
 			break;
 		case DIK_J:
@@ -317,18 +319,19 @@ void Player::OnKeyUpGame(int keyCode) {
 }
 
 void Player::OnKeyDownMap(int keyCode) {
+	const float MAP_RUN_SPEED = 0.08f;
 	switch (keyCode) {
 		case DIK_W:
-			_velocity.y = -0.08f;
+			_velocity.y = -MAP_RUN_SPEED;
 			break;
 		case DIK_A:
-			_velocity.x = -0.08f;
+			_velocity.x = -MAP_RUN_SPEED;
 			break;
 		case DIK_S:
-			_velocity.y = 0.08f;
+			_velocity.y = MAP_RUN_SPEED;
 			break;
 		case DIK_D:
-			_velocity.x = 0.08f;
+			_velocity.x = MAP_RUN_SPEED;
 			break;
 	}
 }
@@ -343,6 +346,10 @@ void Player::OnKeyDownGame(int keyCode) {
 			break;
 		case DIK_S:
 			_isCrouching = true;
+
+			if (_health > 1 && _isOnGround && !IsInPipe()) {
+				_position.y += _CROUCH_HEIGHT_ADJUST;
+			}
 			break;
 		case DIK_J:
 			_isHolding = true;
@@ -448,7 +455,8 @@ void Player::RunFly() {
 
 void Player::SlowFall() {
 	if (_health == 4 && !_isOnGround) {
-		_velocity.y *= 0.2f;
+		const float SLOW_MODIFIER = 0.2f;
+		_velocity.y *= SLOW_MODIFIER;
 
 		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TAILATTACK, false);
 	}
@@ -462,8 +470,9 @@ Fireball* Player::SpawnFireball() {
 			_extraData.at(2)
 		)
 	);
+	const float OFFSET = 10.0f;
 	fireball->SetNormal({ _normal.x, fireball->GetNormal().y });
-	fireball->SetPosition({ _position.x, _position.y + 10.0f });
+	fireball->SetPosition({ _position.x, _position.y + OFFSET });
 	return fireball;
 }
 
@@ -905,7 +914,7 @@ void Player::HandleCollisionResult(
 			case GameObjectType::GAMEOBJECT_TYPE_TILE:
 				if (eventNormal.x != 0.0f) {
 					if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
-						if (GetTickCount64() % 500 == 0) {
+						if (GetTickCount64() % 100 == 0) {
 							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 						}
 					}
@@ -1065,10 +1074,12 @@ void Player::Update(
 			_isHolding = false;
 
 			if (_heldEntity->GetHealth() == 3) {
+				const float OFFSET_X = 17.0f;
+				const float OFFSET_Y = 14.0f;
 				_heldEntity->SetPosition(
 					{ 
-					_position.x + 17.0f * _normal.x, 
-					_position.y - 14.0f 
+					_position.x + OFFSET_X * _normal.x, 
+					_position.y - OFFSET_Y 
 					}
 				);
 			}

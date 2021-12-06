@@ -33,11 +33,13 @@ RECTF PiranaPlant::GetBoundingBox(int index) const {
 void PiranaPlant::SetPosition(D3DXVECTOR2 position) {
 	_position = position;
 	_originalPos = position;
+
 	//Boundary/proximity of the plant to detect the player
-	_boundary.left = _originalPos.x - _hitbox.GetBoxWidth() * 1.5f;
-	_boundary.top = _originalPos.y - _hitbox.GetBoxHeight() * 4.0f;
-	_boundary.right = _originalPos.x + _hitbox.GetBoxWidth() * 2.0f;
-	_boundary.bottom = _originalPos.y + _hitbox.GetBoxHeight() * 4.0f;
+	const RECTF BOUNDARY_OFFSET(1.5f, 4.0f, 2.0f, 4.0f);
+	_boundary.left = _originalPos.x - _hitbox.GetBoxWidth() * BOUNDARY_OFFSET.left;
+	_boundary.top = _originalPos.y - _hitbox.GetBoxHeight() * BOUNDARY_OFFSET.top;
+	_boundary.right = _originalPos.x + _hitbox.GetBoxWidth() * BOUNDARY_OFFSET.right;
+	_boundary.bottom = _originalPos.y + _hitbox.GetBoxHeight() * BOUNDARY_OFFSET.bottom;
 }
 
 void PiranaPlant::ParseData(

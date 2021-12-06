@@ -29,7 +29,7 @@ protected:
 	int _health;
 	
 	//The lower the value, the higher the render priority;
-	unsigned int _renderPriority;
+	int _renderPriority;
 
 	std::string _variant;
 

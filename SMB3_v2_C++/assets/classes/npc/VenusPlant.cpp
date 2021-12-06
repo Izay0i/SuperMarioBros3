@@ -19,8 +19,9 @@ Fireball* VenusPlant::SpawnFireball() {
 			_extraData.at(2)
 		)
 	);
+	const float OFFSET_Y = 3.0f;
 	fireball->SetNormal({ -_scale.x, _normal.x });
-	fireball->SetPosition({ _position.x + _normal.x, _position.y + 3.0f });
+	fireball->SetPosition({ _position.x + _normal.x, _position.y + OFFSET_Y });
 	return fireball;
 }
 

@@ -13,7 +13,7 @@ OrbEffect::OrbEffect() {
 	_renderPriority = 1;
 	_health = 0;
 	_runSpeed = 0.04f;
-	_removeTime = 1000;
+	_removeTime = 800;
 
 	isPassThroughable = true;
 }

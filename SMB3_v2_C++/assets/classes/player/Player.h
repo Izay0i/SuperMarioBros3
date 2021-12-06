@@ -23,6 +23,7 @@ private:
 	friend class ScorePopUp;
 
 	static Texture* _playerTexture;
+	static std::vector<GameObjectType> _bonusItems;
 
 	const unsigned int _DEFAULT_LIVES = 3;
 	const unsigned int _MAX_LIVES = 99;
@@ -37,6 +38,8 @@ private:
 	const float _MAX_ACCEL = 2.2f;
 	const float _MIN_ACCEL = 1.1f;
 	const float _ACCEL_THRESHOLD = 1.86f;
+
+	const float _CROUCH_HEIGHT_ADJUST = 8.0f;
 
 	unsigned int _lives;
 	unsigned int _coins;
@@ -62,8 +65,6 @@ private:
 	Entity* _heldEntity;
 
 	PlayerState* _playerState;
-
-	std::vector<GameObjectType> _bonusItems;
 
 	D3DXVECTOR2 _lastPos;
 	D3DXVECTOR2 _mapNodePos;

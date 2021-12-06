@@ -9,6 +9,9 @@ private:
 	void _ParseSprites(std::string) override;
 
 public:
+	HammerBro();
+	~HammerBro();
+
 	RECTF GetBoundingBox(int = 0) const override;
 	void SetPosition(D3DXVECTOR2) override;
 

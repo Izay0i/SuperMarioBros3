@@ -4,6 +4,7 @@
 Texture* GameLogo::_logoTexture = nullptr;
 
 GameLogo::GameLogo() {
+	_renderPriority = 11;
 	_fallDownTime = 400;
 }
 

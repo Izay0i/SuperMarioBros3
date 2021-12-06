@@ -12,6 +12,7 @@ void BonusItem::_ParseSprites(std::string line) {
 BonusItem::BonusItem() {
 	_renderPriority = 2;
 	_removeTime = 3000;
+	_runSpeed = 0.08f;
 	_health = 2;
 
 	_possibleItems = {
@@ -54,11 +55,16 @@ void BonusItem::HandleStates() {
 
 void BonusItem::HandleCollisionResult(LPCOLLISIONEVENT, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&, D3DXVECTOR2&) {}
 
-void BonusItem::Update(DWORD deltaTime, std::vector<Entity*>* collidableEntities, std::vector<Entity*>* collidableTiles, Grid* grid) {
+void BonusItem::Update(
+	DWORD deltaTime, 
+	std::vector<Entity*>* collidableEntities, 
+	std::vector<Entity*>* collidableTiles, 
+	Grid* grid) 
+{
 	HandleStates();
 	switch (_state) {
 		case _State::PICKEDUP:
-			_velocity.y -= 0.006f;
+			_velocity.y = -_runSpeed;
 			Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 			break;
 		case _State::ROTATE:
@@ -90,12 +96,13 @@ void BonusItem::Render() {
 						break;
 				}
 
-				if (GetTickCount64() - _removeStart > _removeTime * 0.75f) {
+				/*if (GetTickCount64() - _removeStart > _removeTime * 0.95f) {
 					_animatedSprite.PlaySpriteAnimation("Spark", _position);
 				}
 				else {
 					_animatedSprite.PlaySpriteAnimation(animationName, _position);
-				}
+				}*/
+				_animatedSprite.PlaySpriteAnimation(animationName, _position);
 			}
 			break;
 		case _State::ROTATE:

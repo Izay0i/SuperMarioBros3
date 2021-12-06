@@ -312,25 +312,29 @@ void ScenePlay::Update(DWORD deltaTime) {
 							AddEntityToScene(shinyBrick->SpawnItem());
 						}
 						else if (shinyBrick->GetHealth() == -1) {
+							const D3DXVECTOR2 BOUNCE_SPEED = { 0.28f, 0.18f };
+							const float RUN_SPEED = 0.08f;
+							const float OFFSET = 10.0f;
+
 							//Top left
 							auto debris = shinyBrick->SpawnDebris();
-							debris->SetVelocity({ -0.08f, -0.28f });
+							debris->SetVelocity({ -RUN_SPEED, -BOUNCE_SPEED.x });
 							AddEntityToScene(debris);
 							//Top right
 							debris = shinyBrick->SpawnDebris();
 							debris->SetScale({ -1.0f, 1.0f });
-							debris->SetVelocity({ 0.08f, -0.28f });
+							debris->SetVelocity({ RUN_SPEED, -BOUNCE_SPEED.x });
 							AddEntityToScene(debris);
 							//Bottom left
 							debris = shinyBrick->SpawnDebris();
-							debris->SetVelocity({ -0.08f, -0.18f });
-							debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + 10.0f });
+							debris->SetVelocity({ -RUN_SPEED, -BOUNCE_SPEED.y });
+							debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + OFFSET });
 							AddEntityToScene(debris);
 							//Bottom right
 							debris = shinyBrick->SpawnDebris();
 							debris->SetScale({ -1.0f, 1.0f });
-							debris->SetVelocity({ 0.08f, -0.18f });
-							debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + 10.0f });
+							debris->SetVelocity({ RUN_SPEED, -BOUNCE_SPEED.y });
+							debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + OFFSET });
 							AddEntityToScene(debris);
 						}
 					}
@@ -364,10 +368,12 @@ void ScenePlay::Update(DWORD deltaTime) {
 						}
 
 						if (fortressBoss->GetHealth() <= 0 && !fortressBoss->IsInvulnerable()) {
+							const float ORB_VEL = 0.02f;
 							auto orb = fortressBoss->SpawnOrb();
-							orb->SetVelocity({ 0.0f, -0.02f });
+							orb->SetVelocity({ 0.0f, -ORB_VEL });
 							AddEntityToScene(orb);
 
+							const float OFFSET = 8.0f;
 							//		*
 							//	*		*
 							//*		o		*
@@ -378,11 +384,11 @@ void ScenePlay::Update(DWORD deltaTime) {
 							AddEntityToScene(effect);
 							effect = fortressBoss->SpawnOrbEffect();
 							effect->SetNormal({ -1.0f, -1.0f });
-							effect->SetPosition({ effect->GetPosition().x + 8.0f, effect->GetPosition().y + 8.0f });
+							effect->SetPosition({ effect->GetPosition().x + OFFSET, effect->GetPosition().y + OFFSET });
 							AddEntityToScene(effect);
 							effect = fortressBoss->SpawnOrbEffect();
 							effect->SetNormal({ 1.0f, -1.0f });
-							effect->SetPosition({ effect->GetPosition().x - 8.0f, effect->GetPosition().y + 8.0f });
+							effect->SetPosition({ effect->GetPosition().x - OFFSET, effect->GetPosition().y + OFFSET });
 							AddEntityToScene(effect);
 							effect = fortressBoss->SpawnOrbEffect();
 							effect->SetNormal({ -1.0f, 0.0f });
@@ -392,11 +398,11 @@ void ScenePlay::Update(DWORD deltaTime) {
 							AddEntityToScene(effect);
 							effect = fortressBoss->SpawnOrbEffect();
 							effect->SetNormal({ -1.0f, 1.0f });
-							effect->SetPosition({ effect->GetPosition().x + 8.0f, effect->GetPosition().y - 8.0f });
+							effect->SetPosition({ effect->GetPosition().x + OFFSET, effect->GetPosition().y - OFFSET });
 							AddEntityToScene(effect);
 							effect = fortressBoss->SpawnOrbEffect();
 							effect->SetNormal({ 1.0f, 1.0f });
-							effect->SetPosition({ effect->GetPosition().x - 8.0f, effect->GetPosition().y - 8.0f });
+							effect->SetPosition({ effect->GetPosition().x - OFFSET, effect->GetPosition().y - OFFSET });
 							AddEntityToScene(effect);
 							effect = fortressBoss->SpawnOrbEffect();
 							effect->SetNormal({ 0.0f, 1.0f });
@@ -461,10 +467,12 @@ void ScenePlay::Update(DWORD deltaTime) {
 
 	_scorePopUp->Update(deltaTime);
 
+	const float HUD_OFFSET_X = 134.0f;
+	const float HUD_OFFSET_Y = 161.0f;
 	_hud->Update(_sceneTime);
 	_hud->SetPosition({
-		floor(_cameraInstance->GetPosition().x) + 134.0f,
-		floor(_cameraInstance->GetPosition().y) + 161.0f 
+		floor(_cameraInstance->GetPosition().x) + HUD_OFFSET_X,
+		floor(_cameraInstance->GetPosition().y) + HUD_OFFSET_Y 
 		}
 	);
 

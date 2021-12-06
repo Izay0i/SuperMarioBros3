@@ -8,7 +8,7 @@ void MaskTile::_ParseSprites(std::string line) {
 }
 
 MaskTile::MaskTile() {
-	_renderPriority = 0;
+	_renderPriority = -1;
 }
 
 MaskTile::~MaskTile() {}

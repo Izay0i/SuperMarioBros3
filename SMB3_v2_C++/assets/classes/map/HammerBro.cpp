@@ -7,6 +7,12 @@ void HammerBro::_ParseSprites(std::string line) {
 	_animatedSprite.ParseSprites(line, _broTexture);
 }
 
+HammerBro::HammerBro() {
+	_renderPriority = 1;
+}
+
+HammerBro::~HammerBro() {}
+
 RECTF HammerBro::GetBoundingBox(int) const {
 	return RECTF();
 }

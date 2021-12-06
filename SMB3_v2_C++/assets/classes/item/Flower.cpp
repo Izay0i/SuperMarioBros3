@@ -11,6 +11,7 @@ Flower::Flower() {
 	_renderPriority = 4;
 	_removeTime = 50;
 
+	_jumpSpeed = 0.018f;
 	_gravity = 0.002f;
 
 	_emergeTime = 700;
@@ -64,7 +65,7 @@ void Flower::Update(
 	}
 
 	if (IsEmerging()) {
-		_velocity.y = -0.018f;
+		_velocity.y = -_jumpSpeed;
 	}
 
 	HandleStates();

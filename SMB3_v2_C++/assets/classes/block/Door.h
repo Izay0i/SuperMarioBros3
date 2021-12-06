@@ -4,6 +4,8 @@ class Door : public Entity {
 private:
 	static Texture* _doorTexture;
 
+	const float _MAX_HEIGHT = 113.0f;
+
 	DWORD _idleStart;
 	DWORD _idleTime;
 

@@ -162,7 +162,7 @@ void Tail::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
-	if (_touchedEntity != nullptr && GetTickCount64() % 200 == 0) {
+	if (_touchedEntity != nullptr && GetTickCount64() % 100 == 0) {
 		_touchedEntity = nullptr;
 	}
 

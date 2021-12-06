@@ -179,60 +179,78 @@ void HUD::Update(DWORD sceneTime, std::vector<GameObject*>*) {
 }
 
 void HUD::Render() {
-	_animatedSprite.PlaySpriteAnimation("BlackBG", { _position.x - 2.0f, _position.y + 42.0f });
+	const float BG_OFFSET_X = 2.0f;
+	const float BG_OFFSET_Y = 42.0f;
+	_animatedSprite.PlaySpriteAnimation("BlackBG", { _position.x - BG_OFFSET_X, _position.y + BG_OFFSET_Y });
 	_animatedSprite.PlaySpriteAnimation("Panel", _position);
 
+	const D3DXVECTOR2 MARGIN = { 8.0f, 24.0f };
 	//Lives
+	const float LIVES_OFFSET_X = 98.0f;
+	const float LIVES_OFFSET_Y = 5.0f;
 	for (unsigned int i = 0; i < _lives.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_lives.at(i), D3DXVECTOR2(
-			_position.x - 98.0f + (8.0f * i),
-			_position.y + 5.0f
+			_position.x - LIVES_OFFSET_X + (MARGIN.x * i),
+			_position.y + LIVES_OFFSET_Y
 		));
 	}
 
 	//Coins
+	const float COINS_OFFSET_X = 6.0f;
+	const float COINS_OFFSET_Y = 3.0f;
 	for (unsigned int i = 0; i < _coins.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_coins.at(i), D3DXVECTOR2(
-			_position.x + 6.0f + (8.0f * i),
-			_position.y - 3.0f
+			_position.x + COINS_OFFSET_X + (MARGIN.x * i),
+			_position.y - COINS_OFFSET_Y
 		));
 	}
 
 	//Items
+	const float ITEMS_OFFSET_X = 42.0f;
 	for (unsigned int i = 0; i < _items.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_items.at(i), D3DXVECTOR2(
-			_position.x + 42.0f + (24.0f * i),
-			_position.y + 0.0f
+			_position.x + ITEMS_OFFSET_X + (MARGIN.y * i),
+			_position.y
 		));
 	}
 
 	//Speed gauge
+	const float GAUGE_OFFSET_X = 74.0f;
+	const float GAUGE_OFFSET_Y = 3.0f;
 	for (unsigned int i = 0; i < _speedGauge.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_speedGauge.at(i), D3DXVECTOR2(
-			_position.x - 74.0f + (8.0f * i),
-			_position.y - 3.0f
+			_position.x - GAUGE_OFFSET_X + (MARGIN.x * i),
+			_position.y - GAUGE_OFFSET_Y
 		));
 	}
 
 	//Score
+	const float SCORE_OFFSET_X = 74.0f;
+	const float SCORE_OFFSET_Y = 5.0f;
 	for (unsigned int i = 0; i < _score.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_score.at(i), D3DXVECTOR2(
-			_position.x - 74.0f + (8.0f * i),
-			_position.y + 5.0f
+			_position.x - SCORE_OFFSET_X + (MARGIN.x * i),
+			_position.y + SCORE_OFFSET_Y
 		));
 	}
 
 	//Time left
+	const float TIME_OFFSET_X = 2.0f;
+	const float TIME_OFFSET_Y = 5.0f;
 	for (unsigned int i = 0; i < _timeLeft.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_timeLeft.at(i), D3DXVECTOR2(
-			_position.x - 2.0f + (8.0f * i),
-			_position.y + 5.0f
+			_position.x - TIME_OFFSET_X + (MARGIN.x * i),
+			_position.y + TIME_OFFSET_Y
 		));
 	}
 
 	if (_player->_triggeredStageEnd && !_player->_hasBossItem) {
-		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x - 10.0f, _position.y - 135.0f));
-		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + 52.0f, _position.y - 126.0f));
+		const float COURSE_OFFSET_X = 10.0f;
+		const float COURSE_OFFSET_Y = 135.0f;
+		_animatedSprite.PlaySpriteAnimation("CourseClear", D3DXVECTOR2(_position.x - COURSE_OFFSET_X, _position.y - COURSE_OFFSET_Y));
+		const float ANI_OFFSET_X = 52.0f;
+		const float ANI_OFFSET_Y = 126.0f;
+		_animatedSprite.PlaySpriteAnimation(_animationName, D3DXVECTOR2(_position.x + ANI_OFFSET_X, _position.y - ANI_OFFSET_Y));
 	}
 }
 

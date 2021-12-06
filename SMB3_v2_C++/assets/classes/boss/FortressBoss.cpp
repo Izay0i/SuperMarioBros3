@@ -25,7 +25,7 @@ FortressBoss::FortressBoss() {
 	_introTime = 300;
 	_attackTime = 1200;
 	_coolDownTime = 5000;
-	_invulnerableTime = 3000;
+	_invulnerableTime = 2000;
 
 	_bossState = new BossIdleState(this);
 }

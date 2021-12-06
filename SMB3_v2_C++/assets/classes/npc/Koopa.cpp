@@ -72,7 +72,10 @@ void Koopa::HandleStates() {
 			_velocity.x = 0.0f;
 			break;
 		case _State::SPIN:
-			_velocity.x = -_runSpeed * _normal.x * 6.0f;
+			{
+				const float SPEED_MODIFIER = 6.0f;
+				_velocity.x = -_runSpeed * _normal.x * SPEED_MODIFIER;
+			}
 			break;
 		case _State::DIE:
 			_isOnGround = false;

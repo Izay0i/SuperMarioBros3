@@ -52,9 +52,11 @@ void Rotodisc::Update(
 	Grid* grid) 
 {
 	//https://gamedev.stackexchange.com/questions/67206/how-to-set-speed-of-circular-motion
+
+	const float RIGHT_ANGLE = 90.0f;
 	_angle += 2 * static_cast<float>(M_PI) / (deltaTime * _roundTripTime);
-	_position.x = _centerPoint.x + (_radius * cos(90 - _direction * _angle));
-	_position.y = _centerPoint.y + (_radius * sin(90 - _direction * _angle));
+	_position.x = _centerPoint.x + (_radius * cos(RIGHT_ANGLE - _direction * _angle));
+	_position.y = _centerPoint.y + (_radius * sin(RIGHT_ANGLE - _direction * _angle));
 	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
 }
 

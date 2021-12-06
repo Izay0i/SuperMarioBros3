@@ -12,7 +12,7 @@ Mushroom::Mushroom() {
 	_removeTime = 50;
 
 	_runSpeed = 0.06f;
-	_jumpSpeed = 0.2f;
+	_jumpSpeed = 0.018f;
 	_gravity = 0.002f;
 
 	_emergeTime = 700;
@@ -100,7 +100,7 @@ void Mushroom::Update(
 	}
 
 	if (IsEmerging()) {
-		_velocity.y = -0.018f;
+		_velocity.y = -_jumpSpeed;
 	}
 	else {
 		_velocity.x = -_runSpeed * _normal.x;

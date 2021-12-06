@@ -75,10 +75,12 @@ void SceneMap::Update(DWORD deltaTime) {
 	}
 	std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
 
+	const float HUD_OFFSET_X = 134.0f;
+	const float HUD_OFFSET_Y = 177.0f;
 	_hud->Update(_sceneTime);
 	_hud->SetPosition({
-		_cameraInstance->GetPosition().x + 134.0f,
-		_cameraInstance->GetPosition().y + 177.0f 
+		_cameraInstance->GetPosition().x + HUD_OFFSET_X,
+		_cameraInstance->GetPosition().y + HUD_OFFSET_Y 
 		}
 	);
 
