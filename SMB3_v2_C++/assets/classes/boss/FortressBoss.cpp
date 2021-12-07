@@ -4,6 +4,7 @@
 #include "../effect/OrbEffect.h"
 #include "FortressBoss.h"
 #include "state/BossIdleState.h"
+#include "../audio/AudioService.h"
 
 Texture* FortressBoss::_bossTexture = nullptr;
 
@@ -172,6 +173,10 @@ void FortressBoss::Update(
 	}
 
 	if (IsInvulnerable() && GetTickCount64() - _invulnerableStart > _invulnerableTime) {
+		if (_health <= 0) {
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
+		}
+		
 		_invulnerableStart = 0;
 	}
 

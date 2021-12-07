@@ -553,9 +553,4 @@
     <None Include="packages.config" />
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="assets\shaders\VertexShader.hlsl" />
-    <FxCompile Include="assets\shaders\PixelShader.hlsl" />
-    <FxCompile Include="assets\shaders\effect.fx" />
-  </ItemGroup>
 </Project>

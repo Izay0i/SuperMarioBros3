@@ -19,6 +19,8 @@ void CrouchState::Render() {
 		return;
 	}
 
+	const float RAC_OFFSET = 4.0f;
+	const float CROUCH_OFFSET = 8.0f;
 	switch (_form) {
 		case _Form::SMALL:
 			if (_player->IsInPipe()) {
@@ -33,7 +35,7 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("BigFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("BigCrouch", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale, _alpha);
+				_player->_animatedSprite.PlaySpriteAnimation("BigCrouch", { _player->_position.x, _player->_position.y - CROUCH_OFFSET }, _player->_scale, _alpha);
 			}
 			break;
 		case _Form::FIRE:
@@ -41,7 +43,7 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("FireFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("FireCrouch", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale, _alpha);
+				_player->_animatedSprite.PlaySpriteAnimation("FireCrouch", { _player->_position.x, _player->_position.y - CROUCH_OFFSET }, _player->_scale, _alpha);
 			}
 			break;
 		case _Form::RACCOON:
@@ -49,7 +51,13 @@ void CrouchState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 			}
 			else {
-				_player->_animatedSprite.PlaySpriteAnimation("RacCrouch", { _player->_position.x, _player->_position.y - 8.0f }, _player->_scale, _alpha);
+				_player->_animatedSprite.PlaySpriteAnimation("RacCrouch", { 
+					_player->_position.x - RAC_OFFSET * _player->_normal.x, 
+					_player->_position.y - CROUCH_OFFSET 
+					}, 
+					_player->_scale, 
+					_alpha
+				);
 			}
 			break;
 	}

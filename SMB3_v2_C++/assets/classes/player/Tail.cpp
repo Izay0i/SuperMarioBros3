@@ -101,7 +101,7 @@ void Tail::HandleOverlap(Entity* entity) {
 				dryBones->TakeDamage();
 			}
 
-			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_KICK);
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BLOCKBREAK);
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_FORTRESSBOSS:
 			{

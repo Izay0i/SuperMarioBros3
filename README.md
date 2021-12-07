@@ -4,7 +4,7 @@
 
 ## Requirements
 + OS: Windows® 10 32-bit+
-+ Processor: 1.2GHz+
++ Processor: Any modern processor
 + Memory: 512 MB+
 + Graphics: Intergrated graphics
 + DirectX: Version 10

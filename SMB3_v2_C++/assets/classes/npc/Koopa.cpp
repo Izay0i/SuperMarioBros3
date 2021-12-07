@@ -1,3 +1,4 @@
+#include "../SceneManager.h"
 #include "../Entity.h"
 #include "Koopa.h"
 #include "../EntityList.h"
@@ -257,7 +258,7 @@ void Koopa::HandleCollisionResult(
 			}
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_ONEHITPLATFORM:
-			_position.y = 999.0f;
+			_position.y = static_cast<float>(SceneManager::GetInstance()->GetCurrentScene()->GetSceneHeight());
 			break;
 		case GameObjectType::GAMEOBJECT_TYPE_TILE:
 		case GameObjectType::GAMEOBJECT_TYPE_ONEWAYPLATFORM:	

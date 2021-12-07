@@ -255,10 +255,11 @@ void ScenePlay::Update(DWORD deltaTime) {
 					break;
 				case GameObject::GameObjectType::GAMEOBJECT_TYPE_TAIL:
 					{
+						const float OFFSET = 4.0f;
 						Tail* tail = dynamic_cast<Tail*>(entity);
 						tail->SetPosition({
 							_player->GetPosition().x, 
-							_player->IsAttacking() ? _player->GetPosition().y + 4.0f : 0.0f
+							_player->IsAttacking() ? _player->GetPosition().y + OFFSET : 0.0f
 							}
 						);
 					}
@@ -312,28 +313,29 @@ void ScenePlay::Update(DWORD deltaTime) {
 							AddEntityToScene(shinyBrick->SpawnItem());
 						}
 						else if (shinyBrick->GetHealth() == -1) {
-							const D3DXVECTOR2 BOUNCE_SPEED = { 0.28f, 0.18f };
+							const float BOUNCE_SPEED_0 = 0.28f;
+							const float BOUNCE_SPEED_1 = 0.18f;
 							const float RUN_SPEED = 0.08f;
 							const float OFFSET = 10.0f;
 
 							//Top left
 							auto debris = shinyBrick->SpawnDebris();
-							debris->SetVelocity({ -RUN_SPEED, -BOUNCE_SPEED.x });
+							debris->SetVelocity({ -RUN_SPEED, -BOUNCE_SPEED_0 });
 							AddEntityToScene(debris);
 							//Top right
 							debris = shinyBrick->SpawnDebris();
 							debris->SetScale({ -1.0f, 1.0f });
-							debris->SetVelocity({ RUN_SPEED, -BOUNCE_SPEED.x });
+							debris->SetVelocity({ RUN_SPEED, -BOUNCE_SPEED_0 });
 							AddEntityToScene(debris);
 							//Bottom left
 							debris = shinyBrick->SpawnDebris();
-							debris->SetVelocity({ -RUN_SPEED, -BOUNCE_SPEED.y });
+							debris->SetVelocity({ -RUN_SPEED, -BOUNCE_SPEED_1 });
 							debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + OFFSET });
 							AddEntityToScene(debris);
 							//Bottom right
 							debris = shinyBrick->SpawnDebris();
 							debris->SetScale({ -1.0f, 1.0f });
-							debris->SetVelocity({ RUN_SPEED, -BOUNCE_SPEED.y });
+							debris->SetVelocity({ RUN_SPEED, -BOUNCE_SPEED_1 });
 							debris->SetPosition({ debris->GetPosition().x, debris->GetPosition().y + OFFSET });
 							AddEntityToScene(debris);
 						}
@@ -368,9 +370,9 @@ void ScenePlay::Update(DWORD deltaTime) {
 						}
 
 						if (fortressBoss->GetHealth() <= 0 && !fortressBoss->IsInvulnerable()) {
-							const float ORB_VEL = 0.02f;
+							const float BOUNCE_SPEED = 0.04f;
 							auto orb = fortressBoss->SpawnOrb();
-							orb->SetVelocity({ 0.0f, -ORB_VEL });
+							orb->SetVelocity({ 0.0f, -BOUNCE_SPEED });
 							AddEntityToScene(orb);
 
 							const float OFFSET = 8.0f;
@@ -409,8 +411,6 @@ void ScenePlay::Update(DWORD deltaTime) {
 							AddEntityToScene(effect);
 
 							fortressBoss->SetPosition({ fortressBoss->GetPosition().x, static_cast<float>(_sceneHeight) });
-
-							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_THWOMP);
 						}
 					}
 					break;

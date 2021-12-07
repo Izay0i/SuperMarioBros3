@@ -11,8 +11,7 @@ Flower::Flower() {
 	_renderPriority = 4;
 	_removeTime = 50;
 
-	_jumpSpeed = 0.018f;
-	_gravity = 0.002f;
+	_jumpSpeed = 0.016f;
 
 	_emergeTime = 700;
 
@@ -60,16 +59,18 @@ void Flower::Update(
 	Grid* grid) 
 {
 	if (IsEmerging() && GetTickCount64() - _emergeStart > _emergeTime) {
-		_renderPriority = 2;
 		_emergeStart = 0;
 	}
 
 	if (IsEmerging()) {
 		_velocity.y = -_jumpSpeed;
 	}
+	else {
+		_velocity.y = 0.0f;
+	}
 
 	HandleStates();
-	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
+	Entity::Update(deltaTime);
 }
 
 void Flower::Render() {

@@ -185,12 +185,14 @@ void HUD::Render() {
 	_animatedSprite.PlaySpriteAnimation("Panel", _position);
 
 	const D3DXVECTOR2 MARGIN = { 8.0f, 24.0f };
+	const float MARGIN_0 = 8.0f;
+	const float MARGIN_1 = 24.0f;
 	//Lives
 	const float LIVES_OFFSET_X = 98.0f;
 	const float LIVES_OFFSET_Y = 5.0f;
 	for (unsigned int i = 0; i < _lives.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_lives.at(i), D3DXVECTOR2(
-			_position.x - LIVES_OFFSET_X + (MARGIN.x * i),
+			_position.x - LIVES_OFFSET_X + (MARGIN_0 * i),
 			_position.y + LIVES_OFFSET_Y
 		));
 	}
@@ -200,7 +202,7 @@ void HUD::Render() {
 	const float COINS_OFFSET_Y = 3.0f;
 	for (unsigned int i = 0; i < _coins.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_coins.at(i), D3DXVECTOR2(
-			_position.x + COINS_OFFSET_X + (MARGIN.x * i),
+			_position.x + COINS_OFFSET_X + (MARGIN_0 * i),
 			_position.y - COINS_OFFSET_Y
 		));
 	}
@@ -209,7 +211,7 @@ void HUD::Render() {
 	const float ITEMS_OFFSET_X = 42.0f;
 	for (unsigned int i = 0; i < _items.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_items.at(i), D3DXVECTOR2(
-			_position.x + ITEMS_OFFSET_X + (MARGIN.y * i),
+			_position.x + ITEMS_OFFSET_X + (MARGIN_1 * i),
 			_position.y
 		));
 	}
@@ -219,7 +221,7 @@ void HUD::Render() {
 	const float GAUGE_OFFSET_Y = 3.0f;
 	for (unsigned int i = 0; i < _speedGauge.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_speedGauge.at(i), D3DXVECTOR2(
-			_position.x - GAUGE_OFFSET_X + (MARGIN.x * i),
+			_position.x - GAUGE_OFFSET_X + (MARGIN_0 * i),
 			_position.y - GAUGE_OFFSET_Y
 		));
 	}
@@ -229,7 +231,7 @@ void HUD::Render() {
 	const float SCORE_OFFSET_Y = 5.0f;
 	for (unsigned int i = 0; i < _score.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_score.at(i), D3DXVECTOR2(
-			_position.x - SCORE_OFFSET_X + (MARGIN.x * i),
+			_position.x - SCORE_OFFSET_X + (MARGIN_0 * i),
 			_position.y + SCORE_OFFSET_Y
 		));
 	}
@@ -239,7 +241,7 @@ void HUD::Render() {
 	const float TIME_OFFSET_Y = 5.0f;
 	for (unsigned int i = 0; i < _timeLeft.size(); ++i) {
 		_animatedSprite.PlaySpriteAnimation(_timeLeft.at(i), D3DXVECTOR2(
-			_position.x - TIME_OFFSET_X + (MARGIN.x * i),
+			_position.x - TIME_OFFSET_X + (MARGIN_0 * i),
 			_position.y + TIME_OFFSET_Y
 		));
 	}

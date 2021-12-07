@@ -23,6 +23,7 @@ void JumpState::Render() {
 		return;
 	}
 
+	const float RAC_OFFSET = 4.0f;
 	switch (_form) {
 		case _Form::SMALL:
 			if (_player->IsInPipe()) {
@@ -81,20 +82,50 @@ void JumpState::Render() {
 			}
 			else if (_player->_heldEntity == nullptr) {
 				if (_player->_acceleration >= _player->_ACCEL_THRESHOLD) {
-					_player->_animatedSprite.PlaySpriteAnimation("RacSuperJump", _player->_position, _player->_scale, _alpha);
+					_player->_animatedSprite.PlaySpriteAnimation("RacSuperJump", { 
+						_player->_position.x - RAC_OFFSET * _player->_normal.x,  
+						_player->_position.y 
+						}, 
+						_player->_scale, 
+						_alpha
+					);
 				}
 				else if (_player->IsFlying() && Device::IsKeyDown(DIK_K)) {
-					_player->_animatedSprite.PlaySpriteAnimation("RacWagSuperFall", _player->_position, _player->_scale, _alpha);
+					_player->_animatedSprite.PlaySpriteAnimation("RacWagSuperFall", { 
+						_player->_position.x - RAC_OFFSET * _player->_normal.x,  
+						_player->_position.y 
+						}, 
+						_player->_scale, 
+						_alpha
+					);
 				}
 				else {
-					_player->_animatedSprite.PlaySpriteAnimation("RacJump", _player->_position, _player->_scale, _alpha);
+					_player->_animatedSprite.PlaySpriteAnimation("RacJump", { 
+						_player->_position.x - RAC_OFFSET * _player->_normal.x,  
+						_player->_position.y 
+						}, 
+						_player->_scale, 
+						_alpha
+					);
 				}
 			}
 			else if (_player->_isNextToShell) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacKick", _player->_position, _player->_scale, _alpha);
+				_player->_animatedSprite.PlaySpriteAnimation("RacKick", { 
+					_player->_position.x - RAC_OFFSET * _player->_normal.x, 
+					_player->_position.y 
+					}, 
+					_player->_scale, 
+					_alpha
+				);
 			}
 			else if (_player->_heldEntity != nullptr) {
-				_player->_animatedSprite.PlaySpriteAnimation("RacHoldJump", _player->_position, _player->_scale, _alpha);
+				_player->_animatedSprite.PlaySpriteAnimation("RacHoldJump", { 
+					_player->_position.x - RAC_OFFSET * _player->_normal.x, 
+					_player->_position.y 
+					}, 
+					_player->_scale, 
+					_alpha
+				);
 			}
 			break;
 	}

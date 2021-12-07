@@ -1,12 +1,16 @@
 #include "BossState.h"
 #include "BossRunState.h"
 #include "BossAttackState.h"
+#include "BossHurtState.h"
 
 BossAttackState::BossAttackState(FortressBoss* fortressBoss) : BossState(fortressBoss) {}
 
 BossState* BossAttackState::HandleStates() {
 	if (_fortressBoss->IsOnCoolDown()) {
 		return new BossRunState(_fortressBoss);
+	}
+	else if (_fortressBoss->IsInvulnerable()) {
+		return new BossHurtState(_fortressBoss);
 	}
 
 	return nullptr;
@@ -19,6 +23,7 @@ void BossAttackState::Update(DWORD deltaTime) {
 			break;
 		case 2:
 			_fortressBoss->_velocity.y = -_fortressBoss->_jumpSpeed;
+			_fortressBoss->_isOnGround = false;
 			break;
 		case 1:
 			{

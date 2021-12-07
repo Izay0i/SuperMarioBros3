@@ -14,10 +14,17 @@ PlayerState* WagState::HandleStates() {
 }
 
 void WagState::Render() {
+	const float RAC_OFFSET = 4.0f;
 	if (_player->IsInPipe()) {
 		_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 	}
 	else if (_player->IsAttacking()) {
-		_player->_animatedSprite.PlaySpriteAnimation("RacWag", _player->_position, D3DXVECTOR2(_player->_normal.x, 1.0f), _alpha);
+		_player->_animatedSprite.PlaySpriteAnimation("RacWag", { 
+			_player->_position.x - RAC_OFFSET * _player->_normal.x,  
+			_player->_position.y 
+			}, 
+			{ _player->_normal.x, _player->_scale.y },
+			_alpha
+		);
 	}
 }

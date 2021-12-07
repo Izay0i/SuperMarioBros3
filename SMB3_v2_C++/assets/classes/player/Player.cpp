@@ -186,7 +186,7 @@ Player::Player() {
 	_gravity = 0.0025f;
 	_acceleration = 0.5f;
 
-	_health = 4;
+	_health = 1;
 
 	_lives = 3;
 	_coins = 0;
@@ -309,7 +309,7 @@ void Player::OnKeyUpGame(int keyCode) {
 
 			if (_health > 1 && _isOnGround && !IsInPipe()) {
 				_isOnGround = false;
-				_position.y -= _CROUCH_HEIGHT_ADJUST;
+				_position.y = ceil(_position.y - _CROUCH_HEIGHT_ADJUST);
 			}
 			break;
 		case DIK_J:
@@ -348,7 +348,7 @@ void Player::OnKeyDownGame(int keyCode) {
 			_isCrouching = true;
 
 			if (_health > 1 && _isOnGround && !IsInPipe()) {
-				_position.y += _CROUCH_HEIGHT_ADJUST;
+				_position.y = ceil(_position.y + _CROUCH_HEIGHT_ADJUST);
 			}
 			break;
 		case DIK_J:
@@ -638,7 +638,7 @@ void Player::HandleCollisionResult(
 
 						dryBones->TakeDamage();
 
-						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SQUISH);
+						AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BLOCKBREAK);
 					}
 				}
 				else if (eventNormal.x != 0.0f || eventNormal.y == 1.0f) {
@@ -907,7 +907,7 @@ void Player::HandleCollisionResult(
 	//ANIMATED BLOCKS
 	//----------------------------------------------------------------------------
 			case GameObjectType::GAMEOBJECT_TYPE_ONEHITPLATFORM:
-				_position.y = 999.0f;
+				_position.y = static_cast<float>(SceneManager::GetInstance()->GetCurrentScene()->GetSceneHeight());
 				_health = 1;
 				TakeDamage();
 				break;
