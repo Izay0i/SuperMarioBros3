@@ -5,8 +5,10 @@
 #include <vector>
 #include <string>
 
-const unsigned int SCREEN_WIDTH = 256;
-const unsigned int SCREEN_HEIGHT = 224;
+//const unsigned int SCREEN_WIDTH = 256;
+//const unsigned int SCREEN_HEIGHT = 224;
+const unsigned int SCREEN_WIDTH = 500;
+const unsigned int SCREEN_HEIGHT = 500;
 
 const unsigned int CELL_WIDTH = static_cast<unsigned int>(SCREEN_WIDTH / 2);
 const unsigned int CELL_HEIGHT = static_cast<unsigned int>(SCREEN_HEIGHT / 2);

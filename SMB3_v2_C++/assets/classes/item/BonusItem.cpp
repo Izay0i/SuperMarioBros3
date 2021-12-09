@@ -95,13 +95,6 @@ void BonusItem::Render() {
 						animationName = "Star";
 						break;
 				}
-
-				/*if (GetTickCount64() - _removeStart > _removeTime * 0.95f) {
-					_animatedSprite.PlaySpriteAnimation("Spark", _position);
-				}
-				else {
-					_animatedSprite.PlaySpriteAnimation(animationName, _position);
-				}*/
 				_animatedSprite.PlaySpriteAnimation(animationName, _position);
 			}
 			break;

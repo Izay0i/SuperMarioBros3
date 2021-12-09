@@ -11,7 +11,7 @@ private:
 	static Texture* _ceilingTexture;
 	static D3DX10_SPRITE _sprite;
 
-	const float _MAX_HEIGHT = 113.0f;
+	const float _MAX_HEIGHT = 112.0f;
 
 	const unsigned int _SPRITE_WIDTH = 16;
 	const unsigned int _SPRITE_HEIGHT = 16;

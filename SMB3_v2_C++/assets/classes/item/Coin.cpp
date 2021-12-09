@@ -13,7 +13,7 @@ Coin::Coin() {
 
 	_gravity = 0.0005f;
 
-	_popUpTime = 700;
+	_popUpTime = 1000;
 
 	isPassThroughable = true;
 }
@@ -27,7 +27,7 @@ bool Coin::IsPoppedUp() const {
 void Coin::StartPopUpTimer() {
 	_popUpStart = static_cast<DWORD>(GetTickCount64());
 
-	const float BOUNCE_VALUE = 0.16f;
+	const float BOUNCE_VALUE = 0.24f;
 	_velocity.y = -BOUNCE_VALUE;
 }
 
@@ -89,8 +89,7 @@ void Coin::Update(
 
 	HandleStates();
 	if (_state == _State::PUSHEDFROMBLOCK) {
-		Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
-		_position += _distance;
+		Entity::Update(deltaTime);
 	}
 }
 

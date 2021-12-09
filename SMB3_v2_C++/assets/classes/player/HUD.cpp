@@ -184,7 +184,6 @@ void HUD::Render() {
 	_animatedSprite.PlaySpriteAnimation("BlackBG", { _position.x - BG_OFFSET_X, _position.y + BG_OFFSET_Y });
 	_animatedSprite.PlaySpriteAnimation("Panel", _position);
 
-	const D3DXVECTOR2 MARGIN = { 8.0f, 24.0f };
 	const float MARGIN_0 = 8.0f;
 	const float MARGIN_1 = 24.0f;
 	//Lives

@@ -453,11 +453,11 @@ void ScenePlay::Update(DWORD deltaTime) {
 			if (!_IsEntityAliveAndIB(entity)) {
 				if (_grid != nullptr) {
 					_grid->RemoveEntity(entity);
-
-					_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
 				}
 
 				_removedEntities.emplace_back(entity);
+
+				_entities.erase(std::remove(_entities.begin(), _entities.end(), entity), _entities.end());
 			}
 		}
 		std::sort(_entities.begin(), _entities.end(), Entity::CompareRenderPriority);
