@@ -40,7 +40,7 @@
 
 #include "secret/Dialga.h"
 #include "secret/Palkia.h"
-//#include "secret/Giratina.h"
+#include "secret/Giratina.h"
 
 #include "intro/GameLogo.h"
 #include "intro/GameIcon.h"

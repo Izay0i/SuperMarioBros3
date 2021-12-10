@@ -155,7 +155,7 @@ void Player::_HandleMovementGame() {
 
 	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
 		//GOTTA GO FAAAST
-		if (Device::IsKeyDown(DIK_J) && !IsFlying()) {
+		if (Device::IsKeyDown(DIK_J) && (_isOnGround || !IsFlying())) {
 			if (_acceleration < _MAX_ACCEL) {
 				_acceleration += 0.03f;
 			}
@@ -448,7 +448,8 @@ void Player::RunFly() {
 				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_PMETER, true);
 			}
 			
-			_velocity.y = -_jumpSpeed * 0.66f;
+			const float FLOAT_MODIFIER = 0.66f;
+			_velocity.y = -_jumpSpeed * FLOAT_MODIFIER;
 		}
 	}
 }

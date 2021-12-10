@@ -11,7 +11,6 @@ private:
 	friend class BossIntroState;
 	friend class BossIdleState;
 	friend class BossRunState;
-	friend class BossJumpState;
 	friend class BossAttackState;
 	friend class BossHurtState;
 

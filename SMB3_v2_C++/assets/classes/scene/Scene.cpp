@@ -329,7 +329,7 @@ void Scene::_ParseEntityData(std::string line) {
 			entity = new Palkia;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_GIRATINA:
-			//entity = new Giratina;
+			entity = new Giratina;
 			break;
 		case GameObject::GameObjectType::GAMEOBJECT_TYPE_LOGO:
 			entity = new GameLogo;

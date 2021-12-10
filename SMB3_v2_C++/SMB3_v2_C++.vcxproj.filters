@@ -258,9 +258,6 @@
     <ClCompile Include="assets\classes\boss\state\BossRunState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="assets\classes\boss\state\BossJumpState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="assets\classes\boss\state\BossHurtState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -277,6 +274,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="assets\classes\effect\OrbEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="assets\classes\secret\Giratina.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -527,9 +527,6 @@
     <ClInclude Include="assets\classes\boss\state\BossRunState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="assets\classes\boss\state\BossJumpState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="assets\classes\boss\state\BossHurtState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -546,6 +543,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="assets\classes\effect\OrbEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\classes\secret\Giratina.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -20,7 +20,7 @@ FortressBoss::FortressBoss() {
 	_removeTime = 3200;
 
 	_runSpeed = 0.08f;
-	_jumpSpeed = 0.04f;
+	_jumpSpeed = 0.6f;
 	_gravity = 0.002f;
 
 	_introTime = 300;

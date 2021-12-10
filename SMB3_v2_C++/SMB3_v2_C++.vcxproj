@@ -164,7 +164,6 @@
     <ClCompile Include="assets\classes\boss\state\BossHurtState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossIdleState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossIntroState.cpp" />
-    <ClCompile Include="assets\classes\boss\state\BossJumpState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossRunState.cpp" />
     <ClCompile Include="assets\classes\boss\state\BossState.cpp" />
     <ClCompile Include="assets\classes\Camera.cpp" />
@@ -228,6 +227,7 @@
     <ClCompile Include="assets\classes\scene\SceneMap.cpp" />
     <ClCompile Include="assets\classes\scene\ScenePlay.cpp" />
     <ClCompile Include="assets\classes\secret\Dialga.cpp" />
+    <ClCompile Include="assets\classes\secret\Giratina.cpp" />
     <ClCompile Include="assets\classes\secret\Palkia.cpp" />
     <ClCompile Include="assets\classes\spatial\Grid.cpp" />
     <ClCompile Include="assets\classes\Tile.cpp" />
@@ -256,7 +256,6 @@
     <ClInclude Include="assets\classes\boss\state\BossHurtState.h" />
     <ClInclude Include="assets\classes\boss\state\BossIdleState.h" />
     <ClInclude Include="assets\classes\boss\state\BossIntroState.h" />
-    <ClInclude Include="assets\classes\boss\state\BossJumpState.h" />
     <ClInclude Include="assets\classes\boss\state\BossRunState.h" />
     <ClInclude Include="assets\classes\boss\state\BossState.h" />
     <ClInclude Include="assets\classes\Camera.h" />
@@ -322,6 +321,7 @@
     <ClInclude Include="assets\classes\scene\SceneMap.h" />
     <ClInclude Include="assets\classes\scene\ScenePlay.h" />
     <ClInclude Include="assets\classes\secret\Dialga.h" />
+    <ClInclude Include="assets\classes\secret\Giratina.h" />
     <ClInclude Include="assets\classes\secret\Palkia.h" />
     <ClInclude Include="assets\classes\spatial\Grid.h" />
     <ClInclude Include="assets\classes\Sprite.h" />

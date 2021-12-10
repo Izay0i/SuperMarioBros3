@@ -31,6 +31,7 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_HURRY, "assets\\audio\\songs\\HurryUp.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_STAGE_END, "assets\\audio\\songs\\LevelClear.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_UNIVERSE, "assets\\audio\\songs\\Creation.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_DISTORTION, "assets\\audio\\songs\\Distortion.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_BATTLE_MINIBOSS, "assets\\audio\\battles\\MiniBoss.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_BATTLE_CLEAR, "assets\\audio\\battles\\BossClear.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_1UP, "assets\\audio\\sfx\\1UP.ogg");
@@ -57,6 +58,7 @@ void SFMLAudio::Initialize() {
 	AddAudio(AudioType::AUDIO_TYPE_THWOMP, "assets\\audio\\sfx\\Thwomp.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_TIME, "assets\\audio\\sfx\\Time.ogg");
 	AddAudio(AudioType::AUDIO_TYPE_SPACE, "assets\\audio\\sfx\\Space.ogg");
+	AddAudio(AudioType::AUDIO_TYPE_ANTIMATTER, "assets\\audio\\sfx\\Antimatter.ogg");
 }
 
 void SFMLAudio::PlayAudio(AudioType type, bool loop, float pitch, float volume) {	

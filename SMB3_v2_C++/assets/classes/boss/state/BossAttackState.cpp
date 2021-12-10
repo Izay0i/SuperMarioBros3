@@ -3,7 +3,17 @@
 #include "BossAttackState.h"
 #include "BossHurtState.h"
 
-BossAttackState::BossAttackState(FortressBoss* fortressBoss) : BossState(fortressBoss) {}
+BossAttackState::BossAttackState(FortressBoss* fortressBoss) : BossState(fortressBoss) {
+	_jumpTime = 200;
+}
+
+bool BossAttackState::IsJumping() const {
+	return _jumpStart != 0;
+}
+
+void BossAttackState::StartJumpTimer() {
+	_jumpStart = static_cast<DWORD>(GetTickCount64());
+}
 
 BossState* BossAttackState::HandleStates() {
 	if (_fortressBoss->IsOnCoolDown()) {
@@ -17,13 +27,22 @@ BossState* BossAttackState::HandleStates() {
 }
 
 void BossAttackState::Update(DWORD deltaTime) {
+	if (IsJumping() && GetTickCount64() - _jumpStart > _jumpTime) {
+		_jumpStart = 0;
+	}
+
 	switch (_fortressBoss->_health) {
 		case 3:
 			_fortressBoss->_velocity.x = 0.0f;
 			break;
 		case 2:
-			_fortressBoss->_velocity.y = -_fortressBoss->_jumpSpeed;
-			_fortressBoss->_isOnGround = false;
+			if (!IsJumping()) {
+				StartJumpTimer();
+			}
+			else if (IsJumping() && _fortressBoss->_isOnGround) {
+				_fortressBoss->_velocity.y = -_fortressBoss->_jumpSpeed;
+				_fortressBoss->_isOnGround = false;
+			}			
 			break;
 		case 1:
 			{
