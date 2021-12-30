@@ -57,7 +57,7 @@ void Rotodisc::Update(
 	_angle += 2 * static_cast<float>(M_PI) / (deltaTime * _roundTripTime);
 	_position.x = _centerPoint.x + (_radius * cos(RIGHT_ANGLE - _direction * _angle));
 	_position.y = _centerPoint.y + (_radius * sin(RIGHT_ANGLE - _direction * _angle));
-	Entity::Update(deltaTime, collidableEntities, collidableTiles, grid);
+	Entity::Update(deltaTime);
 }
 
 void Rotodisc::Render() {

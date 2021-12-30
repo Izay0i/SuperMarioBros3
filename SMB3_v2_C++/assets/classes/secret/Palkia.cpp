@@ -10,6 +10,8 @@ void Palkia::_ParseSprites(std::string line) {
 
 Palkia::Palkia() {
 	_cryTime = 500;
+
+	isPassThroughable = true;
 }
 
 Palkia::~Palkia() {}

@@ -208,7 +208,7 @@
 #One way pink block 3 112x64
 999	1296	352	112	64
 #One way pink block 4 64x32
-999	1312	144	64	32
+999	1312	144	64	999
 #One way pink block 5 48x48
 999	2144	368	48	48
 

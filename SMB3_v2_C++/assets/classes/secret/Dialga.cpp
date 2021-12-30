@@ -9,6 +9,7 @@ void Dialga::_ParseSprites(std::string line) {
 }
 
 Dialga::Dialga() {
+	isPassThroughable = true;
 	AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TIME);
 }
 

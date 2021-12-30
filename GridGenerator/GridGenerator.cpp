@@ -10,8 +10,10 @@
 const unsigned int SCREEN_WIDTH = 500;
 const unsigned int SCREEN_HEIGHT = 500;
 
-const unsigned int CELL_WIDTH = static_cast<unsigned int>(SCREEN_WIDTH / 2);
-const unsigned int CELL_HEIGHT = static_cast<unsigned int>(SCREEN_HEIGHT / 2);
+const unsigned int CELL_WIDTH = SCREEN_WIDTH;
+const unsigned int CELL_HEIGHT = SCREEN_HEIGHT;
+//const unsigned int CELL_WIDTH = static_cast<unsigned int>(SCREEN_WIDTH / 2);
+//const unsigned int CELL_HEIGHT = static_cast<unsigned int>(SCREEN_HEIGHT / 2);
 
 const unsigned int MAX_FILE_LINE = 5000;
 

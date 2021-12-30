@@ -14,6 +14,8 @@ Giratina::Giratina() {
 	_runSpeed = 0.18f;
 	_transitionTime = 500;
 
+	isPassThroughable = true;
+
 	StartTransitionTimer();
 }
 
