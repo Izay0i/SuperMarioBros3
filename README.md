@@ -1,4 +1,4 @@
-# Super Mario Bros. 3 Demo v2.0 (WIP)
+# Super Mario Bros. 3 Demo v2.0
 
 ![Intro](Previews/preview_1.png)
 
@@ -26,17 +26,17 @@ Only a few inputs supported, not mappable.
 |Global     |<kbd>Esc</kbd> |Exit application        |
 |Intro only |<kbd>U</kbd>   |Select                  |
 |           |<kbd>I</kbd>   |Start                   |
-|Map only   |<kbd>W</kbd>   |Move up                 |
-|           |<kbd>A</kbd>   |Move left               |
-|           |<kbd>S</kbd>   |Move down               |
-|           |<kbd>D</kbd>   |Move right              |
-|           |<kbd>K</kbd>   |Select                  |
-|Stage only |<kbd>W</kbd>   |Enter pipe/door         |
-|           |<kbd>A</kbd>   |Move left               |
-|           |<kbd>S</kbd>   |Crouch/Enter pipe       |
-|           |<kbd>D</kbd>   |Move right              |
-|           |<kbd>J</kbd>   |Throw/Attack/Hold shell |
-|           |<kbd>K</kbd>   |Run/Fly/Jump/Float down |
+|Map only   |<kbd>⬆</kbd>   |Move up                 |
+|           |<kbd>⬅</kbd>  |Move left               |
+|           |<kbd>⬇</kbd>   |Move down               |
+|           |<kbd>➡</kbd>  |Move right              |
+|           |<kbd>A</kbd>   |Select                  |
+|Stage only |<kbd>⬆</kbd>   |Enter pipe/door         |
+|           |<kbd>⬅</kbd>  |Move left               |
+|           |<kbd>⬇</kbd>   |Crouch/Enter pipe       |
+|           |<kbd>➡</kbd>  |Move right              |
+|           |<kbd>S</kbd>   |Throw/Attack/Hold shell |
+|           |<kbd>␣</kbd>   |Run/Fly/Jump/Float down |
 |Debug only |<kbd>1</kbd>   |Set form to `SMALL`     |
 |           |<kbd>2</kbd>   |Set form to `BIG`       |
 |           |<kbd>3</kbd>   |Set form to `FIRE`      |

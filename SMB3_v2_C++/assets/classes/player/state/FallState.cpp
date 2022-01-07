@@ -80,7 +80,7 @@ void FallState::Render() {
 			if (_player->IsInPipe()) {
 				_player->_animatedSprite.PlaySpriteAnimation("RacFront", _player->_position);
 			}
-			else if (_player->_heldEntity == nullptr && !_player->IsFlying() && Device::IsKeyDown(DIK_K)) {
+			else if (_player->_heldEntity == nullptr && !_player->IsFlying() && Device::IsKeyDown(DIK_SPACE)) {
 				_player->_animatedSprite.PlaySpriteAnimation("RacWagFall", { 
 					_player->_position.x - RAC_OFFSET * _player->_normal.x,  
 					_player->_position.y 
@@ -90,7 +90,7 @@ void FallState::Render() {
 				);
 			}
 			else if (_player->_heldEntity == nullptr && _player->IsFlying()) {
-				if (Device::IsKeyDown(DIK_K)) {
+				if (Device::IsKeyDown(DIK_SPACE)) {
 					_player->_animatedSprite.PlaySpriteAnimation("RacWagSuperFall", { 
 						_player->_position.x - RAC_OFFSET * _player->_normal.x,  
 						_player->_position.y 

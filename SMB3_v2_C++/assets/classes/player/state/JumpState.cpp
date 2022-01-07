@@ -90,7 +90,7 @@ void JumpState::Render() {
 						_alpha
 					);
 				}
-				else if (_player->IsFlying() && Device::IsKeyDown(DIK_K)) {
+				else if (_player->IsFlying() && Device::IsKeyDown(DIK_SPACE)) {
 					_player->_animatedSprite.PlaySpriteAnimation("RacWagSuperFall", { 
 						_player->_position.x - RAC_OFFSET * _player->_normal.x,  
 						_player->_position.y 

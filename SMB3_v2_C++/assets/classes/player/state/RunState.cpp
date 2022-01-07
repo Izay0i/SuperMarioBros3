@@ -51,7 +51,7 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("HoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_LEFTARROW) || Device::IsKeyDown(DIK_RIGHTARROW))) {
 					_player->_animatedSprite.PlaySpriteAnimation("Skid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
@@ -73,7 +73,7 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("BigHoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_LEFTARROW) || Device::IsKeyDown(DIK_RIGHTARROW))) {
 					_player->_animatedSprite.PlaySpriteAnimation("BigSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
@@ -95,7 +95,7 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("FireHoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_LEFTARROW) || Device::IsKeyDown(DIK_RIGHTARROW))) {
 					_player->_animatedSprite.PlaySpriteAnimation("FireSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
@@ -135,7 +135,7 @@ void RunState::Render() {
 				);
 			}
 			else {
-				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_LEFTARROW) || Device::IsKeyDown(DIK_RIGHTARROW))) {
 					_player->_animatedSprite.PlaySpriteAnimation("RacSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {

@@ -104,7 +104,7 @@ void Player::_HandleMovementGame() {
 	}
 
 	//Variable jump height	
-	if (Device::IsKeyDown(DIK_K)) {
+	if (Device::IsKeyDown(DIK_SPACE)) {
 		if (_gravity > _MAX_GRAVITY) {
 			_gravity -= 0.0005f;
 		}
@@ -121,14 +121,14 @@ void Player::_HandleMovementGame() {
 	//Skid
 	if (_acceleration < _ACCEL_THRESHOLD && _velocity.x != 0.0f) {
 		if (_normal.x == -1) {
-			if (Device::IsKeyDown(DIK_D)) {
+			if (Device::IsKeyDown(DIK_RIGHTARROW)) {
 				_acceleration = 0.0499f;
 
 				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SKID);
 			}
 		}
 		else if (_normal.x == 1) {
-			if (Device::IsKeyDown(DIK_A)) {
+			if (Device::IsKeyDown(DIK_LEFTARROW)) {
 				_acceleration = 0.0499f;
 
 				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SKID);
@@ -136,10 +136,10 @@ void Player::_HandleMovementGame() {
 		}
 	}
 
-	if (Device::IsKeyDown(DIK_A)) {
+	if (Device::IsKeyDown(DIK_LEFTARROW)) {
 		MoveLeft();
 	}
-	else if (Device::IsKeyDown(DIK_D)) {
+	else if (Device::IsKeyDown(DIK_RIGHTARROW)) {
 		MoveRight();
 	}
 	else {
@@ -153,9 +153,9 @@ void Player::_HandleMovementGame() {
 		}
 	}
 
-	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
+	if (Device::IsKeyDown(DIK_LEFTARROW) || Device::IsKeyDown(DIK_RIGHTARROW)) {
 		//GOTTA GO FAAAST
-		if (Device::IsKeyDown(DIK_J) && (_isOnGround || !IsFlying())) {
+		if (Device::IsKeyDown(DIK_S) && (_isOnGround || !IsFlying())) {
 			if (_acceleration < _MAX_ACCEL) {
 				_acceleration += 0.03f;
 			}
@@ -304,7 +304,7 @@ void Player::OnKeyUpMap(int keyCode) {
 
 void Player::OnKeyUpGame(int keyCode) {
 	switch (keyCode) {
-		case DIK_S:
+		case DIK_DOWNARROW:
 			_isCrouching = false;
 
 			if (_health > 1 && _isOnGround && !IsInPipe()) {
@@ -312,7 +312,7 @@ void Player::OnKeyUpGame(int keyCode) {
 				_position.y = ceil(_position.y - _CROUCH_HEIGHT_ADJUST);
 			}
 			break;
-		case DIK_J:
+		case DIK_S:
 			_isHolding = false;
 			break;
 	}
@@ -321,16 +321,16 @@ void Player::OnKeyUpGame(int keyCode) {
 void Player::OnKeyDownMap(int keyCode) {
 	const float MAP_RUN_SPEED = 0.08f;
 	switch (keyCode) {
-		case DIK_W:
+		case DIK_UPARROW:
 			_velocity.y = -MAP_RUN_SPEED;
 			break;
-		case DIK_A:
+		case DIK_LEFTARROW:
 			_velocity.x = -MAP_RUN_SPEED;
 			break;
-		case DIK_S:
+		case DIK_DOWNARROW:
 			_velocity.y = MAP_RUN_SPEED;
 			break;
-		case DIK_D:
+		case DIK_RIGHTARROW:
 			_velocity.x = MAP_RUN_SPEED;
 			break;
 	}
@@ -338,20 +338,20 @@ void Player::OnKeyDownMap(int keyCode) {
 
 void Player::OnKeyDownGame(int keyCode) {
 	switch (keyCode) {
-		case DIK_A:
+		case DIK_LEFTARROW:
 			_normal.x = -1.0f;
 			break;
-		case DIK_D:
+		case DIK_RIGHTARROW:
 			_normal.x = 1.0f;
 			break;
-		case DIK_S:
+		case DIK_DOWNARROW:
 			_isCrouching = true;
 
 			if (_health > 1 && _isOnGround && !IsInPipe()) {
 				_position.y = ceil(_position.y + _CROUCH_HEIGHT_ADJUST);
 			}
 			break;
-		case DIK_J:
+		case DIK_S:
 			_isHolding = true;
 			//Fireball attack
 			if (_health == 3 && !_isCrouching) {
@@ -374,7 +374,7 @@ void Player::OnKeyDownGame(int keyCode) {
 				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TAILATTACK);
 			}
 			break;
-		case DIK_K:
+		case DIK_SPACE:
 			SlowFall();
 			RunFly();
 			Jump();
@@ -699,11 +699,11 @@ void Player::HandleCollisionResult(
 					_mapNodePos = portal->GetPosition();
 				}
 				else {
-					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
-						if (eventNormal.y == 1.0f && Device::IsKeyDown(DIK_W)) {
+					if (Device::IsKeyDown(DIK_DOWNARROW) || Device::IsKeyDown(DIK_UPARROW)) {
+						if (eventNormal.y == 1.0f && Device::IsKeyDown(DIK_UPARROW)) {
 							_normal.y = -1.0f;
 						}
-						else if (eventNormal.y == -1.0f && Device::IsKeyDown(DIK_S)) {
+						else if (eventNormal.y == -1.0f && Device::IsKeyDown(DIK_DOWNARROW)) {
 							_normal.y = 1.0f;
 						}
 
@@ -896,7 +896,7 @@ void Player::HandleCollisionResult(
 			case GameObjectType::GAMEOBJECT_TYPE_DOOR:
 				{
 					Door* door = dynamic_cast<Door*>(eventEntity);
-					if (Device::IsKeyDown(DIK_W)) {
+					if (Device::IsKeyDown(DIK_UPARROW)) {
 						_position = door->GetDestination();
 
 						_wentIntoPipe = !_wentIntoPipe;
@@ -914,7 +914,7 @@ void Player::HandleCollisionResult(
 				break;
 			case GameObjectType::GAMEOBJECT_TYPE_TILE:
 				if (eventNormal.x != 0.0f) {
-					if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
+					if (Device::IsKeyDown(DIK_LEFTARROW) || Device::IsKeyDown(DIK_RIGHTARROW)) {
 						if (GetTickCount64() % 100 == 0) {
 							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 						}

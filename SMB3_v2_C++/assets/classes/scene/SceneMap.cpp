@@ -27,13 +27,13 @@ void SceneMap::OnKeyDown(int keyCode) {
 		case DIK_4:
 			_player->SetHealth(4);
 			break;
-		case DIK_W:
-		case DIK_A:
-		case DIK_S:
-		case DIK_D:
+		case DIK_UPARROW:
+		case DIK_LEFTARROW:
+		case DIK_DOWNARROW:
+		case DIK_RIGHTARROW:
 			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
 			break;
-		case DIK_K:
+		case DIK_A:
 			if (_player->GetNextSceneID() != 0) {
 				if (!IsTransitioningToScene()) {
 					StartToSceneTimer();
