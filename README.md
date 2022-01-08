@@ -1,4 +1,4 @@
-# Super Mario Bros. 3 Demo v2.0 (WIP)
+# Super Mario Bros. 3 Demo v2.0
 
 ![Intro](Previews/preview_1.png)
 
@@ -20,7 +20,7 @@ Only do this if the project isn't running.
 + [***IMPORTANT***] Configuration: `Active(Debug)`, Platform: `Win32`
 
 ## Controls
-Only a few inputs supported, not mappable.
+Only a few inputs supported, not remappable.
 |Constraint |Key            |Action                  |
 |-----------|---------------|------------------------|
 |Global     |<kbd>Esc</kbd> |Exit application        |

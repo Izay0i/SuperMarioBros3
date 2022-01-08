@@ -1,6 +1,9 @@
 #include "GlobalUtil.h"
 
 namespace GlobalUtil {
+	bool debugMode = false;
+	DebugInfo debugStruct;
+
 	ID3D10Device* directDevice = nullptr;
 	ID3DX10Sprite* spriteHandler = nullptr;
 	ID3DX10Font* font = nullptr;

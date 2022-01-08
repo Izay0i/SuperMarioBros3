@@ -163,7 +163,13 @@ void Entity::Update(
 		//Since tiles themselves are static, as in, they don't update and render every tick, performance wise it's negligible
 		CalcPotentialCollision(collidableTiles, collisionEvents);
 
-		if (grid != nullptr) {	
+		if (grid != nullptr) {
+			if (_objectType == GameObjectType::GAMEOBJECT_TYPE_MARIO) {
+				GlobalUtil::debugStruct.cellIndexX = ownerCell->indexX;
+				GlobalUtil::debugStruct.cellIndexY = ownerCell->indexY;
+				GlobalUtil::debugStruct.numEntities = ownerCell->entities.size();
+			}
+
 			//Check collisions from the residing cell
 			CalcPotentialCollision(&ownerCell->entities, collisionEvents);
 

@@ -415,9 +415,10 @@ void Scene::_ParseTileData(std::string line) {
 	float y = std::stof(tokens.at(2));
 	D3DXVECTOR2 position = D3DXVECTOR2(x, y);
 
+	const float SPRITE_OFFSET = 8.0f;
 	RECTF hitbox;
-	hitbox.left = -8.0f;
-	hitbox.top = -8.0f;
+	hitbox.left = -SPRITE_OFFSET;
+	hitbox.top = -SPRITE_OFFSET;
 	hitbox.right = std::stof(tokens.at(3));
 	hitbox.bottom = std::stof(tokens.at(4));
 	

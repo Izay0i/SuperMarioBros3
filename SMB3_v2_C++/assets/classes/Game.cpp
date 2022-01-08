@@ -68,6 +68,9 @@ LRESULT Game::_WinProc(HWND hWND, UINT message, WPARAM wParam, LPARAM lParam) {
 			break;
 		case WM_CHAR:
 			switch (wParam) {
+				case VK_TAB:
+					GlobalUtil::debugMode = !GlobalUtil::debugMode;
+					break;
 				case VK_ESCAPE:
 					PostQuitMessage(0);
 					break;
@@ -246,10 +249,24 @@ void Game::_Render() {
 	device->ClearRenderTargetView(renderTargetView, currentScene->GetBGColor());	
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE | D3DX10_SPRITE_SAVE_STATE);
 
-	/*char debug[100];
-	sprintf_s(debug, "D3DX_SDK_VERSION: %d", D3DX10_SDK_VERSION);
-	RECT rect{};
-	GlobalUtil::WriteTextToScreen(debug, &rect, DT_LEFT, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));*/
+	if (GlobalUtil::debugMode) {
+		char debug[256];
+		sprintf_s(
+			debug, 
+			"D3DX_SDK_VERSION: %d\nDELTA: %lu ms\nSCENE_ID: %lu\nPOSITION: %f, %f\nCELL: %lu, %lu\nENTITIES: %lu\nNUM_1234: CHANGEFORM", 
+			GlobalUtil::debugStruct.sdkVersion, 
+			GlobalUtil::debugStruct.deltaTime, 
+			GlobalUtil::debugStruct.sceneID, 
+			GlobalUtil::debugStruct.playerPosition.x, 
+			GlobalUtil::debugStruct.playerPosition.y, 
+			GlobalUtil::debugStruct.cellIndexX, 
+			GlobalUtil::debugStruct.cellIndexY, 
+			GlobalUtil::debugStruct.numEntities
+		);
+
+		RECT rect{};
+		GlobalUtil::WriteTextToScreen(debug, &rect, DT_LEFT, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+	}
 
 	//RGBA
 	float newBlendFactor[4] = { 0.0f };
@@ -385,7 +402,7 @@ bool Game::InitGame(HWND hWND) {
 		return false;
 	}
 
-	if (!_pipelineInstance->PipCreateFont("Time News Roman", 15, true, true)) {
+	if (!_pipelineInstance->PipCreateFont("Time News Roman", 11, false, false)) {
 		return false;
 	}
 
@@ -470,6 +487,9 @@ void Game::GameRun() {
 			DWORD now = static_cast<DWORD>(GetTickCount64());
 			DWORD deltaTime = now - frameStart;
 
+			GlobalUtil::debugStruct.sdkVersion = D3DX_SDK_VERSION;
+			GlobalUtil::debugStruct.deltaTime = deltaTime;
+
 			if (deltaTime >= ticksPerFrame) {
 				frameStart = now;
 
@@ -481,6 +501,7 @@ void Game::GameRun() {
 				Sleep(0);
 			}
 			else {
+				//The time has come and so have I
 				//Sleep(ticksPerFrame - deltaTime);
 			}
 		}

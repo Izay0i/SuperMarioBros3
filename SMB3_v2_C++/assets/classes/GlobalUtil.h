@@ -14,10 +14,24 @@
 #include <Windows.h>
 
 namespace GlobalUtil {
+	struct DebugInfo {
+		unsigned int sdkVersion = 0;
+		DWORD deltaTime = 0L;
+		unsigned int sceneID = 0;
+		D3DXVECTOR2 playerPosition = {};
+		unsigned int cellIndexX = 0;
+		unsigned int cellIndexY = 0;
+		unsigned int numEntities = 0;
+	};
+
 	const unsigned int SCREEN_WIDTH = 256;
 	const unsigned int SCREEN_HEIGHT = 224;
 	//Used in all entity classes
 	const unsigned int MAX_FILE_LINE = 5000;
+
+	//Debug
+	extern bool debugMode;
+	extern DebugInfo debugStruct;
 
 	//Mainly used in the Game and Sprite class
 	extern ID3D10Device* directDevice;

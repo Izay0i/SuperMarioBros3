@@ -49,6 +49,8 @@ void SceneManager::ChangeScene(unsigned int sceneID) {
 	_scenes[_currentSceneID]->Release();
 	_currentSceneID = sceneID;
 	_scenes[_currentSceneID]->LoadScene();
+
+	GlobalUtil::debugStruct.sceneID = _currentSceneID;
 }
 
 void SceneManager::Release() {

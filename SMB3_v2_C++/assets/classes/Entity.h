@@ -54,8 +54,6 @@ public:
 	Entity();
 	virtual ~Entity();
 
-	
-
 	bool IsRemoved() const;
 	void StartRemoveTimer();
 

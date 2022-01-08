@@ -18,13 +18,11 @@ void SceneIntro::OnKeyDown(int keyCode) {
 			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
 			break;
 		case DIK_I:
-			if (_selectText->GetScale() == D3DXVECTOR2(1.0f, 1.0f)) {
-				if (!IsTransitioningToScene()) {
-					StartToSceneTimer();
+			if (!IsTransitioningToScene()) {
+				StartToSceneTimer();
 
-					AudioService::GetAudio().StopAll();
-					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
-				}
+				AudioService::GetAudio().StopAll();
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
 			}
 			break;
 	}

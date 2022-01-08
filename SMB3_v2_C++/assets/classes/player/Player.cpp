@@ -985,6 +985,8 @@ void Player::Update(
 	std::vector<Entity*>* collidableTiles, 
 	Grid* grid) 
 {
+	GlobalUtil::debugStruct.playerPosition = _position;
+
 	_HandleCurrencies();
 	_HanldeStageEnd();
 	_HandleBonusItems();
