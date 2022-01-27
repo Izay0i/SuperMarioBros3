@@ -24,6 +24,9 @@ void JumpState::Render() {
 	}
 
 	const float RAC_OFFSET = 4.0f;
+
+	const int A_KEY = Device::GetInstance()->GetControllerKey("A");
+
 	switch (_form) {
 		case _Form::SMALL:
 			if (_player->IsInPipe()) {
@@ -90,7 +93,7 @@ void JumpState::Render() {
 						_alpha
 					);
 				}
-				else if (_player->IsFlying() && Device::IsKeyDown(DIK_K)) {
+				else if (_player->IsFlying() && Device::IsKeyDown(A_KEY)) {
 					_player->_animatedSprite.PlaySpriteAnimation("RacWagSuperFall", { 
 						_player->_position.x - RAC_OFFSET * _player->_normal.x,  
 						_player->_position.y 

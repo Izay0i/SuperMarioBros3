@@ -99,12 +99,18 @@ void Player::_HandleMovementMap() {
 }
 
 void Player::_HandleMovementGame() {
+	const int LEFT_KEY = Device::GetInstance()->GetControllerKey("LEFT");
+	const int DOWN_KEY = Device::GetInstance()->GetControllerKey("DOWN");
+	const int RIGHT_KEY = Device::GetInstance()->GetControllerKey("RIGHT");
+	const int B_KEY = Device::GetInstance()->GetControllerKey("B");
+	const int A_KEY = Device::GetInstance()->GetControllerKey("A");
+
 	if (_isOnGround) {
 		_gravity = 0.0025f;
 	}
 
 	//Variable jump height	
-	if (Device::IsKeyDown(DIK_K)) {
+	if (Device::IsKeyDown(A_KEY)) {
 		if (_gravity > _MAX_GRAVITY) {
 			_gravity -= 0.0005f;
 		}
@@ -121,14 +127,14 @@ void Player::_HandleMovementGame() {
 	//Skid
 	if (_acceleration < _ACCEL_THRESHOLD && _velocity.x != 0.0f) {
 		if (_normal.x == -1) {
-			if (Device::IsKeyDown(DIK_D)) {
+			if (Device::IsKeyDown(RIGHT_KEY)) {
 				_acceleration = 0.0499f;
 
 				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SKID);
 			}
 		}
 		else if (_normal.x == 1) {
-			if (Device::IsKeyDown(DIK_A)) {
+			if (Device::IsKeyDown(LEFT_KEY)) {
 				_acceleration = 0.0499f;
 
 				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_SKID);
@@ -136,10 +142,10 @@ void Player::_HandleMovementGame() {
 		}
 	}
 
-	if (Device::IsKeyDown(DIK_A)) {
+	if (Device::IsKeyDown(LEFT_KEY)) {
 		MoveLeft();
 	}
-	else if (Device::IsKeyDown(DIK_D)) {
+	else if (Device::IsKeyDown(RIGHT_KEY)) {
 		MoveRight();
 	}
 	else {
@@ -153,9 +159,9 @@ void Player::_HandleMovementGame() {
 		}
 	}
 
-	if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
+	if (Device::IsKeyDown(LEFT_KEY) || Device::IsKeyDown(RIGHT_KEY)) {
 		//GOTTA GO FAAAST
-		if (Device::IsKeyDown(DIK_J) && (_isOnGround || !IsFlying())) {
+		if (Device::IsKeyDown(B_KEY) && (_isOnGround || !IsFlying())) {
 			if (_acceleration < _MAX_ACCEL) {
 				_acceleration += 0.03f;
 			}
@@ -303,82 +309,91 @@ void Player::OnKeyUpMap(int keyCode) {
 }
 
 void Player::OnKeyUpGame(int keyCode) {
-	switch (keyCode) {
-		case DIK_S:
-			_isCrouching = false;
+	const int DOWN_KEY = Device::GetInstance()->GetControllerKey("DOWN");
+	const int B_KEY = Device::GetInstance()->GetControllerKey("B");
 
-			if (_health > 1 && _isOnGround && !IsInPipe()) {
-				_isOnGround = false;
-				_position.y = ceil(_position.y - _CROUCH_HEIGHT_ADJUST);
-			}
-			break;
-		case DIK_J:
-			_isHolding = false;
-			break;
+	if (keyCode == DOWN_KEY) {
+		_isCrouching = false;
+
+		if (_health > 1 && _isOnGround && !IsInPipe()) {
+			_isOnGround = false;
+			_position.y = ceil(_position.y - _CROUCH_HEIGHT_ADJUST);
+		}
+	}
+	else if (keyCode == B_KEY) {
+		_isHolding = false;
 	}
 }
 
 void Player::OnKeyDownMap(int keyCode) {
 	const float MAP_RUN_SPEED = 0.08f;
-	switch (keyCode) {
-		case DIK_W:
-			_velocity.y = -MAP_RUN_SPEED;
-			break;
-		case DIK_A:
-			_velocity.x = -MAP_RUN_SPEED;
-			break;
-		case DIK_S:
-			_velocity.y = MAP_RUN_SPEED;
-			break;
-		case DIK_D:
-			_velocity.x = MAP_RUN_SPEED;
-			break;
+
+	const int UP_KEY = Device::GetInstance()->GetControllerKey("UP");
+	const int LEFT_KEY = Device::GetInstance()->GetControllerKey("LEFT");
+	const int DOWN_KEY = Device::GetInstance()->GetControllerKey("DOWN");
+	const int RIGHT_KEY = Device::GetInstance()->GetControllerKey("RIGHT");
+
+	if (keyCode == UP_KEY) {
+		_velocity.y = -MAP_RUN_SPEED;
+	}
+	else if (keyCode == LEFT_KEY) {
+		_velocity.x = -MAP_RUN_SPEED;
+	}
+	else if (keyCode == DOWN_KEY) {
+		_velocity.y = MAP_RUN_SPEED;
+	}
+	else if (keyCode == RIGHT_KEY) {
+		_velocity.x = MAP_RUN_SPEED;
 	}
 }
 
 void Player::OnKeyDownGame(int keyCode) {
-	switch (keyCode) {
-		case DIK_A:
-			_normal.x = -1.0f;
-			break;
-		case DIK_D:
-			_normal.x = 1.0f;
-			break;
-		case DIK_S:
-			_isCrouching = true;
+	const int LEFT_KEY = Device::GetInstance()->GetControllerKey("LEFT");
+	const int DOWN_KEY = Device::GetInstance()->GetControllerKey("DOWN");
+	const int RIGHT_KEY = Device::GetInstance()->GetControllerKey("RIGHT");
+	const int B_KEY = Device::GetInstance()->GetControllerKey("B");
+	const int A_KEY = Device::GetInstance()->GetControllerKey("A");
 
-			if (_health > 1 && _isOnGround && !IsInPipe()) {
-				_position.y = ceil(_position.y + _CROUCH_HEIGHT_ADJUST);
-			}
-			break;
-		case DIK_J:
-			_isHolding = true;
-			//Fireball attack
-			if (_health == 3 && !_isCrouching) {
-				if (_fireballsCount < _FIREBALLS_LIMIT) {
-					SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnFireball());
-					++_fireballsCount;
+	if (keyCode == LEFT_KEY) {
+		_normal.x = -1.0f;
+	}
+	else if (keyCode == RIGHT_KEY) {
+		_normal.x = 1.0f;
+	}
+	else if (keyCode == DOWN_KEY) {
+		_isCrouching = true;
 
-					if (_fireballsCount == _FIREBALLS_LIMIT) {
-						StartFireballCoolDownTimer();
-					}
+		if (_health > 1 && _isOnGround && !IsInPipe()) {
+			_position.y = ceil(_position.y + _CROUCH_HEIGHT_ADJUST);
+		}
+	}
+	else if (keyCode == B_KEY) {
+		_isHolding = true;
+		//Fireball attack
+		if (_health == 3 && !_isCrouching) {
+			if (_fireballsCount < _FIREBALLS_LIMIT) {
+				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(SpawnFireball());
+				++_fireballsCount;
 
-					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_FIREBALL);
+				if (_fireballsCount == _FIREBALLS_LIMIT) {
+					StartFireballCoolDownTimer();
 				}
-			}
 
-			//Tail attack
-			if (_health == 4 && !IsAttacking()) {
-				StartAttackTimer();
-
-				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TAILATTACK);
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_FIREBALL);
 			}
-			break;
-		case DIK_K:
-			SlowFall();
-			RunFly();
-			Jump();
-			break;
+		}
+
+		//Tail attack
+		if (_health == 4 && !IsAttacking()) {
+			StartAttackTimer();
+
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_TAILATTACK);
+		}
+	}
+	else if (keyCode == A_KEY) {
+		SlowFall();
+		RunFly();
+		Jump();
 	}
 }
 
@@ -484,6 +499,11 @@ void Player::HandleCollisionResult(
 	D3DXVECTOR2& normal, 
 	D3DXVECTOR2& relativeDistance) 
 {
+	const int UP_KEY = Device::GetInstance()->GetControllerKey("UP");
+	const int LEFT_KEY = Device::GetInstance()->GetControllerKey("LEFT");
+	const int DOWN_KEY = Device::GetInstance()->GetControllerKey("DOWN");
+	const int RIGHT_KEY = Device::GetInstance()->GetControllerKey("RIGHT");
+
 	Entity* eventEntity = result->entity;
 	D3DXVECTOR2 eventNormal = result->normal;
 
@@ -699,11 +719,11 @@ void Player::HandleCollisionResult(
 					_mapNodePos = portal->GetPosition();
 				}
 				else {
-					if (Device::IsKeyDown(DIK_S) || Device::IsKeyDown(DIK_W)) {
-						if (eventNormal.y == 1.0f && Device::IsKeyDown(DIK_W)) {
+					if (Device::IsKeyDown(DOWN_KEY) || Device::IsKeyDown(UP_KEY)) {
+						if (eventNormal.y == 1.0f && Device::IsKeyDown(UP_KEY)) {
 							_normal.y = -1.0f;
 						}
-						else if (eventNormal.y == -1.0f && Device::IsKeyDown(DIK_S)) {
+						else if (eventNormal.y == -1.0f && Device::IsKeyDown(DOWN_KEY)) {
 							_normal.y = 1.0f;
 						}
 
@@ -896,7 +916,7 @@ void Player::HandleCollisionResult(
 			case GameObjectType::GAMEOBJECT_TYPE_DOOR:
 				{
 					Door* door = dynamic_cast<Door*>(eventEntity);
-					if (Device::IsKeyDown(DIK_W)) {
+					if (Device::IsKeyDown(UP_KEY)) {
 						_position = door->GetDestination();
 
 						_wentIntoPipe = !_wentIntoPipe;
@@ -914,7 +934,7 @@ void Player::HandleCollisionResult(
 				break;
 			case GameObjectType::GAMEOBJECT_TYPE_TILE:
 				if (eventNormal.x != 0.0f) {
-					if (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D)) {
+					if (Device::IsKeyDown(LEFT_KEY) || Device::IsKeyDown(RIGHT_KEY)) {
 						if (GetTickCount64() % 100 == 0) {
 							AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_BUMP);
 						}

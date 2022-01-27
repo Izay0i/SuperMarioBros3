@@ -12,6 +12,8 @@
 IdleState::IdleState(Player* player) : PlayerState(player) {}
 
 PlayerState* IdleState::HandleStates() {
+	const int B_KEY = Device::GetInstance()->GetControllerKey("B");
+
 	if (_player->isInMap) {
 		return new MapState(_player);
 	}
@@ -28,7 +30,7 @@ PlayerState* IdleState::HandleStates() {
 		if (_player->_isCrouching) {
 			return new CrouchState(_player);
 		}
-		else if (Device::IsKeyDown(DIK_J) && _form == _Form::FIRE) {
+		else if (Device::IsKeyDown(B_KEY) && _form == _Form::FIRE) {
 			return new ThrowState(_player);
 		}
 		else if (_player->IsAttacking() && _form == _Form::RACCOON) {

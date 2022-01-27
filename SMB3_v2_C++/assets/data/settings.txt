@@ -3,7 +3,7 @@
 #Luigi: Well I want yours too
 
 [KEYBINDS]
-key_binds.txt
+assets\data\key_binds.txt
 [/]
 
 [SETTINGS]

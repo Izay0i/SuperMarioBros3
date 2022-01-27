@@ -36,6 +36,10 @@ void RunState::Render() {
 	}
 
 	const float RAC_OFFSET = 4.0f;
+
+	const int LEFT_KEY = Device::GetInstance()->GetControllerKey("LEFT");
+	const int RIGHT_KEY = Device::GetInstance()->GetControllerKey("RIGHT");
+
 	switch (_form) {
 		case _Form::SMALL:
 			if (_player->IsInPipe()) {
@@ -51,7 +55,7 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("HoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(LEFT_KEY) || Device::IsKeyDown(RIGHT_KEY))) {
 					_player->_animatedSprite.PlaySpriteAnimation("Skid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
@@ -73,7 +77,7 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("BigHoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(LEFT_KEY) || Device::IsKeyDown(RIGHT_KEY))) {
 					_player->_animatedSprite.PlaySpriteAnimation("BigSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
@@ -95,7 +99,7 @@ void RunState::Render() {
 				_player->_animatedSprite.PlaySpriteAnimation("FireHoldRun", _player->_position, _player->_scale, _alpha);
 			}
 			else {
-				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(LEFT_KEY) || Device::IsKeyDown(RIGHT_KEY))) {
 					_player->_animatedSprite.PlaySpriteAnimation("FireSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {
@@ -135,7 +139,7 @@ void RunState::Render() {
 				);
 			}
 			else {
-				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(DIK_A) || Device::IsKeyDown(DIK_D))) {
+				if (_player->_acceleration < 0.5f && (Device::IsKeyDown(LEFT_KEY) || Device::IsKeyDown(RIGHT_KEY))) {
 					_player->_animatedSprite.PlaySpriteAnimation("RacSkid", _player->_position, _player->_scale, _alpha);
 				}
 				else {

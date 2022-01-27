@@ -1,6 +1,5 @@
 # Super Mario Bros. 3 Demo v2.0
-
-![Intro](Previews/preview_1.png)
+![Intro](./Previews/preview_1.png)
 
 ## Requirements
 + OS: Windows® 10 32-bit+
@@ -20,33 +19,38 @@ Only do this if the project isn't running.
 + [***IMPORTANT***] Configuration: `Active(Debug)`, Platform: `Win32`
 
 ## Controls
-Only a few inputs supported, not remappable.
+For more information, see [KEYBINDS.md](KEYBINDS.md)
 |Constraint |Key            |Action                  |
 |-----------|---------------|------------------------|
 |Global     |<kbd>Esc</kbd> |Exit application        |
-|Intro only |<kbd>U</kbd>   |Select                  |
+|Intro      |<kbd>U</kbd>   |Select                  |
 |           |<kbd>I</kbd>   |Start                   |
-|Map only   |<kbd>W</kbd>   |Move up                 |
+|Map        |<kbd>W</kbd>   |Move up                 |
 |           |<kbd>A</kbd>   |Move left               |
 |           |<kbd>S</kbd>   |Move down               |
 |           |<kbd>D</kbd>   |Move right              |
 |           |<kbd>K</kbd>   |Select                  |
-|Stage only |<kbd>W</kbd>   |Enter pipe/door         |
+|Stage      |<kbd>W</kbd>   |Enter pipe/door         |
 |           |<kbd>A</kbd>   |Move left               |
 |           |<kbd>S</kbd>   |Crouch/Enter pipe       |
 |           |<kbd>D</kbd>   |Move right              |
 |           |<kbd>J</kbd>   |Throw/Attack/Hold shell |
 |           |<kbd>K</kbd>   |Run/Fly/Jump/Float down |
-|Debug only |<kbd>1</kbd>   |Set form to `SMALL`     |
+|Debug      |<kbd>Tab</kbd> |Toggle debug info       |
+|           |<kbd>1</kbd>   |Set form to `SMALL`     |
 |           |<kbd>2</kbd>   |Set form to `BIG`       |
 |           |<kbd>3</kbd>   |Set form to `FIRE`      |
 |           |<kbd>4</kbd>   |Set form to `RACCOON`   |
 
 ## Scenes available
-+ Intro
-+ Overworld map
++ Intro\
+![Intro](./Previews/intro.png)
++ Overworld map\
+![Map](./Previews/map.png)
 + Stage 1-1
+![Stage1](./Previews/stage_1.png)
 + Stage mini fortress
+![Mini fortress](./Previews/stage_fortress.png)
 + S̯̭̝̯̜͉̮̭ͦ̔̋ͥ̀ę̥̩ͫ̃c̺̖͇̼͚̞̩̍ͦ̆̐͘r̛͍̗̙̰̞̻͒̾̊e͎͚͇̚͟t̤̰͎̲̙̩͛̎̕
 
 ## Credits
@@ -59,4 +63,4 @@ Only a few inputs supported, not remappable.
 + [SilvaGunner](https://youtu.be/rr9QBe5GLEk)
 
 ## That's all
-![Adios](Previews/dante_adios.gif)
+![Adios](./Previews/dante_adios.gif)

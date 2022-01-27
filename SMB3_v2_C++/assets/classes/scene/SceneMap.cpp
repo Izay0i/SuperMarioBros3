@@ -1,3 +1,4 @@
+#include "../Device.h"
 #include "../SceneManager.h"
 #include "Scene.h"
 #include "SceneMap.h"
@@ -14,6 +15,30 @@ void SceneMap::HandleStates() {
 }
 
 void SceneMap::OnKeyDown(int keyCode) {
+	const int UP_KEY = Device::GetInstance()->GetControllerKey("UP");
+	const int LEFT_KEY = Device::GetInstance()->GetControllerKey("LEFT");
+	const int DOWN_KEY = Device::GetInstance()->GetControllerKey("DOWN");
+	const int RIGHT_KEY = Device::GetInstance()->GetControllerKey("RIGHT");
+	const int A_KEY = Device::GetInstance()->GetControllerKey("A");
+
+	if (keyCode == UP_KEY ||
+		keyCode == LEFT_KEY ||
+		keyCode == DOWN_KEY ||
+		keyCode == RIGHT_KEY) 
+	{
+		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
+	}
+	else if (keyCode == A_KEY) {
+		if (_player->GetNextSceneID() != 0) {
+			if (!IsTransitioningToScene()) {
+				StartToSceneTimer();
+
+				AudioService::GetAudio().StopAll();
+				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_LEVELSTART);
+			}
+		}
+	}
+
 	switch (keyCode) {
 		case DIK_1:
 			_player->SetHealth(1);
@@ -26,22 +51,6 @@ void SceneMap::OnKeyDown(int keyCode) {
 			break;
 		case DIK_4:
 			_player->SetHealth(4);
-			break;
-		case DIK_W:
-		case DIK_A:
-		case DIK_S:
-		case DIK_D:
-			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
-			break;
-		case DIK_K:
-			if (_player->GetNextSceneID() != 0) {
-				if (!IsTransitioningToScene()) {
-					StartToSceneTimer();
-
-					AudioService::GetAudio().StopAll();
-					AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_LEVELSTART);
-				}
-			}
 			break;
 	}
 

@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "GlobalUtil.h"
 
 namespace GlobalUtil {
@@ -7,6 +9,14 @@ namespace GlobalUtil {
 	ID3D10Device* directDevice = nullptr;
 	ID3DX10Sprite* spriteHandler = nullptr;
 	ID3DX10Font* font = nullptr;
+
+	void ToUpper(std::string& str) {
+		std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+	}
+
+	void ToLower(std::string& str) {
+		std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+	}
 
 	void GetFontRect(LPCSTR text, RECT* rect) {
 		//Using DT_CALCRECT causes the rect to be determined

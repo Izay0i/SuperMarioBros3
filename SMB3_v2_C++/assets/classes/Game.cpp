@@ -234,6 +234,40 @@ void Game::_ParseSettings(std::string line) {
 }
 
 void Game::_Update(DWORD deltaTime) {
+	const int UP_KEY = Device::GetInstance()->GetControllerKey("UP");
+	const int LEFT_KEY = Device::GetInstance()->GetControllerKey("LEFT");
+	const int DOWN_KEY = Device::GetInstance()->GetControllerKey("DOWN");
+	const int RIGHT_KEY = Device::GetInstance()->GetControllerKey("RIGHT");
+	const int SELECT_KEY = Device::GetInstance()->GetControllerKey("SELECT");
+	const int START_KEY = Device::GetInstance()->GetControllerKey("START");
+	const int B_KEY = Device::GetInstance()->GetControllerKey("B");
+	const int A_KEY = Device::GetInstance()->GetControllerKey("A");
+
+	if (Device::IsKeyDown(UP_KEY)) {
+		GlobalUtil::debugStruct.currentKeyCode = UP_KEY;
+	}
+	else if (Device::IsKeyDown(LEFT_KEY)) {
+		GlobalUtil::debugStruct.currentKeyCode = UP_KEY;
+	}
+	else if (Device::IsKeyDown(DOWN_KEY)) {
+		GlobalUtil::debugStruct.currentKeyCode = DOWN_KEY;
+	}
+	else if (Device::IsKeyDown(RIGHT_KEY)) {
+		GlobalUtil::debugStruct.currentKeyCode = RIGHT_KEY;
+	}
+	else if (Device::IsKeyDown(SELECT_KEY)) {
+		GlobalUtil::debugStruct.currentKeyCode = SELECT_KEY;
+	}
+	else if (Device::IsKeyDown(START_KEY)) {
+		GlobalUtil::debugStruct.currentKeyCode = START_KEY;
+	}
+	else if (Device::IsKeyDown(B_KEY)) {
+		GlobalUtil::debugStruct.currentKeyCode = B_KEY;
+	}
+	else if (Device::IsKeyDown(A_KEY)) {
+		GlobalUtil::debugStruct.currentKeyCode = A_KEY;
+	}
+
 	_managerInstance->GetCurrentScene()->Update(deltaTime);
 }
 
@@ -253,7 +287,7 @@ void Game::_Render() {
 		char debug[256];
 		sprintf_s(
 			debug, 
-			"D3DX_SDK_VERSION: %d\nDELTA: %lu ms\nSCENE_ID: %lu\nPOSITION: %f, %f\nCELL: %lu, %lu\nENTITIES: %lu\nNUM_1234: CHANGEFORM", 
+			"D3DX_SDK_VERSION: %d\nDELTA: %lu ms\nSCENE_ID: %lu\nPOSITION: %f, %f\nCELL: %lu, %lu\nENTITIES: %lu\nDIK_CODE: %d\nNUM_1234: CHANGEFORM", 
 			GlobalUtil::debugStruct.sdkVersion, 
 			GlobalUtil::debugStruct.deltaTime, 
 			GlobalUtil::debugStruct.sceneID, 
@@ -261,7 +295,8 @@ void Game::_Render() {
 			GlobalUtil::debugStruct.playerPosition.y, 
 			GlobalUtil::debugStruct.cellIndexX, 
 			GlobalUtil::debugStruct.cellIndexY, 
-			GlobalUtil::debugStruct.numEntities
+			GlobalUtil::debugStruct.numEntities, 
+			GlobalUtil::debugStruct.currentKeyCode
 		);
 
 		RECT rect{};
@@ -444,6 +479,11 @@ void Game::LoadSettings(std::string filePath) {
 			continue;
 		}
 
+		if (line == "[KEYBINDS]") {
+			section = _GameFileSection::GAMEFILE_SECTION_KEYBINDS;
+			continue;
+		}
+
 		if (line == "[SETTINGS]") {
 			section = _GameFileSection::GAMEFILE_SECTION_SETTINGS;
 			continue;
@@ -455,6 +495,9 @@ void Game::LoadSettings(std::string filePath) {
 		}
 
 		switch (section) {
+			case _GameFileSection::GAMEFILE_SECTION_KEYBINDS:
+				_deviceInstance->LoadKeyBinds(line);
+				break;
 			case _GameFileSection::GAMEFILE_SECTION_SETTINGS:
 				_ParseSettings(line);
 				break;

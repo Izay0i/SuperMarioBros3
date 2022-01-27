@@ -1,3 +1,4 @@
+#include "../Device.h"
 #include "../SceneManager.h"
 #include "Scene.h"
 #include "SceneIntro.h"
@@ -11,20 +12,21 @@ SceneIntro::SceneIntro(SceneType sceneID, std::string path) : Scene(sceneID, pat
 SceneIntro::~SceneIntro() {}
 
 void SceneIntro::OnKeyDown(int keyCode) {
-	switch (keyCode) {
-		case DIK_U:
-			_selectText->isMultiplayer = !_selectText->isMultiplayer;
+	const int SELECT_KEY = Device::GetInstance()->GetControllerKey("SELECT");
+	const int START_KEY = Device::GetInstance()->GetControllerKey("START");
 
-			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
-			break;
-		case DIK_I:
-			if (!IsTransitioningToScene()) {
-				StartToSceneTimer();
+	if (keyCode == SELECT_KEY) {
+		_selectText->isMultiplayer = !_selectText->isMultiplayer;
 
-				AudioService::GetAudio().StopAll();
-				AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
-			}
-			break;
+		AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_MAPMOVE);
+	}
+	else if (keyCode == START_KEY) {
+		if (!IsTransitioningToScene()) {
+			StartToSceneTimer();
+
+			AudioService::GetAudio().StopAll();
+			AudioService::GetAudio().PlayAudio(AudioType::AUDIO_TYPE_COIN);
+		}
 	}
 }
 

@@ -6,7 +6,9 @@
 ThrowState::ThrowState(Player* player) : PlayerState(player) {}
 
 PlayerState* ThrowState::HandleStates() {
-	if (_player->_velocity.x != 0.0f || !Device::IsKeyDown(DIK_J)) {
+	const int B_KEY = Device::GetInstance()->GetControllerKey("B");
+
+	if (_player->_velocity.x != 0.0f || !Device::IsKeyDown(B_KEY)) {
 		return new IdleState(_player);
 	}
 

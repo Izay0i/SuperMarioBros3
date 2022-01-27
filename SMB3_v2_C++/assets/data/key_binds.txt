@@ -1,17 +1,17 @@
 [UP]
-^
+W
 [/]
 
 [DOWN]
-v
+S
 [/]
 
 [LEFT]
-<
+A
 [/]
 
 [RIGHT]
->
+D
 [/]
 
 [SELECT]

@@ -22,6 +22,7 @@ namespace GlobalUtil {
 		unsigned int cellIndexX = 0;
 		unsigned int cellIndexY = 0;
 		unsigned int numEntities = 0;
+		int currentKeyCode = 0;
 	};
 
 	const unsigned int SCREEN_WIDTH = 256;
@@ -38,6 +39,9 @@ namespace GlobalUtil {
 	extern ID3DX10Sprite* spriteHandler;
 	//For debugging
 	extern ID3DX10Font* font;
+
+	extern void ToUpper(std::string&);
+	extern void ToLower(std::string&);
 
 	extern void GetFontRect(LPCSTR, RECT*);
 	extern void WriteTextToScreen(LPCSTR, RECT*, UINT, D3DXCOLOR);
